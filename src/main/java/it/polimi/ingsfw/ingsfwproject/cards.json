@@ -1,0 +1,876 @@
+{
+  "cards": [
+
+    {
+      "id": 1,
+      "type": "resource",
+      "center": "FUNGI_KINGDOM",
+      "points": 0,
+      "corners": ["FUNGI_KINGDOM", "EMPTY", "FUNGI_KINGDOM", "HIDDEN"]
+    },
+    {
+      "id": 2,
+      "type": "resource",
+      "center": "FUNGI_KINGDOM",
+      "points": 0,
+      "corners": ["FUNGI_KINGDOM", "FUNGI_KINGDOM", "HIDDEN", "EMPTY"]
+    },
+    {
+      "id": 3,
+      "type": "resource",
+      "center": "FUNGI_KINGDOM",
+      "points": 0,
+      "corners": ["EMPTY", "HIDDEN", "FUNGI_KINGDOM", "FUNGI_KINGDOM"]
+    },
+    {
+      "id": 4,
+      "type": "resource",
+      "center": "FUNGI_KINGDOM",
+      "points": 0,
+      "corners": ["HIDDEN", "FUNGI_KINGDOM", "EMPTY", "FUNGI_KINGDOM"]
+    },
+    {
+      "id": 5,
+      "type": "resource",
+      "center": "FUNGI_KINGDOM",
+      "points": 0,
+      "corners": ["HIDDEN", "QUILL", "PLANT_KINGDOM", "FUNGI_KINGDOM"]
+    },
+
+    {
+      "id": 6,
+      "type": "resource",
+      "center": "FUNGI_KINGDOM",
+      "points": 0,
+      "corners": ["INKWELL", "FUNGI_KINGDOM", "HIDDEN", "ANIMAL_KINGDOM"]
+    },
+    {
+      "id": 7,
+      "type": "resource",
+      "center": "FUNGI_KINGDOM",
+      "points": 0,
+      "corners": ["FUNGI_KINGDOM", "INSECT_KINGDOM", "MANUSCRIPT", "EMPTY"]
+    },
+    {
+      "id": 8,
+      "type": "resource",
+      "center": "FUNGI_KINGDOM",
+      "corners": ["EMPTY", "FUNGI_KINGDOM", "EMPTY", "HIDDEN"],
+      "points": 1
+    },
+    {
+      "id": 9,
+      "type": "resource",
+      "center": "FUNGI_KINGDOM",
+      "corners": ["FUNGI_KINGDOM", "HIDDEN", "EMPTY", "EMPTY"],
+      "points": 1
+    },
+    {
+      "id": 10,
+      "type": "resource",
+      "center": "FUNGI_KINGDOM",
+      "corners": ["HIDDEN", "EMPTY", "FUNGI_KINGDOM", "EMPTY"],
+      "points": 1
+    },
+
+    {
+      "id": 11,
+      "type": "resource",
+      "center": "PLANT_KINGDOM",
+      "points": 0,
+      "corners": ["PLANT_KINGDOM", "EMPTY", "PLANT_KINGDOM", "HIDDEN"]
+    },
+
+    {
+      "id": 12,
+      "type": "resource",
+      "center": "PLANT_KINGDOM",
+      "points": 0,
+      "corners": ["PLANT_KINGDOM", "PLANT_KINGDOM", "HIDDEN", "EMPTY"]
+    },
+    {
+      "id": 13,
+      "type": "resource",
+      "center": "PLANT_KINGDOM",
+      "points": 0,
+      "corners": ["EMPTY", "HIDDEN", "PLANT_KINGDOM", "PLANT_KINGDOM"]
+    },
+    {
+      "id": 14,
+      "type": "resource",
+      "center": "PLANT_KINGDOM",
+      "points": 0,
+      "corners": ["HIDDEN", "PLANT_KINGDOM", "EMPTY", "PLANT_KINGDOM"]
+    },
+    {
+      "id": 15,
+      "type": "resource",
+      "center": "PLANT_KINGDOM",
+      "points": 0,
+      "corners": ["HIDDEN", "INSECT_KINGDOM", "QUILL", "PLANT_KINGDOM"]
+    },
+
+    {
+      "id": 16,
+      "type": "resource",
+      "center": "PLANT_KINGDOM",
+      "points": 0,
+      "corners": ["FUNGI_KINGDOM", "PLANT_KINGDOM", "HIDDEN", "INKWELL"]
+    },
+    {
+      "id": 17,
+      "type": "resource",
+      "center": "PLANT_KINGDOM",
+      "points": 0,
+      "corners": ["MANUSCRIPT", "HIDDEN", "PLANT_KINGDOM", "ANIMAL_KINGDOM"]
+    },
+    {
+      "id": 18,
+      "type": "resource",
+      "center": "PLANT_KINGDOM",
+      "corners": ["EMPTY", "EMPTY", "PLANT_KINGDOM", "HIDDEN"],
+      "points": 1
+    },
+    {
+      "id": 19,
+      "type": "resource",
+      "center": "PLANT_KINGDOM",
+      "corners": ["EMPTY", "EMPTY", "HIDDEN", "PLANT_KINGDOM"],
+      "points": 1
+    },
+    {
+      "id": 20,
+      "type": "resource",
+      "center": "PLANT_KINGDOM",
+      "corners": ["EMPTY", "PLANT_KINGDOM", "HIDDEN", "HIDDEN"],
+      "points": 1
+    },
+
+    {
+      "id": 21,
+      "type": "resource",
+      "center": "ANIMAL_KINGDOM",
+      "points": 0,
+      "corners": ["ANIMAL_KINGDOM", "ANIMAL_KINGDOM", "EMPTY", "HIDDEN"]
+    },
+    {
+      "id": 22,
+      "type": "resource",
+      "center": "ANIMAL_KINGDOM",
+      "points": 0,
+      "corners": ["HIDDEN", "EMPTY", "ANIMAL_KINGDOM", "ANIMAL_KINGDOM"]
+    },
+    {
+      "id": 23,
+      "type": "resource",
+      "center": "ANIMAL_KINGDOM",
+      "points": 0,
+      "corners": ["ANIMAL_KINGDOM", "HIDDEN", "ANIMAL_KINGDOM", "EMPTY"]
+    },
+    {
+      "id": 24,
+      "type": "resource",
+      "center": "ANIMAL_KINGDOM",
+      "points": 0,
+      "corners": ["EMPTY", "ANIMAL_KINGDOM", "EMPTY", "ANIMAL_KINGDOM"]
+    },
+    {
+      "id": 25,
+      "type": "resource",
+      "center": "ANIMAL_KINGDOM",
+      "points": 0,
+      "corners": ["HIDDEN", "INSECT_KINGDOM", "INKWELL", "ANIMAL_KINGDOM"]
+    },
+
+    {
+      "id": 26,
+      "type": "resource",
+      "center": "ANIMAL_KINGDOM",
+      "points": 0,
+      "corners": ["PLANT_KINGDOM", "ANIMAL_KINGDOM", "HIDDEN", "MANUSCRIPT"]
+    },
+    {
+      "id": 27,
+      "type": "resource",
+      "center": "ANIMAL_KINGDOM",
+      "points": 0,
+      "corners": ["QUILL", "HIDDEN", "ANIMAL_KINGDOM", "FUNGI_KINGDOM"]
+    },
+    {
+      "id": 28,
+      "type": "resource",
+      "center": "ANIMAL_KINGDOM",
+      "corners": ["HIDDEN", "EMPTY", "ANIMAL_KINGDOM", "EMPTY"],
+      "points": 1
+    },
+    {
+      "id": 29,
+      "type": "resource",
+      "center": "ANIMAL_KINGDOM",
+      "corners": ["EMPTY", "HIDDEN", "EMPTY", "ANIMAL_KINGDOM"],
+      "points": 1
+    },
+    {
+      "id": 30,
+      "type": "resource",
+      "center": "ANIMAL_KINGDOM",
+      "corners": ["EMPTY", "ANIMAL_KINGDOM", "EMPTY", "HIDDEN"],
+      "points": 1
+    },
+
+    {
+      "id": 31,
+      "type": "resource",
+      "center": "INSECT_KINGDOM",
+      "points": 0,
+      "corners": ["INSECT_KINGDOM", "INSECT_KINGDOM", "EMPTY", "HIDDEN"]
+    },
+    {
+      "id": 32,
+      "type": "resource",
+      "center": "INSECT_KINGDOM",
+      "points": 0,
+      "corners": ["HIDDEN", "EMPTY", "INSECT_KINGDOM", "INSECT_KINGDOM"]
+    },
+    {
+      "id": 33,
+      "type": "resource",
+      "center": "INSECT_KINGDOM",
+      "points": 0,
+      "corners": ["INSECT_KINGDOM", "HIDDEN", "INSECT_KINGDOM", "EMPTY"]
+    },
+    {
+      "id": 34,
+      "type": "resource",
+      "center": "INSECT_KINGDOM",
+      "points": 0,
+      "corners": ["EMPTY", "INSECT_KINGDOM", "HIDDEN", "INSECT_KINGDOM"]
+    },
+    {
+      "id": 35,
+      "type": "resource",
+      "center": "INSECT_KINGDOM",
+      "points": 0,
+      "corners": ["HIDDEN", "QUILL", "ANIMAL_KINGDOM", "INSECT_KINGDOM"]
+    },
+
+    {
+      "id": 36,
+      "type": "resource",
+      "center": "INSECT_KINGDOM",
+      "points": 0,
+      "corners": ["MANUSCRIPT", "INSECT_KINGDOM", "HIDDEN", "FUNGI_KINGDOM"]
+    },
+    {
+      "id": 37,
+      "type": "resource",
+      "center": "INSECT_KINGDOM",
+      "points": 0,
+      "corners": ["INSECT_KINGDOM", "PLANT_KINGDOM", "INKWELL", "HIDDEN"]
+    },
+    {
+      "id": 38,
+      "type": "resource",
+      "center": "INSECT_KINGDOM",
+      "corners": ["INSECT_KINGDOM", "HIDDEN", "EMPTY", "EMPTY"],
+      "points": 1
+    },
+    {
+      "id": 39,
+      "type": "resource",
+      "center": "INSECT_KINGDOM",
+      "corners": ["EMPTY", "EMPTY", "HIDDEN", "INSECT_KINGDOM"],
+      "points": 1
+    },
+    {
+      "id": 40,
+      "type": "resource",
+      "center": "INSECT_KINGDOM",
+      "corners": ["HIDDEN", "INSECT_KINGDOM", "EMPTY", "EMPTY"],
+      "points": 1
+    },
+
+
+
+
+    {
+      "id": 41,
+      "type": "gold",
+      "center": "FUNGI_KINGDOM",
+      "points": 1,
+      "cost": ["FUNGI_KINGDOM", "FUNGI_KINGDOM", "ANIMAL_KINGDOM"],
+      "objectNeeded": "QUILL",
+      "overlapped": false,
+      "corners": ["HIDDEN", "EMPTY", "EMPTY", "QUILL"]
+    },
+    {
+      "id": 42,
+      "type": "gold",
+      "center": "FUNGI_KINGDOM",
+      "points": 1,
+      "cost": ["FUNGI_KINGDOM", "FUNGI_KINGDOM", "PLANT_KINGDOM"],
+      "objectNeeded": "INKWELL",
+      "overlapped": false,
+      "corners": ["EMPTY", "INKWELL", "HIDDEN", "EMPTY"]
+    },
+    {
+      "id": 43,
+      "type": "gold",
+      "center": "FUNGI_KINGDOM",
+      "points": 1,
+      "cost": ["FUNGI_KINGDOM", "FUNGI_KINGDOM", "INSECT_KINGDOM"],
+      "objectNeeded": "MANUSCRIPT",
+      "overlapped": false,
+      "corners": ["MANUSCRIPT", "EMPTY", "EMPTY", "HIDDEN"]
+    },
+    {
+      "id": 44,
+      "type": "gold",
+      "center": "FUNGI_KINGDOM",
+      "points": 2,
+      "cost": ["FUNGI_KINGDOM", "FUNGI_KINGDOM", "FUNGI_KINGDOM", "ANIMAL_KINGDOM"],
+      "objectNeeded": null,
+      "overlapped": true,
+      "corners": ["EMPTY", "EMPTY", "HIDDEN", "EMPTY"]
+    },
+
+    {
+      "id": 45,
+      "type": "gold",
+      "center": "FUNGI_KINGDOM",
+      "points": 2,
+      "cost": ["FUNGI_KINGDOM", "FUNGI_KINGDOM", "FUNGI_KINGDOM", "PLANT_KINGDOM"],
+      "objectNeeded": null,
+      "overlapped": true,
+      "corners": ["EMPTY", "EMPTY", "EMPTY", "HIDDEN"]
+    },
+
+    {
+      "id": 46,
+      "type": "gold",
+      "center": "FUNGI_KINGDOM",
+      "points": 2,
+      "cost": ["FUNGI_KINGDOM", "FUNGI_KINGDOM", "FUNGI_KINGDOM", "INSECT_KINGDOM"],
+      "objectNeeded": null,
+      "overlapped": true,
+      "corners": ["EMPTY", "HIDDEN", "EMPTY", "EMPTY"]
+    },
+    {
+      "id": 47,
+      "type": "gold",
+      "center": "FUNGI_KINGDOM",
+      "points": 3,
+      "cost": ["FUNGI_KINGDOM", "FUNGI_KINGDOM", "FUNGI_KINGDOM"],
+      "objectNeeded": null,
+      "overlapped": false,
+      "corners": ["EMPTY", "HIDDEN", "INKWELL", "HIDDEN"]
+    },
+    {
+      "id": 48,
+      "type": "gold",
+      "center": "FUNGI_KINGDOM",
+      "points": 3,
+      "cost": ["FUNGI_KINGDOM", "FUNGI_KINGDOM", "FUNGI_KINGDOM"],
+      "objectNeeded": null,
+      "overlapped": false,
+      "corners": ["QUILL", "EMPTY", "HIDDEN", "HIDDEN"]
+    },
+    {
+      "id": 49,
+      "type": "gold",
+      "center": "FUNGI_KINGDOM",
+      "points": 3,
+      "cost": ["FUNGI_KINGDOM", "FUNGI_KINGDOM", "FUNGI_KINGDOM"],
+      "objectNeeded": null,
+      "overlapped": false,
+      "corners": ["HIDDEN", "MANUSCRIPT", "HIDDEN", "EMPTY"]
+    },
+    {
+      "id": 50,
+      "type": "gold",
+      "center": "FUNGI_KINGDOM",
+      "points": 5,
+      "cost": ["FUNGI_KINGDOM", "FUNGI_KINGDOM", "FUNGI_KINGDOM", "FUNGI_KINGDOM", "FUNGI_KINGDOM"],
+      "objectNeeded": null,
+      "overlapped": false,
+      "corners": ["EMPTY", "HIDDEN", "EMPTY", "HIDDEN"]
+    },
+
+
+
+    {
+      "id": 51,
+      "type": "gold",
+      "center": "PLANT_KINGDOM",
+      "points": 1,
+      "cost": ["PLANT_KINGDOM", "PLANT_KINGDOM", "INSECT_KINGDOM"],
+      "objectNeeded": "QUILL",
+      "overlapped": false,
+      "corners": ["QUILL", "EMPTY", "EMPTY", "HIDDEN"]
+    },
+    {
+      "id": 52,
+      "type": "gold",
+      "center": "PLANT_KINGDOM",
+      "points": 1,
+      "cost": ["PLANT_KINGDOM", "PLANT_KINGDOM", "FUNGI_KINGDOM"],
+      "objectNeeded": "MANUSCRIPT",
+      "overlapped": false,
+      "corners": ["EMPTY", "MANUSCRIPT", "HIDDEN", "EMPTY"]
+    },
+    {
+      "id": 53,
+      "type": "gold",
+      "center": "PLANT_KINGDOM",
+      "points": 1,
+      "cost": ["PLANT_KINGDOM", "PLANT_KINGDOM", "ANIMAL_KINGDOM"],
+      "objectNeeded": "INKWELL",
+      "overlapped": false,
+      "corners": ["EMPTY", "HIDDEN", "INKWELL", "EMPTY"]
+    },
+    {
+      "id": 54,
+      "type": "gold",
+      "center": "PLANT_KINGDOM",
+      "points": 2,
+      "cost": ["PLANT_KINGDOM", "PLANT_KINGDOM", "PLANT_KINGDOM", "INSECT_KINGDOM"],
+      "objectNeeded": null,
+      "overlapped": true,
+      "corners": ["HIDDEN", "EMPTY", "EMPTY", "EMPTY"]
+    },
+
+    {
+      "id": 55,
+      "type": "gold",
+      "center": "PLANT_KINGDOM",
+      "points": 2,
+      "cost": ["PLANT_KINGDOM", "PLANT_KINGDOM", "PLANT_KINGDOM", "ANIMAL_KINGDOM"],
+      "objectNeeded": null,
+      "overlapped": true,
+      "corners": ["EMPTY", "EMPTY", "EMPTY", "HIDDEN"]
+    },
+
+    {
+      "id": 56,
+      "type": "gold",
+      "center": "PLANT_KINGDOM",
+      "points": 2,
+      "cost": ["PLANT_KINGDOM", "PLANT_KINGDOM", "PLANT_KINGDOM", "FUNGI_KINGDOM"],
+      "objectNeeded": null,
+      "overlapped": true,
+      "corners": ["EMPTY", "HIDDEN", "EMPTY", "EMPTY"]
+    },
+    {
+      "id": 57,
+      "type": "gold",
+      "center": "PLANT_KINGDOM",
+      "points": 3,
+      "cost": ["PLANT_KINGDOM", "PLANT_KINGDOM", "PLANT_KINGDOM"],
+      "objectNeeded": null,
+      "overlapped": false,
+      "corners": ["EMPTY", "HIDDEN", "QUILL", "HIDDEN"]
+    },
+    {
+      "id": 58,
+      "type": "gold",
+      "center": "PLANT_KINGDOM",
+      "points": 3,
+      "cost": ["PLANT_KINGDOM", "PLANT_KINGDOM", "PLANT_KINGDOM"],
+      "objectNeeded": null,
+      "overlapped": false,
+      "corners": ["MANUSCRIPT", "EMPTY", "HIDDEN", "HIDDEN"]
+    },
+    {
+      "id": 59,
+      "type": "gold",
+      "center": "PLANT_KINGDOM",
+      "points": 3,
+      "cost": ["PLANT_KINGDOM", "PLANT_KINGDOM", "PLANT_KINGDOM"],
+      "objectNeeded": null,
+      "overlapped": false,
+      "corners": ["HIDDEN", "INKWELL", "HIDDEN", "EMPTY"]
+    },
+    {
+      "id": 60,
+      "type": "gold",
+      "center": "PLANT_KINGDOM",
+      "points": 5,
+      "cost": ["PLANT_KINGDOM", "PLANT_KINGDOM", "PLANT_KINGDOM", "PLANT_KINGDOM", "PLANT_KINGDOM"],
+      "objectNeeded": null,
+      "overlapped": false,
+      "corners": ["EMPTY", "EMPTY", "HIDDEN", "HIDDEN"]
+    },
+
+
+
+    {
+      "id": 61,
+      "type": "gold",
+      "center": "ANIMAL_KINGDOM",
+      "points": 1,
+      "cost": ["ANIMAL_KINGDOM", "ANIMAL_KINGDOM", "ANIMAL_KINGDOM"],
+      "objectNeeded": "INKWELL",
+      "overlapped": false,
+      "corners": ["INKWELL", "EMPTY", "EMPTY", "HIDDEN"]
+    },
+    {
+      "id": 62,
+      "type": "gold",
+      "center": "ANIMAL_KINGDOM",
+      "points": 1,
+      "cost": ["ANIMAL_KINGDOM", "ANIMAL_KINGDOM", "PLANT_KINGDOM"],
+      "objectNeeded": "MANUSCRIPT",
+      "overlapped": false,
+      "corners": ["HIDDEN", "EMPTY", "EMPTY", "MANUSCRIPT"]
+    },
+    {
+      "id": 63,
+      "type": "gold",
+      "center": "ANIMAL_KINGDOM",
+      "points": 1,
+      "cost": ["ANIMAL_KINGDOM", "ANIMAL_KINGDOM", "FUNGI_KINGDOM"],
+      "objectNeeded": "QUILL",
+      "overlapped": false,
+      "corners": ["EMPTY", "HIDDEN", "QUILL", "EMPTY"]
+    },
+    {
+      "id": 64,
+      "type": "gold",
+      "center": "ANIMAL_KINGDOM",
+      "points": 2,
+      "cost": ["ANIMAL_KINGDOM", "ANIMAL_KINGDOM", "ANIMAL_KINGDOM", "INSECT_KINGDOM"],
+      "objectNeeded": null,
+      "overlapped": true,
+      "corners": ["EMPTY", "EMPTY", "HIDDEN", "EMPTY"]
+    },
+
+    {
+      "id": 65,
+      "type": "gold",
+      "center": "ANIMAL_KINGDOM",
+      "points": 2,
+      "cost": ["ANIMAL_KINGDOM", "ANIMAL_KINGDOM", "ANIMAL_KINGDOM", "FUNGI_KINGDOM"],
+      "objectNeeded": null,
+      "overlapped": true,
+      "corners": ["EMPTY", "HIDDEN", "EMPTY", "EMPTY"]
+    },
+
+    {
+      "id": 66,
+      "type": "gold",
+      "center": "ANIMAL_KINGDOM",
+      "points": 2,
+      "cost": ["ANIMAL_KINGDOM", "ANIMAL_KINGDOM", "ANIMAL_KINGDOM", "PLANT_KINGDOM"],
+      "objectNeeded": null,
+      "overlapped": true,
+      "corners": ["HIDDEN", "EMPTY", "EMPTY", "EMPTY"]
+    },
+    {
+      "id": 67,
+      "type": "gold",
+      "center": "ANIMAL_KINGDOM",
+      "points": 3,
+      "cost": ["ANIMAL_KINGDOM", "ANIMAL_KINGDOM", "ANIMAL_KINGDOM"],
+      "objectNeeded": null,
+      "overlapped": false,
+      "corners": ["EMPTY", "HIDDEN", "MANUSCRIPT", "HIDDEN"]
+    },
+    {
+      "id": 68,
+      "type": "gold",
+      "center": "ANIMAL_KINGDOM",
+      "points": 3,
+      "cost": ["ANIMAL_KINGDOM", "ANIMAL_KINGDOM", "ANIMAL_KINGDOM"],
+      "objectNeeded": null,
+      "overlapped": false,
+      "corners": ["EMPTY", "INKWELL", "HIDDEN", "HIDDEN"]
+    },
+    {
+      "id": 69,
+      "type": "gold",
+      "center": "ANIMAL_KINGDOM",
+      "points": 3,
+      "cost": ["ANIMAL_KINGDOM", "ANIMAL_KINGDOM", "ANIMAL_KINGDOM"],
+      "objectNeeded": null,
+      "overlapped": false,
+      "corners": ["HIDDEN", "EMPTY", "HIDDEN", "QUILL"]
+    },
+    {
+      "id": 70,
+      "type": "gold",
+      "center": "ANIMAL_KINGDOM",
+      "points": 5,
+      "cost": ["ANIMAL_KINGDOM", "ANIMAL_KINGDOM", "ANIMAL_KINGDOM", "ANIMAL_KINGDOM", "ANIMAL_KINGDOM"],
+      "objectNeeded": null,
+      "overlapped": false,
+      "corners": ["HIDDEN", "EMPTY", "HIDDEN", "EMPTY"]
+    },
+
+
+    {
+      "id": 71,
+      "type": "gold",
+      "center": "INSECT_KINGDOM",
+      "points": 1,
+      "cost": ["INSECT_KINGDOM", "INSECT_KINGDOM", "PLANT_KINGDOM"],
+      "objectNeeded": "QUILL",
+      "overlapped": false,
+      "corners": ["EMPTY", "QUILL", "HIDDEN", "EMPTY"]
+    },
+    {
+      "id": 72,
+      "type": "gold",
+      "center": "INSECT_KINGDOM",
+      "points": 1,
+      "cost": ["INSECT_KINGDOM", "INSECT_KINGDOM", "ANIMAL_KINGDOM"],
+      "objectNeeded": "MANUSCRIPT",
+      "overlapped": false,
+      "corners": ["EMPTY", "HIDDEN", "MANUSCRIPT", "EMPTY"]
+    },
+    {
+      "id": 73,
+      "type": "gold",
+      "center": "INSECT_KINGDOM",
+      "points": 1,
+      "cost": ["INSECT_KINGDOM", "INSECT_KINGDOM", "FUNGI_KINGDOM"],
+      "objectNeeded": "INKWELL",
+      "overlapped": false,
+      "corners": ["HIDDEN", "EMPTY", "EMPTY", "INKWELL"]
+    },
+    {
+      "id": 74,
+      "type": "gold",
+      "center": "INSECT_KINGDOM",
+      "points": 2,
+      "cost": ["INSECT_KINGDOM", "INSECT_KINGDOM", "INSECT_KINGDOM", "ANIMAL_KINGDOM"],
+      "objectNeeded": null,
+      "overlapped": true,
+      "corners": ["EMPTY", "EMPTY", "HIDDEN", "EMPTY"]
+    },
+
+    {
+      "id": 75,
+      "type": "gold",
+      "center": "INSECT_KINGDOM",
+      "points": 2,
+      "cost": ["INSECT_KINGDOM", "INSECT_KINGDOM", "INSECT_KINGDOM", "PLANT_KINGDOM"],
+      "objectNeeded": null,
+      "overlapped": true,
+      "corners": ["EMPTY", "EMPTY", "EMPTY", "HIDDEN"]
+    },
+
+    {
+      "id": 76,
+      "type": "gold",
+      "center": "INSECT_KINGDOM",
+      "points": 2,
+      "cost": ["INSECT_KINGDOM", "INSECT_KINGDOM", "INSECT_KINGDOM", "FUNGI_KINGDOM"],
+      "objectNeeded": null,
+      "overlapped": true,
+      "corners": ["EMPTY", "HIDDEN", "EMPTY", "EMPTY"]
+    },
+    {
+      "id": 77,
+      "type": "gold",
+      "center": "INSECT_KINGDOM",
+      "points": 3,
+      "cost": ["INSECT_KINGDOM", "INSECT_KINGDOM", "INSECT_KINGDOM"],
+      "objectNeeded": null,
+      "overlapped": false,
+      "corners": ["INKWELL", "HIDDEN", "EMPTY", "HIDDEN"]
+    },
+    {
+      "id": 78,
+      "type": "gold",
+      "center": "INSECT_KINGDOM",
+      "points": 3,
+      "cost": ["INSECT_KINGDOM", "INSECT_KINGDOM", "INSECT_KINGDOM"],
+      "objectNeeded": null,
+      "overlapped": false,
+      "corners": ["EMPTY", "MANUSCRIPT", "HIDDEN", "HIDDEN"]
+    },
+    {
+      "id": 79,
+      "type": "gold",
+      "center": "INSECT_KINGDOM",
+      "points": 3,
+      "cost": ["INSECT_KINGDOM", "INSECT_KINGDOM", "INSECT_KINGDOM"],
+      "objectNeeded": null,
+      "overlapped": false,
+      "corners": ["HIDDEN", "HIDDEN", "QUILL", "EMPTY"]
+    },
+    {
+      "id": 80,
+      "type": "gold",
+      "center": "INSECT_KINGDOM",
+      "points": 5,
+      "cost": ["INSECT_KINGDOM", "INSECT_KINGDOM", "INSECT_KINGDOM", "INSECT_KINGDOM", "INSECT_KINGDOM"],
+      "objectNeeded": null,
+      "overlapped": false,
+      "corners": ["EMPTY", "EMPTY", "HIDDEN", "HIDDEN"]
+    },
+
+
+
+
+
+    {
+      "id": 81,
+      "type": "starter",
+      "center": "INSECT_KINGDOM",
+      "cornerFront": ["FUNGI_KINGDOM", "PLANT_KINGDOM", "INSECT_KINGDOM", "ANIMAL_KINGDOM"],
+      "cornerBack": ["EMPTY", "PLANT_KINGDOM", "INSECT_KINGDOM", "EMPTY"]
+    },
+    {
+      "id": 82,
+      "type": "starter",
+      "center": "FUNGI_KINGDOM",
+      "cornerBack": ["PLANT_KINGDOM", "EMPTY", "EMPTY", "FUNGI_KINGDOM"],
+      "cornerFront": ["PLANT_KINGDOM", "ANIMAL_KINGDOM", "FUNGI_KINGDOM", "INSECT_KINGDOM"]
+    },
+    {
+      "id": 83,
+      "type": "starter",
+      "center":  ["PLANT_KINGDOM","FUNGI_KINGDOM"],
+      "cornerBack": ["EMPTY", "EMPTY", "EMPTY", "EMPTY"],
+      "cornerFront": ["INSECT_KINGDOM", "ANIMAL_KINGDOM", "FUNGI_KINGDOM", "PLANT_KINGDOM"]
+    },
+
+    {
+      "id": 84,
+      "type": "starter",
+      "center":  ["ANIMAL_KINGDOM","INSECT_KINGDOM"],
+      "cornerBack": ["EMPTY", "EMPTY", "EMPTY", "EMPTY"],
+      "cornerFront": ["PLANT_KINGDOM", "INSECT_KINGDOM", "ANIMAL_KINGDOM", "FUNGI_KINGDOM"]
+    },
+
+    {
+      "id": 85,
+      "type": "starter",
+      "center":  ["ANIMAL_KINGDOM","INSECT_KINGDOM", "PLANT_KINGDOM"],
+      "cornerBack": ["EMPTY", "EMPTY", "HIDDEN", "HIDDEN"],
+      "cornerFront": ["INSECT_KINGDOM", "FUNGI_KINGDOM", "PLANT_KINGDOM", "ANIMAL_KINGDOM"]
+    },
+
+    {
+      "id": 86,
+      "type": "starter",
+      "center":  ["PLANT_KINGDOM","ANIMAL_KINGDOM", "FUNGI_KINGDOM"],
+      "cornerBack": ["EMPTY", "EMPTY", "HIDDEN", "HIDDEN"],
+      "cornerFront": ["FUNGI_KINGDOM", "ANIMAL_KINGDOM", "PLANT_KINGDOM", "INSECT_KINGDOM"]
+    },
+
+
+    {
+      "id": 87,
+      "type": "objective",
+      "resource": ["FUNGI_KINGDOM","FUNGI_KINGDOM", "FUNGI_KINGDOM"],
+      "points": 2,
+      "structure": "LEFT_DIAGONAL"
+    },
+
+    {
+      "id": 88,
+      "type": "objective",
+      "resource": ["PLANT_KINGDOM","PLANT_KINGDOM", "PLANT_KINGDOM"],
+      "points": 2,
+      "structure": "RIGHT_DIAGONAL"
+    },
+    {
+      "id": 89,
+      "type": "objective",
+      "resource": ["ANIMAL_KINGDOM","ANIMAL_KINGDOM", "ANIMAL_KINGDOM"],
+      "points": 2,
+      "structure": "LEFT_DIAGONAL"
+    },
+    {
+      "id": 90,
+      "type": "objective",
+      "resource": ["INSECT_KINGDOM","INSECT_KINGDOM", "INSECT_KINGDOM"],
+      "points": 2,
+      "structure": "RIGHT_DIAGONAL"
+    },
+    {
+      "id": 91,
+      "type": "objective",
+      "points": 3,
+      "structure": "DOUBLE_DOWN_RIGHT",
+      "resource": ["FUNGI_KINGDOM","FUNGI_KINGDOM", "PLANT_KINGDOM"]
+    },
+
+    {
+      "id": 92,
+      "type": "objective",
+      "points": 3,
+      "structure": "DOUBLE_DOWN_LEFT",
+      "resource": ["PLANT_KINGDOM","PLANT_KINGDOM", "INSECT_KINGDOM"]
+    },
+    {
+      "id": 93,
+      "type": "objective",
+      "points": 3,
+      "structure": "DOUBLE_UP_RIGHT",
+      "resource": ["ANIMAL_KINGDOM","ANIMAL_KINGDOM", "FUNGI_KINGDOM"]
+    },
+    {
+      "id": 94,
+      "type": "objective",
+      "points": 3,
+      "structure": "DOUBLE_UP_LEFT",
+      "resource": ["INSECT_KINGDOM","INSECT_KINGDOM", "ANIMAL_KINGDOM"]
+    },
+    {
+      "id": 95,
+      "type": "objective",
+      "points": 2,
+      "resource": ["FUNGI_KINGDOM","FUNGI_KINGDOM", "FUNGI_KINGDOM"]
+    },
+    {
+      "id": 96,
+      "type": "objective",
+      "points": 2,
+      "resource": ["PLANT_KINGDOM","PLANT_KINGDOM", "PLANT_KINGDOM"]
+    },
+    {
+      "id": 97,
+      "type": "objective",
+      "points": 2,
+      "resource": ["ANIMAL_KINGDOM","ANIMAL_KINGDOM", "ANIMAL_KINGDOM"]
+    },
+    {
+      "id": 98,
+      "type": "objective",
+      "points": 2,
+      "resource": ["INSECT_KINGDOM","INSECT_KINGDOM", "INSECT_KINGDOM"]
+    },
+    {
+      "id": 99,
+      "type": "objective",
+      "points": 3,
+      "resource": ["QUILL","INKWELL", "MANUSCRIPT"]
+    },
+    {
+      "id": 100,
+      "type": "objective",
+      "points": 2,
+      "resource": ["MANUSCRIPT", "MANUSCRIPT"]
+    },
+    {
+      "id": 101,
+      "type": "objective",
+      "points": 2,
+      "resource": ["INKWELL", "INKWELL"]
+    },
+    {
+      "id": 102,
+      "type": "objective",
+      "points": 2,
+      "resource": ["QUILL", "QUILL"]
+    }
+
+  ]
+
+}
+
+
+  
