@@ -5,6 +5,7 @@ import java.util.*;
 import com.google.gson.Gson;
 
 public class Game {
+    private int idGame;
     private List<Player> listOfPlayers;
     private int numOfPlayers;
     private Map<Player, Integer> scores;
