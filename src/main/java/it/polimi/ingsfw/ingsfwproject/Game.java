@@ -56,7 +56,7 @@ public class Game {
 
     }
 
-    public void playCard(Player player, Face face, Coordinates coord){
+    public void playCard(Player player, Card card, Coordinate coord, Boolean upwards){
 
     }
 
