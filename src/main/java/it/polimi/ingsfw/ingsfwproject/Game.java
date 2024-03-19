@@ -1,6 +1,8 @@
 package it.polimi.ingsfw.ingsfwproject;
 
+import java.io.FileReader;
 import java.util.*;
+import com.google.gson.Gson;
 
 public class Game {
     private List<Player> listOfPlayers;
@@ -15,6 +17,25 @@ public class Game {
     private Player currentPlayer;
 
     public void setupGame(){
+        resourceDeck = new Deck();
+        goldDeck = new Deck();
+
+        try{
+            Gson gson = new Gson();
+            Card[] cards = gson.fromJson(new FileReader("cards.json"), Card[].class);
+
+            for (Card card : cards) {
+
+                if (card instanceof ResourceCard) {
+                    resourceDeck.addCard((ResourceCard) card);
+                } else if (card instanceof GoldCard) {
+                    goldDeck.addCard((GoldCard) card);
+                }
+            }
+
+        }catch (Exception e) {
+            System.out.println("Error with JSON file");
+        }
 
     }
 

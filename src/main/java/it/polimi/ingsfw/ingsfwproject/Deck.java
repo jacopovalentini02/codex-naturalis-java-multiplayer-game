@@ -13,7 +13,7 @@ public class Deck {
 
     }
 
-    public void addCard(){
-
+    public void addCard(Card card){
+        cardList.add(card);
     }
 }
