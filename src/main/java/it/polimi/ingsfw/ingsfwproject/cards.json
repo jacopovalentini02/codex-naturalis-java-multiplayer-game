@@ -142,7 +142,7 @@
       "id": 20,
       "type": "resource",
       "center": "PLANT_KINGDOM",
-      "corners": ["EMPTY", "PLANT_KINGDOM", "HIDDEN", "HIDDEN"],
+      "corners": ["HIDDEN", "PLANT_KINGDOM", "EMPTY", "EMPTY"],
       "points": 1
     },
 
@@ -172,7 +172,7 @@
       "type": "resource",
       "center": "ANIMAL_KINGDOM",
       "points": 0,
-      "corners": ["EMPTY", "ANIMAL_KINGDOM", "EMPTY", "ANIMAL_KINGDOM"]
+      "corners": ["EMPTY", "ANIMAL_KINGDOM", "HIDDEN", "ANIMAL_KINGDOM"]
     },
     {
       "id": 25,
@@ -508,7 +508,7 @@
       "type": "gold",
       "center": "ANIMAL_KINGDOM",
       "points": 1,
-      "cost": ["ANIMAL_KINGDOM", "ANIMAL_KINGDOM", "ANIMAL_KINGDOM"],
+      "cost": ["ANIMAL_KINGDOM", "ANIMAL_KINGDOM", "INSECT_KINGDOM"],
       "objectNeeded": "INKWELL",
       "overlapped": false,
       "corners": ["INKWELL", "EMPTY", "EMPTY", "HIDDEN"]
