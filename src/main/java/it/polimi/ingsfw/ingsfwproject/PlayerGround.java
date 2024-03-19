@@ -11,7 +11,7 @@ public class PlayerGround {
 
     }
 
-    public int objPointsCalc(){
+    /*public int objPointsCalc(){
 
-    }
+    }*/
 }

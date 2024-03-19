@@ -5,10 +5,6 @@ import java.util.*;
 public class GameManager {
     private ArrayList<Game> gameList;
 
-    public static void main(String[] args){
-
-    }
-
     public void createGame(){
 
     }
@@ -18,6 +14,24 @@ public class GameManager {
     }
 
     public void deleteGame(int idGame){
+
+    }
+
+    public static void main(String[] args){
+        Game game1= new Game();
+        Deck prova=new Deck();
+
+        game1.setupGame();
+
+        prova=game1.getGoldDeck();
+
+        for (Card card : prova.getCardList())
+        {
+            System.out.println(card.getIdCard()); // Customize this based on your card properties
+        }
+
+
+
 
     }
 }
