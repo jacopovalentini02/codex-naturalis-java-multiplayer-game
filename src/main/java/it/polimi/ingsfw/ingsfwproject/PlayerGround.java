@@ -5,9 +5,9 @@ import java.util.*;
 public class PlayerGround {
     private int[] resourceCount;
     private int[] objectCount;
-    private Map<Coordinates, Face> grid;
+    private Map<Coordinate, Face> grid;
 
-    public void playCard(Face face, Coordinates coord){
+    public void playCard(Face face, Coordinate coord){
 
     }
 

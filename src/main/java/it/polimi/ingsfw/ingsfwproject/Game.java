@@ -1,12 +1,12 @@
 package it.polimi.ingsfw.ingsfwproject;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.*;
 import java.io.FileReader;
-import java.util.*;
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
 import java.io.IOException;
+import java.util.*;
 
 public class Game {
     private int idGame;
@@ -109,60 +109,59 @@ public class Game {
         this.currentPlayer = currentPlayer;
     }
 
-    public void setupGame(){
+    public void setupGame() {
         resourceDeck = new Deck();
         goldDeck = new Deck();
+        try {
+            // Percorso al file JSON
+            String filePath = "/Users/alessandrozanoni/IdeaProjects/demoApp/src/main/java/com/demoapp/demoapp/example.json";
 
+            // Lettura del file JSON
+            FileReader reader = new FileReader(filePath);
 
+            // Parsa il file JSON
+            JSONTokener tokener = new JSONTokener(reader);
+            JSONObject jsonObject = new JSONObject(tokener);
 
+            // Ottieni l'array di carte dal JSON
+            JSONArray cardsArray = jsonObject.getJSONArray("cards");
+            List<ResourceCard> cardList = new ArrayList<ResourceCard>();
 
-        try{
-//            Gson gson = new Gson();
-//            ResourceCard preRes=new ResourceCard();
-//            JsonElement json = null;
-//            Card[] cards = gson.fromJson(new FileReader("/Users/beatricespazzadeschi/IdeaProjects/ing-sw-2024-zanoni-valentini-spazzadeschi-spandri/src/main/java/it/polimi/ingsfw/ingsfwproject/cards.json"), Card[].class);
-//
-//
-//            for(int i=0; i<40; i++){
-//                resourceDeck.addCard(cards[i]);
-//
-//                JsonObject jsonObject = json.getAsJsonObject();
-//                int idCard = jsonObject.get("id").getAsInt();
-//                String centerS = jsonObject.get("center").getAsString();
-//                Content center=Content.valueOf(centerS);
-//                int points=jsonObject.get("points").getAsInt();
-//
-//                String[] cornersS = new String[0];
-//                Content[] corners = new Content[0];
-//
-//                System.out.println(idCard);
-//                System.out.println(center);
-//                System.out.println(points);
-//
-//                for(int j=0; j<4; j++){
-//                    cornersS[j]=jsonObject.get("corners").getAsString();
-//                    corners[j]=Content.valueOf(cornersS[j]);
-//
-//                    System.out.println(cornersS[j]);
-//
-//                }
-//
-//                preRes.createCard(idCard, center, points, corners);
+            // Itera su ogni oggetto nel JSONArray
+            for (int i = 0; i < cardsArray.length(); i++) {
+                JSONObject cardObject = cardsArray.getJSONObject(i);
 
+                // Estrai i dati dalla carta JSON
+                int id = cardObject.getInt("id");
+                String type = cardObject.getString("type");
+                String centerS = cardObject.getString("center");
+                int points = cardObject.getInt("points");
+                JSONArray cornersArray = cardObject.getJSONArray("corners");
+                String[] cornerS = new String[cornersArray.length()];
+                for (int j = 0; j < cornersArray.length(); j++) {
+                    cornerS[j] = cornersArray.getString(j);
+                }
 
-//            }
-
-
-
-        }catch (IOException e) {
-            // Handle file-related exceptions
-            e.printStackTrace();
-        } catch (JsonParseException e) {
-            // Handle JSON parsing exceptions
+                // Crea un oggetto Card e aggiungilo alla lista
+                ResourceCard preRes = new ResourceCard();
+                Content center = Content.valueOf(centerS);
+                Content[] corners = new Content[4];
+                for (int k = 0; k < 4; k++) {
+                    corners[k] = Content.valueOf(cornerS[k]);
+                }
+                preRes.createCard(id, center, points, corners);
+                cardList.add(preRes);
+            }
+            for(ResourceCard i : cardList){
+                i.printAll();
+            }
+            // Chiudi il lettore
+            reader.close();
+        } catch (IOException | JSONException e) {
             e.printStackTrace();
         }
-
     }
+
 
     public void endGame(){
 
