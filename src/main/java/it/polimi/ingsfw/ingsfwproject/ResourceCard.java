@@ -1,6 +1,7 @@
 package it.polimi.ingsfw.ingsfwproject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Enumeration;
 
 public class ResourceCard extends NormalCard{
@@ -14,20 +15,31 @@ public class ResourceCard extends NormalCard{
         this.front = front;
     }
 
-    public void createCard(int id, Content center, int points, Content[] corners){
-        NormalBack prova= super.getBackface();
-        prova= new NormalBack();
-        this.front = new Front();
-        this.setIdCard(id);
-        this.front.setCornerList(corners);
-        this.front.setPoints(points);
-        prova.setCenter(center);
+   public void createCard(int id, Content center, int points, Content[] corners){
+       this.front = new Front();
+       NormalBack normalBack = new NormalBack();
+       this.setBackface(normalBack);
+       this.setIdCard(id);
+       this.front.setCornerList(corners);
+       this.front.setPoints(points);
+       normalBack.setCenter(center);
+       Content[] emptyCorners = {Content.valueOf("EMPTY"),Content.valueOf("EMPTY"),Content.valueOf("EMPTY"),Content.valueOf("EMPTY")};
+       normalBack.setCornerList(emptyCorners);
+       boolean[] coveredCorn = new boolean[4];
+       normalBack.setCoveredCorner(coveredCorn);
+
+
+
     }
 
     public void printAll(){
         System.out.println(super.getIdCard());
-        //System.out.println(String.valueOf(super.getBackface().getCenter()));
+        System.out.println(String.valueOf(super.getBackface().getCenter()));
         System.out.println(this.front.getPoints());
-        //System.out.println(String.valueOf(this.front.getCornerList()));
+        System.out.println(Arrays.toString(this.front.getCornerList()));
+        System.out.println(Arrays.toString(this.getBackface().getCornerList()));
+        System.out.println(Arrays.toString(this.getBackface().getCoveredCorner()));
+        System.out.println();
+
     }
 }

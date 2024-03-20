@@ -114,7 +114,7 @@ public class Game {
         goldDeck = new Deck();
         try {
             // Percorso al file JSON
-            String filePath = "/Users/alessandrozanoni/IdeaProjects/demoApp/src/main/java/com/demoapp/demoapp/example.json";
+            String filePath = "/Users/beatricespazzadeschi/Documents/prova.json";
 
             // Lettura del file JSON
             FileReader reader = new FileReader(filePath);
@@ -152,6 +152,7 @@ public class Game {
                 preRes.createCard(id, center, points, corners);
                 cardList.add(preRes);
             }
+
             for(ResourceCard i : cardList){
                 i.printAll();
             }
