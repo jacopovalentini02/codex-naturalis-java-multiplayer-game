@@ -112,9 +112,11 @@ public class Game {
     public void setupGame() {
         resourceDeck = new Deck();
         goldDeck = new Deck();
+
+
         try {
             // Percorso al file JSON
-            String filePath = "/Users/beatricespazzadeschi/Documents/prova.json";
+            String filePath = "src/main/java/it/polimi/ingsfw/ingsfwproject/cards.json";
 
             // Lettura del file JSON
             FileReader reader = new FileReader(filePath);
@@ -126,6 +128,7 @@ public class Game {
             // Ottieni l'array di carte dal JSON
             JSONArray cardsArray = jsonObject.getJSONArray("cards");
             List<ResourceCard> cardList = new ArrayList<ResourceCard>();
+            List<GoldCard> goldList = new ArrayList<GoldCard>();
 
             // Itera su ogni oggetto nel JSONArray
             for (int i = 0; i < cardsArray.length(); i++) {
@@ -133,35 +136,28 @@ public class Game {
 
                 // Estrai i dati dalla carta JSON
                 int id = cardObject.getInt("id");
-                String type = cardObject.getString("type");
-                String centerS = cardObject.getString("center");
-                int points = cardObject.getInt("points");
-                JSONArray cornersArray = cardObject.getJSONArray("corners");
-                String[] cornerS = new String[cornersArray.length()];
-                for (int j = 0; j < cornersArray.length(); j++) {
-                    cornerS[j] = cornersArray.getString(j);
+
+                //Resource card 0-40
+                if(i<=39){
+                    resourceDeck.createResourceCard(cardObject, cardList, id);
+
+                }else if(i<=80){
+                    goldDeck.createGoldCard(cardObject, goldList, id, jsonObject);
+
                 }
 
-                // Crea un oggetto Card e aggiungilo alla lista
-                ResourceCard preRes = new ResourceCard();
-                Content center = Content.valueOf(centerS);
-                Content[] corners = new Content[4];
-                for (int k = 0; k < 4; k++) {
-                    corners[k] = Content.valueOf(cornerS[k]);
-                }
-                preRes.createCard(id, center, points, corners);
-                cardList.add(preRes);
+
+
             }
 
-            for(ResourceCard i : cardList){
-                i.printAll();
-            }
             // Chiudi il lettore
             reader.close();
         } catch (IOException | JSONException e) {
             e.printStackTrace();
         }
     }
+
+
 
 
     public void endGame(){
