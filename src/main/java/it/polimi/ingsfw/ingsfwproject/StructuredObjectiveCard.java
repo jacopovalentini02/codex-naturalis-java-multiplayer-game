@@ -9,7 +9,6 @@ public class StructuredObjectiveCard extends ObjectiveCard{
     public Structure getStructureType() {
         return structureType;
     }
-
     public void setStructureType(Structure structureType) {
         this.structureType = structureType;
     }
@@ -20,5 +19,13 @@ public class StructuredObjectiveCard extends ObjectiveCard{
 
     public void setResourceRequested(ArrayList<Content> resourceRequested) {
         this.resourceRequested = resourceRequested;
+    }
+
+    @Override
+    public String toString() {
+        return "StructuredObjectiveCard{" +
+                "structureType=" + structureType +
+                ", resourceRequested=" + resourceRequested +
+                '}';
     }
 }

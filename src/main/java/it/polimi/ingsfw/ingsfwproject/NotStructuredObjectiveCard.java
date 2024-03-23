@@ -12,4 +12,11 @@ public class NotStructuredObjectiveCard extends ObjectiveCard{
     public void setObjectRequested(ArrayList<Content> objectRequested) {
         this.objectRequested = objectRequested;
     }
+
+    @Override
+    public String toString() {
+        return "NotStructuredObjectiveCard{" +
+                "objectRequested=" + objectRequested +
+                '}';
+    }
 }

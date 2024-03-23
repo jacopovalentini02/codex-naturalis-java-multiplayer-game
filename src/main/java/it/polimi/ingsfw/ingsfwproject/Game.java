@@ -17,6 +17,17 @@ public class Game {
     private Deck resourceDeck;
     private Deck goldDeck;
     private Deck objectiveDeck;
+
+    private Deck starterDeck;
+
+    public Deck getStarterDeck() {
+        return starterDeck;
+    }
+
+    public void setStarterDeck(Deck starterDeck) {
+        this.starterDeck = starterDeck;
+    }
+
     private ArrayList<PlayableCard> displayedPlayableCard;
     private ArrayList<ObjectiveCard> displayedObjectiveCard;
     private Player currentPlayer;
@@ -110,9 +121,15 @@ public class Game {
     }
 
     public void setupGame() {
+        setUpCards();
+    }
+
+
+    public void setUpCards(){
         resourceDeck = new Deck();
         goldDeck = new Deck();
-
+        starterDeck =new Deck();
+        objectiveDeck=new Deck();
 
         try {
             // Percorso al file JSON
@@ -127,8 +144,6 @@ public class Game {
 
             // Ottieni l'array di carte dal JSON
             JSONArray cardsArray = jsonObject.getJSONArray("cards");
-            List<ResourceCard> cardList = new ArrayList<ResourceCard>();
-            List<GoldCard> goldList = new ArrayList<GoldCard>();
 
             // Itera su ogni oggetto nel JSONArray
             for (int i = 0; i < cardsArray.length(); i++) {
@@ -139,15 +154,16 @@ public class Game {
 
                 //Resource card 0-40
                 if(i<=39){
-                    resourceDeck.createResourceCard(cardObject, cardList, id);
-
-                }else if(i<=80){
-                    goldDeck.createGoldCard(cardObject, goldList, id, jsonObject);
-
+                    resourceDeck.createResourceCard(cardObject, id);
+                }else if(i<=79){
+                    goldDeck.createGoldCard(cardObject, id, jsonObject);
+                }else if(i<=85){
+                    starterDeck.createStarterCard(cardObject, id);
+                }else if(i<=93){
+                    objectiveDeck.createStructObjective(cardObject, id);
+                }else{
+                    objectiveDeck.createNotStructObjective(cardObject, id);
                 }
-
-
-
             }
 
             // Chiudi il lettore
@@ -156,9 +172,6 @@ public class Game {
             e.printStackTrace();
         }
     }
-
-
-
 
     public void endGame(){
 

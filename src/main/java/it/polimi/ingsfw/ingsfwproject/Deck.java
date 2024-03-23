@@ -26,30 +26,34 @@ public class Deck {
         return cardList;
     }
 
-    public void createResourceCard(JSONObject cardObject, List<ResourceCard> cardList, int id){
+    public void createResourceCard(JSONObject cardObject, int id){
+        this.cardList = new ArrayList<>();
+        Content[] corners = new Content[4];
+
         String centerS = cardObject.getString("center");
         int points = cardObject.getInt("points");
         JSONArray cornersArray = cardObject.getJSONArray("corners");
-        String[] cornerS = new String[cornersArray.length()];
         for (int j = 0; j < cornersArray.length(); j++) {
-            cornerS[j] = cornersArray.getString(j);
+            corners[j] = Content.valueOf(cornersArray.getString(j));
         }
 
         // Crea un oggetto Card e aggiungilo alla lista
         ResourceCard preRes = new ResourceCard();
         Content center = Content.valueOf(centerS);
-        Content[] corners = new Content[4];
-        for (int k = 0; k < 4; k++) {
-            corners[k] = Content.valueOf(cornerS[k]);
-        }
+
         preRes.createCard(id, center, points, corners);
-        this.addCard(preRes); //THIS O CARDSLIST????????
+        this.addCard(preRes);
+        this.printCardsDeck();
 
     }
 
-    public void createGoldCard(JSONObject cardObject, List<GoldCard> cardList, int id, JSONObject jsonObject){
+    public void createGoldCard(JSONObject cardObject, int id, JSONObject jsonObject){
+        this.cardList = new ArrayList<>();
+
         String objectNeed = null;
         Content object = null;
+        Content[] corners = new Content[4];
+        ArrayList<Content> costList = new ArrayList<>();
 
         String centerS = cardObject.getString("center");
         int points = cardObject.getInt("points");
@@ -59,14 +63,12 @@ public class Deck {
         boolean overlapped=cardObject.getBoolean("overlapped");
         JSONArray corner = cardObject.getJSONArray("corners");
 
-        String[] cornerS = new String[corner.length()];
         for (int j = 0; j < corner.length(); j++) {
-            cornerS[j] = corner.getString(j);
+            corners[j] = Content.valueOf(corner.getString(j));
         }
 
-        String[] costS = new String[costArray.length()];
         for (int j = 0; j < costArray.length(); j++) {
-            costS[j] = costArray.getString(j);
+            costList.add(Content.valueOf(costArray.getString(j)));
         }
 
         //Card creation
@@ -74,18 +76,107 @@ public class Deck {
         Content center = Content.valueOf(centerS);
         if(objectNeed != null)
             object=Content.valueOf(objectNeed);
-        Content[] corners = new Content[4];
-        for (int k = 0; k < 4; k++) {
-            corners[k] = Content.valueOf(cornerS[k]);
-        }
-
-        ArrayList<Content> costList = new ArrayList<>();
-        for (String s : costS) {
-            costList.add(Content.valueOf(s));
-        }
 
         preGold.createCard(id, center, points,corners,costList,object,overlapped);
-        this.addCard(preGold); //THIS O CARDSLIST????????
+        this.addCard(preGold);
+        this.printCardsDeck();
+
+
 
     }
+
+    public void createStarterCard(JSONObject cardObject, int id){
+        this.cardList = new ArrayList<>();
+
+        ArrayList<Content> centerList = new ArrayList<>();
+        Content[] cornerBa = new Content[4];
+        Content[] cornerFr = new Content[4];
+
+        JSONArray centerArray = cardObject.getJSONArray("center");
+        for (int j = 0; j < centerArray.length(); j++) {
+            centerList.add(Content.valueOf(centerArray.getString(j)));
+        }
+
+        JSONArray cornerBaArray = cardObject.getJSONArray("cornerBack");
+        for (int j = 0; j < cornerBaArray.length(); j++) {
+            cornerBa[j] = Content.valueOf(cornerBaArray.getString(j));
+        }
+
+        JSONArray cornerFrArray = cardObject.getJSONArray("cornerFront");
+        for (int j = 0; j < cornerFrArray.length(); j++) {
+            cornerFr[j] = Content.valueOf(cornerFrArray.getString(j));
+        }
+
+        StarterCard preStart = new StarterCard();
+        preStart.createCard(id, centerList, cornerBa,cornerFr);
+        this.addCard(preStart);
+        this.printCardsDeck();
+
+    }
+
+    public void createStructObjective(JSONObject cardObject, int id){
+        this.cardList = new ArrayList<>();
+
+        int points = cardObject.getInt("points");
+        String structureS = cardObject.getString("structure");
+        Structure structure = Structure.valueOf(structureS);
+
+        ArrayList<Content> resourceList = new ArrayList<>();
+        JSONArray resArray = cardObject.getJSONArray("resource");
+        for (int j = 0; j < resArray.length(); j++) {
+            resourceList.add(Content.valueOf(resArray.getString(j)));
+        }
+
+        StructuredObjectiveCard structObj=new StructuredObjectiveCard();
+        structObj.setPoints(points);
+        structObj.setStructureType(structure);
+        structObj.setResourceRequested(resourceList);
+
+        this.addCard(structObj);
+        this.printCardsDeck();
+
+    }
+
+    public void createNotStructObjective(JSONObject cardObject, int id){
+
+        int points = cardObject.getInt("points");
+
+        ArrayList<Content> resourceList = new ArrayList<>();
+        JSONArray resArray = cardObject.getJSONArray("resource");
+        for (int j = 0; j < resArray.length(); j++) {
+            resourceList.add(Content.valueOf(resArray.getString(j)));
+        }
+
+        NotStructuredObjectiveCard notStructObj=new NotStructuredObjectiveCard();
+        notStructObj.setPoints(points);
+        notStructObj.setObjectRequested(resourceList);
+
+        this.addCard(notStructObj);
+        this.printCardsDeck();
+
+    }
+
+
+    public void printCardsDeck() {
+        ArrayList<Card> cards = this.getCardList();
+        for (Card card : cards) {
+            if (card instanceof ResourceCard) {
+                ResourceCard resourceCard = (ResourceCard) card;
+                resourceCard.printAll();
+            }else if (card instanceof GoldCard) {
+                GoldCard goldcard = (GoldCard) card;
+                goldcard.printAll();
+            } else if (card instanceof StarterCard) {
+                StarterCard starterCard = (StarterCard) card;
+                starterCard.printAll();
+            } else if (card instanceof StructuredObjectiveCard) {
+                StructuredObjectiveCard structObj = (StructuredObjectiveCard) card;
+                System.out.println(structObj.toString());
+            }else{
+                NotStructuredObjectiveCard notstructObj = (NotStructuredObjectiveCard) card;
+                System.out.println(notstructObj.toString());
+            }
+        }
+    }
+
 }
