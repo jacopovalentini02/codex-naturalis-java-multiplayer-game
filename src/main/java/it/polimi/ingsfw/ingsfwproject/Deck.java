@@ -128,6 +128,7 @@ public class Deck {
         }
 
         StructuredObjectiveCard structObj=new StructuredObjectiveCard();
+        structObj.setIdCard(id);
         structObj.setPoints(points);
         structObj.setStructureType(structure);
         structObj.setResourceRequested(resourceList);
@@ -148,6 +149,7 @@ public class Deck {
         }
 
         NotStructuredObjectiveCard notStructObj=new NotStructuredObjectiveCard();
+        notStructObj.setIdCard(id);
         notStructObj.setPoints(points);
         notStructObj.setObjectRequested(resourceList);
 
