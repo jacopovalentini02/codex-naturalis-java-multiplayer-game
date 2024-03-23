@@ -14,8 +14,11 @@ public class Deck {
 
     }*/
 
+    public Deck(){
+        cardList = new ArrayList<>();
+    }
     public void shuffle(){
-
+        Collections.shuffle(cardList);
     }
 
     public void addCard(Card card){
@@ -27,7 +30,6 @@ public class Deck {
     }
 
     public void createResourceCard(JSONObject cardObject, int id){
-        this.cardList = new ArrayList<>();
         Content[] corners = new Content[4];
 
         String centerS = cardObject.getString("center");
@@ -43,12 +45,10 @@ public class Deck {
 
         preRes.createCard(id, center, points, corners);
         this.addCard(preRes);
-        this.printCardsDeck();
 
     }
 
     public void createGoldCard(JSONObject cardObject, int id, JSONObject jsonObject){
-        this.cardList = new ArrayList<>();
 
         String objectNeed = null;
         Content object = null;
@@ -79,14 +79,11 @@ public class Deck {
 
         preGold.createCard(id, center, points,corners,costList,object,overlapped);
         this.addCard(preGold);
-        this.printCardsDeck();
-
 
 
     }
 
     public void createStarterCard(JSONObject cardObject, int id){
-        this.cardList = new ArrayList<>();
 
         ArrayList<Content> centerList = new ArrayList<>();
         Content[] cornerBa = new Content[4];
@@ -110,12 +107,10 @@ public class Deck {
         StarterCard preStart = new StarterCard();
         preStart.createCard(id, centerList, cornerBa,cornerFr);
         this.addCard(preStart);
-        this.printCardsDeck();
 
     }
 
     public void createStructObjective(JSONObject cardObject, int id){
-        this.cardList = new ArrayList<>();
 
         int points = cardObject.getInt("points");
         String structureS = cardObject.getString("structure");
@@ -134,7 +129,6 @@ public class Deck {
         structObj.setResourceRequested(resourceList);
 
         this.addCard(structObj);
-        this.printCardsDeck();
 
     }
 
@@ -154,7 +148,6 @@ public class Deck {
         notStructObj.setObjectRequested(resourceList);
 
         this.addCard(notStructObj);
-        this.printCardsDeck();
 
     }
 
@@ -180,5 +173,7 @@ public class Deck {
             }
         }
     }
+
+
 
 }

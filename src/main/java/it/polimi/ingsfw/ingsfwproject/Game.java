@@ -168,6 +168,15 @@ public class Game {
 
             // Chiudi il lettore
             reader.close();
+
+            //Shuffle
+            goldDeck.shuffle();
+            starterDeck.shuffle();
+            objectiveDeck.shuffle();
+            resourceDeck.shuffle();
+
+            goldDeck.printCardsDeck();
+
         } catch (IOException | JSONException e) {
             e.printStackTrace();
         }
