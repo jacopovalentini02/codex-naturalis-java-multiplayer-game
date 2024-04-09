@@ -1,4 +1,4 @@
-package it.polimi.ingsfw.ingsfwproject;
+package it.polimi.ingsfw.ingsfwproject.Model;
 
 public enum PlayerColor {
     YELLOW,

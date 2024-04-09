@@ -64,7 +64,7 @@
                         <!-- Default configuration for running with: mvn clean javafx:run -->
                         <id>default-cli</id>
                         <configuration>
-                            <mainClass>it.polimi.ingsfw.ingsfwproject/it.polimi.ingsfw.ingsfwproject.HelloApplication
+                            <mainClass>it.polimi.ingsfw.ingsfwproject/it.polimi.ingsfw.ingsfwproject.Model.HelloApplication
                             </mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>

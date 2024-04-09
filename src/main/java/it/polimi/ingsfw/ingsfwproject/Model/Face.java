@@ -1,6 +1,6 @@
-package it.polimi.ingsfw.ingsfwproject;
+package it.polimi.ingsfw.ingsfwproject.Model;
 
-import java.util.*;
+import it.polimi.ingsfw.ingsfwproject.Model.Content;
 
 abstract public class Face {
     /*cornerList[0] = top left
@@ -8,6 +8,7 @@ abstract public class Face {
     cornerList[2] = bottom left
     cornerList[3] = bottom right
      */
+    private int idCard;
 
     private Content[] cornerList;
     private boolean[] coveredCorner;

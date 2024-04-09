@@ -1,6 +1,9 @@
-package it.polimi.ingsfw.ingsfwproject;
+package it.polimi.ingsfw.ingsfwproject.Model;
 
-abstract public class ObjectiveCard extends Card{
+import it.polimi.ingsfw.ingsfwproject.Model.Card;
+import it.polimi.ingsfw.ingsfwproject.Model.Content;
+
+abstract public class ObjectiveCard extends Card {
     private Content color;
     private int points;
     public Content getColor() {

@@ -1,8 +1,6 @@
-package it.polimi.ingsfw.ingsfwproject;
+package it.polimi.ingsfw.ingsfwproject.Model;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Enumeration;
 
 public class ResourceCard extends NormalCard{
     private Front front;
