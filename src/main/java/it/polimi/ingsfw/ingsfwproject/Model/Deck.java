@@ -17,6 +17,9 @@ public class Deck {
     public Deck(){
         cardList = new ArrayList<>();
     }
+    public Card draw(){
+
+    }
     public void shuffle(){
         Collections.shuffle(cardList);
     }

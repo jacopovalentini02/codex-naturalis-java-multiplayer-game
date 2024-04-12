@@ -20,4 +20,8 @@ public class GameController {
     public void draw(Player player, Deck deck){
 
     }
+
+    public boolean choosingFace(Player player){
+
+    }
 }
