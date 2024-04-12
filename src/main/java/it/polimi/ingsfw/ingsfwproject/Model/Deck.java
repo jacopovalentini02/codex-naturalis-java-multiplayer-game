@@ -152,6 +152,16 @@ public class Deck {
     }
 
 
+    public Card draw(){
+        if (this.cardList!=null && !this.cardList.isEmpty()) {
+            Card drawnCard= this.cardList.getFirst();
+            this.cardList.remove(drawnCard);
+            return drawnCard;
+        } else {
+            // if the deck is empty return null
+            return null;
+        }
+    }
     public void printCardsDeck() {
         ArrayList<Card> cards = this.getCardList();
         for (Card card : cards) {

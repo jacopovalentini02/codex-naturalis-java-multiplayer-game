@@ -26,6 +26,14 @@ abstract public class Face {
         this.cornerList = cornerList;
     }
 
+    public int getIdCard() {
+        return idCard;
+    }
+
+    public void setIdCard(int idCard) {
+        this.idCard = idCard;
+    }
+
     public boolean[] getCoveredCorner() {
         return coveredCorner;
     }

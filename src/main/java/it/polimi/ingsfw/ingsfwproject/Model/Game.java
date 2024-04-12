@@ -14,11 +14,13 @@ public class Game {
     private int numOfPlayers;
     private Map<Player, Integer> scores;
     private Player firstPlayer;
+    private Player currentPlayer;
     private Deck resourceDeck;
     private Deck goldDeck;
     private Deck objectiveDeck;
-
     private Deck starterDeck;
+    private ArrayList<PlayableCard> displayedPlayableCard;
+    private ArrayList<ObjectiveCard> displayedObjectiveCard;
 
     public Deck getStarterDeck() {
         return starterDeck;
@@ -27,10 +29,6 @@ public class Game {
     public void setStarterDeck(Deck starterDeck) {
         this.starterDeck = starterDeck;
     }
-
-    private ArrayList<PlayableCard> displayedPlayableCard;
-    private ArrayList<ObjectiveCard> displayedObjectiveCard;
-    private Player currentPlayer;
 
     public int getIdGame() {
         return idGame;

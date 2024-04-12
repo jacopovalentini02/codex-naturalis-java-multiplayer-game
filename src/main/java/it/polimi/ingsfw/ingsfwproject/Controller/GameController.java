@@ -9,9 +9,9 @@ public class GameController {
 
     }
 
-    public ArrayList<Coordinate> getAvailablePositions(Player player){
-
-    }
+//    public ArrayList<Coordinate> getAvailablePositions(Player player){
+//
+//    }
 
     public void DrawDisplayedPlayableCard(Player player, PlayableCard card){
 

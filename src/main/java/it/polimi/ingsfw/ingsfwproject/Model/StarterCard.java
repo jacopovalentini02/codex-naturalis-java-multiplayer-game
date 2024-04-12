@@ -28,6 +28,8 @@ public class StarterCard extends PlayableCard{
         this.back=new StarterBack();
 
         this.setIdCard(id);
+        this.front.setIdCard(id);
+        this.back.setIdCard(id);
         this.front.setCornerList(cornerFront);
         this.back.setCornerList(cornerBack);
         this.back.setCenter(center);
