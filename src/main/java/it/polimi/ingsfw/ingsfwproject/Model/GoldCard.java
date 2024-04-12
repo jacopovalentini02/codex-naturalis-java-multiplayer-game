@@ -20,6 +20,8 @@ public class GoldCard extends NormalCard{
         NormalBack normalBack = new NormalBack();
         this.setBackface(normalBack);
         this.setIdCard(id);
+        this.front.setIdCard(id);
+        normalBack.setIdCard(id);
         this.front.setCornerList(corners);
         this.front.setPoints(points);
         normalBack.setCenter(center);

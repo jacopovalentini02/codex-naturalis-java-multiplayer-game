@@ -17,9 +17,11 @@ public class ResourceCard extends NormalCard{
        this.front = new Front();
        NormalBack normalBack = new NormalBack();
        this.setBackface(normalBack);
-       this.setIdCard(id);
        this.front.setCornerList(corners);
        this.front.setPoints(points);
+       this.setIdCard(id);
+       this.front.setIdCard(id);
+       normalBack.setIdCard(id);
        normalBack.setCenter(center);
        Content[] emptyCorners = {Content.valueOf("EMPTY"),Content.valueOf("EMPTY"),Content.valueOf("EMPTY"),Content.valueOf("EMPTY")};
        normalBack.setCornerList(emptyCorners);

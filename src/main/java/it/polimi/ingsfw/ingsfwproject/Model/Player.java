@@ -10,11 +10,26 @@ public class Player {
     private ArrayList<PlayableCard> handCard;
     private ObjectiveCard handObjective;
 
-    public void draw(Deck deck){
 
+    public Player(String username, PlayerColor token) {
+        this.username = username;
+        this.points = 0; // At the beginning points are equal to 0
+        this.token = token;
+        this.ground = new PlayerGround();
+        this.handCard = new ArrayList<>();
+        this.handObjective = null;
+    }
+
+    public void draw(Deck deck){
+        Card drawnCard = deck.draw();
+        if (drawnCard != null) {
+            handCard.add((PlayableCard) drawnCard);
+        } else {
+            System.out.println("Deck is empty");
+        }
     }
     public void pick(Card card){
-
+        handCard.add((PlayableCard) card);
     }
 
     public String getUsername() {

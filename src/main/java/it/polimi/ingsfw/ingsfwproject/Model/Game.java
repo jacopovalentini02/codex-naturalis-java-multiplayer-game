@@ -1,7 +1,5 @@
 package it.polimi.ingsfw.ingsfwproject.Model;
 
-import it.polimi.ingsfw.ingsfwproject.Controller.GameController;
-import it.polimi.ingsfw.ingsfwproject.faceReader;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -10,10 +8,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
 
-
 public class Game {
     private int idGame;
-    private GameController controller = new GameController();
     private List<Player> listOfPlayers;
     private int numOfPlayers;
     private Map<Player, Integer> scores;
@@ -32,8 +28,8 @@ public class Game {
         this.starterDeck = starterDeck;
     }
 
-    private List<PlayableCard> displayedPlayableCard;
-    private List<ObjectiveCard> displayedObjectiveCard;
+    private ArrayList<PlayableCard> displayedPlayableCard;
+    private ArrayList<ObjectiveCard> displayedObjectiveCard;
     private Player currentPlayer;
 
     public int getIdGame() {
@@ -125,82 +121,7 @@ public class Game {
     }
 
     public void setupGame() {
-        //invoking the instantiation of all game's cards
         setUpCards();
-        //Shuffle the Resource cards and place them facedown in the center of the table. Draw 2 cards and place them faceup.
-        resourceDeck.shuffle();
-        displayedPlayableCard = new ArrayList<PlayableCard>();
-        displayedPlayableCard.add(resourceDeck.draw());
-        displayedPlayableCard.add(resourceDeck.draw());
-        //Shuffle the Gold cards and place them facedown in the center of the table. Draw 2 cards and place them faceup.
-        goldDeck.shuffle();
-        displayedPlayableCard.add(goldDeck.draw());
-        displayedPlayableCard.add(goldDeck.draw());
-        //Each player randomly takes one Starter card and choose the face to be played
-        starterDeck.shuffle();
-        //creating the arrayList representing the token available
-        List<PlayerColor> tokenAvailable = new ArrayList<>();
-        tokenAvailable.add(PlayerColor.GREEN);
-        tokenAvailable.add(PlayerColor.RED);
-        tokenAvailable.add(PlayerColor.BLUE);
-        tokenAvailable.add(PlayerColor.YELLOW);
-        //initializing the score track
-        scores = new HashMap<>();
-        //cycling on every player the beginning operations
-        for (Player p : listOfPlayers){
-            StarterCard starter = starterDeck.draw();
-            //choosing the face
-            controller.playCard(p, starter, faceReader.getBoolean(), new Coordinate(0,0));
-            //picking the token
-            System.out.println("Puoi scegliere tra i seguenti colori: ");
-            for(PlayerColor color : tokenAvailable){
-                System.out.println(color);
-            }
-            Scanner scanner = new Scanner(System.in);
-            String colorChoosen = scanner.next().toUpperCase();
-            scanner.close();
-            p.setToken(PlayerColor.valueOf(colorChoosen));
-            tokenAvailable.remove(PlayerColor.valueOf(colorChoosen));
-            //placing the token on the 0 of the score track
-            scores.put(p, 0);
-            //draw 2 resourceCard e 1 goldCard
-            p.getHandCard().add(resourceDeck.draw());
-            p.getHandCard().add(resourceDeck.draw());
-            p.getHandCard().add(goldDeck.draw());
-        }
-        //shuffling the objectiveDeck
-        objectiveDeck.shuffle();
-        //placing the 2 common objective on the table
-        displayedObjectiveCard = new ArrayList<>();
-        displayedObjectiveCard.add(objectiveDeck.draw());
-        displayedObjectiveCard.add(objectiveDeck.draw());
-        //Each player receives 2 Objective cards, they look at them and choose one of them.
-        for(Player p : listOfPlayers){
-            //draw 2 objective cards
-            Deck cardsToChooseWithin = new Deck();
-            cardsToChooseWithin.addCard(objectiveDeck.draw());
-            cardsToChooseWithin.addCard(objectiveDeck.draw());
-            //letting the player choose which card he wants
-            System.out.println("Che carta vuoi tenere tra queste (indicare id):\n");
-            cardsToChooseWithin.printCardsDeck();
-            Scanner scanner = new Scanner(System.in);
-            int cardChoosen = scanner.nextInt();
-            scanner.close();
-            //finding the card choosen by the player
-            for(Card o : cardsToChooseWithin.getCardList()){
-                if(o.getIdCard() == cardChoosen){
-                    cardsToChooseWithin.getCardList().remove(o);
-                    p.setHandObjective((ObjectiveCard)o);
-                    break;
-                }
-            }
-            //with the .addCard method, it should be possible adding the card directly at the bottom of the deck
-            objectiveDeck.addCard(cardsToChooseWithin.getCardList().get(0));
-        }
-        //choosing randomly the first player
-        Random rand = new Random();
-        int index = rand.nextInt(listOfPlayers.size());
-        setFirstPlayer(listOfPlayers.get(index));
     }
 
 
@@ -211,24 +132,24 @@ public class Game {
         objectiveDeck=new Deck();
 
         try {
-            // path to JSON file
-            String filePath = "src/main/java/it/polimi/ingsfw/ingsfwproject/Model/cards.json";
+            // Percorso al file JSON
+            String filePath = "src/main/java/it/polimi/ingsfw/ingsfwproject/cards.json";
 
-            // reading of JSON file
+            // Lettura del file JSON
             FileReader reader = new FileReader(filePath);
 
-            // Parsing of JSON file
+            // Parsa il file JSON
             JSONTokener tokener = new JSONTokener(reader);
             JSONObject jsonObject = new JSONObject(tokener);
 
-            // Obtaining array of cards from JSON
+            // Ottieni l'array di carte dal JSON
             JSONArray cardsArray = jsonObject.getJSONArray("cards");
 
-            // Cycling on every object of the JSONArray
+            // Itera su ogni oggetto nel JSONArray
             for (int i = 0; i < cardsArray.length(); i++) {
                 JSONObject cardObject = cardsArray.getJSONObject(i);
 
-                // Extracting cards data
+                // Estrai i dati dalla carta JSON
                 int id = cardObject.getInt("id");
 
                 //Resource card 0-40
@@ -245,17 +166,16 @@ public class Game {
                 }
             }
 
-            // close reader
+            // Chiudi il lettore
             reader.close();
 
-            //Shuffle methods that i'll insert in the main function 'setupGame'
-           /* goldDeck.shuffle();
+            //Shuffle
+            goldDeck.shuffle();
             starterDeck.shuffle();
             objectiveDeck.shuffle();
             resourceDeck.shuffle();
 
-            //check method to see if we did correct
-            goldDeck.printCardsDeck();*/
+            goldDeck.printCardsDeck();
 
         } catch (IOException | JSONException e) {
             e.printStackTrace();
