@@ -1,15 +1,33 @@
 package it.polimi.ingsfw.ingsfwproject.Model;
 
+import it.polimi.ingsfw.ingsfwproject.Exceptions.IDAlreadyTakenException;
+
 import java.util.*;
 
 public class GameManager {
-    private ArrayList<Game> gameList;
+    private HashMap<Integer, Game> gameList;
+    int firstAvailableGameID; //indica il primo numero utilizzabile come ID di un nuovo Game
 
-    public void createGame(){
-
+    public GameManager(){
+        this.gameList = new HashMap<>();
+        this.firstAvailableGameID = 0;
     }
 
-    public void joinGame(String nick, int idGame){
+    public void createGame(int numOfPlayers){
+        Game newGame = new Game();
+        newGame.setIdGame(firstAvailableGameID);
+        newGame.setNumOfPlayers(numOfPlayers);
+        gameList.put(firstAvailableGameID, newGame);
+        firstAvailableGameID++;
+    }
+
+    public void joinGame(String nick, int idGame) throws IDAlreadyTakenException {
+        Game game = gameList.get(idGame);
+        for (Player p: game.getListOfPlayers()){ //controllo che username non sia già stato preso
+            if (p.getUsername().equals(nick))
+                throw new IDAlreadyTakenException("Nickname : " + nick + "is already taken");
+        }
+
 
     }
 
