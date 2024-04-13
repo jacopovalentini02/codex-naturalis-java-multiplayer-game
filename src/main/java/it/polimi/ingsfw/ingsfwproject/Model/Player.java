@@ -4,7 +4,6 @@ import java.util.*;
 
 public class Player {
     private String username;
-    private int points;
     private PlayerColor token;
     private PlayerGround ground;
     private ArrayList<PlayableCard> handCard;
@@ -13,7 +12,6 @@ public class Player {
 
     public Player(String username, PlayerColor token) {
         this.username = username;
-        this.points = 0; // At the beginning points are equal to 0
         this.token = token;
         this.ground = new PlayerGround();
         this.handCard = new ArrayList<>();
@@ -38,14 +36,6 @@ public class Player {
 
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    public int getPoints() {
-        return points;
-    }
-
-    public void setPoints(int points) {
-        this.points = points;
     }
 
     public PlayerColor getToken() {

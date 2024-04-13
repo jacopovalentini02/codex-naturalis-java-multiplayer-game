@@ -21,8 +21,10 @@ public class Game {
     private Deck resourceDeck;
     private Deck goldDeck;
     private Deck objectiveDeck;
-
     private Deck starterDeck;
+    private List<PlayableCard> displayedPlayableCard;
+    private List<ObjectiveCard> displayedObjectiveCard;
+    private Player currentPlayer;
 
     public Deck getStarterDeck() {
         return starterDeck;
@@ -32,9 +34,7 @@ public class Game {
         this.starterDeck = starterDeck;
     }
 
-    private List<PlayableCard> displayedPlayableCard;
-    private List<ObjectiveCard> displayedObjectiveCard;
-    private Player currentPlayer;
+
 
     public int getIdGame() {
         return idGame;
@@ -69,11 +69,11 @@ public class Game {
     }
 
     public ArrayList<PlayableCard> getDisplayedPlayableCard() {
-        return displayedPlayableCard;
+        return (ArrayList<PlayableCard>) displayedPlayableCard;
     }
 
     public ArrayList<ObjectiveCard> getDisplayedObjectiveCard() {
-        return displayedObjectiveCard;
+        return (ArrayList<ObjectiveCard>) displayedObjectiveCard;
     }
 
     public Player getCurrentPlayer() {
@@ -266,11 +266,17 @@ public class Game {
 
     }
 
-    /*public Player addPlayer(String nick){
-
-    }*/
+    public void addPlayer(Player newPlayer){
+        listOfPlayers.add(newPlayer);
+    }
 
     public void nextTurn(){
+        if(listOfPlayers.indexOf(currentPlayer)==listOfPlayers.size()-1) //if current player is the last one, the next one is the first in the list
+            this.setCurrentPlayer(listOfPlayers.getFirst());
+        else{
+            int currInd=listOfPlayers.indexOf(currentPlayer);
+            this.setCurrentPlayer(listOfPlayers.get(currInd+1));
+        }
 
     }
 
@@ -278,13 +284,12 @@ public class Game {
 
     }
 
-    public void playCard(Player player, Card card, Coordinate coord, Boolean upwards){
-
-    }
-
-
     public void updatePoints(Player player, int score){
+        scores.merge(player, score, Integer::sum); //sum the old score with the new score
 
+        if (scores.get(player) >= 20) {
+            lastTurn(); //last round for every player
+        }
     }
 
     public void finalScoreCheck(){
