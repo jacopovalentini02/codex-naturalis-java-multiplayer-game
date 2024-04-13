@@ -277,6 +277,7 @@ public class Game {
             int currInd=listOfPlayers.indexOf(currentPlayer);
             this.setCurrentPlayer(listOfPlayers.get(currInd+1));
         }
+        //UU
 
     }
 
