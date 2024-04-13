@@ -6,6 +6,7 @@ public class LobbyController {
     private GameManager lobby;
 
     //TODO: gestire eccezione di nickname già preso
+    //TODO: gestire eccezione di gioco già pieno
     public void createGame(int numOfPlayers){
 
     }

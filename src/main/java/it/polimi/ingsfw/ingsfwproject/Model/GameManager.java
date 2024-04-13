@@ -1,5 +1,6 @@
 package it.polimi.ingsfw.ingsfwproject.Model;
 
+import it.polimi.ingsfw.ingsfwproject.Exceptions.GameFullException;
 import it.polimi.ingsfw.ingsfwproject.Exceptions.IDAlreadyTakenException;
 
 import java.util.*;
@@ -21,14 +22,18 @@ public class GameManager {
         firstAvailableGameID++;
     }
 
-    public void joinGame(String nick, int idGame) throws IDAlreadyTakenException {
-        Game game = gameList.get(idGame);
-        for (Player p: game.getListOfPlayers()){ //controllo che username non sia già stato preso
+    public void joinGame(String nick, int idGame) throws IDAlreadyTakenException, GameFullException {
+        Game gameToJoin = gameList.get(idGame);
+
+        if (gameToJoin.getListOfPlayers().size() == gameToJoin.getNumOfPlayers()) //checks if game is already full
+            throw new GameFullException("Game " + idGame + " is full.");
+
+        for (Player p: gameToJoin.getListOfPlayers()){ //controllo che username non sia già stato preso
             if (p.getUsername().equals(nick))
                 throw new IDAlreadyTakenException("Nickname : " + nick + "is already taken");
         }
-
-
+        Player newPlayer = new Player(nick);
+        //gameToJoin.addPlayer(newPlayer);
     }
 
     public void deleteGame(int idGame){
