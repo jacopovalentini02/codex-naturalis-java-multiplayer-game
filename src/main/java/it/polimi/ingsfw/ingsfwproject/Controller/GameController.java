@@ -29,4 +29,8 @@ public class GameController {
     public boolean choosingFace(Player player){
 
     }
+
+    public void drawDisplayedPlayableCard(Player player, PlayableCard card){
+
+    }
 }

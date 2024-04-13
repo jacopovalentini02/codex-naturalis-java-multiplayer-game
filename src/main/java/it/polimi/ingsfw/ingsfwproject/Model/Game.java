@@ -13,6 +13,16 @@ import java.util.*;
 
 public class Game {
     private int idGame;
+
+    public GameState getState() {
+        return state;
+    }
+
+    public void setState(GameState state) {
+        this.state = state;
+    }
+
+    private GameState state;
     private GameController controller = new GameController();
     private List<Player> listOfPlayers;
     private int numOfPlayers;
@@ -277,23 +287,102 @@ public class Game {
             int currInd=listOfPlayers.indexOf(currentPlayer);
             this.setCurrentPlayer(listOfPlayers.get(currInd+1));
         }
-        //UU
 
     }
 
-    public void lastTurn(){
+    public void lastTurn(Player firstTwenty){
+        int flag=0;
+        while(flag<2){
+            //turn operations
+            if(flag!=0) {
+                Deck lastHand = new Deck();
+                //letting the player choose the last card to play
+                System.out.println("Scegli la tua ultima carta da giocare (indicare id): ");
+                for (int i = 0; i < getCurrentPlayer().getHandCard().size(); i++) {
+                    lastHand.getCardList().add(getCurrentPlayer().getHandCard().get(i));
+                }
+                lastHand.printCardsDeck();
+                Scanner scanner = new Scanner(System.in);
+                int index = scanner.nextInt();
+                scanner.close();
+                PlayableCard rightCard = null;
+                for (Card o : currentPlayer.getHandCard()) {
+                    if (o.getIdCard() == index) {
+                        getCurrentPlayer().getHandCard().remove(o);
+                        rightCard = (PlayableCard) o;
+                        break;
+                    }
+                }
+                //letting the player choose the position on the grid
+                System.out.println("Scegli la posizione della carta tra queste (indicare prima x e poi y): \n");
+                for (Coordinate c : getCurrentPlayer().getGround().getAvailablePositions()){
+                    System.out.println("(" + c.getX() + " , " +c.getY() + ")\n");
+                }
+                int x = scanner.nextInt();
+                int y = scanner.nextInt();
+                scanner.close();
+                //invoking the playCard method
+                controller.playCard(getCurrentPlayer(), rightCard, faceReader.getBoolean(), new Coordinate(x,y));
+                //QUA ANDREBBE POI FATTO UN UPDATE DEL PUNTEGGIO DEL GIOCATORE
 
+
+                //choice between draw and pick
+                System.out.println("vuoi pescare dal mazzo o prendere una carta scoperta (scrivere 'pesca' o 'prendi'?\n");
+                String command = null;
+                command = scanner.next();
+                scanner.close();
+                String type = null;
+                //executing the command
+                if(command.equals("pesca")){
+                    System.out.println("Mazzo 'risorse' o 'gold' ?");
+                    type = scanner.next();
+                    scanner.close();
+                    if(type.equals("risorse")){
+                        controller.draw(getCurrentPlayer(), resourceDeck);
+                    }
+                    else if(type.equals("gold")){
+                        controller.draw(getCurrentPlayer(), goldDeck);
+                    }
+                }
+                else if (command.equals("prendi")){
+                    Deck groundCard = new Deck();
+                    //letting the player choose the card from the ground
+                    System.out.println("Scegli la carta da prendere dal terreno (inserisci id):\n");
+                    for(Card gc : displayedPlayableCard){
+                        groundCard.getCardList().add(gc);
+                    }
+                    groundCard.printCardsDeck();
+                    int i = scanner.nextInt();
+                    PlayableCard wantedCard = null;
+                    for(Card gc : displayedPlayableCard){
+                        if(gc.getIdCard() == i){
+                            wantedCard = (PlayableCard) gc;
+                        }
+                    }
+                    controller.drawDisplayedPlayableCard(getCurrentPlayer(), wantedCard);
+                }
+            }
+            if(getCurrentPlayer()==firstTwenty){
+                flag++;
+            }
+            if(flag!=2){
+                nextTurn();
+            }
+        }
+        setState(GameState.ENDING);
+        finalScoreCheck();
     }
 
     public void updatePoints(Player player, int score){
         scores.merge(player, score, Integer::sum); //sum the old score with the new score
 
         if (scores.get(player) >= 20) {
-            lastTurn(); //last round for every player
+            lastTurn(player); //last round for every player
         }
     }
 
     public void finalScoreCheck(){
-
+        //OPERAZIONI...
+        setState(GameState.ENDED);
     }
 }

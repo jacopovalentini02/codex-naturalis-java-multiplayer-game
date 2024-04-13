@@ -16,6 +16,11 @@ public class PlayerGround {
     private int[] resourceCount;
     private int[] objectCount;
     private Map<Coordinate, Face> grid;
+
+    public ArrayList<Coordinate> getAvailablePositions() {
+        return availablePositions;
+    }
+
     private ArrayList<Coordinate> availablePositions;
 
     public PlayerGround(){
