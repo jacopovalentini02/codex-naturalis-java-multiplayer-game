@@ -11,10 +11,10 @@ public class Player {
     private ObjectiveCard handObjective;
 
 
-    public Player(String username, PlayerColor token) {
+    public Player(String username) {
         this.username = username;
         this.points = 0; // At the beginning points are equal to 0
-        this.token = token;
+        this.token = null;
         this.ground = new PlayerGround();
         this.handCard = new ArrayList<>();
         this.handObjective = null;
