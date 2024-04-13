@@ -362,14 +362,18 @@ public class Game {
                     controller.drawDisplayedPlayableCard(getCurrentPlayer(), wantedCard);
                 }
             }
+            //every time we meet the first player to reach x>=20 points, we keep it in mind
             if(getCurrentPlayer()==firstTwenty){
                 flag++;
             }
+            //if flag==2 it means the last turn is completed for every player, so we don't have to go for a nextTurn()
             if(flag!=2){
                 nextTurn();
             }
         }
+        //now that all have completed their last turn, the game is set in ending state
         setState(GameState.ENDING);
+        //invoking the final function to check who is the winner
         finalScoreCheck();
     }
 
