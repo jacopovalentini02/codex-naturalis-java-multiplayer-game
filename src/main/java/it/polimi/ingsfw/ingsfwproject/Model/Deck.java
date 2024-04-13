@@ -10,16 +10,11 @@ public class Deck {
 
     private ArrayList<Card> cardList;
 
-    /*public Card draw(){
-
-    }*/
 
     public Deck(){
         cardList = new ArrayList<>();
     }
-    public Card draw(){
 
-    }
     public void shuffle(){
         Collections.shuffle(cardList);
     }

@@ -130,12 +130,12 @@ public class Game {
         //Shuffle the Resource cards and place them facedown in the center of the table. Draw 2 cards and place them faceup.
         resourceDeck.shuffle();
         displayedPlayableCard = new ArrayList<PlayableCard>();
-        displayedPlayableCard.add(resourceDeck.draw());
-        displayedPlayableCard.add(resourceDeck.draw());
+        displayedPlayableCard.add((PlayableCard) resourceDeck.draw());
+        displayedPlayableCard.add((PlayableCard) resourceDeck.draw());
         //Shuffle the Gold cards and place them facedown in the center of the table. Draw 2 cards and place them faceup.
         goldDeck.shuffle();
-        displayedPlayableCard.add(goldDeck.draw());
-        displayedPlayableCard.add(goldDeck.draw());
+        displayedPlayableCard.add((PlayableCard) goldDeck.draw());
+        displayedPlayableCard.add((PlayableCard) goldDeck.draw());
         //Each player randomly takes one Starter card and choose the face to be played
         starterDeck.shuffle();
         //creating the arrayList representing the token available
@@ -148,7 +148,7 @@ public class Game {
         scores = new HashMap<>();
         //cycling on every player the beginning operations
         for (Player p : listOfPlayers){
-            StarterCard starter = starterDeck.draw();
+            StarterCard starter = (StarterCard) starterDeck.draw();
             //choosing the face
             controller.playCard(p, starter, faceReader.getBoolean(), new Coordinate(0,0));
             //picking the token
@@ -164,16 +164,16 @@ public class Game {
             //placing the token on the 0 of the score track
             scores.put(p, 0);
             //draw 2 resourceCard e 1 goldCard
-            p.getHandCard().add(resourceDeck.draw());
-            p.getHandCard().add(resourceDeck.draw());
-            p.getHandCard().add(goldDeck.draw());
+            p.getHandCard().add((PlayableCard) resourceDeck.draw());
+            p.getHandCard().add((PlayableCard) resourceDeck.draw());
+            p.getHandCard().add((PlayableCard) goldDeck.draw());
         }
         //shuffling the objectiveDeck
         objectiveDeck.shuffle();
         //placing the 2 common objective on the table
         displayedObjectiveCard = new ArrayList<>();
-        displayedObjectiveCard.add(objectiveDeck.draw());
-        displayedObjectiveCard.add(objectiveDeck.draw());
+        displayedObjectiveCard.add((ObjectiveCard) objectiveDeck.draw());
+        displayedObjectiveCard.add((ObjectiveCard) objectiveDeck.draw());
         //Each player receives 2 Objective cards, they look at them and choose one of them.
         for(Player p : listOfPlayers){
             //draw 2 objective cards
@@ -282,13 +282,6 @@ public class Game {
 
     }
 
-    public void drawDisplayedPlayableCard(Player player, PlayableCard card){
-
-    }
-
-    public void draw(Player player, Deck deck){
-
-    }
 
     public void updatePoints(Player player, int score){
 
