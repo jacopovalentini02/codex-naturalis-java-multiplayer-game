@@ -55,12 +55,12 @@ public class PlayerGround {
         //add the face in the grid
         grid.put(coord, face);
 
-        //update the available position and counts the corners that the face has covered (i.e. gold card points)
+        //update the available position and counts the corners that the face has covered (i.e. gold front points)
         int coveredCorners = updateAvailablePositions(coord);
-
+        /*
         if(upwards)
             calculatePoints(face);
-
+        */
 
     }
 
@@ -116,11 +116,11 @@ public class PlayerGround {
                 }
             }
         }
-        //TODO: AGGIORNARE I COUNTER ANCHE SULLA BASE DEI CENTER
+        //update the counters checking in the center of the played card, if it has it
         if(facePlayed instanceof NormalBack)
             updateCounter(((NormalBack) facePlayed).getCenter());
-        else if (facePlayed instanceof  StarterBack) {
-            for(Content c : ((StarterBack) facePlayed).getCenter()){
+        else if (facePlayed instanceof  StarterFront) {
+            for(Content c : ((StarterFront) facePlayed).getCenter()){
                 updateCounter(c);
             }
         }
@@ -145,14 +145,14 @@ public class PlayerGround {
             this.setQuillCount(this.getQuillCount()-1);
     }
 
-    public int calculatePoints(Face face) {
+    /*public int calculatePoints(Face face) {
         if(face instanceof GoldFront){
             if(((GoldFront) face).getObjectNeeded() == null){
 
             }
         }
     }
-
+    */
     //RESORUCE GETTERS AND SETTERS
     public int getPlantCount(){
         return this.resourceCount[0];
