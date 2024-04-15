@@ -120,6 +120,7 @@ public class PlayerGround {
 
     private void updateCounter(Content content){
         //TODO: lanciare eccezione se l'angolo è hidden
+        //TODO: CONTARE I CENTER
         if(content == Content.ANIMAL_KINGDOM)
             this.setAnimalCount(this.getAnimalCount()-1);
         else if(content == Content.FUNGI_KINGDOM)
@@ -188,6 +189,12 @@ public class PlayerGround {
     }
     public void setManuscriptCount(int count){
         this.objectCount[2] = count;
+    }
+
+    //
+
+    public Map<Coordinate, Face> getGrid(){
+        return grid;
     }
 
 
