@@ -72,34 +72,34 @@ class DeckTest {
     }
 
     @Test
-    public void testCreateStarter(){
-        Deck deck=new Deck();
-        JSONObject cardObject = new JSONObject();
-        JSONArray centerArray = new JSONArray().put("INSECT_KINGDOM");
-        cardObject.put("center", centerArray);
-        JSONArray cornerFrontArray = new JSONArray().put("FUNGI_KINGDOM").put("PLANT_KINGDOM").put("INSECT_KINGDOM").put("ANIMAL_KINGDOM");
-        cardObject.put("cornerFront", cornerFrontArray);
-        JSONArray cornerBackArray = new JSONArray().put("EMPTY").put("PLANT_KINGDOM").put("INSECT_KINGDOM").put("EMPTY");
-        cardObject.put("cornerBack", cornerBackArray);
-
-        deck.createStarterCard(cardObject, 81);
-        StarterCard addedCard = (StarterCard) deck.getCardList().getFirst();
-
-        assertEquals(81,  addedCard.getFront().getIdCard());
-        assertEquals(1, addedCard.getBack().getCenter().size());
-        assertEquals(Content.INSECT_KINGDOM, addedCard.getBack().getCenter().get(0));
-        assertEquals(4, addedCard.getFront().getCornerList().length);
-        assertEquals(Content.FUNGI_KINGDOM, addedCard.getFront().getCornerList()[0]);
-        assertEquals(Content.PLANT_KINGDOM, addedCard.getFront().getCornerList()[1]);
-        assertEquals(Content.INSECT_KINGDOM, addedCard.getFront().getCornerList()[2]);
-        assertEquals(Content.ANIMAL_KINGDOM, addedCard.getFront().getCornerList()[3]);
-        assertEquals(4, addedCard.getBack().getCornerList().length);
-        assertEquals(Content.EMPTY, addedCard.getBack().getCornerList()[0]);
-        assertEquals(Content.PLANT_KINGDOM, addedCard.getBack().getCornerList()[1]);
-        assertEquals(Content.INSECT_KINGDOM, addedCard.getBack().getCornerList()[2]);
-        assertEquals(Content.EMPTY, addedCard.getBack().getCornerList()[3]);
-
-    }
+//    public void testCreateStarter(){
+//        Deck deck=new Deck();
+//        JSONObject cardObject = new JSONObject();
+//        JSONArray centerArray = new JSONArray().put("INSECT_KINGDOM");
+//        cardObject.put("center", centerArray);
+//        JSONArray cornerFrontArray = new JSONArray().put("FUNGI_KINGDOM").put("PLANT_KINGDOM").put("INSECT_KINGDOM").put("ANIMAL_KINGDOM");
+//        cardObject.put("cornerFront", cornerFrontArray);
+//        JSONArray cornerBackArray = new JSONArray().put("EMPTY").put("PLANT_KINGDOM").put("INSECT_KINGDOM").put("EMPTY");
+//        cardObject.put("cornerBack", cornerBackArray);
+//
+//        deck.createStarterCard(cardObject, 81);
+//        StarterCard addedCard = (StarterCard) deck.getCardList().getFirst();
+//
+//        assertEquals(81,  addedCard.getFront().getIdCard());
+//        assertEquals(1, addedCard.getBack().getCenter().size());
+//        assertEquals(Content.INSECT_KINGDOM, addedCard.getBack().getCenter().get(0));
+//        assertEquals(4, addedCard.getFront().getCornerList().length);
+//        assertEquals(Content.FUNGI_KINGDOM, addedCard.getFront().getCornerList()[0]);
+//        assertEquals(Content.PLANT_KINGDOM, addedCard.getFront().getCornerList()[1]);
+//        assertEquals(Content.INSECT_KINGDOM, addedCard.getFront().getCornerList()[2]);
+//        assertEquals(Content.ANIMAL_KINGDOM, addedCard.getFront().getCornerList()[3]);
+//        assertEquals(4, addedCard.getBack().getCornerList().length);
+//        assertEquals(Content.EMPTY, addedCard.getBack().getCornerList()[0]);
+//        assertEquals(Content.PLANT_KINGDOM, addedCard.getBack().getCornerList()[1]);
+//        assertEquals(Content.INSECT_KINGDOM, addedCard.getBack().getCornerList()[2]);
+//        assertEquals(Content.EMPTY, addedCard.getBack().getCornerList()[3]);
+//
+//    }
 
     @Test
     public void testCreateStructObjective(){

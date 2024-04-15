@@ -4,48 +4,51 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class StarterCard extends PlayableCard{
-    private Front front;
-    private StarterFront back;
+    private Front back;
+    private StarterFront front;
 
-    public Front getFront() {
-        return front;
-    }
 
-    public void setFront(Front front) {
-        this.front = front;
-    }
-
-    public StarterFront getBack() {
+    @Override
+    public Front getBack() {
         return back;
     }
 
-    public void setBack(StarterFront back) {
+    public void setBack(Front back) {
         this.back = back;
     }
 
+    @Override
+    public StarterFront getFront() {
+        return front;
+    }
+
+    public void setFront(StarterFront front) {
+        this.front = front;
+    }
+
     public void createCard(int id, ArrayList<Content> center, Content[] cornerBack, Content[] cornerFront){
-        this.front = new Front(id);
-        this.back=new StarterFront(id);
+        this.back = new Front(id);
+        this.front=new StarterFront(id);
 
         this.setIdCard(id);
-        this.front.setIdCard(id);
         this.back.setIdCard(id);
-        this.front.setCornerList(cornerFront);
-        this.back.setCornerList(cornerBack);
-        this.back.setCenter(center);
-        this.front.setPoints(0);
+        this.front.setIdCard(id);
+        this.back.setCornerList(cornerFront);
+        this.front.setCornerList(cornerBack);
+        this.front.setCenter(center);
+        this.back.setPoints(0);
         boolean[] coveredCorn = new boolean[4];
-        this.front.setCoveredCorner(coveredCorn);
         this.back.setCoveredCorner(coveredCorn);
+        this.front.setCoveredCorner(coveredCorn);
 
     }
 
     public void printAll(){
         System.out.println(super.getIdCard());
-        System.out.println(this.front.getPoints());
-        System.out.println(Arrays.toString(this.front.getCornerList()));
+        System.out.println(this.back.getPoints());
         System.out.println(Arrays.toString(this.back.getCornerList()));
-        System.out.println(this.back.getCenter());
+        System.out.println(Arrays.toString(this.front.getCornerList()));
+        System.out.println(this.front.getCenter());
 
     }
 }
