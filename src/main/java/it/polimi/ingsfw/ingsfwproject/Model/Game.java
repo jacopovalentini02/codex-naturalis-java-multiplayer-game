@@ -377,7 +377,8 @@ public class Game {
         finalScoreCheck();
     }
 
-    public void updatePoints(Player player, int score){
+    public void updatePoints(int score){
+        Player player = currentPlayer;
         scores.merge(player, score, Integer::sum); //sum the old score with the new score
 
         if (scores.get(player) >= 20) {
