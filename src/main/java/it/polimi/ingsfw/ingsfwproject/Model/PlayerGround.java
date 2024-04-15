@@ -46,6 +46,7 @@ public class PlayerGround {
          */
 
         //get the face
+        Face face;
         if(upwards)
             face = card.getFront();
         else
