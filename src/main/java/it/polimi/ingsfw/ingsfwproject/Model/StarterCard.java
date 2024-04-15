@@ -5,7 +5,7 @@ import java.util.Arrays;
 
 public class StarterCard extends PlayableCard{
     private Front front;
-    private StarterBack back;
+    private StarterFront back;
 
     public Front getFront() {
         return front;
@@ -15,17 +15,17 @@ public class StarterCard extends PlayableCard{
         this.front = front;
     }
 
-    public StarterBack getBack() {
+    public StarterFront getBack() {
         return back;
     }
 
-    public void setBack(StarterBack back) {
+    public void setBack(StarterFront back) {
         this.back = back;
     }
 
     public void createCard(int id, ArrayList<Content> center, Content[] cornerBack, Content[] cornerFront){
         this.front = new Front(id);
-        this.back=new StarterBack(id);
+        this.back=new StarterFront(id);
 
         this.setIdCard(id);
         this.front.setIdCard(id);

@@ -2,10 +2,10 @@ package it.polimi.ingsfw.ingsfwproject.Model;
 
 import java.util.*;
 
-public class StarterBack extends Face{
+public class StarterFront extends Face{
     private ArrayList<Content> center;
 
-    public StarterBack(int id) {
+    public StarterFront(int id) {
         super(id);
     }
 
