@@ -245,7 +245,7 @@ public class Game {
                 if(i<=39){
                     resourceDeck.createResourceCard(cardObject, id);
                 }else if(i<=79){
-                    goldDeck.createGoldCard(cardObject, id, jsonObject);
+                    goldDeck.createGoldCard(cardObject, id);
                 }else if(i<=85){
                     starterDeck.createStarterCard(cardObject, id);
                 }else if(i<=93){

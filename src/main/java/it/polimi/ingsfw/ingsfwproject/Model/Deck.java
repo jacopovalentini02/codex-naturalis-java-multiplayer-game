@@ -27,6 +27,10 @@ public class Deck {
         return cardList;
     }
 
+    public void setCardList(ArrayList<Card> cardList) {
+        this.cardList = cardList;
+    }
+
     public void createResourceCard(JSONObject cardObject, int id){
         Content[] corners = new Content[4];
 
@@ -46,18 +50,17 @@ public class Deck {
 
     }
 
-    public void createGoldCard(JSONObject cardObject, int id, JSONObject jsonObject){
+    public void createGoldCard(JSONObject cardObject, int id){
 
-        String objectNeed = null;
-        Content object = null;
+        Content objectNeed = null;
         Content[] corners = new Content[4];
         ArrayList<Content> costList = new ArrayList<>();
 
         String centerS = cardObject.getString("center");
         int points = cardObject.getInt("points");
         JSONArray costArray = cardObject.getJSONArray("cost");
-        if (jsonObject.has("objectNeeded") && !jsonObject.isNull("objectNeeded"))
-            objectNeed=cardObject.getString("objectNeeded");
+        if (cardObject.has("objectNeeded") && !cardObject.isNull("objectNeeded"))
+            objectNeed=Content.valueOf(cardObject.getString("objectNeeded"));
         boolean overlapped=cardObject.getBoolean("overlapped");
         JSONArray corner = cardObject.getJSONArray("corners");
 
@@ -72,10 +75,8 @@ public class Deck {
         //Card creation
         GoldCard preGold = new GoldCard();
         Content center = Content.valueOf(centerS);
-        if(objectNeed != null)
-            object=Content.valueOf(objectNeed);
 
-        preGold.createCard(id, center, points,corners,costList,object,overlapped);
+        preGold.createCard(id, center, points,corners,costList,objectNeed,overlapped);
         this.addCard(preGold);
 
 
@@ -153,7 +154,7 @@ public class Deck {
     public Card draw(){
         if (this.cardList!=null && !this.cardList.isEmpty()) {
             Card drawnCard= this.cardList.getFirst();
-            this.cardList.remove(drawnCard);
+            this.cardList.removeFirst();
             return drawnCard;
         } else {
             // if the deck is empty return null
