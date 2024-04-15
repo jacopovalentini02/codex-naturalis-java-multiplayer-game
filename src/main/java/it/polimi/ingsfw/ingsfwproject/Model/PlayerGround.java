@@ -37,7 +37,7 @@ public class PlayerGround {
         availablePositions.add(new Coordinate(0,0));
     }
 
-    public void playCard(PlayableCard card, boolean upwards, Coordinate coord){
+    public int playCard(PlayableCard card, boolean upwards, Coordinate coord){
         //TODO: eventuali eccezioni
         /*TODO: fare i check:
          * se la face non è in mano al player
@@ -57,10 +57,11 @@ public class PlayerGround {
 
         //update the available position and counts the corners that the face has covered (i.e. gold front points)
         int coveredCorners = updateAvailablePositions(coord);
-        /*
-        if(upwards)
-            calculatePoints(face);
-        */
+
+        if(face instanceof NormalFace){
+            return calculatePoints(face, coveredCorners);
+        }
+        return 0;
 
     }
 
@@ -145,15 +146,46 @@ public class PlayerGround {
             this.setQuillCount(this.getQuillCount()-1);
     }
 
-    /*public int calculatePoints(Face face) {
+    public int calculatePoints(Face face, int coveredCorners) {
+        int points = 0;
         if(face instanceof GoldFront){
-            if(((GoldFront) face).getObjectNeeded() == null){
-
+            if(((GoldFront) face).isOverlapped()){
+                //overlapped ==> it gives 2 points for each corner that the played card has covered
+                points = ((GoldFront) face).getPoints() * coveredCorners;
+            }else{
+                if(((GoldFront) face).getObjectNeeded() == null){
+                    //if it is not overlapped and the needed object variable is null, it means it gives unconditionally points
+                    points = ((GoldFront) face).getPoints();
+                }else{
+                    //if it has a needed object, it gives 1 point for each object of needed object is on the playerGround
+                    //TODO: CHECK IL CASO IN CUI getContentCount ritorni -1
+                    points = getContentCount(((GoldFront) face).getObjectNeeded()) * ((GoldFront) face).getPoints();
+                }
             }
         }
+        return points;
     }
-    */
     //RESORUCE GETTERS AND SETTERS
+
+    public int getContentCount(Content content){
+        //TODO: GESTIRE CON UN ECCEZIONE IL CASO -1
+        if(content == Content.ANIMAL_KINGDOM)
+            return this.getAnimalCount();
+        else if(content == Content.FUNGI_KINGDOM)
+            return this.getFungiCount();
+        else if(content == Content.INSECT_KINGDOM)
+            return this.getInsectCount();
+        else if(content == Content.PLANT_KINGDOM)
+            return this.getPlantCount();
+        else if(content == Content.INKWELL)
+            return this.getInkwellCount();
+        else if(content == Content.MANUSCRIPT)
+            return this.getManuscriptCount();
+        else if(content == Content.QUILL)
+            return this.getQuillCount();
+        return -1;
+    }
+
     public int getPlantCount(){
         return this.resourceCount[0];
     }
