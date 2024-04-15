@@ -9,13 +9,13 @@ abstract public class Face {
     cornerList[3] = bottom right
      */
     private int idCard;
-
     private Content[] cornerList;
     private boolean[] coveredCorner;
 
-    public Face(){
+    public Face(int id){
         cornerList = new Content[4];
         coveredCorner = new boolean[4];
+        idCard=id;
     }
 
     public Content[] getCornerList() {
@@ -24,6 +24,7 @@ abstract public class Face {
 
     public void setCornerList(Content[] cornerList) {
         this.cornerList = cornerList;
+
     }
 
     public int getIdCard() {

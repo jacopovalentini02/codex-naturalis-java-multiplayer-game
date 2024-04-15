@@ -5,6 +5,10 @@ import java.util.*;
 public class StarterBack extends Face{
     private ArrayList<Content> center;
 
+    public StarterBack(int id) {
+        super(id);
+    }
+
     public ArrayList<Content> getCenter() {
         return center;
     }

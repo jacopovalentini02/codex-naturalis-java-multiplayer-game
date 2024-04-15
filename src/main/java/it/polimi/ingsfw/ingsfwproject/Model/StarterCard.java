@@ -24,8 +24,8 @@ public class StarterCard extends PlayableCard{
     }
 
     public void createCard(int id, ArrayList<Content> center, Content[] cornerBack, Content[] cornerFront){
-        this.front = new Front();
-        this.back=new StarterBack();
+        this.front = new Front(id);
+        this.back=new StarterBack(id);
 
         this.setIdCard(id);
         this.front.setIdCard(id);

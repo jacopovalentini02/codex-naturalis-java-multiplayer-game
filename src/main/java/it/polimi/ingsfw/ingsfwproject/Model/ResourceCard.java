@@ -9,13 +9,18 @@ public class ResourceCard extends NormalCard{
         return front;
     }
 
+    @Override
+    public Face getBack() {
+        return this.getBackface();
+    }
+
     public void setFront(Front front) {
         this.front = front;
     }
 
    public void createCard(int id, Content center, int points, Content[] corners){
-       this.front = new Front();
-       NormalBack normalBack = new NormalBack();
+       this.front = new Front(id);
+       NormalBack normalBack = new NormalBack(id);
        this.setBackface(normalBack);
        this.front.setCornerList(corners);
        this.front.setPoints(points);

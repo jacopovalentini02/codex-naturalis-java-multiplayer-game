@@ -7,6 +7,10 @@ public class GoldFront extends Front{
     private boolean overlapped;
     private Content objectNeeded;
 
+    public GoldFront(int id) {
+        super(id);
+    }
+
     public void setCost(ArrayList<Content> cost) {
         this.cost = cost;
     }

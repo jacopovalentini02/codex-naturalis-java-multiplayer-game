@@ -10,14 +10,19 @@ public class GoldCard extends NormalCard{
         return front;
     }
 
+    @Override
+    public Face getBack() {
+        return this.getBackface();
+    }
+
     public void setFront(GoldFront front) {
         this.front = front;
     }
 
 
     public void createCard(int id, Content center, int points, Content[] corners, ArrayList<Content> cost, Content object, Boolean overlapped){
-        this.front = new GoldFront();
-        NormalBack normalBack = new NormalBack();
+        this.front = new GoldFront(id);
+        NormalBack normalBack = new NormalBack(id);
         this.setBackface(normalBack);
         this.setIdCard(id);
         this.front.setIdCard(id);
