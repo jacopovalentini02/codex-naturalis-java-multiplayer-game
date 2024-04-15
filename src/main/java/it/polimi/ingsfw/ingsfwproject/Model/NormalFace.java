@@ -1,9 +1,9 @@
 package it.polimi.ingsfw.ingsfwproject.Model;
 
-public class Front extends Face{
+public class NormalFace extends Face{
     private int points;
 
-    public Front(int id) {
+    public NormalFace(int id) {
         super(id);
     }
 

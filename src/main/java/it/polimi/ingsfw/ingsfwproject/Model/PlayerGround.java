@@ -116,12 +116,19 @@ public class PlayerGround {
                 }
             }
         }
+        //TODO: AGGIORNARE I COUNTER ANCHE SULLA BASE DEI CENTER
+        if(facePlayed instanceof NormalBack)
+            updateCounter(((NormalBack) facePlayed).getCenter());
+        else if (facePlayed instanceof  StarterBack) {
+            for(Content c : ((StarterBack) facePlayed).getCenter()){
+                updateCounter(c);
+            }
+        }
         return counter;
     }
 
     private void updateCounter(Content content){
         //TODO: lanciare eccezione se l'angolo è hidden
-        //TODO: CONTARE I CENTER
         if(content == Content.ANIMAL_KINGDOM)
             this.setAnimalCount(this.getAnimalCount()-1);
         else if(content == Content.FUNGI_KINGDOM)

@@ -4,16 +4,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class StarterCard extends PlayableCard{
-    private Front back;
+    private NormalFace back;
     private StarterFront front;
 
 
     @Override
-    public Front getBack() {
+    public NormalFace getBack() {
         return back;
     }
 
-    public void setBack(Front back) {
+    public void setBack(NormalFace back) {
         this.back = back;
     }
 
@@ -27,7 +27,7 @@ public class StarterCard extends PlayableCard{
     }
 
     public void createCard(int id, ArrayList<Content> center, Content[] cornerBack, Content[] cornerFront){
-        this.back = new Front(id);
+        this.back = new NormalFace(id);
         this.front=new StarterFront(id);
 
         this.setIdCard(id);

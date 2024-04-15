@@ -2,7 +2,7 @@ package it.polimi.ingsfw.ingsfwproject.Model;
 
 import java.util.*;
 
-public class GoldFront extends Front{
+public class GoldFront extends NormalFace {
     private ArrayList<Content> cost;
     private boolean overlapped;
     private Content objectNeeded;

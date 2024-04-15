@@ -3,9 +3,9 @@ package it.polimi.ingsfw.ingsfwproject.Model;
 import java.util.Arrays;
 
 public class ResourceCard extends NormalCard{
-    private Front front;
+    private NormalFace front;
 
-    public Front getFront() {
+    public NormalFace getFront() {
         return front;
     }
 
@@ -14,12 +14,12 @@ public class ResourceCard extends NormalCard{
         return this.getBackface();
     }
 
-    public void setFront(Front front) {
+    public void setFront(NormalFace front) {
         this.front = front;
     }
 
    public void createCard(int id, Content center, int points, Content[] corners){
-       this.front = new Front(id);
+       this.front = new NormalFace(id);
        NormalBack normalBack = new NormalBack(id);
        this.setBackface(normalBack);
        this.front.setCornerList(corners);
