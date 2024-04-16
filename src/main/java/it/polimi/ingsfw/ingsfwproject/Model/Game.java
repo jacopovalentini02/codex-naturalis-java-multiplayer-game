@@ -8,11 +8,15 @@ import org.json.JSONObject;
 import org.json.*;
 import java.io.FileReader;
 import java.io.IOException;
+import java.rmi.RemoteException;
 import java.util.*;
 
 
 public class Game {
     private int idGame;
+
+    public Game() throws RemoteException {
+    }
 
     public GameState getState() {
         return state;
@@ -23,7 +27,7 @@ public class Game {
     }
 
     private GameState state;
-    private GameController controller = new GameController();
+    private GameController controller = new GameController(this);
     private List<Player> listOfPlayers;
     private int numOfPlayers;
     private Map<Player, Integer> scores;

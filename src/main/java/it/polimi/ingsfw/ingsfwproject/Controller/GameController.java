@@ -17,6 +17,11 @@ public class GameController {
         //TODO: logica di turno
     }
 
+    @Override
+    public void DrawDisplayedPlayableCard(Player player, PlayableCard card) throws RemoteException {
+
+    }
+
 //    public ArrayList<Coordinate> getAvailablePositions(Player player){
 //
 //    }
@@ -35,5 +40,9 @@ public class GameController {
 
     public void drawDisplayedPlayableCard(Player player, PlayableCard card){
 
+    }
+
+    public ArrayList<Coordinate> getAvailablePositions(Player player) throws RemoteException {
+        return null;
     }
 }
