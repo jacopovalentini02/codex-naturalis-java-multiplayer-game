@@ -5,6 +5,7 @@ import java.util.*;
 public interface ObjectiveCheckStrategy<T extends ObjectiveCard> {
     public int checkObjective(Player player, T card);
 
+
 }
 class StructuredObjectiveCheckStrategy implements ObjectiveCheckStrategy<StructuredObjectiveCard>{
 
@@ -31,20 +32,19 @@ class StructuredObjectiveCheckStrategy implements ObjectiveCheckStrategy<Structu
         Map<Coordinate, Face> gameArea = player.getGround().getGrid();
         foundStrcutures = switch (card.getStructureType()){
 
-            case LEFT_DIAGONAL -> leftDiagonalSearch(card.getResourceRequested(), gameArea);
-            case RIGHT_DIAGONAL -> rightDiagonalSearch(card.getResourceRequested(), gameArea);
-            case DOUBLE_UP_LEFT -> doubleUpLeftSearch(card.getResourceRequested(), gameArea);
-            case DOUBLE_UP_RIGHT -> doubleUpRightSearch(card.getResourceRequested(), gameArea);
-            case DOUBLE_DOWN_LEFT -> doubleDownLeftSearch(card.getResourceRequested(), gameArea);
-            case DOUBLE_DOWN_RIGHT -> doubleDownRightSearch(card.getResourceRequested(), gameArea);
+            case LEFT_DIAGONAL -> DiagonalSearch(card.getResourceRequested(), gameArea, true);
+            case RIGHT_DIAGONAL -> DiagonalSearch(card.getResourceRequested(), gameArea, false);
+            case DOUBLE_UP_LEFT -> doubleStructureSearch(card.getResourceRequested(), gameArea, 1);
+            case DOUBLE_UP_RIGHT -> doubleStructureSearch(card.getResourceRequested(), gameArea, 0);
+            case DOUBLE_DOWN_LEFT -> doubleStructureSearch(card.getResourceRequested(), gameArea, 3);
+            case DOUBLE_DOWN_RIGHT -> doubleStructureSearch(card.getResourceRequested(), gameArea,2);
 
         };
         givenPoints = foundStrcutures * card.getPoints();
         return givenPoints;
     }
 
-    int leftDiagonalSearch(ArrayList<Content> objectsRequested, Map<Coordinate, Face> gameArea) {
-        //TODO: sistemare, partendo dall'alto o dal basso e proseguendo
+    int DiagonalSearch(ArrayList<Content> objectsRequested, Map<Coordinate, Face> gameArea, boolean leftDiagonal) {
         Content typeToSearch = objectsRequested.getFirst();
         int foundDiagonals = 0;
         CoordinateOrderedSet cardsToCheck = new CoordinateOrderedSet();
@@ -58,25 +58,82 @@ class StructuredObjectiveCheckStrategy implements ObjectiveCheckStrategy<Structu
         for (Coordinate c : cardsToCheck){
             if (checkedCoordinates.coordinatesList.contains(c)) continue;
 
-            Coordinate upperLeftPosition = new Coordinate(c.getX() - 1, c.getY() + 1);
-            Coordinate secondUpperLeftPosition = new Coordinate(upperLeftPosition.getX()-1, upperLeftPosition.getY()+1);
+            Coordinate upperPosition;
+            Coordinate secondUpperPosition;
 
-            if(cardsToCheck.coordinatesList.contains(upperLeftPosition) && cardsToCheck.coordinatesList.contains(secondUpperLeftPosition)){
+            //decision on which position to iterate, based on the structure we're searching
+            if (leftDiagonal) { //left diagonal
+                upperPosition = new Coordinate(c.getX() - 1, c.getY() + 1);
+                secondUpperPosition = new Coordinate(upperPosition.getX() - 1, upperPosition.getY() + 1);
+            } else  { // right diagonal
+                upperPosition = new Coordinate(c.getX() + 1, c.getY() + 1);
+                secondUpperPosition = new Coordinate(upperPosition.getX() + 1, upperPosition.getY() + 1);
+            }
+
+            if (checkedCoordinates.coordinatesList.contains(upperPosition) || checkedCoordinates.coordinatesList.contains(secondUpperPosition))
+                continue;
+
+            if(cardsToCheck.coordinatesList.contains(upperPosition) && cardsToCheck.coordinatesList.contains(secondUpperPosition)){
                 foundDiagonals++;
                 checkedCoordinates.coordinatesList.add(c);
-                checkedCoordinates.coordinatesList.add(upperLeftPosition);
-                checkedCoordinates.coordinatesList.add(secondUpperLeftPosition);
+                checkedCoordinates.coordinatesList.add(upperPosition);
+                checkedCoordinates.coordinatesList.add(secondUpperPosition);
             }
         }
         return foundDiagonals;
     }
 
-    int rightDiagonalSearch(ArrayList<Content> objectsRequested, Map<Coordinate, Face> gameArea){
-        return 0;
-    }
 
-    int doubleUpLeftSearch(ArrayList<Content> objectsRequested, Map<Coordinate, Face> gameArea){
-        return 0;
+    int doubleStructureSearch(ArrayList<Content> objectsRequested, Map<Coordinate, Face> gameArea, int structureType){
+        Content firstTypetoSearch = objectsRequested.getFirst();
+        Content secondTypeToSearch = objectsRequested.getLast();
+        int foundStructures = 0;
+        CoordinateOrderedSet firstTypeCardsToCheck = new CoordinateOrderedSet();
+        CoordinateOrderedSet secondTypeCardsToCheck = new CoordinateOrderedSet();
+        CoordinateOrderedSet checked = new CoordinateOrderedSet();
+
+        //riempimento dei set con carte del primo e secondo tipo
+        for (Coordinate c: gameArea.keySet()){
+            if (Objects.equals(Card.getType(gameArea.get(c).getIdCard()), firstTypetoSearch)){
+                firstTypeCardsToCheck.addCoordinate(c);
+            }
+            if (Objects.equals(Card.getType(gameArea.get(c).getIdCard()), secondTypeToSearch)){
+                secondTypeCardsToCheck.addCoordinate(c);
+            }
+        }
+
+        for (Coordinate c: firstTypeCardsToCheck){
+            if (checked.coordinatesList.contains(c)) continue;
+
+            Coordinate upperPosition = new Coordinate(c.getX(), c.getY()+1);
+            Coordinate diagonalPosition = null;
+
+            switch (structureType){
+                case 0: //double-up right
+                    diagonalPosition = new Coordinate(upperPosition.getX()+1, upperPosition.getY()+1);
+                    break;
+                case 1: //double up left
+                    diagonalPosition = new Coordinate(upperPosition.getX()-1, upperPosition.getY()+1);
+                    break;
+                case 2: //double down right
+                    diagonalPosition = new Coordinate(c.getX()+1, c.getY()-1);
+                    break;
+                case 3: //double down left
+                    diagonalPosition = new Coordinate(c.getX()-1, c.getY()-1);
+            }
+
+            if (checked.coordinatesList.contains(upperPosition) || checked.coordinatesList.contains(diagonalPosition))
+                continue;
+
+            if (firstTypeCardsToCheck.coordinatesList.contains(upperPosition) && secondTypeCardsToCheck.coordinatesList.contains(diagonalPosition)){
+                foundStructures++;
+                checked.coordinatesList.add(c);
+                checked.coordinatesList.add(upperPosition);
+                checked.coordinatesList.add(diagonalPosition);
+            }
+        }
+
+        return foundStructures;
     }
 
     int doubleUpRightSearch(ArrayList<Content> objectsRequested, Map<Coordinate, Face> gameArea){

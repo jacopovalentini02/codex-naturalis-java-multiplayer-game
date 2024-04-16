@@ -13,6 +13,8 @@ public class GameController {
     public void playCard(Player player, PlayableCard card, boolean upwards, Coordinate coord){
         //TODO: chiamare effettvamente PlayerGround.playCard(...).
         // con il valore di ritorno, chiamare game.updatePoints(...) per aggiungere i punti di questa giocata al player
+
+        //TODO: logica di turno
     }
 
 //    public ArrayList<Coordinate> getAvailablePositions(Player player){
@@ -28,7 +30,7 @@ public class GameController {
     }
 
     public boolean choosingFace(Player player){
-
+        return false;
     }
 
     public void drawDisplayedPlayableCard(Player player, PlayableCard card){
