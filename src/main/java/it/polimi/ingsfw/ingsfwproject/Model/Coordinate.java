@@ -30,4 +30,14 @@ public class Coordinate {
     public String toString(){
         return "("+ this.getX() + ","+ this.getY() +")";
     }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31; // Un numero primo usato come base
+        int result = 1;
+        result = prime * result + x;
+        result = prime * result + y;
+        return result;
+    }
+
 }

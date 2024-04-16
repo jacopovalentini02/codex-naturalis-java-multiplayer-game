@@ -6,8 +6,24 @@ public interface ObjectiveCheckStrategy<T extends ObjectiveCard> {
     public int checkObjective(Player player, T card);
 
 }
-
 class StructuredObjectiveCheckStrategy implements ObjectiveCheckStrategy<StructuredObjectiveCard>{
+
+    static class CoordinateOrderedSet implements Iterable<Coordinate>{
+        protected final List<Coordinate> coordinatesList = new ArrayList<Coordinate>();
+
+        public void addCoordinate(Coordinate coordinate){
+            coordinatesList.add(coordinate);
+        }
+
+        public void removeCordinate(Coordinate coordinate){
+            coordinatesList.remove(coordinate);
+        }
+
+        public Iterator<Coordinate> iterator(){
+            coordinatesList.sort(Comparator.comparingInt(Coordinate::getY));
+            return coordinatesList.iterator();
+        }
+    }
     @Override
     public int checkObjective(Player player, StructuredObjectiveCard card) {
         int givenPoints = 0;
@@ -28,25 +44,28 @@ class StructuredObjectiveCheckStrategy implements ObjectiveCheckStrategy<Structu
     }
 
     int leftDiagonalSearch(ArrayList<Content> objectsRequested, Map<Coordinate, Face> gameArea) {
+        //TODO: sistemare, partendo dall'alto o dal basso e proseguendo
         Content typeToSearch = objectsRequested.getFirst();
         int foundDiagonals = 0;
-        ArrayList<Coordinate> cardsToCheck = new ArrayList<>();
-
+        CoordinateOrderedSet cardsToCheck = new CoordinateOrderedSet();
+        CoordinateOrderedSet checkedCoordinates = new CoordinateOrderedSet();
         //riempimento del set con le carte da visitare
         for(Coordinate c : gameArea.keySet()){
             if (Objects.equals(Card.getType(gameArea.get(c).getIdCard()), typeToSearch))
-                cardsToCheck.add(c);
+                cardsToCheck.addCoordinate(c);
         }
         //visita delle carte per vedere se sono disposte in diagonale
         for (Coordinate c : cardsToCheck){
+            if (checkedCoordinates.coordinatesList.contains(c)) continue;
+
             Coordinate upperLeftPosition = new Coordinate(c.getX() - 1, c.getY() + 1);
             Coordinate secondUpperLeftPosition = new Coordinate(upperLeftPosition.getX()-1, upperLeftPosition.getY()+1);
 
-            if(cardsToCheck.contains(upperLeftPosition) && cardsToCheck.contains(secondUpperLeftPosition)){
+            if(cardsToCheck.coordinatesList.contains(upperLeftPosition) && cardsToCheck.coordinatesList.contains(secondUpperLeftPosition)){
                 foundDiagonals++;
-                cardsToCheck.remove(c);
-                cardsToCheck.remove(upperLeftPosition);
-                cardsToCheck.remove(secondUpperLeftPosition);
+                checkedCoordinates.coordinatesList.add(c);
+                checkedCoordinates.coordinatesList.add(upperLeftPosition);
+                checkedCoordinates.coordinatesList.add(secondUpperLeftPosition);
             }
         }
         return foundDiagonals;
