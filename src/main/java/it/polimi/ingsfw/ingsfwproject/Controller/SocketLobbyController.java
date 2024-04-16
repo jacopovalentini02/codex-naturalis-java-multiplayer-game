@@ -1,4 +1,5 @@
 package it.polimi.ingsfw.ingsfwproject.Controller;
 
-public interface SocketLobbyController {
+public class SocketLobbyController extends LobbyController implements InterfaceSocketLobbyController{
+
 }

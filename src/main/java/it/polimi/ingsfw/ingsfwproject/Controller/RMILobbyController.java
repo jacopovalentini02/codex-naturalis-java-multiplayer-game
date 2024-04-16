@@ -1,4 +1,5 @@
 package it.polimi.ingsfw.ingsfwproject.Controller;
 
-public interface RMILobbyController {
+public class RMILobbyController extends LobbyController implements InterfaceRMILobbyController{
+
 }
