@@ -18,7 +18,7 @@ public class GameController extends UnicastRemoteObject {
         // con il valore di ritorno, chiamare game.updatePoints(...) per aggiungere i punti di questa giocata al player
     }
 
-    @Override
+
     public void DrawDisplayedPlayableCard(Player player, PlayableCard card) throws RemoteException {
 
     }
