@@ -17,7 +17,7 @@ public class GameController {
         //TODO: logica di turno
     }
 
-    @Override
+
     public void DrawDisplayedPlayableCard(Player player, PlayableCard card) throws RemoteException {
 
     }
