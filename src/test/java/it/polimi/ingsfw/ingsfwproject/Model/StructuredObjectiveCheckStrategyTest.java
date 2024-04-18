@@ -2,7 +2,6 @@ package it.polimi.ingsfw.ingsfwproject.Model;
 
 import org.junit.jupiter.api.Test;
 
-import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -11,11 +10,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class StructuredObjectiveCheckStrategyTest {
 
-
     @Test
-    void leftDiagonalSearch() throws RemoteException {
-        Player player1=new Player("user1");
-        Game game=new Game(1,2,player1);
+    void diagonalSearch() {
+        Game game = new Game();
         game.setUpCards();
         Deck resourceDeck = game.getResourceDeck();
         Deck goldDeck = game.getGoldDeck();
@@ -34,7 +31,7 @@ class StructuredObjectiveCheckStrategyTest {
         list.add(Content.FUNGI_KINGDOM);
         list.add(Content.FUNGI_KINGDOM);
 
-        int diagonals = strategy.leftDiagonalSearch(list, grid);
+        int diagonals = strategy.DiagonalSearch(list, grid, true);
         assertEquals(0, diagonals);
 
         ResourceCard card2 = (ResourceCard) resourceDeck.draw();
@@ -57,20 +54,20 @@ class StructuredObjectiveCheckStrategyTest {
         grid.put(due, card2.getFront());
         grid.put(tre, card3.getBack());grid.put(quattro, card4.getFront());
 
-       diagonals = strategy.leftDiagonalSearch(list, grid);
-       assertEquals(1, diagonals);
+        diagonals = strategy.DiagonalSearch(list, grid, true);
+        assertEquals(1, diagonals);
 
-       Coordinate cinque = new Coordinate(-4,4);
-       grid.put(cinque, card5.getFront());
-       diagonals = strategy.leftDiagonalSearch(list, grid);
-       assertEquals(1, diagonals);
+        Coordinate cinque = new Coordinate(-4,4);
+        grid.put(cinque, card5.getFront());
+        diagonals = strategy.DiagonalSearch(list, grid, true);
+        assertEquals(1, diagonals);
 
-       Coordinate sei = new Coordinate(-5,5);
-       Coordinate sette = new Coordinate(-6, 6);
-       grid.put(sei, card6.getBack());
-       grid.put(sette, card7.getFront());
-       diagonals = strategy.leftDiagonalSearch(list, grid);
-       assertEquals(2, diagonals);
+        Coordinate sei = new Coordinate(-5,5);
+        Coordinate sette = new Coordinate(-6, 6);
+        grid.put(sei, card6.getBack());
+        grid.put(sette, card7.getFront());
+        diagonals = strategy.DiagonalSearch(list, grid, true);
+        assertEquals(2, diagonals);
 
         ResourceCard card8 = (ResourceCard) resourceDeck.draw();
         ResourceCard card9 = (ResourceCard) resourceDeck.draw();
@@ -81,9 +78,7 @@ class StructuredObjectiveCheckStrategyTest {
         grid.put(otto, card8.getBack());
         grid.put(nove, card9.getFront());
         grid.put(dieci, card10.getFront());
-        diagonals = strategy.leftDiagonalSearch(list, grid);
+        diagonals = strategy.DiagonalSearch(list, grid, true);
         assertEquals(3, diagonals);
-
-
     }
 }
