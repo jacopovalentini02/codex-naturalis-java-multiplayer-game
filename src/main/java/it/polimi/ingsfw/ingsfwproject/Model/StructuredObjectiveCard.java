@@ -6,6 +6,12 @@ public class StructuredObjectiveCard extends ObjectiveCard{
     private Structure structureType;
     private ArrayList<Content> resourceRequested;
 
+    public StructuredObjectiveCard(int idCard, int points, Structure structureType, ArrayList<Content> resourceRequested) {
+        super(idCard, points);
+        this.structureType = structureType;
+        this.resourceRequested = resourceRequested;
+    }
+
     public Structure getStructureType() {
         return structureType;
     }

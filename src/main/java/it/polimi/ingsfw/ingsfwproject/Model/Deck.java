@@ -40,12 +40,16 @@ public class Deck {
         for (int j = 0; j < cornersArray.length(); j++) {
             corners[j] = Content.valueOf(cornersArray.getString(j));
         }
-
-        // Crea un oggetto Card e aggiungilo alla lista
-        ResourceCard preRes = new ResourceCard();
         Content center = Content.valueOf(centerS);
 
-        preRes.createCard(id, center, points, corners);
+        // Crea un oggetto Card e aggiungilo alla lista
+        Content[] emptyCorners = {Content.valueOf("EMPTY"),Content.valueOf("EMPTY"),Content.valueOf("EMPTY"),Content.valueOf("EMPTY")};
+        NormalBack backFace=new NormalBack(id, emptyCorners, center);
+        NormalFace front=new NormalFace(id, points, corners);
+
+        ResourceCard preRes = new ResourceCard(front, backFace, id);
+
+        //preRes.createCard(id, center, points, corners);
         this.addCard(preRes);
 
     }
@@ -72,11 +76,14 @@ public class Deck {
             costList.add(Content.valueOf(costArray.getString(j)));
         }
 
-        //Card creation
-        GoldCard preGold = new GoldCard();
         Content center = Content.valueOf(centerS);
+        //Card creation
+        Content[] emptyCorners = {Content.valueOf("EMPTY"),Content.valueOf("EMPTY"),Content.valueOf("EMPTY"),Content.valueOf("EMPTY")};
+        GoldFront front=new GoldFront(id, points, corners, costList, overlapped, objectNeed);
+        NormalBack back=new NormalBack(id, emptyCorners, center);
 
-        preGold.createCard(id, center, points,corners,costList,objectNeed,overlapped);
+        GoldCard preGold = new GoldCard(back, front, id);
+
         this.addCard(preGold);
 
 
@@ -93,18 +100,20 @@ public class Deck {
             centerList.add(Content.valueOf(centerArray.getString(j)));
         }
 
-        JSONArray cornerBaArray = cardObject.getJSONArray("cornerBack");
-        for (int j = 0; j < cornerBaArray.length(); j++) {
-            cornerBa[j] = Content.valueOf(cornerBaArray.getString(j));
-        }
-
-        JSONArray cornerFrArray = cardObject.getJSONArray("cornerFront");
+        JSONArray cornerFrArray = cardObject.getJSONArray("cornerBack");
         for (int j = 0; j < cornerFrArray.length(); j++) {
             cornerFr[j] = Content.valueOf(cornerFrArray.getString(j));
         }
 
-        StarterCard preStart = new StarterCard();
-        preStart.createCard(id, centerList, cornerBa,cornerFr);
+        JSONArray cornerBaArray = cardObject.getJSONArray("cornerFront");
+        for (int j = 0; j < cornerBaArray.length(); j++) {
+            cornerBa[j] = Content.valueOf(cornerBaArray.getString(j));
+        }
+
+        NormalFace back=new NormalFace(id, 0, cornerBa);
+        StarterFront front=new StarterFront(id, cornerFr, centerList);
+
+        StarterCard preStart = new StarterCard(id, back, front);
         this.addCard(preStart);
 
     }
@@ -121,11 +130,7 @@ public class Deck {
             resourceList.add(Content.valueOf(resArray.getString(j)));
         }
 
-        StructuredObjectiveCard structObj=new StructuredObjectiveCard();
-        structObj.setIdCard(id);
-        structObj.setPoints(points);
-        structObj.setStructureType(structure);
-        structObj.setResourceRequested(resourceList);
+        StructuredObjectiveCard structObj=new StructuredObjectiveCard(id, points,structure,resourceList);
 
         this.addCard(structObj);
 
@@ -141,10 +146,7 @@ public class Deck {
             resourceList.add(Content.valueOf(resArray.getString(j)));
         }
 
-        NotStructuredObjectiveCard notStructObj=new NotStructuredObjectiveCard();
-        notStructObj.setIdCard(id);
-        notStructObj.setPoints(points);
-        notStructObj.setObjectRequested(resourceList);
+        NotStructuredObjectiveCard notStructObj=new NotStructuredObjectiveCard(id, points, resourceList);
 
         this.addCard(notStructObj);
 

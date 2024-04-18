@@ -7,8 +7,11 @@ public class GoldFront extends NormalFace {
     private boolean overlapped;
     private Content objectNeeded;
 
-    public GoldFront(int id) {
-        super(id);
+    public GoldFront(int id, int points, Content[] corners, ArrayList<Content> cost, boolean overlapped, Content objectNeeded) {
+        super(id, points, corners);
+        this.cost = cost;
+        this.overlapped = overlapped;
+        this.objectNeeded = objectNeeded;
     }
 
     public void setCost(ArrayList<Content> cost) {

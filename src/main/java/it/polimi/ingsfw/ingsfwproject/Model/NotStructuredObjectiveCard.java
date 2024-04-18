@@ -13,6 +13,11 @@ public class NotStructuredObjectiveCard extends ObjectiveCard{
         this.objectRequested = objectRequested;
     }
 
+    public NotStructuredObjectiveCard(int idCard, int points, ArrayList<Content> objectRequested) {
+        super(idCard, points);
+        this.objectRequested = objectRequested;
+    }
+
     @Override
     public String toString() {
         return "NotStructuredObjectiveCard{" +

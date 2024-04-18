@@ -2,6 +2,7 @@ package it.polimi.ingsfw.ingsfwproject.Model;
 
 import org.junit.jupiter.api.Test;
 
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -12,8 +13,9 @@ class StructuredObjectiveCheckStrategyTest {
 
 
     @Test
-    void leftDiagonalSearch() {
-        Game game = new Game();
+    void leftDiagonalSearch() throws RemoteException {
+        Player player1=new Player("user1");
+        Game game=new Game(1,2,player1);
         game.setUpCards();
         Deck resourceDeck = game.getResourceDeck();
         Deck goldDeck = game.getGoldDeck();

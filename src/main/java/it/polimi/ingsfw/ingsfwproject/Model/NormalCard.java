@@ -10,4 +10,9 @@ abstract public class NormalCard extends PlayableCard{
     public void setBackface(NormalBack backface) {
         this.backface = backface;
     }
+
+    public NormalCard(int id, NormalBack backface) {
+        super(id);
+        this.backface = backface;
+    }
 }

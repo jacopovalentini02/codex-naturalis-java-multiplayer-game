@@ -24,4 +24,7 @@ abstract public class Card {
             return null;
     }
 
+    public Card(int idCard) {
+        this.idCard = idCard;
+    }
 }

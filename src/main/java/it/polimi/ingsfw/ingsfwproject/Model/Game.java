@@ -14,20 +14,8 @@ import java.util.*;
 
 public class Game {
     private int idGame;
-
-    public Game() throws RemoteException {
-    }
-
-    public GameState getState() {
-        return state;
-    }
-
-    public void setState(GameState state) {
-        this.state = state;
-    }
-
     private GameState state;
-    private GameController controller = new GameController(this);
+    private GameController controller;
     private List<Player> listOfPlayers;
     private int numOfPlayers;
     private Map<Player, Integer> scores;
@@ -40,6 +28,31 @@ public class Game {
     private List<ObjectiveCard> displayedObjectiveCard;
     private Player currentPlayer;
 
+
+    public Game(int idGame, int numOfPlayers, Player player1)  throws RemoteException {
+        this.idGame = idGame;
+        this.numOfPlayers = numOfPlayers;
+        this.state=GameState.WAITING_FOR_PLAYERS;
+        resourceDeck = new Deck();
+        goldDeck = new Deck();
+        starterDeck =new Deck();
+        objectiveDeck=new Deck();
+        listOfPlayers = new ArrayList<>();
+        listOfPlayers.add(player1);
+        controller = new GameController(this);
+        displayedPlayableCard = new ArrayList<PlayableCard>();
+        displayedObjectiveCard = new ArrayList<>();
+        scores = new HashMap<>();
+    }
+
+    public GameState getState() {
+        return state;
+    }
+
+    public void setState(GameState state) {
+        this.state = state;
+    }
+
     public Deck getStarterDeck() {
         return starterDeck;
     }
@@ -47,8 +60,6 @@ public class Game {
     public void setStarterDeck(Deck starterDeck) {
         this.starterDeck = starterDeck;
     }
-
-
 
     public int getIdGame() {
         return idGame;
@@ -143,7 +154,6 @@ public class Game {
         setUpCards();
         //Shuffle the Resource cards and place them facedown in the center of the table. Draw 2 cards and place them faceup.
         resourceDeck.shuffle();
-        displayedPlayableCard = new ArrayList<PlayableCard>();
         displayedPlayableCard.add((PlayableCard) resourceDeck.draw());
         displayedPlayableCard.add((PlayableCard) resourceDeck.draw());
         //Shuffle the Gold cards and place them facedown in the center of the table. Draw 2 cards and place them faceup.
@@ -158,8 +168,7 @@ public class Game {
         tokenAvailable.add(PlayerColor.RED);
         tokenAvailable.add(PlayerColor.BLUE);
         tokenAvailable.add(PlayerColor.YELLOW);
-        //initializing the score track
-        scores = new HashMap<>();
+
         //cycling on every player the beginning operations
         for (Player p : listOfPlayers){
             StarterCard starter = (StarterCard) starterDeck.draw();
@@ -185,7 +194,6 @@ public class Game {
         //shuffling the objectiveDeck
         objectiveDeck.shuffle();
         //placing the 2 common objective on the table
-        displayedObjectiveCard = new ArrayList<>();
         displayedObjectiveCard.add((ObjectiveCard) objectiveDeck.draw());
         displayedObjectiveCard.add((ObjectiveCard) objectiveDeck.draw());
         //Each player receives 2 Objective cards, they look at them and choose one of them.
@@ -219,10 +227,7 @@ public class Game {
 
 
     public void setUpCards(){
-        resourceDeck = new Deck();
-        goldDeck = new Deck();
-        starterDeck =new Deck();
-        objectiveDeck=new Deck();
+
 
         try {
             // path to JSON file
@@ -282,6 +287,8 @@ public class Game {
 
     public void addPlayer(Player newPlayer){
         listOfPlayers.add(newPlayer);
+        if(listOfPlayers.size()==this.numOfPlayers)
+            setState(GameState.STARTED);
     }
 
     public void nextTurn(){

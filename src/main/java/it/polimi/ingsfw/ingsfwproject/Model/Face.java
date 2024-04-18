@@ -12,11 +12,14 @@ abstract public class Face {
     private Content[] cornerList;
     private boolean[] coveredCorner;
 
-    public Face(int id){
+    public Face(int id, Content[] corners){
         cornerList = new Content[4];
         coveredCorner = new boolean[4];
         idCard=id;
+        System.arraycopy(corners, 0, cornerList, 0, 4);
     }
+
+
 
     public Content[] getCornerList() {
         return cornerList;
