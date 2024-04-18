@@ -42,7 +42,7 @@ public class GoldCard extends NormalCard{
 //        this.front.setOverlapped(overlapped);
 //        this.front.setObjectNeeded(object);
 //        this.front.setCost(cost);
-//
+
 //    }
 
     public void printAll(){
