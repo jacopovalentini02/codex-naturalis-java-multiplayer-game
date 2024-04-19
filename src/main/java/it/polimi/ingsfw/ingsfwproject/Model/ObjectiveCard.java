@@ -20,5 +20,6 @@ abstract public class ObjectiveCard extends Card {
         this.points = points;
     }
 
+    public abstract int verifyObjective(PlayerGround ground);
 
 }

@@ -24,4 +24,39 @@ public class NotStructuredObjectiveCard extends ObjectiveCard{
                 "objectRequested=" + objectRequested +
                 '}';
     }
+
+
+    @Override
+    public int verifyObjective(PlayerGround ground) {
+        Map<Content, Integer> counters = new HashMap<>();
+
+        for (Content c : objectRequested) {
+            counters.put(c, ground.getContentCount(c));
+        }
+
+        int flag = 0;
+        int index = 0;
+        int setsCounter = 0;
+
+        while (flag == 0){
+            Content c = objectRequested.get(index); //get i-th object requested by the card
+            int currentCount = counters.get(c); //get object actual value from the map
+            if (currentCount == 1){ //no more sets to count, set flag to 1 to exit while loop
+                flag = 1;
+            } else {
+                currentCount--; //decrement the counter and put it back in the map
+                counters.put(c, currentCount);
+            }
+
+            if(index == objectRequested.size()-1){ //go back to the beginning of the list if it's over
+                setsCounter++; //a set has been completed
+                index = 0;
+            } else {
+                index++;
+            }
+
+        }
+        return setsCounter * this.getPoints();
+
+    }
 }

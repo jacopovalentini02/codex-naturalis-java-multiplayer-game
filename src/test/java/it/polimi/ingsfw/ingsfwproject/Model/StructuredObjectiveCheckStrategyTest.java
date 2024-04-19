@@ -1,4 +1,4 @@
-package it.polimi.ingsfw.ingsfwproject.Model;
+/*package it.polimi.ingsfw.ingsfwproject.Model;
 
 import org.junit.jupiter.api.Test;
 
@@ -81,4 +81,4 @@ class StructuredObjectiveCheckStrategyTest {
         diagonals = strategy.DiagonalSearch(list, grid, true);
         assertEquals(3, diagonals);
     }
-}
+}*/

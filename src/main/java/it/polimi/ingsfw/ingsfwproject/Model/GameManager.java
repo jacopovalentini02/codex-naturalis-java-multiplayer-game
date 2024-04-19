@@ -3,6 +3,7 @@ package it.polimi.ingsfw.ingsfwproject.Model;
 import it.polimi.ingsfw.ingsfwproject.Exceptions.GameFullException;
 import it.polimi.ingsfw.ingsfwproject.Exceptions.IDAlreadyTakenException;
 
+import java.rmi.RemoteException;
 import java.util.*;
 
 public class GameManager {
@@ -13,9 +14,9 @@ public class GameManager {
         this.gameList = new HashMap<>();
         this.firstAvailableGameID = 0;
     }
-
-    public void createGame(int numOfPlayers){
-        Game newGame = new Game();
+    //TODO: rivedere dopo modifica costruttore game
+    public void createGame(int numOfPlayers, String username) throws RemoteException {
+        Game newGame = new Game(firstAvailableGameID, numOfPlayers, new Player(username));
         newGame.setIdGame(firstAvailableGameID);
         newGame.setNumOfPlayers(numOfPlayers);
         gameList.put(firstAvailableGameID, newGame);
@@ -40,12 +41,4 @@ public class GameManager {
 
     }
 
-    public static void main(String[] args){
-        Game game1= new Game();
-
-        game1.setupGame();
-
-
-
-    }
 }

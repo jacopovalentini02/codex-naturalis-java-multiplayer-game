@@ -1,4 +1,5 @@
 package it.polimi.ingsfw.ingsfwproject.Controller;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 
 import it.polimi.ingsfw.ingsfwproject.Model.*;
@@ -26,9 +27,6 @@ public class GameController {
 //
 //    }
 
-    public void DrawDisplayedPlayableCard(Player player, PlayableCard card){
-
-    }
 
     public void draw(Player player, Deck deck){
 

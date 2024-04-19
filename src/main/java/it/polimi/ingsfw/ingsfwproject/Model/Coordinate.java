@@ -40,4 +40,8 @@ public class Coordinate {
         return result;
     }
 
+    public Coordinate sum(Coordinate toSum){
+        return new Coordinate(x+toSum.getX(), y+toSum.getY());
+    }
+
 }
