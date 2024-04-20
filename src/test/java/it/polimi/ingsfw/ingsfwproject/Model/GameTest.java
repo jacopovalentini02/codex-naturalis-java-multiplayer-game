@@ -115,15 +115,17 @@ class GameTest {
         assertEquals(1, addedCard.getFront().getCenter().size());
         assertEquals(Content.INSECT_KINGDOM, addedCard.getFront().getCenter().getFirst());
         assertEquals(4, addedCard.getFront().getCornerList().length);
-        assertEquals(Content.FUNGI_KINGDOM, addedCard.getFront().getCornerList()[0]);
+        assertEquals(Content.EMPTY, addedCard.getFront().getCornerList()[0]);
         assertEquals(Content.PLANT_KINGDOM, addedCard.getFront().getCornerList()[1]);
         assertEquals(Content.INSECT_KINGDOM, addedCard.getFront().getCornerList()[2]);
-        assertEquals(Content.ANIMAL_KINGDOM, addedCard.getFront().getCornerList()[3]);
+        assertEquals(Content.EMPTY, addedCard.getFront().getCornerList()[3]);
         assertEquals(4, addedCard.getBack().getCornerList().length);
-        assertEquals(Content.EMPTY, addedCard.getBack().getCornerList()[0]);
+        assertEquals(Content.FUNGI_KINGDOM, addedCard.getBack().getCornerList()[0]);
         assertEquals(Content.PLANT_KINGDOM, addedCard.getBack().getCornerList()[1]);
         assertEquals(Content.INSECT_KINGDOM, addedCard.getBack().getCornerList()[2]);
-        assertEquals(Content.EMPTY, addedCard.getBack().getCornerList()[3]);
+        assertEquals(Content.ANIMAL_KINGDOM, addedCard.getBack().getCornerList()[3]);
+
+
 
     }
 
@@ -215,14 +217,15 @@ class GameTest {
         game.addPlayer(player2);
         game.addPlayer(player3);
 
+        game.setupGame();
 
         game.setCurrentPlayer(player1);
         game.updatePoints(10);
         assertEquals(10, game.getScores().get(player1));
 
-
-        //game.updatePoints(10);
-        //assertEquals(GameState.ENDING, game.getState());
+        //player1's score is greater than 20, lastTurn should be called and the game state is set to ENDING
+        game.updatePoints(12);
+        assertEquals(GameState.ENDING, game.getState());
 
 
     }
@@ -242,9 +245,23 @@ class GameTest {
         //randomize the first player scoring 20 points
         Random rand = new Random();
         int index = rand.nextInt(game.getListOfPlayers().size());
-        game.lastTurn(game.getListOfPlayers().get(index));
-        //TODO: Mettere le assertion per verificare che effettivamente lastTurn() si svolga correttamente
 
+
+        //Save the score of each player
+        Map<Player, Integer> initialHandSizes = new HashMap<>();
+        for (Player player : game.getListOfPlayers()) {
+            initialHandSizes.put(player, player.getHandCard().size());
+        }
+
+        game.lastTurn(game.getListOfPlayers().get(index));
+
+        //Game state should be in Ending state
+        assertSame(game.getState(), GameState.ENDING);
+
+        //Check that every player's card set is decreased by 1
+        for (Player player : game.getListOfPlayers()) {
+            assertEquals((int) initialHandSizes.get(player) - 1, player.getHandCard().size());
+        }
 
 
     }

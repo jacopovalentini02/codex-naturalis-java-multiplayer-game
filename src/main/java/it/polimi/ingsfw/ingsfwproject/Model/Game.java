@@ -355,49 +355,7 @@ public class Game {
                     getCurrentPlayer().getGround().playCard(rightCard, true, coordinateTest);
                     //TODO : QUA ANDREBBE POI FATTO UN UPDATE DEL PUNTEGGIO DEL GIOCATORE
                 }
-                //choice between draw and pick
-                System.out.println("vuoi pescare dal mazzo o prendere una carta scoperta (scrivere 'pesca' o 'prendi'?\n");
-                //TODO: Anche qui ho rimpiazzato la scelta di draw and pick perchè non avevo ancora la parte di view.
-                //TODO: Per ovviare al problema, ho deciso di utilizzare un attributo inizializzato all'invocazione della
-                //TODO: funzione 'turnsPassed' che se pari mi farà fare 'draw', dispari 'pick'. Il contatore viene incrementato
-                //TODO: poi quando si cambia il currentPlayer tramite nextTurn(). Questo andrà tutto rimpiazzato!
-                /*String command = null;
-                command = scanner.next();
-                scanner.close();
-                String type = null;*/
-                //executing the command
-                if(turnsPassed%2==0){
-                    System.out.println("Mazzo 'risorse' o 'gold' ?");
-                    //TODO: Rimpiazzo la scelta del mazzo da cui pescare e a fine di test assumo che si peschi sempre dalle resource
-                    /*type = scanner.next();
-                    scanner.close();
-                    if(type.equals("risorse")){
-                        controller.draw(getCurrentPlayer(), resourceDeck);
-                    }
-                    else if(type.equals("gold")){
-                        controller.draw(getCurrentPlayer(), goldDeck);
-                    }*/
-                    getCurrentPlayer().draw(resourceDeck);
-                }
-                //TODO: turnsPassed%2 !=0 allora si fa 'pick'
-                else{
-                    Deck groundCard = new Deck();
-                    //letting the player choose the card from the ground
-                    System.out.println("Scegli la carta da prendere dal terreno (inserisci id):\n");
-                    for(Card gc : displayedPlayableCard){
-                        groundCard.getCardList().add(gc);
-                    }
-                    groundCard.printCardsDeck();
-                    //TODO: Rimpiazzo anche qui la scelta della carta da tirare su dal terreno
-                    //int i = scanner.nextInt();
-                    PlayableCard wantedCard = (PlayableCard) groundCard.getCardList().get(2);
-                    /*for(Card gc : displayedPlayableCard){
-                        if(gc.getIdCard() == i){
-                            wantedCard = (PlayableCard) gc;
-                        }
-                    }*/
-                    getCurrentPlayer().pick(wantedCard);
-                }
+
                 if(firstTwentyFirstTurn){
                     firstTwentyFirstTurn=false;
                 }
