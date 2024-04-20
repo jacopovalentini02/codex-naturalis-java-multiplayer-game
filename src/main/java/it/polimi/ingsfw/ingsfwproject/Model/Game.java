@@ -162,28 +162,35 @@ public class Game {
         displayedPlayableCard.add((PlayableCard) goldDeck.draw());
         //Each player randomly takes one Starter card and choose the face to be played
         starterDeck.shuffle();
+        //TODO : Reinserire tutta la logica per la scelta dei colori
         //creating the arrayList representing the token available
-        List<PlayerColor> tokenAvailable = new ArrayList<>();
-        tokenAvailable.add(PlayerColor.GREEN);
-        tokenAvailable.add(PlayerColor.RED);
-        tokenAvailable.add(PlayerColor.BLUE);
-        tokenAvailable.add(PlayerColor.YELLOW);
+        //List<PlayerColor> tokenAvailable = new ArrayList<>();
+        //tokenAvailable.add(PlayerColor.GREEN);
+        //tokenAvailable.add(PlayerColor.RED);
+        //tokenAvailable.add(PlayerColor.BLUE);
+        //tokenAvailable.add(PlayerColor.YELLOW);
 
         //cycling on every player the beginning operations
         for (Player p : listOfPlayers){
             StarterCard starter = (StarterCard) starterDeck.draw();
             //choosing the face
-            controller.playCard(p, starter, faceReader.getBoolean(), new Coordinate(0,0));
+            //TODO : Rimpiazzare il true di upwards con valori presi dalla view. Adesso è a true solo per il test.
+            //TODO: prima era a 'faceReader.getBoolean()';
+            //TODO: Inoltre questo dovrà passare dal controller non direttamente da player
+            p.getGround().playCard(starter,true, new Coordinate(0,0));
             //picking the token
-            System.out.println("Puoi scegliere tra i seguenti colori: ");
+            /*System.out.println("Puoi scegliere tra i seguenti colori: ");
             for(PlayerColor color : tokenAvailable){
                 System.out.println(color);
-            }
-            Scanner scanner = new Scanner(System.in);
+            }*/
+            //TODO : Rimpiazzare il BLUE dcon valori presi dalla view. Adesso è a BLUE solo per il test.
+            //TODO: prima era a 'faceReader.getBoolean()';
+            /*Scanner scanner = new Scanner(System.in);
             String colorChoosen = scanner.next().toUpperCase();
-            scanner.close();
-            p.setToken(PlayerColor.valueOf(colorChoosen));
-            tokenAvailable.remove(PlayerColor.valueOf(colorChoosen));
+            scanner.close();*/
+            //TODO : reinserire l'assegnamento del colore
+            //p.setToken(PlayerColor.BLUE);
+            //tokenAvailable.remove(PlayerColor.BLUE);
             //placing the token on the 0 of the score track
             scores.put(p, 0);
             //draw 2 resourceCard e 1 goldCard
@@ -203,19 +210,22 @@ public class Game {
             cardsToChooseWithin.addCard(objectiveDeck.draw());
             cardsToChooseWithin.addCard(objectiveDeck.draw());
             //letting the player choose which card he wants
-            System.out.println("Che carta vuoi tenere tra queste (indicare id):\n");
+            //TODO : Rimpiazzare tutta la scelta con comandi presi da view
+            /*System.out.println("Che carta vuoi tenere tra queste (indicare id):\n");
             cardsToChooseWithin.printCardsDeck();
             Scanner scanner = new Scanner(System.in);
             int cardChoosen = scanner.nextInt();
-            scanner.close();
+            scanner.close();*/
             //finding the card choosen by the player
-            for(Card o : cardsToChooseWithin.getCardList()){
+            /*for(Card o : cardsToChooseWithin.getCardList()){
                 if(o.getIdCard() == cardChoosen){
                     cardsToChooseWithin.getCardList().remove(o);
                     p.setHandObjective((ObjectiveCard)o);
                     break;
                 }
-            }
+            }*/
+            p.setHandObjective((ObjectiveCard) cardsToChooseWithin.getCardList().get(0));
+            cardsToChooseWithin.getCardList().remove(0);
             //with the .addCard method, it should be possible adding the card directly at the bottom of the deck
             objectiveDeck.addCard(cardsToChooseWithin.getCardList().get(0));
         }
@@ -303,17 +313,21 @@ public class Game {
 
     public void lastTurn(Player firstTwenty){
         int flag=0;
+        int turnsPassed =0;
+        boolean firstTwentyFirstTurn = true; // Aggiunta una variabile per tenere traccia del primo turno di firstTwenty
         while(flag<2){
             //turn operations
             if(flag!=0) {
-                Deck lastHand = new Deck();
-                //letting the player choose the last card to play
-                System.out.println("Scegli la tua ultima carta da giocare (indicare id): ");
-                for (int i = 0; i < getCurrentPlayer().getHandCard().size(); i++) {
-                    lastHand.getCardList().add(getCurrentPlayer().getHandCard().get(i));
-                }
-                lastHand.printCardsDeck();
-                Scanner scanner = new Scanner(System.in);
+                if (getCurrentPlayer() != firstTwenty || !firstTwentyFirstTurn) {
+                    Deck lastHand = new Deck();
+                    //letting the player choose the last card to play
+                    System.out.println("Scegli la tua ultima carta da giocare (indicare id): ");
+                    for (int i = 0; i < getCurrentPlayer().getHandCard().size(); i++) {
+                        lastHand.getCardList().add(getCurrentPlayer().getHandCard().get(i));
+                    }
+                    lastHand.printCardsDeck();
+                    //TODO: Mettere poi la logica di scelta della carta, qua ho messo index 1
+                /*Scanner scanner = new Scanner(System.in);
                 int index = scanner.nextInt();
                 scanner.close();
                 PlayableCard rightCard = null;
@@ -323,39 +337,50 @@ public class Game {
                         rightCard = (PlayableCard) o;
                         break;
                     }
-                }
-                //letting the player choose the position on the grid
-                System.out.println("Scegli la posizione della carta tra queste (indicare prima x e poi y): \n");
-                for (Coordinate c : getCurrentPlayer().getGround().getAvailablePositions()){
-                    System.out.println("(" + c.getX() + " , " +c.getY() + ")\n");
-                }
-                int x = scanner.nextInt();
+                }*/
+                    PlayableCard rightCard = getCurrentPlayer().getHandCard().get(1);
+                    getCurrentPlayer().getHandCard().remove(1);
+                    //letting the player choose the position on the grid
+                    System.out.println("Scegli la posizione della carta tra queste (indicare prima x e poi y): \n");
+                    for (Coordinate c : getCurrentPlayer().getGround().getAvailablePositions()) {
+                        System.out.println("(" + c.getX() + " , " + c.getY() + ")\n");
+                    }
+                    //TODO: anche qui ho rimpiazzato la scelta delle coordinate su cui giocare con una scelta arbitraria per fare i test
+                /*int x = scanner.nextInt();
                 int y = scanner.nextInt();
-                scanner.close();
-                //invoking the playCard method
-                controller.playCard(getCurrentPlayer(), rightCard, faceReader.getBoolean(), new Coordinate(x,y));
-                //QUA ANDREBBE POI FATTO UN UPDATE DEL PUNTEGGIO DEL GIOCATORE
-
-
+                scanner.close();*/
+                    Coordinate coordinateTest = getCurrentPlayer().getGround().getAvailablePositions().get(1);
+                    //TODO: questo dovrebbe farlo il controller ma per ora lasceremo che sia player a farlo
+                    //invoking the playCard method
+                    getCurrentPlayer().getGround().playCard(rightCard, true, coordinateTest);
+                    //TODO : QUA ANDREBBE POI FATTO UN UPDATE DEL PUNTEGGIO DEL GIOCATORE
+                }
                 //choice between draw and pick
                 System.out.println("vuoi pescare dal mazzo o prendere una carta scoperta (scrivere 'pesca' o 'prendi'?\n");
-                String command = null;
+                //TODO: Anche qui ho rimpiazzato la scelta di draw and pick perchè non avevo ancora la parte di view.
+                //TODO: Per ovviare al problema, ho deciso di utilizzare un attributo inizializzato all'invocazione della
+                //TODO: funzione 'turnsPassed' che se pari mi farà fare 'draw', dispari 'pick'. Il contatore viene incrementato
+                //TODO: poi quando si cambia il currentPlayer tramite nextTurn(). Questo andrà tutto rimpiazzato!
+                /*String command = null;
                 command = scanner.next();
                 scanner.close();
-                String type = null;
+                String type = null;*/
                 //executing the command
-                if(command.equals("pesca")){
+                if(turnsPassed%2==0){
                     System.out.println("Mazzo 'risorse' o 'gold' ?");
-                    type = scanner.next();
+                    //TODO: Rimpiazzo la scelta del mazzo da cui pescare e a fine di test assumo che si peschi sempre dalle resource
+                    /*type = scanner.next();
                     scanner.close();
                     if(type.equals("risorse")){
                         controller.draw(getCurrentPlayer(), resourceDeck);
                     }
                     else if(type.equals("gold")){
                         controller.draw(getCurrentPlayer(), goldDeck);
-                    }
+                    }*/
+                    getCurrentPlayer().draw(resourceDeck);
                 }
-                else if (command.equals("prendi")){
+                //TODO: turnsPassed%2 !=0 allora si fa 'pick'
+                else{
                     Deck groundCard = new Deck();
                     //letting the player choose the card from the ground
                     System.out.println("Scegli la carta da prendere dal terreno (inserisci id):\n");
@@ -363,14 +388,18 @@ public class Game {
                         groundCard.getCardList().add(gc);
                     }
                     groundCard.printCardsDeck();
-                    int i = scanner.nextInt();
-                    PlayableCard wantedCard = null;
-                    for(Card gc : displayedPlayableCard){
+                    //TODO: Rimpiazzo anche qui la scelta della carta da tirare su dal terreno
+                    //int i = scanner.nextInt();
+                    PlayableCard wantedCard = (PlayableCard) groundCard.getCardList().get(2);
+                    /*for(Card gc : displayedPlayableCard){
                         if(gc.getIdCard() == i){
                             wantedCard = (PlayableCard) gc;
                         }
-                    }
-                    controller.drawDisplayedPlayableCard(getCurrentPlayer(), wantedCard);
+                    }*/
+                    getCurrentPlayer().pick(wantedCard);
+                }
+                if(firstTwentyFirstTurn){
+                    firstTwentyFirstTurn=false;
                 }
             }
             //every time we meet the first player to reach x>=20 points, we keep it in mind
@@ -379,13 +408,16 @@ public class Game {
             }
             //if flag==2 it means the last turn is completed for every player, so we don't have to go for a nextTurn()
             if(flag!=2){
+                turnsPassed++;
                 nextTurn();
             }
         }
+        System.out.println(turnsPassed);
         //now that all have completed their last turn, the game is set in ending state
         setState(GameState.ENDING);
+        //TODO: Rimetterla in funzione post-implementazione
         //invoking the final function to check who is the winner
-        finalScoreCheck();
+        //finalScoreCheck();
     }
 
     public void updatePoints(int score){
