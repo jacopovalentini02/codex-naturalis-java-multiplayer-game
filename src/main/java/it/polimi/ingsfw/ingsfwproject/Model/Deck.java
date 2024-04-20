@@ -1,5 +1,6 @@
 package it.polimi.ingsfw.ingsfwproject.Model;
 
+import it.polimi.ingsfw.ingsfwproject.Exceptions.DeckEmptyException;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -153,14 +154,15 @@ public class Deck {
     }
 
 
-    public Card draw(){
+    public Card draw() throws DeckEmptyException {
         if (this.cardList!=null && !this.cardList.isEmpty()) {
             Card drawnCard= this.cardList.getFirst();
             this.cardList.removeFirst();
             return drawnCard;
         } else {
-            // if the deck is empty return null
-            return null;
+            // if the deck is empty throw exception
+            throw new DeckEmptyException("This deck is empty, cannot draw a card");
+
         }
     }
     public void printCardsDeck() {

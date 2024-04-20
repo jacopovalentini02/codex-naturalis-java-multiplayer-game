@@ -1,5 +1,6 @@
 package it.polimi.ingsfw.ingsfwproject.Model;
 
+import it.polimi.ingsfw.ingsfwproject.Exceptions.DeckEmptyException;
 import org.junit.jupiter.api.Test;
 
 import java.rmi.RemoteException;
@@ -11,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class StructuredObjectiveCardTest {
 
     @Test
-    void verifyObjective() throws RemoteException {
+    void verifyObjective() throws RemoteException, DeckEmptyException {
         Player player1 = new Player("player1");
         PlayerGround ground = player1.getGround();
         Map<Coordinate, Face> grid = ground.getGrid();
