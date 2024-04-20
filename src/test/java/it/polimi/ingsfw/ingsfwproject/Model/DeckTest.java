@@ -1,5 +1,6 @@
 package it.polimi.ingsfw.ingsfwproject.Model;
 
+import it.polimi.ingsfw.ingsfwproject.Exceptions.DeckEmptyException;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
@@ -146,7 +147,7 @@ class DeckTest {
     }
 
     @Test
-    public void testDraw(){
+    public void testDraw() throws DeckEmptyException {
         Deck deck=new Deck();
         Content[] emptyCorners = {Content.valueOf("EMPTY"),Content.valueOf("EMPTY"),Content.valueOf("EMPTY"),Content.valueOf("EMPTY")};
         //Creation of the first card
@@ -178,9 +179,9 @@ class DeckTest {
         //The drawn card should be not in the deck
         assertFalse(deck.getCardList().contains(drawnCard));
 
-        //If the deck is empty the function should return null
+        //If the deck is empty an exception should be thrown
         deck.setCardList(new ArrayList<>());
-        assertNull(deck.draw());
+        assertThrows(DeckEmptyException.class, deck::draw);
 
     }
 }

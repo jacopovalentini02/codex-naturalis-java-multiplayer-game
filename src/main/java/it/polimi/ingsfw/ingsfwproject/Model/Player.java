@@ -1,5 +1,7 @@
 package it.polimi.ingsfw.ingsfwproject.Model;
 
+import it.polimi.ingsfw.ingsfwproject.Exceptions.DeckEmptyException;
+
 import java.util.*;
 
 public class Player {
@@ -20,7 +22,7 @@ public class Player {
         this.handObjective = null;
     }
 
-    public void draw(Deck deck){
+    public void draw(Deck deck) throws DeckEmptyException {
         Card drawnCard = deck.draw();
         if (drawnCard != null) {
             handCard.add((PlayableCard) drawnCard);

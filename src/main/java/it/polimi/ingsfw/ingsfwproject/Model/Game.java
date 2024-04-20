@@ -1,6 +1,7 @@
 package it.polimi.ingsfw.ingsfwproject.Model;
 
 import it.polimi.ingsfw.ingsfwproject.Controller.GameController;
+import it.polimi.ingsfw.ingsfwproject.Exceptions.DeckEmptyException;
 import it.polimi.ingsfw.ingsfwproject.faceReader;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -149,7 +150,7 @@ public class Game {
         this.currentPlayer = currentPlayer;
     }
 
-    public void setupGame() {
+    public void setupGame() throws DeckEmptyException {
         //invoking the instantiation of all game's cards
         setUpCards();
         //Shuffle the Resource cards and place them facedown in the center of the table. Draw 2 cards and place them faceup.

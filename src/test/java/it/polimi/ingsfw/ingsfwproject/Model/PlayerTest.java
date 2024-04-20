@@ -1,5 +1,6 @@
 package it.polimi.ingsfw.ingsfwproject.Model;
 
+import it.polimi.ingsfw.ingsfwproject.Exceptions.DeckEmptyException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -8,7 +9,7 @@ class PlayerTest {
 
     @Test
     //it checks if the drawn card is in the player's hand
-    void TestDraw() {
+    void TestDraw() throws DeckEmptyException {
         Deck deck = new Deck();
         Content[] emptyCorners = {Content.valueOf("EMPTY"),Content.valueOf("EMPTY"),Content.valueOf("EMPTY"),Content.valueOf("EMPTY")};
         //Create and add a card to the deck
