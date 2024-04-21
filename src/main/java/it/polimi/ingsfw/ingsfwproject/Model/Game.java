@@ -28,6 +28,7 @@ public class Game {
     private List<PlayableCard> displayedPlayableCard;
     private List<ObjectiveCard> displayedObjectiveCard;
     private Player currentPlayer;
+    private Player potentialWinner;
 
     private Player winner;
 
@@ -322,6 +323,10 @@ public class Game {
             this.setCurrentPlayer(listOfPlayers.get(currInd+1));
         }
 
+        if(currentPlayer==potentialWinner){
+            this.finalScoreCheck();
+        }
+
     }
 
     public void lastTurn(Player firstTwenty){
@@ -395,9 +400,9 @@ public class Game {
 
         scores.merge(player, score, Integer::sum); //sum the old score with the new score
 
-        if (scores.get(player) >= 20 && state == GameState.STARTED) {
-            lastTurn(player); //last round for every player
-            this.setState(GameState.ENDING);
+        if (scores.get(player) >= 20) {
+            potentialWinner=currentPlayer;
+            this.state=GameState.ENDING;
         }
     }
 
