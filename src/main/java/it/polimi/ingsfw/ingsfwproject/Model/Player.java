@@ -1,5 +1,6 @@
 package it.polimi.ingsfw.ingsfwproject.Model;
 
+import it.polimi.ingsfw.ingsfwproject.Exceptions.CardNotInHandException;
 import it.polimi.ingsfw.ingsfwproject.Exceptions.DeckEmptyException;
 
 import java.util.*;
@@ -32,6 +33,16 @@ public class Player {
     }
     public void pick(Card card){
         handCard.add((PlayableCard) card);
+    }
+
+    public void playCard(PlayableCard cardPlayed, boolean upwards, Coordinate coord) throws CardNotInHandException {
+        if (handCard.contains(cardPlayed)) {
+            ground.playCard(cardPlayed, upwards, coord);
+            // remove card from player's hand
+            handCard.remove(cardPlayed);
+        } else {
+            throw new CardNotInHandException("The card chosen is not in the player's hand");
+        }
     }
 
     public String getUsername() {

@@ -14,11 +14,9 @@ public class GameManager {
         this.gameList = new HashMap<>();
         this.firstAvailableGameID = 0;
     }
-    //TODO: rivedere dopo modifica costruttore game
+
     public void createGame(int numOfPlayers, String username) throws RemoteException {
-        Game newGame = new Game(firstAvailableGameID, numOfPlayers, new Player(username));
-        newGame.setIdGame(firstAvailableGameID);
-        newGame.setNumOfPlayers(numOfPlayers);
+        Game newGame = new Game(this, firstAvailableGameID, numOfPlayers, new Player(username));
         gameList.put(firstAvailableGameID, newGame);
         firstAvailableGameID++;
     }
@@ -34,11 +32,11 @@ public class GameManager {
                 throw new IDAlreadyTakenException("Nickname : " + nick + "is already taken");
         }
         Player newPlayer = new Player(nick);
-        //gameToJoin.addPlayer(newPlayer);
+        gameToJoin.addPlayer(newPlayer);
     }
 
     public void deleteGame(int idGame){
-
+        gameList.remove(idGame);
     }
 
 }

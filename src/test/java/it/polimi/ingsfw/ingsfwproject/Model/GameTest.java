@@ -14,7 +14,8 @@ class GameTest {
     @Test
     public void testSetUpGame() throws RemoteException, DeckEmptyException {
         Player player1=new Player("user1");
-        Game game = new Game(1, 4, player1);
+        GameManager manager = new GameManager();
+        Game game = new Game(new GameManager(), 1, 4, player1);
         Player player2 = new Player("user2");
         Player player3 = new Player("user3");
         Player player4 = new Player("user4");
@@ -51,7 +52,7 @@ class GameTest {
     //Check the size of each deck
     public void testSetUpCards() throws RemoteException {
         Player player1=new Player("user1");
-        Game game=new Game(1,2,player1);
+        Game game=new Game(new GameManager(), 1,2,player1);
         game.setUpCards();
 
         assertEquals(40, game.getResourceDeck().getCardList().size());
@@ -65,7 +66,7 @@ class GameTest {
     //Check resource cards' deck attributes are set up correctly
     public void testSetUpResourceDeck() throws RemoteException {
         Player player1=new Player("user1");
-        Game game=new Game(1,2,player1);
+        Game game=new Game(new GameManager(),1,2,player1);
         game.setUpCards();
 
         ResourceCard addedCard = (ResourceCard) game.getResourceDeck().getCardList().getFirst();
@@ -83,7 +84,7 @@ class GameTest {
     //Check gold cards' deck attributes are set up correctly
     public void testSetUpGoldDeck() throws RemoteException {
         Player player1=new Player("user1");
-        Game game=new Game(1,2,player1);
+        Game game=new Game(new GameManager(),1,2,player1);
         game.setUpCards();
 
         GoldCard addedCard=  (GoldCard) game.getGoldDeck().getCardList().getFirst();
@@ -108,7 +109,7 @@ class GameTest {
     //Check starter's deck attributes are set up correctly
     public void testSetUpStarterDeck() throws RemoteException {
         Player player1=new Player("user1");
-        Game game=new Game(1,2,player1);
+        Game game=new Game(new GameManager(),1,2,player1);
         game.setUpCards();
 
         StarterCard addedCard=  (StarterCard) game.getStarterDeck().getCardList().getFirst();
@@ -134,7 +135,7 @@ class GameTest {
     //Check objective cards' deck attributes are set up correctly
     public void testSetUpStructObjectiveDeck() throws RemoteException {
         Player player1=new Player("user1");
-        Game game=new Game(1,2,player1);
+        Game game=new Game(new GameManager(), 1,2,player1);
         game.setUpCards();
 
         StructuredObjectiveCard addedCard=  (StructuredObjectiveCard) game.getObjectiveDeck().getCardList().get(0);
@@ -154,7 +155,7 @@ class GameTest {
     //Check objective cards' deck attributes are set up correctly
     public void  testSetUpNotStructObjectiveDeck() throws RemoteException {
         Player player1=new Player("user1");
-        Game game=new Game(1,2,player1);
+        Game game=new Game(new GameManager(),1,2,player1);
         game.setUpCards();
 
         NotStructuredObjectiveCard addedCard=  (NotStructuredObjectiveCard) game.getObjectiveDeck().getCardList().get(8);
@@ -174,7 +175,7 @@ class GameTest {
         Player player1 = new Player("user1");
         Player player2 = new Player("user2");
 
-        Game game=new Game(1,2, player1);
+        Game game=new Game(new GameManager(),1,2, player1);
         game.addPlayer(player2);
         game.setCurrentPlayer(player1);
         game.nextTurn();
@@ -194,7 +195,7 @@ class GameTest {
         Player player2 = new Player("user2");
         Player player3 = new Player("user3");
 
-        Game game=new Game(1,3, player1);
+        Game game=new Game(new GameManager(),1,3, player1);
         game.addPlayer(player2);
 
         //Player 2 should be in the list of player and GameState should still be waiting
@@ -214,18 +215,18 @@ class GameTest {
         Player player2 = new Player("user2");
         Player player3 = new Player("user3");
 
-        Game game=new Game(1,3, player1);
+        Game game=new Game(new GameManager(),1,3, player1);
         game.addPlayer(player2);
         game.addPlayer(player3);
 
         game.setupGame();
 
         game.setCurrentPlayer(player1);
-        game.updatePoints(10);
+        game.updatePoints(10, player1);
         assertEquals(10, game.getScores().get(player1));
 
         //player1's score is greater than 20, lastTurn should be called and the game state is set to ENDING
-        game.updatePoints(12);
+        game.updatePoints(12, player1);
         assertEquals(GameState.ENDING, game.getState());
 
 
@@ -234,7 +235,7 @@ class GameTest {
     @Test
     public void testLastTurn() throws RemoteException, DeckEmptyException {
         Player player1=new Player("user1");
-        Game game = new Game(1, 4, player1);
+        Game game = new Game(new GameManager(),1, 4, player1);
         Player player2 = new Player("user2");
         Player player3 = new Player("user3");
         Player player4 = new Player("user4");

@@ -28,12 +28,18 @@ public class Game {
     private List<PlayableCard> displayedPlayableCard;
     private List<ObjectiveCard> displayedObjectiveCard;
     private Player currentPlayer;
+    private Player potentialWinner;
+
+    private Player winner;
+
+    private GameManager gameManager;
 
 
-    public Game(int idGame, int numOfPlayers, Player player1)  throws RemoteException {
+    public Game(GameManager gameManager, int idGame, int numOfPlayers, Player player1)  throws RemoteException {
         this.idGame = idGame;
         this.numOfPlayers = numOfPlayers;
         this.state=GameState.WAITING_FOR_PLAYERS;
+        this.gameManager = gameManager;
         resourceDeck = new Deck();
         goldDeck = new Deck();
         starterDeck =new Deck();
@@ -293,13 +299,20 @@ public class Game {
     }
 
     public void endGame(){
-
+        gameManager.deleteGame(this.idGame);
     }
 
     public void addPlayer(Player newPlayer){
         listOfPlayers.add(newPlayer);
-        if(listOfPlayers.size()==this.numOfPlayers)
+        if(listOfPlayers.size()==this.numOfPlayers){
             setState(GameState.STARTED);
+            try {
+            this.setupGame();
+            } catch (DeckEmptyException e) {
+                e.printStackTrace();
+            }
+        }
+
     }
 
     public void nextTurn(){
@@ -308,6 +321,10 @@ public class Game {
         else{
             int currInd=listOfPlayers.indexOf(currentPlayer);
             this.setCurrentPlayer(listOfPlayers.get(currInd+1));
+        }
+
+        if(currentPlayer==potentialWinner){
+            this.finalScoreCheck();
         }
 
     }
@@ -379,17 +396,36 @@ public class Game {
         //finalScoreCheck();
     }
 
-    public void updatePoints(int score){
-        Player player = currentPlayer;
+    public void updatePoints(int score, Player player){
+
         scores.merge(player, score, Integer::sum); //sum the old score with the new score
 
         if (scores.get(player) >= 20) {
-            lastTurn(player); //last round for every player
+            potentialWinner=currentPlayer;
+            this.state=GameState.ENDING;
         }
     }
 
     public void finalScoreCheck(){
         //OPERAZIONI...
+
+        //check for additional objective points, from both common and secret objective cards
+        for (Player p: this.listOfPlayers){
+            int pointsToAdd = 0;
+
+            for (ObjectiveCard card: this.getDisplayedObjectiveCard()){ //common objective cards
+                pointsToAdd += card.verifyObjective(p.getGround());
+            }
+
+            pointsToAdd += p.getHandObjective().verifyObjective(p.getGround()); //secret objective card
+
+            updatePoints(pointsToAdd, p); //points update
+        }
+
+        winner = Collections.max(scores.entrySet(), Map.Entry.comparingByValue()).getKey();
+        //TODO: notify clients with a listener
         setState(GameState.ENDED);
+
+        this.endGame();
     }
 }
