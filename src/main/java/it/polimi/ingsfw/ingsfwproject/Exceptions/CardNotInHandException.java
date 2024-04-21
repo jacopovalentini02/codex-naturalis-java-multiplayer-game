@@ -4,5 +4,6 @@ public class CardNotInHandException extends Throwable {
     public CardNotInHandException(String message) {
         super(message);
     }
-    }
+
 }
+
