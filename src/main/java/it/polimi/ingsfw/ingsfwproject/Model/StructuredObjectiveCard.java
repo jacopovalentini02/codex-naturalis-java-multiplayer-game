@@ -2,7 +2,7 @@ package it.polimi.ingsfw.ingsfwproject.Model;
 
 import java.util.*;
 
-public class StructuredObjectiveCard extends ObjectiveCard{
+public class  StructuredObjectiveCard extends ObjectiveCard{
     private Structure structureType;
     private ArrayList<Content> resourceRequested;
 
