@@ -1,40 +1,37 @@
 package it.polimi.ingsfw.ingsfwproject.Model;
 
 public class ContentCounter {
-    /*resourceCount[0] = FUNGI_KINGDOM
-    resourceCount[1] = PLANT_KINGDOM
-    resourceCount[2] = ANIMAL_KINGDOM
-    resourceCount[3] = INSECT_KINGDOM
-
-    objectCount[0] =  QUILL
-    objectCount[1] =  INKWELL
-    objectCount[2] =  MANUSCRIPT
-
+    /*
+    countersArray[0] = FUNGI_KINGDOM
+    countersArray[1] = PLANT_KINGDOM
+    countersArray[2] = ANIMAL_KINGDOM
+    countersArray[3] = INSECT_KINGDOM
+    countersArray[4] =  QUILL
+    countersArray[5] =  INKWELL
+    countersArray[6] =  MANUSCRIPT
     */
 
-    private int[] resourceCount;
-    private int[] objectCount;
+    private int[] countersArray;
 
     public ContentCounter() {
-        resourceCount = new int[4];
-        objectCount = new int[3];
+        countersArray = new int[7];
     }
 
     public void setCounter(Content content, int newValue) {
         if (content == Content.FUNGI_KINGDOM)
-            resourceCount[0] = newValue;
+            countersArray[0] = newValue;
         else if (content == Content.PLANT_KINGDOM)
-            resourceCount[1] = newValue;
+            countersArray[1] = newValue;
         else if (content == Content.ANIMAL_KINGDOM)
-            resourceCount[2] = newValue;
+            countersArray[2] = newValue;
         else if (content == Content.INSECT_KINGDOM)
-            resourceCount[3] = newValue;
+            countersArray[3] = newValue;
         else if (content == Content.INKWELL)
-            objectCount[0] = newValue;
+            countersArray[4] = newValue;
         else if (content == Content.MANUSCRIPT)
-            objectCount[1] = newValue;
+            countersArray[5] = newValue;
         else if (content == Content.QUILL)
-            objectCount[2] = newValue;
+            countersArray[6] = newValue;
     }
 
     public void decrementCounter(Content content) {
@@ -43,20 +40,20 @@ public class ContentCounter {
 
     public int getCounter(Content content) {
         if (content == Content.FUNGI_KINGDOM)
-            return resourceCount[0];
+            return countersArray[0];
         else if (content == Content.PLANT_KINGDOM)
-            return resourceCount[1];
+            return countersArray[1];
         else if (content == Content.ANIMAL_KINGDOM)
-            return resourceCount[2];
+            return countersArray[2];
         else if (content == Content.INSECT_KINGDOM)
-            return resourceCount[3];
+            return countersArray[3];
         else if (content == Content.INKWELL)
-            return objectCount[0];
+            return countersArray[4];
         else if (content == Content.MANUSCRIPT)
-            return objectCount[1];
+            return countersArray[5];
         else if (content == Content.QUILL)
-            return objectCount[2];
-        return -1;
+            return countersArray[6];
+        return 0;
     }
 
     public ContentCounter getCopy(){

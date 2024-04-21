@@ -47,9 +47,7 @@ public class PlayerGround {
                 if (counterCopy.getCounter(c) == -1)
                     throw new NotEnoughResourcesException("you have not enough resource to play the card with id" + card.getIdCard());
             }
-
         }
-
     }
 
     private int updateAvailablePositions(Coordinate coord){
@@ -79,7 +77,6 @@ public class PlayerGround {
                     else if(i==1 && j==1) //top right card
                         corner = facePlayed.getTR();
 
-                    //TODO: corner may be null
                     if(corner != Content.HIDDEN)
                         availablePositions.add(check);
                 }else{
@@ -127,7 +124,6 @@ public class PlayerGround {
                     points = ((GoldFront) face).getPoints();
                 }else{
                     //if it has a needed object, it gives 1 point for each object of needed object is on the playerGround
-                    //TODO: CHECK IL CASO IN CUI getContentCount ritorni -1
                     points = contentCounter.getCounter(((GoldFront) face).getObjectNeeded()) * ((GoldFront) face).getPoints();
                 }
             }
@@ -145,109 +141,5 @@ public class PlayerGround {
     public int getContentCount(Content content){
         return contentCounter.getCounter(content);
     }
-
-    /*
-
-    /*resourceCount[0] = FUNGI_KINGDOM
-    resourceCount[1] = PLANT_KINGDOM
-    resourceCount[2] = ANIMAL_KINGDOM
-    resourceCount[3] = INSECT_KINGDOM
-
-    objectCount[0] =  QUILL
-    objectCount[1] =  INKWELL
-    objectCount[2] =  MANUSCRIPT
-
-    */
-
-    /*
-    private int[] resourceCount;
-    private int[] objectCount;
-
-
-    private void updateCounter(Content content){
-        //TODO: lanciare eccezione se l'angolo è hidden
-        if(content == Content.ANIMAL_KINGDOM)
-            this.setAnimalCount(this.getAnimalCount()-1);
-        else if(content == Content.FUNGI_KINGDOM)
-            this.setFungiCount(this.getFungiCount()-1);
-        else if(content == Content.INSECT_KINGDOM)
-            this.setInsectCount(this.getInsectCount()-1);
-        else if(content == Content.PLANT_KINGDOM)
-            this.setPlantCount(this.getPlantCount()-1);
-        else if(content == Content.INKWELL)
-            this.setInkwellCount(this.getInkwellCount()-1);
-        else if(content == Content.MANUSCRIPT)
-            this.setManuscriptCount(this.getManuscriptCount()-1);
-        else if(content == Content.QUILL)
-            this.setQuillCount(this.getQuillCount()-1);
-    }
-
-    public int getContentCount(Content content){
-        //TODO: GESTIRE CON UN ECCEZIONE IL CASO -1
-        if(content == Content.ANIMAL_KINGDOM)
-            return this.getAnimalCount();
-        else if(content == Content.FUNGI_KINGDOM)
-            return this.getFungiCount();
-        else if(content == Content.INSECT_KINGDOM)
-            return this.getInsectCount();
-        else if(content == Content.PLANT_KINGDOM)
-            return this.getPlantCount();
-        else if(content == Content.INKWELL)
-            return this.getInkwellCount();
-        else if(content == Content.MANUSCRIPT)
-            return this.getManuscriptCount();
-        else if(content == Content.QUILL)
-            return this.getQuillCount();
-        return -1;
-    }
-
-    //OBJECT GETTERS AND SETTERS
-    public int getPlantCount(){
-        return this.resourceCount[0];
-    }
-    public void setPlantCount(int count){
-        this.resourceCount[0] = count;
-    }
-    public int getAnimalCount(){
-        return this.resourceCount[1];
-    }
-    public void setAnimalCount(int count){
-        this.resourceCount[1] = count;
-    }
-    public int getFungiCount(){
-        return this.resourceCount[2];
-    }
-    public void setFungiCount(int count){
-        this.resourceCount[2] = count;
-    }
-    public int getInsectCount(){
-        return this.resourceCount[3];
-    }
-    public void setInsectCount(int count){
-        this.resourceCount[3] = count;
-    }
-
-    public int getQuillCount(){
-        return this.objectCount[0];
-    }
-    public void setQuillCount(int count){
-        this.objectCount[0] = count;
-    }
-    public int getInkwellCount(){
-        return this.objectCount[1];
-    }
-    public void setInkwellCount(int count){
-        this.objectCount[1] = count;
-    }
-    public int getManuscriptCount(){
-        return this.objectCount[2];
-    }
-    public void setManuscriptCount(int count){
-        this.objectCount[2] = count;
-    }
-     */
-
-
-
 
 }
