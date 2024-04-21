@@ -1,6 +1,9 @@
 package it.polimi.ingsfw.ingsfwproject.Model;
 
+import it.polimi.ingsfw.ingsfwproject.Exceptions.CardNotInHandException;
 import it.polimi.ingsfw.ingsfwproject.Exceptions.DeckEmptyException;
+import it.polimi.ingsfw.ingsfwproject.Exceptions.NotEnoughResourcesException;
+import it.polimi.ingsfw.ingsfwproject.Exceptions.PositionNotAvailableException;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
@@ -12,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class GameTest {
 
     @Test
-    public void testSetUpGame() throws RemoteException, DeckEmptyException {
+    public void testSetUpGame() throws RemoteException, DeckEmptyException, PositionNotAvailableException, NotEnoughResourcesException, CardNotInHandException {
         Player player1=new Player("user1");
         GameManager manager = new GameManager();
         Game game = new Game(new GameManager(), 1, 4, player1);
@@ -210,7 +213,7 @@ class GameTest {
 
     @Test
     //Check the new score is updated and lastTurn is called if the score is >=20
-    public void testUpdatePoints() throws RemoteException, DeckEmptyException {
+    public void testUpdatePoints() throws RemoteException, DeckEmptyException, PositionNotAvailableException, NotEnoughResourcesException, CardNotInHandException {
         Player player1 = new Player("user1");
         Player player2 = new Player("user2");
         Player player3 = new Player("user3");
@@ -233,7 +236,7 @@ class GameTest {
     }
 
     @Test
-    public void testLastTurn() throws RemoteException, DeckEmptyException {
+    public void testLastTurn() throws RemoteException, DeckEmptyException, PositionNotAvailableException, NotEnoughResourcesException, CardNotInHandException {
         Player player1=new Player("user1");
         Game game = new Game(new GameManager(),1, 4, player1);
         Player player2 = new Player("user2");
