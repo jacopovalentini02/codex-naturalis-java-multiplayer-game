@@ -2,6 +2,8 @@ package it.polimi.ingsfw.ingsfwproject.Model;
 
 import it.polimi.ingsfw.ingsfwproject.Exceptions.CardNotInHandException;
 import it.polimi.ingsfw.ingsfwproject.Exceptions.DeckEmptyException;
+import it.polimi.ingsfw.ingsfwproject.Exceptions.NotEnoughResourcesException;
+import it.polimi.ingsfw.ingsfwproject.Exceptions.PositionNotAvailableException;
 
 import java.util.*;
 
@@ -35,7 +37,7 @@ public class Player {
         handCard.add((PlayableCard) card);
     }
 
-    public void playCard(PlayableCard cardPlayed, boolean upwards, Coordinate coord) throws CardNotInHandException {
+    public void playCard(PlayableCard cardPlayed, boolean upwards, Coordinate coord) throws CardNotInHandException, PositionNotAvailableException, NotEnoughResourcesException {
         if (handCard.contains(cardPlayed)) {
             ground.playCard(cardPlayed, upwards, coord);
             // remove card from player's hand

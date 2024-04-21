@@ -1,7 +1,10 @@
 package it.polimi.ingsfw.ingsfwproject.Model;
 
 import it.polimi.ingsfw.ingsfwproject.Controller.GameController;
+import it.polimi.ingsfw.ingsfwproject.Exceptions.CardNotInHandException;
 import it.polimi.ingsfw.ingsfwproject.Exceptions.DeckEmptyException;
+import it.polimi.ingsfw.ingsfwproject.Exceptions.NotEnoughResourcesException;
+import it.polimi.ingsfw.ingsfwproject.Exceptions.PositionNotAvailableException;
 import it.polimi.ingsfw.ingsfwproject.faceReader;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -156,7 +159,7 @@ public class Game {
         this.currentPlayer = currentPlayer;
     }
 
-    public void setupGame() throws DeckEmptyException {
+    public void setupGame() throws DeckEmptyException, PositionNotAvailableException, NotEnoughResourcesException, CardNotInHandException {
         //invoking the instantiation of all game's cards
         setUpCards();
         //Shuffle the Resource cards and place them facedown in the center of the table. Draw 2 cards and place them faceup.
@@ -184,7 +187,7 @@ public class Game {
             //TODO : Rimpiazzare il true di upwards con valori presi dalla view. Adesso è a true solo per il test.
             //TODO: prima era a 'faceReader.getBoolean()';
             //TODO: Inoltre questo dovrà passare dal controller non direttamente da player
-            p.getGround().playCard(starter,true, new Coordinate(0,0));
+            p.playCard(starter,true, new Coordinate(0,0));
             //picking the token
             /*System.out.println("Puoi scegliere tra i seguenti colori: ");
             for(PlayerColor color : tokenAvailable){
@@ -310,18 +313,21 @@ public class Game {
             this.setupGame();
             } catch (DeckEmptyException e) {
                 e.printStackTrace();
+            } catch( PositionNotAvailableException | NotEnoughResourcesException | CardNotInHandException e){
+                /*
+                TODO: CATCH DA ELIMINARE: QUESTE TRE ECCEZIONI LE CATCHERà GIA IL CONTROLLER, IL PROBLEMA
+                è CHE SETUPGAME CHIAMA PLAYCARD MA NON DOVREBBE ESSERE LUI, BENSì IL CONTROLLER!
+                 */
+
+                e.printStackTrace();
             }
         }
 
     }
 
     public void nextTurn(){
-        if(listOfPlayers.indexOf(currentPlayer)==listOfPlayers.size()-1) //if current player is the last one, the next one is the first in the list
-            this.setCurrentPlayer(listOfPlayers.getFirst());
-        else{
-            int currInd=listOfPlayers.indexOf(currentPlayer);
-            this.setCurrentPlayer(listOfPlayers.get(currInd+1));
-        }
+        int newIndex = (listOfPlayers.indexOf(currentPlayer) + 1) % listOfPlayers.size();
+        this.setCurrentPlayer(listOfPlayers.get(newIndex));
 
         if(currentPlayer==potentialWinner){
             this.finalScoreCheck();
@@ -329,7 +335,7 @@ public class Game {
 
     }
 
-    public void lastTurn(Player firstTwenty){
+    public void lastTurn(Player firstTwenty) throws PositionNotAvailableException, NotEnoughResourcesException, CardNotInHandException {
         int flag=0;
         int turnsPassed =0;
         boolean firstTwentyFirstTurn = true; // Aggiunta una variabile per tenere traccia del primo turno di firstTwenty
@@ -370,7 +376,7 @@ public class Game {
                     Coordinate coordinateTest = getCurrentPlayer().getGround().getAvailablePositions().get(1);
                     //TODO: questo dovrebbe farlo il controller ma per ora lasceremo che sia player a farlo
                     //invoking the playCard method
-                    getCurrentPlayer().getGround().playCard(rightCard, true, coordinateTest);
+                    getCurrentPlayer().playCard(rightCard, true, coordinateTest);
                     //TODO : QUA ANDREBBE POI FATTO UN UPDATE DEL PUNTEGGIO DEL GIOCATORE
                 }
 
