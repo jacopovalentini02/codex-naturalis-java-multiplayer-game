@@ -43,6 +43,8 @@ public class Game {
 
     int lastRoundsplayed;
 
+    int objectiveCardsChosen;
+
     public boolean getifCurrentPlayerhasPlayed() {return currentPlayerhasPlayed;}
     public void setCurrentPlayerhasPlayed(boolean bool){
         this.currentPlayerhasPlayed = bool;
@@ -71,6 +73,7 @@ public class Game {
         tokenAvailable.add(PlayerColor.YELLOW);
         currentPlayerhasPlayed = false;
         lastRoundsplayed = 0;
+        objectiveCardsChosen = 0;
     }
 
     public GameState getState() {
@@ -197,6 +200,48 @@ public class Game {
         }
     }
 
+
+    public void setUpObjectives() throws DeckEmptyException {
+        //shuffling objective deck
+        objectiveDeck.shuffle();
+        //placing the 2 common objective on the table
+        displayedObjectiveCard.add((ObjectiveCard) objectiveDeck.draw());
+        displayedObjectiveCard.add((ObjectiveCard) objectiveDeck.draw());
+        for(Player p : listOfPlayers){
+            p.getHandObjective().add((ObjectiveCard) objectiveDeck.draw());
+            p.getHandObjective().add((ObjectiveCard) objectiveDeck.draw());
+        }
+        this.setState(GameState.CHOOSING_OBJECTIVES);
+    }
+
+    public void chooseObjectiveCard(Player player, Card card) throws CardNotPresentException, DeckEmptyException {
+        ObjectiveCard choice = (ObjectiveCard) card;
+        if (!player.getHandObjective().contains(card))
+            throw new CardNotPresentException("You can't choose this card");
+        ArrayList<ObjectiveCard> newObjectivelist = new ArrayList<>();
+        newObjectivelist.add(choice);
+        player.setHandObjective(newObjectivelist);
+
+        objectiveCardsChosen++;
+
+        if (objectiveCardsChosen == this.getNumOfPlayers())
+            setUpHands();
+    }
+
+    private void setUpHands() throws DeckEmptyException {
+        for(Player p : listOfPlayers) {
+            scores.put(p, 0);
+            //draw 2 resourceCard e 1 goldCard
+            p.getHandCard().add((PlayableCard) resourceDeck.draw());
+            p.getHandCard().add((PlayableCard) resourceDeck.draw());
+            p.getHandCard().add((PlayableCard) goldDeck.draw());
+        }
+        randomizeFirstPlayer();
+        this.setState(GameState.STARTED);
+    }
+
+
+
     public synchronized void setupHandsAndObjectives() throws DeckEmptyException {
         for(Player p : listOfPlayers) {
             scores.put(p, 0);
@@ -287,7 +332,8 @@ public void randomizeFirstPlayer(){
     public void addPlayer(Player newPlayer){
         listOfPlayers.add(newPlayer);
         if(listOfPlayers.size()==this.numOfPlayers){
-            setState(GameState.STARTED);
+            //TODO:modifica
+            setState(GameState.CHOOSING_STARTER_CARDS);
             setCurrentPlayer(getListOfPlayers().get(0));
             try {
                 this.setupField();
