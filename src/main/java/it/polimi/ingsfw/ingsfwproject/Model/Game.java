@@ -293,14 +293,7 @@ public void randomizeFirstPlayer(){
                 this.setupField();
             } catch (DeckEmptyException e) {
                 e.printStackTrace();
-            } /*catch( PositionNotAvailableException | NotEnoughResourcesException | CardNotInHandException e){
-                /*
-                TODO: CATCH DA ELIMINARE: QUESTE TRE ECCEZIONI LE CATCHERà GIA IL CONTROLLER, IL PROBLEMA
-                è CHE SETUPGAME CHIAMA PLAYCARD MA NON DOVREBBE ESSERE LUI, BENSì IL CONTROLLER!
-
-
-                e.printStackTrace();
-            }*/
+            }
         }
 
     }
