@@ -19,10 +19,6 @@ public class GameController {
     }
 
     public void playCard(Player player, PlayableCard card, boolean upwards, Coordinate coord) throws TurnException, GamePhaseException, PositionNotAvailableException, NotEnoughResourcesException, CardNotInHandException {
-        //TODO: chiamare effettvamente PlayerGround.playCard(...).
-        // con il valore di ritorno, chiamare game.updatePoints(...) per aggiungere i punti di questa giocata al player
-
-        //TODO: logica di turno
         int pointsMade = 0;
 
         if (model.getCurrentPlayer() != player)

@@ -41,6 +41,8 @@ public class Game {
 
     private GameManager gameManager;
 
+    int lastRoundsplayed;
+
     public boolean getifCurrentPlayerhasPlayed() {return currentPlayerhasPlayed;}
     public void setCurrentPlayerhasPlayed(boolean bool){
         this.currentPlayerhasPlayed = bool;
@@ -68,6 +70,7 @@ public class Game {
         tokenAvailable.add(PlayerColor.BLUE);
         tokenAvailable.add(PlayerColor.YELLOW);
         currentPlayerhasPlayed = false;
+        lastRoundsplayed = 0;
     }
 
     public GameState getState() {
@@ -304,8 +307,11 @@ public void randomizeFirstPlayer(){
 
     public void nextTurn() {
 
-        if (currentPlayer.equals(potentialWinner) && this.state == GameState.ENDING)
-            this.finalScoreCheck();
+        if (this.state == GameState.ENDING) //counting the number of rounds played after a player reaches 20 points
+            lastRoundsplayed++;
+
+        if (lastRoundsplayed == listOfPlayers.size() + 1) // if everybody has made its last turn, end the game
+            finalScoreCheck();
 
         int newIndex = (listOfPlayers.indexOf(currentPlayer) + 1) % listOfPlayers.size();
         this.setCurrentPlayer(listOfPlayers.get(newIndex));
@@ -386,7 +392,6 @@ public void randomizeFirstPlayer(){
 
         if (scores.get(player) >= 20) {
             potentialWinner=currentPlayer;
-            this.state=GameState.ENDING;
         }
     }
 
