@@ -13,7 +13,16 @@ public class Player {
     private PlayerColor token;
     private PlayerGround ground;
     private ArrayList<PlayableCard> handCard;
-    private ObjectiveCard handObjective;
+
+    public ArrayList<ObjectiveCard> getHandObjective() {
+        return handObjective;
+    }
+
+    public void setHandObjective(ArrayList<ObjectiveCard> handObjective) {
+        this.handObjective = handObjective;
+    }
+
+    private ArrayList<ObjectiveCard> handObjective;
 
 
     public Player(String username) {
@@ -22,7 +31,7 @@ public class Player {
         this.token = null;
         this.ground = new PlayerGround();
         this.handCard = new ArrayList<>();
-        this.handObjective = null;
+        this.handObjective = new ArrayList<>();
     }
 
     public void draw(Deck deck) throws DeckEmptyException {
@@ -89,11 +98,5 @@ public class Player {
         this.handCard = handCard;
     }
 
-    public ObjectiveCard getHandObjective() {
-        return handObjective;
-    }
 
-    public void setHandObjective(ObjectiveCard handObjective) {
-        this.handObjective = handObjective;
-    }
 }

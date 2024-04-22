@@ -1,6 +1,10 @@
 package it.polimi.ingsfw.ingsfwproject.Model;
 
 import it.polimi.ingsfw.ingsfwproject.Controller.GameController;
+import it.polimi.ingsfw.ingsfwproject.Exceptions.CardNotInHandException;
+import it.polimi.ingsfw.ingsfwproject.Exceptions.DeckEmptyException;
+import it.polimi.ingsfw.ingsfwproject.Exceptions.NotEnoughResourcesException;
+import it.polimi.ingsfw.ingsfwproject.Exceptions.PositionNotAvailableException;
 import it.polimi.ingsfw.ingsfwproject.Exceptions.*;
 import it.polimi.ingsfw.ingsfwproject.faceReader;
 import org.json.JSONArray;
@@ -18,6 +22,7 @@ public class Game {
     private GameState state;
     private GameController controller;
     private List<Player> listOfPlayers;
+    private List<PlayerColor> tokenAvailable;
     private int numOfPlayers;
     private Map<Player, Integer> scores;
     private Player firstPlayer;
@@ -57,8 +62,12 @@ public class Game {
         displayedPlayableCard = new ArrayList<PlayableCard>();
         displayedObjectiveCard = new ArrayList<>();
         scores = new HashMap<>();
+        tokenAvailable = new ArrayList<>();
+        tokenAvailable.add(PlayerColor.GREEN);
+        tokenAvailable.add(PlayerColor.RED);
+        tokenAvailable.add(PlayerColor.BLUE);
+        tokenAvailable.add(PlayerColor.YELLOW);
         currentPlayerhasPlayed = false;
-        endTriggeringPlayer = null;
     }
 
     public GameState getState() {
@@ -108,8 +117,6 @@ public class Game {
     public Deck getObjectiveDeck() {
         return objectiveDeck;
     }
-
-    private Player endTriggeringPlayer;
 
     public ArrayList<PlayableCard> getDisplayedPlayableCard() {
         return (ArrayList<PlayableCard>) displayedPlayableCard;
@@ -167,7 +174,7 @@ public class Game {
         this.currentPlayer = currentPlayer;
     }
 
-    public void setupGame() throws DeckEmptyException, PositionNotAvailableException, NotEnoughResourcesException, CardNotInHandException {
+    public synchronized void setupField() throws DeckEmptyException {
         //invoking the instantiation of all game's cards
         setUpCards();
         //Shuffle the Resource cards and place them facedown in the center of the table. Draw 2 cards and place them faceup.
@@ -180,36 +187,15 @@ public class Game {
         displayedPlayableCard.add((PlayableCard) goldDeck.draw());
         //Each player randomly takes one Starter card and choose the face to be played
         starterDeck.shuffle();
-        //TODO : Reinserire tutta la logica per la scelta dei colori
-        //creating the arrayList representing the token available
-        //List<PlayerColor> tokenAvailable = new ArrayList<>();
-        //tokenAvailable.add(PlayerColor.GREEN);
-        //tokenAvailable.add(PlayerColor.RED);
-        //tokenAvailable.add(PlayerColor.BLUE);
-        //tokenAvailable.add(PlayerColor.YELLOW);
-
         //cycling on every player the beginning operations
-        for (Player p : listOfPlayers){
+        for (Player p : listOfPlayers) {
             StarterCard starter = (StarterCard) starterDeck.draw();
-            //choosing the face
-            //TODO : Rimpiazzare il true di upwards con valori presi dalla view. Adesso è a true solo per il test.
-            //TODO: prima era a 'faceReader.getBoolean()';
-            //TODO: Inoltre questo dovrà passare dal controller non direttamente da player
-            p.playCard(starter,true, new Coordinate(0,0));
-            //picking the token
-            /*System.out.println("Puoi scegliere tra i seguenti colori: ");
-            for(PlayerColor color : tokenAvailable){
-                System.out.println(color);
-            }*/
-            //TODO : Rimpiazzare il BLUE dcon valori presi dalla view. Adesso è a BLUE solo per il test.
-            //TODO: prima era a 'faceReader.getBoolean()';
-            /*Scanner scanner = new Scanner(System.in);
-            String colorChoosen = scanner.next().toUpperCase();
-            scanner.close();*/
-            //TODO : reinserire l'assegnamento del colore
-            //p.setToken(PlayerColor.BLUE);
-            //tokenAvailable.remove(PlayerColor.BLUE);
-            //placing the token on the 0 of the score track
+            p.getHandCard().add(starter);
+        }
+    }
+
+    public synchronized void setupHandsAndObjectives() throws DeckEmptyException {
+        for(Player p : listOfPlayers) {
             scores.put(p, 0);
             //draw 2 resourceCard e 1 goldCard
             p.getHandCard().add((PlayableCard) resourceDeck.draw());
@@ -221,36 +207,18 @@ public class Game {
         //placing the 2 common objective on the table
         displayedObjectiveCard.add((ObjectiveCard) objectiveDeck.draw());
         displayedObjectiveCard.add((ObjectiveCard) objectiveDeck.draw());
-        //Each player receives 2 Objective cards, they look at them and choose one of them.
         for(Player p : listOfPlayers){
-            //draw 2 objective cards
-            Deck cardsToChooseWithin = new Deck();
-            cardsToChooseWithin.addCard(objectiveDeck.draw());
-            cardsToChooseWithin.addCard(objectiveDeck.draw());
-            //letting the player choose which card he wants
-            //TODO : Rimpiazzare tutta la scelta con comandi presi da view
-            /*System.out.println("Che carta vuoi tenere tra queste (indicare id):\n");
-            cardsToChooseWithin.printCardsDeck();
-            Scanner scanner = new Scanner(System.in);
-            int cardChoosen = scanner.nextInt();
-            scanner.close();*/
-            //finding the card choosen by the player
-            /*for(Card o : cardsToChooseWithin.getCardList()){
-                if(o.getIdCard() == cardChoosen){
-                    cardsToChooseWithin.getCardList().remove(o);
-                    p.setHandObjective((ObjectiveCard)o);
-                    break;
-                }
-            }*/
-            p.setHandObjective((ObjectiveCard) cardsToChooseWithin.getCardList().get(0));
-            cardsToChooseWithin.getCardList().remove(0);
-            //with the .addCard method, it should be possible adding the card directly at the bottom of the deck
-            objectiveDeck.addCard(cardsToChooseWithin.getCardList().get(0));
+            p.getHandObjective().add((ObjectiveCard) objectiveDeck.draw());
+            p.getHandObjective().add((ObjectiveCard) objectiveDeck.draw());
         }
+    }
+
+public void randomizeFirstPlayer(){
         //choosing randomly the first player
         Random rand = new Random();
         int index = rand.nextInt(listOfPlayers.size());
         setFirstPlayer(listOfPlayers.get(index));
+        setCurrentPlayer(getFirstPlayer());
     }
 
 
@@ -317,18 +285,19 @@ public class Game {
         listOfPlayers.add(newPlayer);
         if(listOfPlayers.size()==this.numOfPlayers){
             setState(GameState.STARTED);
+            setCurrentPlayer(getListOfPlayers().get(0));
             try {
-            this.setupGame();
+                this.setupField();
             } catch (DeckEmptyException e) {
                 e.printStackTrace();
-            } catch( PositionNotAvailableException | NotEnoughResourcesException | CardNotInHandException e){
+            } /*catch( PositionNotAvailableException | NotEnoughResourcesException | CardNotInHandException e){
                 /*
                 TODO: CATCH DA ELIMINARE: QUESTE TRE ECCEZIONI LE CATCHERà GIA IL CONTROLLER, IL PROBLEMA
                 è CHE SETUPGAME CHIAMA PLAYCARD MA NON DOVREBBE ESSERE LUI, BENSì IL CONTROLLER!
-                 */
+
 
                 e.printStackTrace();
-            }
+            }*/
         }
 
     }
@@ -417,7 +386,7 @@ public class Game {
 
         if (scores.get(player) >= 20) {
             potentialWinner=currentPlayer;
-            endTriggeringPlayer = listOfPlayers.get((listOfPlayers.indexOf(currentPlayer) + 1) % listOfPlayers.size());
+            this.state=GameState.ENDING;
         }
     }
 
@@ -449,7 +418,7 @@ public class Game {
                 pointsToAdd += card.verifyObjective(p.getGround());
             }
 
-            pointsToAdd += p.getHandObjective().verifyObjective(p.getGround()); //secret objective card
+            pointsToAdd += p.getHandObjective().get(0).verifyObjective(p.getGround()); //secret objective card
 
             updatePoints(pointsToAdd, p); //points update
         }
