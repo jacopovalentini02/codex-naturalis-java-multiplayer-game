@@ -14,7 +14,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class GameTest {
 
-
     @Test
     //Check the size of each deck
     public void testSetUpCards() throws RemoteException {
@@ -233,5 +232,60 @@ class GameTest {
         }
 
 
+    }
+
+    @Test
+    void testSetupField() throws DeckEmptyException, RemoteException {
+        Player player1 = new Player("user1");
+        Game game = new Game(new GameManager(), 1, 4, player1);
+        Player player2 = new Player("user2");
+        Player player3 = new Player("user3");
+        Player player4 = new Player("user4");
+
+        game.addPlayer(player2);
+        game.addPlayer(player3);
+        game.addPlayer(player4);
+        //4 players automatically invokes the setupField() method
+
+        assertEquals(38, game.getResourceDeck().getCardList().size());
+        assertEquals(38, game.getGoldDeck().getCardList().size());
+        assertEquals(2, game.getStarterDeck().getCardList().size());
+        assertEquals(4, game.getDisplayedPlayableCard().size());
+        for(Player p : game.getListOfPlayers()){
+            assertEquals(1, p.getHandCard().size());
+        }
+    }
+
+
+    @Test
+    void setupHandsAndObjectives() throws RemoteException, DeckEmptyException {
+        Player player1 = new Player("user1");
+        Game game = new Game(new GameManager(), 1, 4, player1);
+        Player player2 = new Player("user2");
+        Player player3 = new Player("user3");
+        Player player4 = new Player("user4");
+        game.addPlayer(player2);
+        game.addPlayer(player3);
+        game.addPlayer(player4);
+        //simulating the play of the starter card
+        for (Player p : game.getListOfPlayers()){
+            p.getHandCard().remove(0);
+        }
+        game.setupHandsAndObjectives();
+
+        assertEquals(30, game.getResourceDeck().getCardList().size());
+        assertEquals(34, game.getGoldDeck().getCardList().size());
+        assertEquals(2, game.getStarterDeck().getCardList().size());
+        assertEquals(6, game.getObjectiveDeck().getCardList().size());
+        assertEquals(4, game.getDisplayedPlayableCard().size());
+        assertEquals(2, game.getDisplayedObjectiveCard().size());
+        for (Player p : game.getListOfPlayers()){
+            assertEquals(0,game.getScores().get(p));
+        }
+
+    }
+
+    @Test
+    void randomizeFirstPlayer() {
     }
 }

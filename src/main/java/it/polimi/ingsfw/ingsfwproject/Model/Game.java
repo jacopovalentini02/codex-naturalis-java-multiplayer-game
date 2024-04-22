@@ -276,17 +276,17 @@ public void randomizeFirstPlayer(){
             setState(GameState.STARTED);
             setCurrentPlayer(getListOfPlayers().get(0));
             try {
-            this.setupField();
+                this.setupField();
             } catch (DeckEmptyException e) {
                 e.printStackTrace();
-            } catch( PositionNotAvailableException | NotEnoughResourcesException | CardNotInHandException e){
+            } /*catch( PositionNotAvailableException | NotEnoughResourcesException | CardNotInHandException e){
                 /*
                 TODO: CATCH DA ELIMINARE: QUESTE TRE ECCEZIONI LE CATCHERà GIA IL CONTROLLER, IL PROBLEMA
                 è CHE SETUPGAME CHIAMA PLAYCARD MA NON DOVREBBE ESSERE LUI, BENSì IL CONTROLLER!
-                 */
+
 
                 e.printStackTrace();
-            }
+            }*/
         }
 
     }
@@ -389,7 +389,7 @@ public void randomizeFirstPlayer(){
                 pointsToAdd += card.verifyObjective(p.getGround());
             }
 
-            pointsToAdd += p.getHandObjective().verifyObjective(p.getGround()); //secret objective card
+            pointsToAdd += p.getHandObjective().get(0).verifyObjective(p.getGround()); //secret objective card
 
             updatePoints(pointsToAdd, p); //points update
         }
