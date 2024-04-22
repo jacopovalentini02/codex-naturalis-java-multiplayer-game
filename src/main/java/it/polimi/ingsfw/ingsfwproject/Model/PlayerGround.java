@@ -27,8 +27,15 @@ public class PlayerGround {
         //add the face in the grid
         grid.put(coord, face);
 
+        //update the resources and objects counter
+        updateCounters(face);
+
         //update the available position and counts the corners that the face has covered (i.e. gold front points)
         int coveredCorners = updateAvailablePositions(coord);
+
+        if(face instanceof StarterFront && coord != new Coordinate(0,0)){
+            throw new PositionNotAvailableException("you can only play a starter card in " + new Coordinate(0,0));
+        }
 
         if(face instanceof NormalFace){
             return calculatePoints(face, coveredCorners);
@@ -49,6 +56,28 @@ public class PlayerGround {
             }
         }
     }
+
+    private void updateCounters(Face facePlayed){
+        //update the counters checking the corners
+        if(facePlayed.getBL() != Content.HIDDEN || facePlayed.getBL() != Content.EMPTY)
+            contentCounter.incrementCounter(facePlayed.getBL());
+        if(facePlayed.getTL() != Content.HIDDEN || facePlayed.getTL() != Content.EMPTY)
+            contentCounter.incrementCounter(facePlayed.getTL());
+        if(facePlayed.getBR() != Content.HIDDEN || facePlayed.getBR() != Content.EMPTY)
+            contentCounter.incrementCounter(facePlayed.getBR());
+        if(facePlayed.getTR() != Content.HIDDEN || facePlayed.getTR() != Content.EMPTY)
+            contentCounter.incrementCounter(facePlayed.getTR());
+
+        //update the counters checking in the center of the played card, if it has it
+        if(facePlayed instanceof NormalBack)
+            contentCounter.incrementCounter(((NormalBack) facePlayed).getCenter());
+        else if (facePlayed instanceof  StarterFront) {
+            for(Content c : ((StarterFront) facePlayed).getCenter()){
+                contentCounter.incrementCounter(c);
+            }
+        }
+    }
+
 
     private int updateAvailablePositions(Coordinate coord){
         //remove the position from availablePositions
@@ -99,14 +128,6 @@ public class PlayerGround {
                         grid.get(check).setCoveredBL(true);
                     }
                 }
-            }
-        }
-        //update the counters checking in the center of the played card, if it has it
-        if(facePlayed instanceof NormalBack)
-            contentCounter.decrementCounter(((NormalBack) facePlayed).getCenter());
-        else if (facePlayed instanceof  StarterFront) {
-            for(Content c : ((StarterFront) facePlayed).getCenter()){
-                contentCounter.decrementCounter(c);
             }
         }
         return counter;

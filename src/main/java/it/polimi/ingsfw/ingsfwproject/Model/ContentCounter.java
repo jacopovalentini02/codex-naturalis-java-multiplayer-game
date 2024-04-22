@@ -38,6 +38,10 @@ public class ContentCounter {
         this.setCounter(content, getCounter(content)-1);
     }
 
+    public void incrementCounter(Content content) {
+        this.setCounter(content, getCounter(content)+1);
+    }
+
     public int getCounter(Content content) {
         if (content == Content.FUNGI_KINGDOM)
             return countersArray[0];

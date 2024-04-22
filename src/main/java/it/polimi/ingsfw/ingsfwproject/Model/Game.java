@@ -38,7 +38,7 @@ public class Game {
     private GameManager gameManager;
 
 
-    public Game(GameManager gameManager, int idGame, int numOfPlayers, Player player1)  throws RemoteException {
+    public Game(GameManager gameManager, int idGame, int numOfPlayers, Player player1) {
         this.idGame = idGame;
         this.numOfPlayers = numOfPlayers;
         this.state=GameState.WAITING_FOR_PLAYERS;
