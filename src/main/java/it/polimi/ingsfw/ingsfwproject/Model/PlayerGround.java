@@ -1,56 +1,28 @@
 package it.polimi.ingsfw.ingsfwproject.Model;
 
+import it.polimi.ingsfw.ingsfwproject.Exceptions.NotEnoughResourcesException;
+import it.polimi.ingsfw.ingsfwproject.Exceptions.PositionNotAvailableException;
+
 import java.util.*;
 
 public class PlayerGround {
-    /*resourceCount[0] = PLANT_KINGDOM
-    resourceCount[1] = ANIMAL_KINGDOM
-    resourceCount[2] = FUNGI_KINGDOM
-    resourceCount[3] = INSECT_KINGDOM
 
-    objectCount[0] =  QUILL
-    objectCount[1] =  INKWELL
-    objectCount[2] =  MANUSCRIPT
-
-    * */
-    private int[] resourceCount;
-    private int[] objectCount;
+    private ContentCounter contentCounter;
     private Map<Coordinate, Face> grid;
-
-    public ArrayList<Coordinate> getAvailablePositions() {
-        return availablePositions;
-    }
-
     private ArrayList<Coordinate> availablePositions;
 
     public PlayerGround(){
-        resourceCount = new int[4];
-        for(int i=0; i<4; i++)
-            resourceCount[i] = 0;
-
-        objectCount = new int[3];
-        for(int i=0; i<3; i++)
-            objectCount[i] = 0;
-
+        contentCounter = new ContentCounter();
         grid = new HashMap<>();
         availablePositions = new ArrayList<>();
         availablePositions.add(new Coordinate(0,0));
     }
 
-    public int playCard(PlayableCard card, boolean upwards, Coordinate coord){
-        //TODO: eventuali eccezioni
-        /*TODO: fare i check:
-         * se la face non è in mano al player
-         * se la coordinata non è tra le available
-         * se il costo della carta è troppo alto (oggetti richiesti > oggetti posseduti)
-         */
+    public int playCard(PlayableCard card, boolean upwards, Coordinate coord) throws PositionNotAvailableException, NotEnoughResourcesException {
+        checkIfPlayable(card, upwards, coord);
 
         //get the face
-        Face face;
-        if(upwards)
-            face = card.getFront();
-        else
-            face = card.getBack();
+        Face face = upwards? card.getFront() : card.getBack();
 
         //add the face in the grid
         grid.put(coord, face);
@@ -62,7 +34,20 @@ public class PlayerGround {
             return calculatePoints(face, coveredCorners);
         }
         return 0;
+    }
 
+    private void checkIfPlayable(PlayableCard card, boolean upwards, Coordinate coord) throws PositionNotAvailableException, NotEnoughResourcesException {
+        if(!availablePositions.contains(coord))
+            throw new PositionNotAvailableException("the position " + coord + "is not an available position");
+        if(upwards && card.getFront() instanceof GoldFront face){
+            ArrayList<Content> cost = face.getCost();
+            ContentCounter counterCopy = contentCounter.getCopy();
+            for(Content c : cost){
+                counterCopy.decrementCounter(c);
+                if (counterCopy.getCounter(c) == -1)
+                    throw new NotEnoughResourcesException("you have not enough resource to play the card with id" + card.getIdCard());
+            }
+        }
     }
 
     private int updateAvailablePositions(Coordinate coord){
@@ -92,26 +77,25 @@ public class PlayerGround {
                     else if(i==1 && j==1) //top right card
                         corner = facePlayed.getTR();
 
-                    //TODO: corner may be null
                     if(corner != Content.HIDDEN)
                         availablePositions.add(check);
                 }else{
                     counter++;
 
                     if(i==-1 && j==-1) { //bottom left card
-                        updateCounter(grid.get(check).getTR());
+                        contentCounter.decrementCounter(grid.get(check).getTR());
                         grid.get(check).setCoveredTR(true);
                     }
                     else if(i==-1 && j==1) { //top left card
-                        updateCounter(grid.get(check).getBR());
+                        contentCounter.decrementCounter(grid.get(check).getBR());
                         grid.get(check).setCoveredBR(true);
                     }
                     else if(i==1 && j==-1) { //bottom right card
-                        updateCounter(grid.get(check).getTL());
+                        contentCounter.decrementCounter(grid.get(check).getTL());
                         grid.get(check).setCoveredTL(true);
                     }
                     else if(i==1 && j==1) { //top right card
-                        updateCounter(grid.get(check).getBL());
+                        contentCounter.decrementCounter(grid.get(check).getBL());
                         grid.get(check).setCoveredBL(true);
                     }
                 }
@@ -119,31 +103,13 @@ public class PlayerGround {
         }
         //update the counters checking in the center of the played card, if it has it
         if(facePlayed instanceof NormalBack)
-            updateCounter(((NormalBack) facePlayed).getCenter());
+            contentCounter.decrementCounter(((NormalBack) facePlayed).getCenter());
         else if (facePlayed instanceof  StarterFront) {
             for(Content c : ((StarterFront) facePlayed).getCenter()){
-                updateCounter(c);
+                contentCounter.decrementCounter(c);
             }
         }
         return counter;
-    }
-
-    private void updateCounter(Content content){
-        //TODO: lanciare eccezione se l'angolo è hidden
-        if(content == Content.ANIMAL_KINGDOM)
-            this.setAnimalCount(this.getAnimalCount()-1);
-        else if(content == Content.FUNGI_KINGDOM)
-            this.setFungiCount(this.getFungiCount()-1);
-        else if(content == Content.INSECT_KINGDOM)
-            this.setInsectCount(this.getInsectCount()-1);
-        else if(content == Content.PLANT_KINGDOM)
-            this.setPlantCount(this.getPlantCount()-1);
-        else if(content == Content.INKWELL)
-            this.setInkwellCount(this.getInkwellCount()-1);
-        else if(content == Content.MANUSCRIPT)
-            this.setManuscriptCount(this.getManuscriptCount()-1);
-        else if(content == Content.QUILL)
-            this.setQuillCount(this.getQuillCount()-1);
     }
 
     public int calculatePoints(Face face, int coveredCorners) {
@@ -158,85 +124,22 @@ public class PlayerGround {
                     points = ((GoldFront) face).getPoints();
                 }else{
                     //if it has a needed object, it gives 1 point for each object of needed object is on the playerGround
-                    //TODO: CHECK IL CASO IN CUI getContentCount ritorni -1
-                    points = getContentCount(((GoldFront) face).getObjectNeeded()) * ((GoldFront) face).getPoints();
+                    points = contentCounter.getCounter(((GoldFront) face).getObjectNeeded()) * ((GoldFront) face).getPoints();
                 }
             }
         }
         return points;
     }
-    //RESORUCE GETTERS AND SETTERS
 
-    public int getContentCount(Content content){
-        //TODO: GESTIRE CON UN ECCEZIONE IL CASO -1
-        if(content == Content.ANIMAL_KINGDOM)
-            return this.getAnimalCount();
-        else if(content == Content.FUNGI_KINGDOM)
-            return this.getFungiCount();
-        else if(content == Content.INSECT_KINGDOM)
-            return this.getInsectCount();
-        else if(content == Content.PLANT_KINGDOM)
-            return this.getPlantCount();
-        else if(content == Content.INKWELL)
-            return this.getInkwellCount();
-        else if(content == Content.MANUSCRIPT)
-            return this.getManuscriptCount();
-        else if(content == Content.QUILL)
-            return this.getQuillCount();
-        return -1;
+    public ArrayList<Coordinate> getAvailablePositions() {
+        return availablePositions;
     }
-
-    public int getPlantCount(){
-        return this.resourceCount[0];
-    }
-    public void setPlantCount(int count){
-        this.resourceCount[0] = count;
-    }
-    public int getAnimalCount(){
-        return this.resourceCount[1];
-    }
-    public void setAnimalCount(int count){
-        this.resourceCount[1] = count;
-    }
-    public int getFungiCount(){
-        return this.resourceCount[2];
-    }
-    public void setFungiCount(int count){
-        this.resourceCount[2] = count;
-    }
-    public int getInsectCount(){
-        return this.resourceCount[3];
-    }
-    public void setInsectCount(int count){
-        this.resourceCount[3] = count;
-    }
-
-    //OBJECT GETTERS AND SETTERS
-    public int getQuillCount(){
-        return this.objectCount[0];
-    }
-    public void setQuillCount(int count){
-        this.objectCount[0] = count;
-    }
-    public int getInkwellCount(){
-        return this.objectCount[1];
-    }
-    public void setInkwellCount(int count){
-        this.objectCount[1] = count;
-    }
-    public int getManuscriptCount(){
-        return this.objectCount[2];
-    }
-    public void setManuscriptCount(int count){
-        this.objectCount[2] = count;
-    }
-
-    //
-
     public Map<Coordinate, Face> getGrid(){
         return grid;
     }
 
-
+    public int getContentCount(Content content){
+        return contentCounter.getCounter(content);
+    }
 
 }

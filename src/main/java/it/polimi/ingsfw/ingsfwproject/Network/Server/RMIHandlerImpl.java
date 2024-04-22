@@ -11,9 +11,10 @@ import java.util.Objects;
 /**
  * This class is the implementation of the interface RMIHandler
  */
-public class RMIHandlerImpl extends UnicastRemoteObject implements RMIHandler {
+/*public class RMIHandlerImpl extends UnicastRemoteObject implements RMIHandler {
 
     protected RMIHandlerImpl() throws RemoteException {
 
     }
 }
+ */

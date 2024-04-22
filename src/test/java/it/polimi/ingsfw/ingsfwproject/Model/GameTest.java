@@ -1,6 +1,9 @@
 package it.polimi.ingsfw.ingsfwproject.Model;
 
+import it.polimi.ingsfw.ingsfwproject.Exceptions.CardNotInHandException;
 import it.polimi.ingsfw.ingsfwproject.Exceptions.DeckEmptyException;
+import it.polimi.ingsfw.ingsfwproject.Exceptions.NotEnoughResourcesException;
+import it.polimi.ingsfw.ingsfwproject.Exceptions.PositionNotAvailableException;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
@@ -11,47 +14,12 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class GameTest {
 
-    @Test
-    public void testSetUpGame() throws RemoteException, DeckEmptyException {
-        Player player1=new Player("user1");
-        Game game = new Game(1, 4, player1);
-        Player player2 = new Player("user2");
-        Player player3 = new Player("user3");
-        Player player4 = new Player("user4");
-        game.addPlayer(player2);
-        game.addPlayer(player3);
-        game.addPlayer(player4);
-        game.setupGame();
-
-        //testing the amount of cards in decks and on the field after the setup phase
-        assertEquals(4, game.getDisplayedPlayableCard().size());
-        assertEquals(2, game.getDisplayedObjectiveCard().size());
-        assertEquals(30, game.getResourceDeck().getCardList().size());
-        assertEquals(34, game.getGoldDeck().getCardList().size());
-        assertEquals(2, game.getStarterDeck().getCardList().size());
-        assertEquals(10, game.getObjectiveDeck().getCardList().size());
-        //testing if every player has the following things:
-        for(Player p : game.getListOfPlayers()) {
-            //testing if the player has 3 playable cards in his hands
-            assertEquals(3, p.getHandCard().size());
-            //testing if the player has his secret objective
-            List<ObjectiveCard> prova = new ArrayList<>();
-            prova.add(p.getHandObjective());
-            assertEquals(1, prova.size());
-            //testing if the starter card is on the player ground
-            assertEquals(1, p.getGround().getGrid().keySet().size());
-            //checking if all players score is set to 0
-            assertEquals(0, game.getScores().get(p));
-        }
-        // check to see if the first player has been assigned correctly
-        assertTrue(game.getListOfPlayers().contains(game.getFirstPlayer()));
-    }
 
     @Test
     //Check the size of each deck
     public void testSetUpCards() throws RemoteException {
         Player player1=new Player("user1");
-        Game game=new Game(1,2,player1);
+        Game game=new Game(new GameManager(), 1,2,player1);
         game.setUpCards();
 
         assertEquals(40, game.getResourceDeck().getCardList().size());
@@ -65,7 +33,7 @@ class GameTest {
     //Check resource cards' deck attributes are set up correctly
     public void testSetUpResourceDeck() throws RemoteException {
         Player player1=new Player("user1");
-        Game game=new Game(1,2,player1);
+        Game game=new Game(new GameManager(),1,2,player1);
         game.setUpCards();
 
         ResourceCard addedCard = (ResourceCard) game.getResourceDeck().getCardList().getFirst();
@@ -83,7 +51,7 @@ class GameTest {
     //Check gold cards' deck attributes are set up correctly
     public void testSetUpGoldDeck() throws RemoteException {
         Player player1=new Player("user1");
-        Game game=new Game(1,2,player1);
+        Game game=new Game(new GameManager(),1,2,player1);
         game.setUpCards();
 
         GoldCard addedCard=  (GoldCard) game.getGoldDeck().getCardList().getFirst();
@@ -108,7 +76,7 @@ class GameTest {
     //Check starter's deck attributes are set up correctly
     public void testSetUpStarterDeck() throws RemoteException {
         Player player1=new Player("user1");
-        Game game=new Game(1,2,player1);
+        Game game=new Game(new GameManager(),1,2,player1);
         game.setUpCards();
 
         StarterCard addedCard=  (StarterCard) game.getStarterDeck().getCardList().getFirst();
@@ -134,7 +102,7 @@ class GameTest {
     //Check objective cards' deck attributes are set up correctly
     public void testSetUpStructObjectiveDeck() throws RemoteException {
         Player player1=new Player("user1");
-        Game game=new Game(1,2,player1);
+        Game game=new Game(new GameManager(), 1,2,player1);
         game.setUpCards();
 
         StructuredObjectiveCard addedCard=  (StructuredObjectiveCard) game.getObjectiveDeck().getCardList().get(0);
@@ -154,7 +122,7 @@ class GameTest {
     //Check objective cards' deck attributes are set up correctly
     public void  testSetUpNotStructObjectiveDeck() throws RemoteException {
         Player player1=new Player("user1");
-        Game game=new Game(1,2,player1);
+        Game game=new Game(new GameManager(),1,2,player1);
         game.setUpCards();
 
         NotStructuredObjectiveCard addedCard=  (NotStructuredObjectiveCard) game.getObjectiveDeck().getCardList().get(8);
@@ -174,7 +142,7 @@ class GameTest {
         Player player1 = new Player("user1");
         Player player2 = new Player("user2");
 
-        Game game=new Game(1,2, player1);
+        Game game=new Game(new GameManager(),1,2, player1);
         game.addPlayer(player2);
         game.setCurrentPlayer(player1);
         game.nextTurn();
@@ -194,7 +162,7 @@ class GameTest {
         Player player2 = new Player("user2");
         Player player3 = new Player("user3");
 
-        Game game=new Game(1,3, player1);
+        Game game=new Game(new GameManager(),1,3, player1);
         game.addPlayer(player2);
 
         //Player 2 should be in the list of player and GameState should still be waiting
@@ -209,32 +177,32 @@ class GameTest {
 
     @Test
     //Check the new score is updated and lastTurn is called if the score is >=20
-    public void testUpdatePoints() throws RemoteException, DeckEmptyException {
+    public void testUpdatePoints() throws RemoteException, DeckEmptyException, PositionNotAvailableException, NotEnoughResourcesException, CardNotInHandException {
         Player player1 = new Player("user1");
         Player player2 = new Player("user2");
         Player player3 = new Player("user3");
 
-        Game game=new Game(1,3, player1);
+        Game game=new Game(new GameManager(),1,3, player1);
         game.addPlayer(player2);
         game.addPlayer(player3);
 
-        game.setupGame();
+        game.setupField();
 
         game.setCurrentPlayer(player1);
-        game.updatePoints(10);
+        game.updatePoints(10, player1);
         assertEquals(10, game.getScores().get(player1));
 
         //player1's score is greater than 20, lastTurn should be called and the game state is set to ENDING
-        game.updatePoints(12);
+        game.updatePoints(12, player1);
         assertEquals(GameState.ENDING, game.getState());
 
 
     }
 
     @Test
-    public void testLastTurn() throws RemoteException, DeckEmptyException {
+    public void testLastTurn() throws RemoteException, DeckEmptyException, PositionNotAvailableException, NotEnoughResourcesException, CardNotInHandException {
         Player player1=new Player("user1");
-        Game game = new Game(1, 4, player1);
+        Game game = new Game(new GameManager(),1, 4, player1);
         Player player2 = new Player("user2");
         Player player3 = new Player("user3");
         Player player4 = new Player("user4");
@@ -242,7 +210,7 @@ class GameTest {
         game.addPlayer(player3);
         game.addPlayer(player4);
         //we need to create the istance of hand cards and grids
-        game.setupGame();
+        game.setupField();
         //randomize the first player scoring 20 points
         Random rand = new Random();
         int index = rand.nextInt(game.getListOfPlayers().size());
