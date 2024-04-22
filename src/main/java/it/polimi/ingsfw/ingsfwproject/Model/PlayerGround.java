@@ -33,10 +33,6 @@ public class PlayerGround {
         //update the available position and counts the corners that the face has covered (i.e. gold front points)
         int coveredCorners = updateAvailablePositions(coord);
 
-        if(face instanceof StarterFront && coord != new Coordinate(0,0)){
-            throw new PositionNotAvailableException("you can only play a starter card in " + new Coordinate(0,0));
-        }
-
         if(face instanceof NormalFace){
             return calculatePoints(face, coveredCorners);
         }
@@ -44,6 +40,9 @@ public class PlayerGround {
     }
 
     private void checkIfPlayable(PlayableCard card, boolean upwards, Coordinate coord) throws PositionNotAvailableException, NotEnoughResourcesException {
+        if(card instanceof StarterCard && !coord.equals(new Coordinate(0,0))){
+            throw new PositionNotAvailableException("you can only play a starter card in " + new Coordinate(0,0));
+        }
         if(!availablePositions.contains(coord))
             throw new PositionNotAvailableException("the position " + coord + "is not an available position");
         if(upwards && card.getFront() instanceof GoldFront face){
