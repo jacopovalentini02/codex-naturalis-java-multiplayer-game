@@ -286,6 +286,22 @@ class GameTest {
     }
 
     @Test
-    void randomizeFirstPlayer() {
+    void randomizeFirstPlayer() throws RemoteException {
+        Player player1 = new Player("user1");
+        Game game = new Game(new GameManager(), 1, 4, player1);
+        Player player2 = new Player("user2");
+        Player player3 = new Player("user3");
+        Player player4 = new Player("user4");
+        game.addPlayer(player2);
+        game.addPlayer(player3);
+        game.addPlayer(player4);
+        //simulating the play of the starter card
+        for (Player p : game.getListOfPlayers()){
+            p.getHandCard().remove(0);
+        }
+
+        game.randomizeFirstPlayer();
+
+        assertTrue(game.getFirstPlayer().equals(game.getCurrentPlayer()));
     }
 }
