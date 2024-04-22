@@ -34,15 +34,14 @@ public class NotStructuredObjectiveCard extends ObjectiveCard{
             counters.put(c, ground.getContentCount(c));
         }
 
-        int flag = 0;
         int index = 0;
         int setsCounter = 0;
 
-        while (flag == 0){
+        while (true){
             Content c = objectRequested.get(index); //get i-th object requested by the card
             int currentCount = counters.get(c); //get object actual value from the map
-            if (currentCount == 1){ //no more sets to count, set flag to 1 to exit while loop
-                flag = 1;
+            if (currentCount == 0){
+                break;
             } else {
                 currentCount--; //decrement the counter and put it back in the map
                 counters.put(c, currentCount);

@@ -5,6 +5,8 @@ import it.polimi.ingsfw.ingsfwproject.Exceptions.CardNotInHandException;
 import it.polimi.ingsfw.ingsfwproject.Exceptions.DeckEmptyException;
 import it.polimi.ingsfw.ingsfwproject.Exceptions.NotEnoughResourcesException;
 import it.polimi.ingsfw.ingsfwproject.Exceptions.PositionNotAvailableException;
+import it.polimi.ingsfw.ingsfwproject.Exceptions.*;
+import it.polimi.ingsfw.ingsfwproject.faceReader;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -33,9 +35,18 @@ public class Game {
     private Player currentPlayer;
     private Player potentialWinner;
 
+    private boolean currentPlayerhasPlayed;
+
     private Player winner;
 
     private GameManager gameManager;
+
+    int lastRoundsplayed;
+
+    public boolean getifCurrentPlayerhasPlayed() {return currentPlayerhasPlayed;}
+    public void setCurrentPlayerhasPlayed(boolean bool){
+        this.currentPlayerhasPlayed = bool;
+    }
 
 
     public Game(GameManager gameManager, int idGame, int numOfPlayers, Player player1) {
@@ -58,6 +69,8 @@ public class Game {
         tokenAvailable.add(PlayerColor.RED);
         tokenAvailable.add(PlayerColor.BLUE);
         tokenAvailable.add(PlayerColor.YELLOW);
+        currentPlayerhasPlayed = false;
+        lastRoundsplayed = 0;
     }
 
     public GameState getState() {
@@ -187,6 +200,7 @@ public class Game {
     public synchronized void setupHandsAndObjectives() throws DeckEmptyException {
         for(Player p : listOfPlayers) {
             scores.put(p, 0);
+            //draw 2 resourceCard e 1 goldCard
             p.getHandCard().add((PlayableCard) resourceDeck.draw());
             p.getHandCard().add((PlayableCard) resourceDeck.draw());
             p.getHandCard().add((PlayableCard) goldDeck.draw());
@@ -291,14 +305,18 @@ public void randomizeFirstPlayer(){
 
     }
 
-    public void nextTurn(){
+    public void nextTurn() {
+
+        if (this.state == GameState.ENDING) //counting the number of rounds played after a player reaches 20 points
+            lastRoundsplayed++;
+
+        if (lastRoundsplayed == listOfPlayers.size() + 1) // if everybody has made its last turn, end the game
+            finalScoreCheck();
+
         int newIndex = (listOfPlayers.indexOf(currentPlayer) + 1) % listOfPlayers.size();
         this.setCurrentPlayer(listOfPlayers.get(newIndex));
 
-        if(currentPlayer==potentialWinner){
-            this.finalScoreCheck();
-        }
-
+        currentPlayerhasPlayed = false;
     }
 
     public void lastTurn(Player firstTwenty) throws PositionNotAvailableException, NotEnoughResourcesException, CardNotInHandException {
@@ -374,8 +392,24 @@ public void randomizeFirstPlayer(){
 
         if (scores.get(player) >= 20) {
             potentialWinner=currentPlayer;
-            this.state=GameState.ENDING;
         }
+    }
+
+    public void drawDisplayedPlayableCard(PlayableCard card, Player player) throws CardNotPresentException, DeckEmptyException {
+
+        if (!(displayedPlayableCard.contains(card)))
+            throw new CardNotPresentException("Card is not within the displayed playable cards");
+
+        player.pick(card);
+
+        displayedPlayableCard.remove(card);
+
+        if (card instanceof GoldCard) {
+            displayedPlayableCard.add((PlayableCard) goldDeck.draw());
+        } else if (card instanceof ResourceCard) {
+            displayedPlayableCard.add((PlayableCard) resourceDeck.draw());
+        }
+
     }
 
     public void finalScoreCheck(){
@@ -400,4 +434,9 @@ public void randomizeFirstPlayer(){
 
         this.endGame();
     }
+
+    public Player getPotentialWinner(){
+        return this.potentialWinner;
+    }
+
 }
