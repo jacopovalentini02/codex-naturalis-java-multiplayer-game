@@ -142,4 +142,7 @@ public class PlayerGround {
         return contentCounter.getCounter(content);
     }
 
+    public void setContentCount(Content content, int newValue) {
+        this.contentCounter.setCounter(content, newValue);
+    }
 }

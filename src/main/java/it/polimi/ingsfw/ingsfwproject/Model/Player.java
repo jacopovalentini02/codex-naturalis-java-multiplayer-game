@@ -37,14 +37,16 @@ public class Player {
         handCard.add((PlayableCard) card);
     }
 
-    public void playCard(PlayableCard cardPlayed, boolean upwards, Coordinate coord) throws CardNotInHandException, PositionNotAvailableException, NotEnoughResourcesException {
+    public int playCard(PlayableCard cardPlayed, boolean upwards, Coordinate coord) throws CardNotInHandException, PositionNotAvailableException, NotEnoughResourcesException {
+        int points = 0;
         if (handCard.contains(cardPlayed)) {
-            ground.playCard(cardPlayed, upwards, coord);
+            points = ground.playCard(cardPlayed, upwards, coord);
             // remove card from player's hand
             handCard.remove(cardPlayed);
         } else {
             throw new CardNotInHandException("The card chosen is not in the player's hand");
         }
+        return points;
     }
 
     public String getUsername() {

@@ -1,10 +1,7 @@
 package it.polimi.ingsfw.ingsfwproject.Model;
 
 import it.polimi.ingsfw.ingsfwproject.Controller.GameController;
-import it.polimi.ingsfw.ingsfwproject.Exceptions.CardNotInHandException;
-import it.polimi.ingsfw.ingsfwproject.Exceptions.DeckEmptyException;
-import it.polimi.ingsfw.ingsfwproject.Exceptions.NotEnoughResourcesException;
-import it.polimi.ingsfw.ingsfwproject.Exceptions.PositionNotAvailableException;
+import it.polimi.ingsfw.ingsfwproject.Exceptions.*;
 import it.polimi.ingsfw.ingsfwproject.faceReader;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -33,9 +30,16 @@ public class Game {
     private Player currentPlayer;
     private Player potentialWinner;
 
+    private boolean currentPlayerhasPlayed;
+
     private Player winner;
 
     private GameManager gameManager;
+
+    public boolean getifCurrentPlayerhasPlayed() {return currentPlayerhasPlayed;}
+    public void setCurrentPlayerhasPlayed(boolean bool){
+        this.currentPlayerhasPlayed = bool;
+    }
 
 
     public Game(GameManager gameManager, int idGame, int numOfPlayers, Player player1)  throws RemoteException {
@@ -53,6 +57,8 @@ public class Game {
         displayedPlayableCard = new ArrayList<PlayableCard>();
         displayedObjectiveCard = new ArrayList<>();
         scores = new HashMap<>();
+        currentPlayerhasPlayed = false;
+        endTriggeringPlayer = null;
     }
 
     public GameState getState() {
@@ -102,6 +108,8 @@ public class Game {
     public Deck getObjectiveDeck() {
         return objectiveDeck;
     }
+
+    private Player endTriggeringPlayer;
 
     public ArrayList<PlayableCard> getDisplayedPlayableCard() {
         return (ArrayList<PlayableCard>) displayedPlayableCard;
@@ -325,14 +333,15 @@ public class Game {
 
     }
 
-    public void nextTurn(){
+    public void nextTurn() {
+
+        if (currentPlayer.equals(potentialWinner) && this.state == GameState.ENDING)
+            this.finalScoreCheck();
+
         int newIndex = (listOfPlayers.indexOf(currentPlayer) + 1) % listOfPlayers.size();
         this.setCurrentPlayer(listOfPlayers.get(newIndex));
 
-        if(currentPlayer==potentialWinner){
-            this.finalScoreCheck();
-        }
-
+        currentPlayerhasPlayed = false;
     }
 
     public void lastTurn(Player firstTwenty) throws PositionNotAvailableException, NotEnoughResourcesException, CardNotInHandException {
@@ -408,8 +417,25 @@ public class Game {
 
         if (scores.get(player) >= 20) {
             potentialWinner=currentPlayer;
-            this.state=GameState.ENDING;
+            endTriggeringPlayer = listOfPlayers.get((listOfPlayers.indexOf(currentPlayer) + 1) % listOfPlayers.size());
         }
+    }
+
+    public void drawDisplayedPlayableCard(PlayableCard card, Player player) throws CardNotPresentException, DeckEmptyException {
+
+        if (!(displayedPlayableCard.contains(card)))
+            throw new CardNotPresentException("Card is not within the displayed playable cards");
+
+        player.pick(card);
+
+        displayedPlayableCard.remove(card);
+
+        if (card instanceof GoldCard) {
+            displayedPlayableCard.add((PlayableCard) goldDeck.draw());
+        } else if (card instanceof ResourceCard) {
+            displayedPlayableCard.add((PlayableCard) resourceDeck.draw());
+        }
+
     }
 
     public void finalScoreCheck(){
@@ -434,4 +460,9 @@ public class Game {
 
         this.endGame();
     }
+
+    public Player getPotentialWinner(){
+        return this.potentialWinner;
+    }
+
 }
