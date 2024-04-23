@@ -5,6 +5,8 @@ import it.polimi.ingsfw.ingsfwproject.Exceptions.CardNotInHandException;
 import it.polimi.ingsfw.ingsfwproject.Exceptions.DeckEmptyException;
 import it.polimi.ingsfw.ingsfwproject.Exceptions.NotEnoughResourcesException;
 import it.polimi.ingsfw.ingsfwproject.Exceptions.PositionNotAvailableException;
+import it.polimi.ingsfw.ingsfwproject.Exceptions.*;
+import it.polimi.ingsfw.ingsfwproject.faceReader;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -33,12 +35,23 @@ public class Game {
     private Player currentPlayer;
     private Player potentialWinner;
 
+    private boolean currentPlayerhasPlayed;
+
     private Player winner;
 
     private GameManager gameManager;
 
+    int lastRoundsplayed;
 
-    public Game(GameManager gameManager, int idGame, int numOfPlayers, Player player1)  throws RemoteException {
+    int objectiveCardsChosen;
+
+    public boolean getifCurrentPlayerhasPlayed() {return currentPlayerhasPlayed;}
+    public void setCurrentPlayerhasPlayed(boolean bool){
+        this.currentPlayerhasPlayed = bool;
+    }
+
+
+    public Game(GameManager gameManager, int idGame, int numOfPlayers, Player player1) {
         this.idGame = idGame;
         this.numOfPlayers = numOfPlayers;
         this.state=GameState.WAITING_FOR_PLAYERS;
@@ -58,6 +71,9 @@ public class Game {
         tokenAvailable.add(PlayerColor.RED);
         tokenAvailable.add(PlayerColor.BLUE);
         tokenAvailable.add(PlayerColor.YELLOW);
+        currentPlayerhasPlayed = false;
+        lastRoundsplayed = 0;
+        objectiveCardsChosen = 0;
     }
 
     public GameState getState() {
@@ -184,9 +200,52 @@ public class Game {
         }
     }
 
+
+    public void setUpObjectives() throws DeckEmptyException {
+        //shuffling objective deck
+        objectiveDeck.shuffle();
+        //placing the 2 common objective on the table
+        displayedObjectiveCard.add((ObjectiveCard) objectiveDeck.draw());
+        displayedObjectiveCard.add((ObjectiveCard) objectiveDeck.draw());
+        for(Player p : listOfPlayers){
+            p.getHandObjective().add((ObjectiveCard) objectiveDeck.draw());
+            p.getHandObjective().add((ObjectiveCard) objectiveDeck.draw());
+        }
+        this.setState(GameState.CHOOSING_OBJECTIVES);
+    }
+
+    public void chooseObjectiveCard(Player player, Card card) throws CardNotPresentException, DeckEmptyException {
+        ObjectiveCard choice = (ObjectiveCard) card;
+        if (!player.getHandObjective().contains(card))
+            throw new CardNotPresentException("You can't choose this card");
+        ArrayList<ObjectiveCard> newObjectivelist = new ArrayList<>();
+        newObjectivelist.add(choice);
+        player.setHandObjective(newObjectivelist);
+
+        objectiveCardsChosen++;
+
+        if (objectiveCardsChosen == this.getNumOfPlayers())
+            setUpHands();
+    }
+
+    private void setUpHands() throws DeckEmptyException {
+        for(Player p : listOfPlayers) {
+            scores.put(p, 0);
+            //draw 2 resourceCard e 1 goldCard
+            p.getHandCard().add((PlayableCard) resourceDeck.draw());
+            p.getHandCard().add((PlayableCard) resourceDeck.draw());
+            p.getHandCard().add((PlayableCard) goldDeck.draw());
+        }
+        randomizeFirstPlayer();
+        this.setState(GameState.STARTED);
+    }
+
+
+
     public synchronized void setupHandsAndObjectives() throws DeckEmptyException {
         for(Player p : listOfPlayers) {
             scores.put(p, 0);
+            //draw 2 resourceCard e 1 goldCard
             p.getHandCard().add((PlayableCard) resourceDeck.draw());
             p.getHandCard().add((PlayableCard) resourceDeck.draw());
             p.getHandCard().add((PlayableCard) goldDeck.draw());
@@ -273,32 +332,30 @@ public void randomizeFirstPlayer(){
     public void addPlayer(Player newPlayer){
         listOfPlayers.add(newPlayer);
         if(listOfPlayers.size()==this.numOfPlayers){
-            setState(GameState.STARTED);
+            //TODO:modifica
+            setState(GameState.CHOOSING_STARTER_CARDS);
             setCurrentPlayer(getListOfPlayers().get(0));
             try {
-            this.setupField();
+                this.setupField();
             } catch (DeckEmptyException e) {
-                e.printStackTrace();
-            } catch( PositionNotAvailableException | NotEnoughResourcesException | CardNotInHandException e){
-                /*
-                TODO: CATCH DA ELIMINARE: QUESTE TRE ECCEZIONI LE CATCHERà GIA IL CONTROLLER, IL PROBLEMA
-                è CHE SETUPGAME CHIAMA PLAYCARD MA NON DOVREBBE ESSERE LUI, BENSì IL CONTROLLER!
-                 */
-
                 e.printStackTrace();
             }
         }
 
     }
 
-    public void nextTurn(){
+    public void nextTurn() {
+
+        if (this.state == GameState.ENDING) //counting the number of rounds played after a player reaches 20 points
+            lastRoundsplayed++;
+
+        if (lastRoundsplayed == listOfPlayers.size() + 1) // if everybody has made its last turn, end the game
+            finalScoreCheck();
+
         int newIndex = (listOfPlayers.indexOf(currentPlayer) + 1) % listOfPlayers.size();
         this.setCurrentPlayer(listOfPlayers.get(newIndex));
 
-        if(currentPlayer==potentialWinner){
-            this.finalScoreCheck();
-        }
-
+        currentPlayerhasPlayed = false;
     }
 
     public void lastTurn(Player firstTwenty) throws PositionNotAvailableException, NotEnoughResourcesException, CardNotInHandException {
@@ -374,8 +431,24 @@ public void randomizeFirstPlayer(){
 
         if (scores.get(player) >= 20) {
             potentialWinner=currentPlayer;
-            this.state=GameState.ENDING;
         }
+    }
+
+    public void drawDisplayedPlayableCard(PlayableCard card, Player player) throws CardNotPresentException, DeckEmptyException {
+
+        if (!(displayedPlayableCard.contains(card)))
+            throw new CardNotPresentException("Card is not within the displayed playable cards");
+
+        player.pick(card);
+
+        displayedPlayableCard.remove(card);
+
+        if (card instanceof GoldCard) {
+            displayedPlayableCard.add((PlayableCard) goldDeck.draw());
+        } else if (card instanceof ResourceCard) {
+            displayedPlayableCard.add((PlayableCard) resourceDeck.draw());
+        }
+
     }
 
     public void finalScoreCheck(){
@@ -389,7 +462,7 @@ public void randomizeFirstPlayer(){
                 pointsToAdd += card.verifyObjective(p.getGround());
             }
 
-            pointsToAdd += p.getHandObjective().verifyObjective(p.getGround()); //secret objective card
+            pointsToAdd += p.getHandObjective().get(0).verifyObjective(p.getGround()); //secret objective card
 
             updatePoints(pointsToAdd, p); //points update
         }
@@ -400,4 +473,9 @@ public void randomizeFirstPlayer(){
 
         this.endGame();
     }
+
+    public Player getPotentialWinner(){
+        return this.potentialWinner;
+    }
+
 }

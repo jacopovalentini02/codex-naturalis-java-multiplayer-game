@@ -3,6 +3,7 @@ module it.polimi.ingsfw.ingsfwproject {
     requires javafx.fxml;
     requires org.json;
     requires java.rmi;
+    requires java.desktop;
 
 
     opens it.polimi.ingsfw.ingsfwproject to javafx.fxml;
