@@ -68,6 +68,14 @@ public class ContentCounter {
         return copy;
     }
 
+    public String toString() {
+        String s = "";
+        for(Content c : Content.values()){
+            s += c.toString() + " count: " + getCounter(c) + "\n";
+        }
+        return s;
+    }
+
 
 
 

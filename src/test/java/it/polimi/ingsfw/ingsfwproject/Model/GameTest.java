@@ -148,9 +148,23 @@ class GameTest {
 
         //next player should be player2
         assertEquals(player2, game.getCurrentPlayer());
-        game.nextTurn();
-        //next player should be player1
-        assertEquals(player1, game.getCurrentPlayer());
+        game.updatePoints(20, player1);
+        game.setState(GameState.ENDING);
+        try {
+            game.nextTurn(); // First round
+            assertEquals(player1, game.getCurrentPlayer());
+            assertFalse(game.getifCurrentPlayerhasPlayed());
+
+            game.nextTurn(); // Second round
+            assertEquals(player2, game.getCurrentPlayer());
+            assertFalse(game.getifCurrentPlayerhasPlayed());
+
+        } catch (Exception e) {
+            fail("Unexpected exception: " + e.getMessage());
+        }
+
+        //Check both player played an additional round
+        assertEquals(2, game.getLastRoundsplayed());
 
     }
 
@@ -171,7 +185,14 @@ class GameTest {
         //Check player 3 is added correctly and game state is changed since there are 3 players
         game.addPlayer(player3);
         assertTrue(game.getListOfPlayers().contains(player3));
-        assertEquals(GameState.STARTED, game.getState());
+        assertEquals(GameState.CHOOSING_STARTER_CARDS, game.getState());
+
+        try {
+            game.setupField();
+        } catch (DeckEmptyException e) {
+            fail("Expected DeckEmptyException"); //if an exception is thrown the test fails - deck should not be empty at the beginning
+        }
+
     }
 
     @Test
@@ -191,48 +212,12 @@ class GameTest {
         game.updatePoints(10, player1);
         assertEquals(10, game.getScores().get(player1));
 
-        //player1's score is greater than 20, lastTurn should be called and the game state is set to ENDING
+        //player1's score is greater than 20, potential winner is set to current player
         game.updatePoints(12, player1);
-        assertEquals(GameState.ENDING, game.getState());
-
-
-    }
-
-    @Test
-    public void testLastTurn() throws RemoteException, DeckEmptyException, PositionNotAvailableException, NotEnoughResourcesException, CardNotInHandException {
-        Player player1=new Player("user1");
-        Game game = new Game(new GameManager(),1, 4, player1);
-        Player player2 = new Player("user2");
-        Player player3 = new Player("user3");
-        Player player4 = new Player("user4");
-        game.addPlayer(player2);
-        game.addPlayer(player3);
-        game.addPlayer(player4);
-        //we need to create the istance of hand cards and grids
-        game.setupField();
-        //randomize the first player scoring 20 points
-        Random rand = new Random();
-        int index = rand.nextInt(game.getListOfPlayers().size());
-
-
-        //Save the score of each player
-        Map<Player, Integer> initialHandSizes = new HashMap<>();
-        for (Player player : game.getListOfPlayers()) {
-            initialHandSizes.put(player, player.getHandCard().size());
-        }
-
-        game.lastTurn(game.getListOfPlayers().get(index));
-
-        //Game state should be in Ending state
-        assertSame(game.getState(), GameState.ENDING);
-
-        //Check that every player's card set is decreased by 1
-        for (Player player : game.getListOfPlayers()) {
-            assertEquals((int) initialHandSizes.get(player) - 1, player.getHandCard().size());
-        }
-
+        assertEquals(game.getPotentialWinner(), game.getCurrentPlayer());
 
     }
+
 
     @Test
     void testSetupField() throws DeckEmptyException, RemoteException {
