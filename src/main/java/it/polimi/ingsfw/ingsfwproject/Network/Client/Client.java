@@ -11,6 +11,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public abstract class Client {
+    private int clientID; //nickname is not unique
     private String ip; //Server IP address
     private int port; //Server port
     private final String nickname;
