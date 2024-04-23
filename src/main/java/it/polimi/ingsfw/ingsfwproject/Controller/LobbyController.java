@@ -3,6 +3,7 @@ package it.polimi.ingsfw.ingsfwproject.Controller;
 import it.polimi.ingsfw.ingsfwproject.Exceptions.GameFullException;
 import it.polimi.ingsfw.ingsfwproject.Exceptions.GameNotExistingException;
 import it.polimi.ingsfw.ingsfwproject.Exceptions.NickAlreadyTakenException;
+import it.polimi.ingsfw.ingsfwproject.Exceptions.NotValidNumOfPlayerException;
 import it.polimi.ingsfw.ingsfwproject.Model.Game;
 import it.polimi.ingsfw.ingsfwproject.Model.GameManager;
 import it.polimi.ingsfw.ingsfwproject.Model.Player;
@@ -12,7 +13,9 @@ import java.rmi.RemoteException;
 public class LobbyController {
     private GameManager lobby;
 
-    public void createGame(int numOfPlayers, String thisPlayer) throws RemoteException {
+    public void createGame(int numOfPlayers, String thisPlayer) throws NotValidNumOfPlayerException {
+        if(numOfPlayers < 2 || numOfPlayers > 4)
+            throw new NotValidNumOfPlayerException("the player's number must be between 2 and 4, but you entered: " + numOfPlayers);
         synchronized (lobby){
             lobby.createGame(numOfPlayers, thisPlayer);
         }
