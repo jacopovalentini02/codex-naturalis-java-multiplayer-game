@@ -606,7 +606,6 @@
       "corners": ["HIDDEN", "EMPTY", "HIDDEN", "EMPTY"]
     },
 
-
     {
       "id": 71,
       "type": "gold",
@@ -710,54 +709,50 @@
       "corners": ["EMPTY", "EMPTY", "HIDDEN", "HIDDEN"]
     },
 
-
-
-
-
     {
       "id": 81,
       "type": "starter",
       "center": ["INSECT_KINGDOM"],
-      "cornerFront": ["FUNGI_KINGDOM", "PLANT_KINGDOM", "INSECT_KINGDOM", "ANIMAL_KINGDOM"],
-      "cornerBack": ["EMPTY", "PLANT_KINGDOM", "INSECT_KINGDOM", "EMPTY"]
+      "cornerBack": ["FUNGI_KINGDOM", "PLANT_KINGDOM", "INSECT_KINGDOM", "ANIMAL_KINGDOM"],
+      "cornerFront": ["EMPTY", "PLANT_KINGDOM", "INSECT_KINGDOM", "EMPTY"]
     },
     {
       "id": 82,
       "type": "starter",
       "center": ["FUNGI_KINGDOM"],
-      "cornerBack": ["PLANT_KINGDOM", "EMPTY", "EMPTY", "FUNGI_KINGDOM"],
-      "cornerFront": ["PLANT_KINGDOM", "ANIMAL_KINGDOM", "FUNGI_KINGDOM", "INSECT_KINGDOM"]
+      "cornerBack": ["PLANT_KINGDOM", "ANIMAL_KINGDOM", "FUNGI_KINGDOM", "INSECT_KINGDOM"],
+      "cornerFront": ["ANIMAL_KINGDOM", "EMPTY", "EMPTY", "FUNGI_KINGDOM"]
     },
     {
       "id": 83,
       "type": "starter",
       "center":  ["PLANT_KINGDOM","FUNGI_KINGDOM"],
-      "cornerBack": ["EMPTY", "EMPTY", "EMPTY", "EMPTY"],
-      "cornerFront": ["INSECT_KINGDOM", "ANIMAL_KINGDOM", "FUNGI_KINGDOM", "PLANT_KINGDOM"]
+      "cornerFront": ["EMPTY", "EMPTY", "EMPTY", "EMPTY"],
+      "cornerBack": ["INSECT_KINGDOM", "ANIMAL_KINGDOM", "FUNGI_KINGDOM", "PLANT_KINGDOM"]
     },
 
     {
       "id": 84,
       "type": "starter",
       "center":  ["ANIMAL_KINGDOM","INSECT_KINGDOM"],
-      "cornerBack": ["EMPTY", "EMPTY", "EMPTY", "EMPTY"],
-      "cornerFront": ["PLANT_KINGDOM", "INSECT_KINGDOM", "ANIMAL_KINGDOM", "FUNGI_KINGDOM"]
+      "cornerFront": ["EMPTY", "EMPTY", "EMPTY", "EMPTY"],
+      "cornerBack": ["PLANT_KINGDOM", "INSECT_KINGDOM", "ANIMAL_KINGDOM", "FUNGI_KINGDOM"]
     },
 
     {
       "id": 85,
       "type": "starter",
       "center":  ["ANIMAL_KINGDOM","INSECT_KINGDOM", "PLANT_KINGDOM"],
-      "cornerBack": ["EMPTY", "EMPTY", "HIDDEN", "HIDDEN"],
-      "cornerFront": ["INSECT_KINGDOM", "FUNGI_KINGDOM", "PLANT_KINGDOM", "ANIMAL_KINGDOM"]
+      "cornerFront": ["EMPTY", "EMPTY", "HIDDEN", "HIDDEN"],
+      "cornerBack": ["INSECT_KINGDOM", "FUNGI_KINGDOM", "PLANT_KINGDOM", "ANIMAL_KINGDOM"]
     },
 
     {
       "id": 86,
       "type": "starter",
       "center":  ["PLANT_KINGDOM","ANIMAL_KINGDOM", "FUNGI_KINGDOM"],
-      "cornerBack": ["EMPTY", "EMPTY", "HIDDEN", "HIDDEN"],
-      "cornerFront": ["FUNGI_KINGDOM", "ANIMAL_KINGDOM", "PLANT_KINGDOM", "INSECT_KINGDOM"]
+      "cornerFront": ["EMPTY", "EMPTY", "HIDDEN", "HIDDEN"],
+      "cornerBack": ["FUNGI_KINGDOM", "ANIMAL_KINGDOM", "PLANT_KINGDOM", "INSECT_KINGDOM"]
     },
 
 
