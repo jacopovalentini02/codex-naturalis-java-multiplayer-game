@@ -101,12 +101,12 @@ public class Deck {
             centerList.add(Content.valueOf(centerArray.getString(j)));
         }
 
-        JSONArray cornerFrArray = cardObject.getJSONArray("cornerBack");
+        JSONArray cornerFrArray = cardObject.getJSONArray("cornerFront");
         for (int j = 0; j < cornerFrArray.length(); j++) {
             cornerFr[j] = Content.valueOf(cornerFrArray.getString(j));
         }
 
-        JSONArray cornerBaArray = cardObject.getJSONArray("cornerFront");
+        JSONArray cornerBaArray = cardObject.getJSONArray("cornerBack");
         for (int j = 0; j < cornerBaArray.length(); j++) {
             cornerBa[j] = Content.valueOf(cornerBaArray.getString(j));
         }
