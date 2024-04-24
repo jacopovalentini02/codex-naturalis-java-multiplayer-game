@@ -1,6 +1,8 @@
 package it.polimi.ingsfw.ingsfwproject.Model;
 
-abstract public class Card {
+import java.io.Serializable;
+
+abstract public class Card implements Serializable {
     private int idCard;
 
     public int getIdCard() {

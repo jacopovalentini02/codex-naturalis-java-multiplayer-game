@@ -13,15 +13,21 @@ import java.rmi.RemoteException;
 public class LobbyController {
     private GameManager lobby;
 
-    public void createGame(int numOfPlayers, String thisPlayer) throws NotValidNumOfPlayerException {
-        if(numOfPlayers < 2 || numOfPlayers > 4)
-            throw new NotValidNumOfPlayerException("the player's number must be between 2 and 4, but you entered: " + numOfPlayers);
-        synchronized (lobby){
-            lobby.createGame(numOfPlayers, thisPlayer);
-        }
+    public LobbyController(GameManager lobby){
+        this.lobby = lobby;
     }
 
-    public void joinExistingGame(String nick, int idGame) throws GameNotExistingException, GameFullException, NickAlreadyTakenException {
+    public int createGame(int numOfPlayers, String thisPlayer) throws NotValidNumOfPlayerException {
+        if(numOfPlayers < 2 || numOfPlayers > 4)
+            throw new NotValidNumOfPlayerException("the player's number must be between 2 and 4, but you entered: " + numOfPlayers);
+        int gameID;
+        synchronized (lobby){
+            gameID = lobby.createGame(numOfPlayers, thisPlayer);
+        }
+        return gameID;
+    }
+
+    public int joinExistingGame(String nick, int idGame) throws GameNotExistingException, GameFullException, NickAlreadyTakenException {
         synchronized (lobby) {
 
             if (!lobby.getGameIDs().contains(idGame))
@@ -38,6 +44,7 @@ public class LobbyController {
             }
             lobby.joinGame(nick, idGame);
         }
+        return idGame;
     }
 
     public void deleteGame(int idGame) throws GameNotExistingException {
@@ -47,5 +54,7 @@ public class LobbyController {
             lobby.deleteGame(idGame);
         }
     }
+
+
 
 }

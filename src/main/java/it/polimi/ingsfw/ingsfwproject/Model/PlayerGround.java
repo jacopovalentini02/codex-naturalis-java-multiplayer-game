@@ -3,9 +3,10 @@ package it.polimi.ingsfw.ingsfwproject.Model;
 import it.polimi.ingsfw.ingsfwproject.Exceptions.NotEnoughResourcesException;
 import it.polimi.ingsfw.ingsfwproject.Exceptions.PositionNotAvailableException;
 
+import java.io.Serializable;
 import java.util.*;
 
-public class PlayerGround {
+public class PlayerGround implements Serializable {
 
     private ContentCounter contentCounter;
     private Map<Coordinate, Face> grid;

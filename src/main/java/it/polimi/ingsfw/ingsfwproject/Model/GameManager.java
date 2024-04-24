@@ -10,10 +10,12 @@ public class GameManager {
         this.firstAvailableGameID = 0;
     }
 
-    public void createGame(int numOfPlayers, String username) {
+    public int createGame(int numOfPlayers, String username) {
         Game newGame = new Game(this, firstAvailableGameID, numOfPlayers, new Player(username));
         gameList.put(firstAvailableGameID, newGame);
+        int gameID = firstAvailableGameID;
         firstAvailableGameID++;
+        return gameID;
     }
 
     public void joinGame(String nick, int idGame){

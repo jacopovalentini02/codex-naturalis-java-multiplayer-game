@@ -1,6 +1,8 @@
 package it.polimi.ingsfw.ingsfwproject.Model;
 
-public class ContentCounter {
+import java.io.Serializable;
+
+public class ContentCounter implements Serializable {
     /*
     countersArray[0] = FUNGI_KINGDOM
     countersArray[1] = PLANT_KINGDOM

@@ -13,5 +13,7 @@ module it.polimi.ingsfw.ingsfwproject {
     opens it.polimi.ingsfw.ingsfwproject.Network.Server to javafx.fxml;
     exports it.polimi.ingsfw.ingsfwproject.Exceptions;
 
+    exports it.polimi.ingsfw.ingsfwproject.Network2 to java.rmi;
+
 
 }

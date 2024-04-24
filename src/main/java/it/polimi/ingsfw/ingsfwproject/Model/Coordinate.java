@@ -1,6 +1,8 @@
 package it.polimi.ingsfw.ingsfwproject.Model;
 
-public class Coordinate {
+import java.io.Serializable;
+
+public class Coordinate implements Serializable {
     private final int x;
     private final int y;
 

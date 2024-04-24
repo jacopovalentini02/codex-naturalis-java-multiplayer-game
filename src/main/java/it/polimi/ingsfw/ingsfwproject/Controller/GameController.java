@@ -62,7 +62,6 @@ public class GameController {
         }
     }
 
-
     public void DrawDisplayedPlayableCard(Player player, PlayableCard card) throws RemoteException, TurnException, CardNotPresentException, DeckEmptyException, GamePhaseException{
 
         checkIfDrawPossible(player);
