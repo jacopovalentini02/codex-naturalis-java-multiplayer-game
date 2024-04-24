@@ -78,10 +78,10 @@ class DeckTest {
         JSONObject cardObject = new JSONObject();
         JSONArray centerArray = new JSONArray().put("INSECT_KINGDOM");
         cardObject.put("center", centerArray);
-        JSONArray cornerFrontArray = new JSONArray().put("FUNGI_KINGDOM").put("PLANT_KINGDOM").put("INSECT_KINGDOM").put("ANIMAL_KINGDOM");
-        cardObject.put("cornerFront", cornerFrontArray);
-        JSONArray cornerBackArray = new JSONArray().put("EMPTY").put("PLANT_KINGDOM").put("INSECT_KINGDOM").put("EMPTY");
+        JSONArray cornerBackArray = new JSONArray().put("FUNGI_KINGDOM").put("PLANT_KINGDOM").put("INSECT_KINGDOM").put("ANIMAL_KINGDOM");
         cardObject.put("cornerBack", cornerBackArray);
+        JSONArray cornerFrontArray = new JSONArray().put("EMPTY").put("PLANT_KINGDOM").put("INSECT_KINGDOM").put("EMPTY");
+        cardObject.put("cornerFront", cornerFrontArray);
 
         deck.createStarterCard(cardObject, 81);
         StarterCard addedCard = (StarterCard) deck.getCardList().getFirst();
