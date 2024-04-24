@@ -43,6 +43,16 @@ public class Game {
 
     int lastRoundsplayed;
 
+    int colorChosen;
+
+    public int getObjectiveCardsChosen() {
+        return objectiveCardsChosen;
+    }
+
+    public void setObjectiveCardsChosen(int objectiveCardsChosen) {
+        this.objectiveCardsChosen = objectiveCardsChosen;
+    }
+
     int objectiveCardsChosen;
 
     public boolean getifCurrentPlayerhasPlayed() {return currentPlayerhasPlayed;}
@@ -74,6 +84,8 @@ public class Game {
         currentPlayerhasPlayed = false;
         lastRoundsplayed = 0;
         objectiveCardsChosen = 0;
+        colorChosen = 0;
+        setCurrentPlayer(player1);
     }
 
     public GameState getState() {
@@ -180,10 +192,6 @@ public class Game {
         this.currentPlayer = currentPlayer;
     }
 
-    public int getLastRoundsplayed() {
-        return lastRoundsplayed;
-    }
-
     public synchronized void setupField() throws DeckEmptyException {
         //invoking the instantiation of all game's cards
         setUpCards();
@@ -202,48 +210,39 @@ public class Game {
             StarterCard starter = (StarterCard) starterDeck.draw();
             p.getHandCard().add(starter);
         }
+        this.setState(GameState.CHOOSING_STARTER_CARDS);
     }
 
+    public void chooseColor(Player player, PlayerColor color) throws ColorNotAvailableException, DeckEmptyException {
 
-    public void setUpObjectives() throws DeckEmptyException {
-        //shuffling objective deck
-        objectiveDeck.shuffle();
-        //placing the 2 common objective on the table
-        displayedObjectiveCard.add((ObjectiveCard) objectiveDeck.draw());
-        displayedObjectiveCard.add((ObjectiveCard) objectiveDeck.draw());
-        for(Player p : listOfPlayers){
-            p.getHandObjective().add((ObjectiveCard) objectiveDeck.draw());
-            p.getHandObjective().add((ObjectiveCard) objectiveDeck.draw());
-        }
-        this.setState(GameState.CHOOSING_OBJECTIVES);
+        if(!tokenAvailable.contains(color))
+            throw new ColorNotAvailableException("This color is already taken");
+
+        player.setToken(color);
+        tokenAvailable.remove(color);
+
+        colorChosen++;
+
+        if (colorChosen == this.numOfPlayers)
+            setupHandsAndObjectives();
+
     }
 
     public void chooseObjectiveCard(Player player, Card card) throws CardNotPresentException, DeckEmptyException {
-        ObjectiveCard choice = (ObjectiveCard) card;
-        if (!player.getHandObjective().contains(card))
+
+        if (!player.getHandObjective().contains((ObjectiveCard) card))
             throw new CardNotPresentException("You can't choose this card");
-        ArrayList<ObjectiveCard> newObjectivelist = new ArrayList<>();
-        newObjectivelist.add(choice);
-        player.setHandObjective(newObjectivelist);
+
+        int indexToRemove = player.getHandObjective().get(0).equals(card) ? 1 : 0;
+
+        ObjectiveCard cardToPutBack = player.getHandObjective().remove(indexToRemove);
+        this.objectiveDeck.addCard(cardToPutBack);
 
         objectiveCardsChosen++;
-
-        if (objectiveCardsChosen == this.getNumOfPlayers())
-            setUpHands();
-    }
-
-    private void setUpHands() throws DeckEmptyException {
-        for(Player p : listOfPlayers) {
-            scores.put(p, 0);
-            //draw 2 resourceCard e 1 goldCard
-            p.getHandCard().add((PlayableCard) resourceDeck.draw());
-            p.getHandCard().add((PlayableCard) resourceDeck.draw());
-            p.getHandCard().add((PlayableCard) goldDeck.draw());
+        if(objectiveCardsChosen==listOfPlayers.size()){
+            randomizeFirstPlayer();
         }
-        randomizeFirstPlayer();
-        this.setState(GameState.STARTED);
     }
-
 
 
     public synchronized void setupHandsAndObjectives() throws DeckEmptyException {
@@ -263,6 +262,7 @@ public class Game {
             p.getHandObjective().add((ObjectiveCard) objectiveDeck.draw());
             p.getHandObjective().add((ObjectiveCard) objectiveDeck.draw());
         }
+        this.setState(GameState.CHOOSING_OBJECTIVES);
     }
 
 public void randomizeFirstPlayer(){
@@ -271,6 +271,7 @@ public void randomizeFirstPlayer(){
         int index = rand.nextInt(listOfPlayers.size());
         setFirstPlayer(listOfPlayers.get(index));
         setCurrentPlayer(getFirstPlayer());
+        this.setState(GameState.STARTED);
     }
 
 
@@ -336,9 +337,6 @@ public void randomizeFirstPlayer(){
     public void addPlayer(Player newPlayer){
         listOfPlayers.add(newPlayer);
         if(listOfPlayers.size()==this.numOfPlayers){
-            //TODO:modifica
-            setState(GameState.CHOOSING_STARTER_CARDS);
-            setCurrentPlayer(getListOfPlayers().get(0));
             try {
                 this.setupField();
             } catch (DeckEmptyException e) {
@@ -482,5 +480,9 @@ public void randomizeFirstPlayer(){
         return this.potentialWinner;
     }
 
+    public GameController getController(){
+        return this.controller;
+    }
 
 }
+

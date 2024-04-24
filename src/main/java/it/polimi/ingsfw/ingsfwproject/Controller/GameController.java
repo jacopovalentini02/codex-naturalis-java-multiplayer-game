@@ -2,6 +2,7 @@ package it.polimi.ingsfw.ingsfwproject.Controller;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.IllegalFormatCodePointException;
 import java.util.Map;
 
 import it.polimi.ingsfw.ingsfwproject.Exceptions.*;
@@ -30,13 +31,14 @@ public class GameController {
 
         synchronized (model){
             model.chooseObjectiveCard(player, card);
+            model.nextTurn();
         }
     }
 
     public void playCard(Player player, PlayableCard card, boolean upwards, Coordinate coord) throws TurnException, GamePhaseException, PositionNotAvailableException, NotEnoughResourcesException, CardNotInHandException, DeckEmptyException {
         int pointsMade = 0;
 
-        if (model.getState() == GameState.WAITING_FOR_PLAYERS || model.getState() == GameState.CHOOSING_OBJECTIVES || model.getState() == GameState.ENDED)
+        if (model.getState() == GameState.WAITING_FOR_PLAYERS || model.getState() == GameState.CHOOSING_OBJECTIVES || model.getState() == GameState.ENDED || model.getState() == GameState.CHOOSING_COLORS)
             throw new GamePhaseException("You can't play a card now");
 
         if (model.getCurrentPlayer() != player)
@@ -77,11 +79,12 @@ public class GameController {
 
     }
 
-
-
-    public void draw(Player player, Deck deck) throws TurnException, GamePhaseException, DeckEmptyException {
+    public void draw(Player player, Deck deck) throws TurnException, GamePhaseException, DeckEmptyException, DeckException {
 
         checkIfDrawPossible(player);
+
+        if (deck.equals(model.getObjectiveDeck()))
+            throw new DeckException("You can't draw from objective deck!");
 
         synchronized (model){
             player.draw(deck);
@@ -89,14 +92,27 @@ public class GameController {
             if (model.getCurrentPlayer().equals(model.getPotentialWinner()))
                 model.setState(GameState.ENDING);
 
-
             model.nextTurn();
         }
 
     }
 
+    public void chooseColor(Player player, PlayerColor color) throws ColorNotAvailableException, DeckEmptyException, GamePhaseException, TurnException {
+
+        if (model.getCurrentPlayer() != player)
+            throw new TurnException("Not your turn");
+
+        if (model.getState() != GameState.CHOOSING_COLORS)
+            throw new GamePhaseException("You must choose a color now");
+
+        synchronized (model){
+            model.chooseColor(player, color);
+            model.nextTurn();
+        }
+    }
+
     private void checkIfDrawPossible(Player player) throws GamePhaseException, TurnException {
-        if (model.getState() == GameState.WAITING_FOR_PLAYERS || model.getState() == GameState.CHOOSING_STARTER_CARDS || model.getState() == GameState.CHOOSING_OBJECTIVES || model.getState() == GameState.ENDING)
+        if (model.getState() == GameState.WAITING_FOR_PLAYERS || model.getState() == GameState.CHOOSING_STARTER_CARDS || model.getState() == GameState.CHOOSING_OBJECTIVES || model.getState() == GameState.ENDING || model.getState() == GameState.CHOOSING_COLORS)
             throw new GamePhaseException("You can't draw now");
 
         if (model.getCurrentPlayer() != player)
@@ -110,7 +126,7 @@ public class GameController {
         starterCardsPlayed++;
         //TODO: deadlock?
         if (starterCardsPlayed == model.getNumOfPlayers())
-            model.setUpObjectives();
+            model.setState(GameState.CHOOSING_COLORS);
     }
 }
 

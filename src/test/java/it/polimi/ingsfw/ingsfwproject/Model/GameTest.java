@@ -226,41 +226,6 @@ class GameTest {
 
     }
 
-//    @Test
-//    public void testLastTurn() throws RemoteException, DeckEmptyException, PositionNotAvailableException, NotEnoughResourcesException, CardNotInHandException {
-//        Player player1=new Player("user1");
-//        Game game = new Game(new GameManager(),1, 4, player1);
-//        Player player2 = new Player("user2");
-//        Player player3 = new Player("user3");
-//        Player player4 = new Player("user4");
-//        game.addPlayer(player2);
-//        game.addPlayer(player3);
-//        game.addPlayer(player4);
-//        //we need to create the istance of hand cards and grids
-//        game.setupField();
-//        //randomize the first player scoring 20 points
-//        Random rand = new Random();
-//        int index = rand.nextInt(game.getListOfPlayers().size());
-//
-//
-//        //Save the score of each player
-//        Map<Player, Integer> initialHandSizes = new HashMap<>();
-//        for (Player player : game.getListOfPlayers()) {
-//            initialHandSizes.put(player, player.getHandCard().size());
-//        }
-//
-//        game.lastTurn(game.getListOfPlayers().get(index));
-//
-//        //Game state should be in Ending state
-//        assertSame(game.getState(), GameState.ENDING);
-//
-//        //Check that every player's card set is decreased by 1
-//        for (Player player : game.getListOfPlayers()) {
-//            assertEquals((int) initialHandSizes.get(player) - 1, player.getHandCard().size());
-//        }
-//
-//
-//    }
 
     @Test
     void testSetupField() throws DeckEmptyException, RemoteException {
