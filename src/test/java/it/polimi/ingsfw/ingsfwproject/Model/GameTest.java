@@ -144,11 +144,16 @@ class GameTest {
         Game game=new Game(new GameManager(),1,2, player1);
         game.addPlayer(player2);
         game.setCurrentPlayer(player1);
+
         game.nextTurn();
+
+        player1.getHandObjective().add((ObjectiveCard) game.getObjectiveDeck().getCardList().getFirst());
+        player2.getHandObjective().add((ObjectiveCard) game.getObjectiveDeck().getCardList().getFirst());
 
         //next player should be player2
         assertEquals(player2, game.getCurrentPlayer());
-        game.updatePoints(20, player1);
+
+        game.updatePoints(20, player2);
         game.setState(GameState.ENDING);
         try {
             game.nextTurn(); // First round
@@ -159,12 +164,14 @@ class GameTest {
             assertEquals(player2, game.getCurrentPlayer());
             assertFalse(game.getifCurrentPlayerhasPlayed());
 
+            game.nextTurn();
+
         } catch (Exception e) {
             fail("Unexpected exception: " + e.getMessage());
         }
 
         //Check both player played an additional round
-        assertEquals(2, game.getLastRoundsplayed());
+        assertEquals(3, game.getLastRoundsplayed());
 
     }
 
@@ -205,6 +212,7 @@ class GameTest {
         Game game=new Game(new GameManager(),1,3, player1);
         game.addPlayer(player2);
         game.addPlayer(player3);
+
 
         game.setupField();
 
