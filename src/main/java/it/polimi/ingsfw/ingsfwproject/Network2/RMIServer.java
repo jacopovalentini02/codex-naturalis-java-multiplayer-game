@@ -1,4 +1,5 @@
 package it.polimi.ingsfw.ingsfwproject.Network2;
+import it.polimi.ingsfw.ingsfwproject.Controller.GameController;
 import it.polimi.ingsfw.ingsfwproject.Controller.LobbyController;
 import it.polimi.ingsfw.ingsfwproject.Model.GameManager;
 
@@ -10,10 +11,12 @@ import java.util.Scanner;
 
 public class RMIServer {
 
-    public static void main(String[] args){
+    public static void main(String[] args) throws RemoteException {
 
         GameManager manager = new GameManager();
         LobbyController lobbyController = new LobbyController(manager);
+
+        GameController controller = null;
 
 
         try{
@@ -34,11 +37,16 @@ public class RMIServer {
         while (true){
             System.out.print("> ");
             int command = scan.nextInt();
+            if (command == 1){
+                controller = manager.getGameList().get(0).getController();
+                assert controller != null;
+                controller.updateClients("RMI funziona ziocane");
+            }
             if (command == 0) {
                 break;
-            } else {
-                System.out.println("Invalid command. Type 0 to shut the server down.");
             }
+            if (command != 0 && command != 1)
+                System.out.println("Invalid command. Type 0 to shut the server down.");
         }
     }
 }

@@ -6,10 +6,12 @@ import it.polimi.ingsfw.ingsfwproject.Model.*;
 import java.rmi.*;
 import java.rmi.server.UnicastRemoteObject;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 
 public class GameClientHandler extends UnicastRemoteObject implements GameClientHandlerInterface {
 
     private GameController gameController;
+
     protected GameClientHandler(GameController gc) throws RemoteException {
         this.gameController = gc;
     }
@@ -27,6 +29,13 @@ public class GameClientHandler extends UnicastRemoteObject implements GameClient
         }
         return "OK";
     }
+
+    @Override
+    public void registerClient(ClientCallbackInterface client) throws RemoteException {
+        gameController.addClient(client);
+    }
+
+
 /*
     @Override
     public void playCard(Player player, PlayableCard card, boolean upwards, Coordinate coord) throws TurnException, GamePhaseException, PositionNotAvailableException, NotEnoughResourcesException, CardNotInHandException, DeckEmptyException {

@@ -8,13 +8,15 @@ import java.util.Map;
 import it.polimi.ingsfw.ingsfwproject.Exceptions.*;
 import it.polimi.ingsfw.ingsfwproject.Model.*;
 import it.polimi.ingsfw.ingsfwproject.Network.Server.NetworkController;
+import it.polimi.ingsfw.ingsfwproject.Network2.ClientCallback;
+import it.polimi.ingsfw.ingsfwproject.Network2.ClientCallbackInterface;
 
 public class GameController {
     private Game model;
 
     private int starterCardsPlayed;
 
-    private Map<Player, NetworkController> clients = new HashMap<>();
+    private ArrayList<ClientCallbackInterface> clientCallbacks = new ArrayList<>();
 
 
     public GameController(Game model){
@@ -127,5 +129,15 @@ public class GameController {
         if (starterCardsPlayed == model.getNumOfPlayers())
             model.setState(GameState.CHOOSING_COLORS);
     }
+
+    public void updateClients(String string) throws RemoteException {
+        for (ClientCallbackInterface c: clientCallbacks)
+            c.update(string);
+    }
+
+    public void addClient(ClientCallbackInterface clientCallback){
+        clientCallbacks.add(clientCallback);
+    }
+
 }
 
