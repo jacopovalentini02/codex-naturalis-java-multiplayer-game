@@ -6,6 +6,8 @@ import it.polimi.ingsfw.ingsfwproject.Exceptions.DeckEmptyException;
 import it.polimi.ingsfw.ingsfwproject.Exceptions.NotEnoughResourcesException;
 import it.polimi.ingsfw.ingsfwproject.Exceptions.PositionNotAvailableException;
 import it.polimi.ingsfw.ingsfwproject.Exceptions.*;
+import it.polimi.ingsfw.ingsfwproject.Network2.ClientCallback;
+import it.polimi.ingsfw.ingsfwproject.Network2.ClientCallbackInterface;
 import it.polimi.ingsfw.ingsfwproject.faceReader;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -44,6 +46,8 @@ public class Game {
     int lastRoundsplayed;
 
     int colorChosen;
+
+    private HashMap<String, ClientCallbackInterface> listeners = new HashMap<>();
 
     public int getObjectiveCardsChosen() {
         return objectiveCardsChosen;
@@ -228,7 +232,7 @@ public class Game {
 
     }
 
-    public void chooseObjectiveCard(Player player, Card card) throws CardNotPresentException, DeckEmptyException {
+    public void chooseObjectiveCard(Player player, Card card) throws CardNotPresentException {
 
         if (!player.getHandObjective().contains((ObjectiveCard) card))
             throw new CardNotPresentException("You can't choose this card");
@@ -343,7 +347,6 @@ public void randomizeFirstPlayer(){
                 e.printStackTrace();
             }
         }
-
     }
 
     public void nextTurn() {
@@ -484,5 +487,21 @@ public void randomizeFirstPlayer(){
         return this.controller;
     }
 
+    @Override
+    public String toString(){return this.getIdGame() + this.getListOfPlayers().toString();}
+
+    public void addListener(String username, ClientCallbackInterface listener){
+        this.listeners.put(username, listener);
+        for (Player p: this.getListOfPlayers()){
+            if (Objects.equals(p.getUsername(), username)) {
+                try {
+                    listener.setPlayer(p);
+                } catch (RemoteException e) {
+                    throw new RuntimeException(e);
+                }
+                p.addClient(listener);
+            }
+        }
+    }
 }
 

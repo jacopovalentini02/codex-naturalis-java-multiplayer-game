@@ -6,9 +6,13 @@ import it.polimi.ingsfw.ingsfwproject.Exceptions.NickAlreadyTakenException;
 import it.polimi.ingsfw.ingsfwproject.Exceptions.NotValidNumOfPlayerException;
 import it.polimi.ingsfw.ingsfwproject.Model.Game;
 import it.polimi.ingsfw.ingsfwproject.Model.GameManager;
+import it.polimi.ingsfw.ingsfwproject.Model.GameState;
 import it.polimi.ingsfw.ingsfwproject.Model.Player;
 
 import java.rmi.RemoteException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class LobbyController {
     private GameManager lobby;
@@ -39,9 +43,9 @@ public class LobbyController {
                 throw new GameFullException("Game " + idGame + " is full.");
 
             for(Player player : gameToJoin.getListOfPlayers()) {
-                if(player.getUsername().equals(nick))
+                if(player.getUsername().equals(nick)) {
                     throw new NickAlreadyTakenException("there's another player with the nick: " + nick);
-            }
+                }}
             lobby.joinGame(nick, idGame);
         }
         return idGame;
@@ -55,6 +59,14 @@ public class LobbyController {
         }
     }
 
+    public HashMap<Integer, Integer> getGameList(){
+        HashMap<Integer, Integer> games = new HashMap<>();
 
-
+        for (Map.Entry<Integer, Game> entry: lobby.getGameList().entrySet()) {
+            if (entry.getValue().getState() == GameState.WAITING_FOR_PLAYERS) {
+                games.put(entry.getKey(), entry.getValue().getListOfPlayers().size());
+            }
+        }
+        return games;
+    }
 }

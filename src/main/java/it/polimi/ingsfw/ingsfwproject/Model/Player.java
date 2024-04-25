@@ -4,6 +4,7 @@ import it.polimi.ingsfw.ingsfwproject.Exceptions.CardNotInHandException;
 import it.polimi.ingsfw.ingsfwproject.Exceptions.DeckEmptyException;
 import it.polimi.ingsfw.ingsfwproject.Exceptions.NotEnoughResourcesException;
 import it.polimi.ingsfw.ingsfwproject.Exceptions.PositionNotAvailableException;
+import it.polimi.ingsfw.ingsfwproject.Network2.ClientCallbackInterface;
 
 import java.io.Serializable;
 import java.util.*;
@@ -14,6 +15,8 @@ public class Player implements Serializable {
     private PlayerColor token;
     private PlayerGround ground;
     private ArrayList<PlayableCard> handCard;
+
+    private ClientCallbackInterface client;
 
     public ArrayList<ObjectiveCard> getHandObjective() {
         return handObjective;
@@ -98,6 +101,13 @@ public class Player implements Serializable {
     public void setHandCard(ArrayList<PlayableCard> handCard) {
         this.handCard = handCard;
     }
+    @Override
+    public String toString(){
+        return this.username;
+    }
 
+    public void addClient(ClientCallbackInterface client){
+        this.client = client;
+    }
 
 }

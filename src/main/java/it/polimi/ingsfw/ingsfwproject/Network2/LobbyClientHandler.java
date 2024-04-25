@@ -8,6 +8,8 @@ import it.polimi.ingsfw.ingsfwproject.Exceptions.NotValidNumOfPlayerException;
 import java.rmi.*;
 import java.rmi.server.UnicastRemoteObject;
 import java.rmi.RemoteException;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class LobbyClientHandler extends UnicastRemoteObject implements LobbyClientHandlerInterface {
@@ -15,7 +17,7 @@ public class LobbyClientHandler extends UnicastRemoteObject implements LobbyClie
         this.lobbyController = lobbyController;
     }
 
-    private LobbyController lobbyController;
+    private final LobbyController lobbyController;
 
     @Override
     public int createGame(int numOfPlayers, String username) throws RemoteException, NotValidNumOfPlayerException {
@@ -25,5 +27,10 @@ public class LobbyClientHandler extends UnicastRemoteObject implements LobbyClie
     @Override
     public int joinGame(int GameID, String username) throws RemoteException, NickAlreadyTakenException, GameFullException, GameNotExistingException {
         return lobbyController.joinExistingGame(username, GameID);
+    }
+
+    @Override
+    public HashMap<Integer, Integer> getGameList() throws RemoteException {
+        return lobbyController.getGameList();
     }
 }

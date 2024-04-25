@@ -24,7 +24,7 @@ public class GameController {
         starterCardsPlayed = 0;
     }
 
-    public void chooseObjectiveCard(Player player, Card card) throws TurnException, GamePhaseException, CardNotPresentException, DeckEmptyException {
+    public void chooseObjectiveCard(Player player, Card card) throws TurnException, GamePhaseException, CardNotPresentException {
         if (model.getCurrentPlayer() != player)
             throw new TurnException("Not your turn");
 
@@ -37,7 +37,7 @@ public class GameController {
         }
     }
 
-    public void playCard(Player player, PlayableCard card, boolean upwards, Coordinate coord) throws TurnException, GamePhaseException, PositionNotAvailableException, NotEnoughResourcesException, CardNotInHandException, DeckEmptyException {
+    public void playCard(Player player, PlayableCard card, boolean upwards, Coordinate coord) throws TurnException, GamePhaseException, PositionNotAvailableException, NotEnoughResourcesException, CardNotInHandException{
         int pointsMade = 0;
 
         if (model.getState() == GameState.WAITING_FOR_PLAYERS || model.getState() == GameState.CHOOSING_OBJECTIVES || model.getState() == GameState.ENDED || model.getState() == GameState.CHOOSING_COLORS)
@@ -123,7 +123,7 @@ public class GameController {
             throw new GamePhaseException("You should play a card before drawing");
     }
 
-    private void starterCardPlayed() throws DeckEmptyException {
+    private void starterCardPlayed() {
         starterCardsPlayed++;
         //TODO: deadlock?
         if (starterCardsPlayed == model.getNumOfPlayers())
@@ -135,8 +135,8 @@ public class GameController {
             c.update(string);
     }
 
-    public void addClient(ClientCallbackInterface clientCallback){
-        clientCallbacks.add(clientCallback);
+    public void addClient(String username, ClientCallbackInterface clientCallback){
+        this.model.addListener(username, clientCallback);
     }
 
 }

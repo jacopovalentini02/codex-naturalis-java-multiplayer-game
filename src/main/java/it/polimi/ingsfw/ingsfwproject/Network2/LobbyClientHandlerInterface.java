@@ -7,6 +7,9 @@ import it.polimi.ingsfw.ingsfwproject.Exceptions.NickAlreadyTakenException;
 import it.polimi.ingsfw.ingsfwproject.Exceptions.NotValidNumOfPlayerException;
 
 import java.rmi.Remote;
+import java.rmi.RemoteException;
+import java.util.HashMap;
+import java.util.Map;
 
 public interface LobbyClientHandlerInterface extends Remote {
 
@@ -14,4 +17,5 @@ public interface LobbyClientHandlerInterface extends Remote {
 
     public int joinGame(int GameID, String username) throws java.rmi.RemoteException, NickAlreadyTakenException, GameFullException, GameNotExistingException;
 
+    public HashMap<Integer, Integer> getGameList() throws RemoteException;
 }

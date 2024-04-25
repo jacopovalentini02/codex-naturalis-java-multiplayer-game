@@ -2,7 +2,9 @@ package it.polimi.ingsfw.ingsfwproject.Model;
 
 import it.polimi.ingsfw.ingsfwproject.Model.Content;
 
-abstract public class Face {
+import java.io.Serializable;
+
+abstract public class Face implements Serializable {
     /*cornerList[0] = top left
     cornerList[1] = top right
     cornerList[2] = bottom left

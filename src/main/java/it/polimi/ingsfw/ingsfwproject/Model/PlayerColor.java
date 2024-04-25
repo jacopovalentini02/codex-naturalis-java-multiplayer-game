@@ -1,6 +1,8 @@
 package it.polimi.ingsfw.ingsfwproject.Model;
 
-public enum PlayerColor {
+import java.io.Serializable;
+
+public enum PlayerColor implements Serializable {
     YELLOW,
     GREEN,
     RED,

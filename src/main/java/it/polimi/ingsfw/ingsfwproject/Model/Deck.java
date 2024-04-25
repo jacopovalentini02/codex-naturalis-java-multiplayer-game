@@ -4,9 +4,10 @@ import it.polimi.ingsfw.ingsfwproject.Exceptions.DeckEmptyException;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.*;
 
-public class Deck {
+public class Deck implements Serializable {
 
 
     private ArrayList<Card> cardList;

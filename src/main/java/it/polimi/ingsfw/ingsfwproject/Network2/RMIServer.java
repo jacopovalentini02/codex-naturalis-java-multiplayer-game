@@ -18,7 +18,6 @@ public class RMIServer {
 
         GameController controller = null;
 
-
         try{
             LocateRegistry.createRegistry(1099);
             ClientHandlerFactory clientHandlerFactory = new ClientHandlerFactory(lobbyController, manager);

@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 public class GameClientHandler extends UnicastRemoteObject implements GameClientHandlerInterface {
 
-    private GameController gameController;
+    private final GameController gameController;
 
     protected GameClientHandler(GameController gc) throws RemoteException {
         this.gameController = gc;
@@ -20,40 +20,38 @@ public class GameClientHandler extends UnicastRemoteObject implements GameClient
         return "a + b";
     }
 
-
-    public String chooseObjectiveCard(Player player, Card card) throws java.rmi.RemoteException {
-        try{
+    @Override
+    public String chooseObjectiveCard(Player player, Card card) throws java.rmi.RemoteException, TurnException, GamePhaseException, CardNotPresentException {
         gameController.chooseObjectiveCard(player, card);
-        } catch (Exception e){
-            return "Exception";
-        }
-        return "OK";
+        return "Objective card successfully chosen";
     }
 
     @Override
-    public void registerClient(ClientCallbackInterface client) throws RemoteException {
-        gameController.addClient(client);
+    public void registerClient(ClientCallbackInterface client, String username) throws RemoteException {
+        gameController.addClient(username, client);
     }
 
-
-/*
     @Override
-    public void playCard(Player player, PlayableCard card, boolean upwards, Coordinate coord) throws TurnException, GamePhaseException, PositionNotAvailableException, NotEnoughResourcesException, CardNotInHandException, DeckEmptyException {
+    public String playCard(Player player, PlayableCard card, boolean upwards, Coordinate coord) throws RemoteException, TurnException, GamePhaseException, PositionNotAvailableException, NotEnoughResourcesException, CardNotInHandException {
         gameController.playCard(player, card, upwards, coord);
+        return "Card succesfully played";
     }
 
     @Override
-    public void DrawDisplayedPlayableCard(Player player, PlayableCard card) throws TurnException, GamePhaseException, RemoteException, CardNotPresentException, DeckEmptyException {
+    public String DrawDisplayedPlayableCard(Player player, PlayableCard card) throws RemoteException, TurnException, GamePhaseException, CardNotPresentException, DeckEmptyException {
         gameController.DrawDisplayedPlayableCard(player, card);
+        return "Card drawn successfully";
     }
 
     @Override
-    public void draw(Player player, Deck deck) throws TurnException, GamePhaseException, DeckEmptyException, DeckException {
+    public String draw(Player player, Deck deck) throws RemoteException, TurnException, GamePhaseException, DeckEmptyException, DeckException {
         gameController.draw(player, deck);
+        return "Card successfully drawn";
     }
 
     @Override
-    public void chooseColor(Player player, PlayerColor color) throws TurnException, GamePhaseException, ColorNotAvailableException, DeckEmptyException {
+    public String  chooseColor(Player player, PlayerColor color) throws RemoteException, TurnException, GamePhaseException, ColorNotAvailableException, DeckEmptyException {
         gameController.chooseColor(player, color);
-    }*/
+        return "Color successfully chosen";
+    }
 }
