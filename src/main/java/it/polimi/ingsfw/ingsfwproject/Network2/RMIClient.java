@@ -120,17 +120,16 @@ public class RMIClient {
 
         while (gameStatus.getState() != GameState.ENDED){
             System.out.println("Actual game state is " + gameStatus.getState());
-            String input = scanner.nextLine();
             boolean validInput = false;
 
             while(!validInput){
-
+                String input = scanner.nextLine();
                 switch (input.toLowerCase()){
 
                     case "playcard":{
                         System.out.println("You have these cards in your hand: ");
                         for (PlayableCard c : gameStatus.getHandCards()){
-                            System.out.print(c.getIdCard());
+                            System.out.println(c.getIdCard());
                         }
                         System.out.println("Which card do you want to play? Type the ID of the card:");
                         int cardID = scanner.nextInt();
@@ -143,13 +142,7 @@ public class RMIClient {
                         } else {
                             upwards = false;
                         }
-                        PlayableCard cardToPlay = null;
-                        for (PlayableCard p: gameStatus.getHandCards()){
-                            if (p.getIdCard() == cardID)
-                                cardToPlay = p;
-                        }
                         System.out.println("In which position you want to play the card?");
-
                         for (Coordinate c: gameStatus.getAvailablePositions())
                             System.out.print(c.toString());
 
@@ -159,7 +152,7 @@ public class RMIClient {
                         System.out.println("Type the y coordinate");
                         int y = scanner.nextInt();
                         try {
-                            gameHandler.playCard(me, cardToPlay, upwards, new Coordinate(x, y));
+                            gameHandler.playCard(username, cardID, upwards, new Coordinate(x, y));
                         } catch (Exception e) {
                             System.out.println(e.getMessage());
                         }
@@ -167,32 +160,82 @@ public class RMIClient {
                         break;
                     }
 
+                    case "color":{
+                        System.out.println("Now choose a color: type 1 for yellow, 2 for green, 3 for red, 4 for blue");
+                        choice = scanner.nextInt();
 
+                        PlayerColor color = null;
 
+                        switch (choice){
+                            case 1: color = PlayerColor.YELLOW;
+                            case 2: color = PlayerColor.GREEN;
+                            case 3: color = PlayerColor.RED;
+                            case 4: color = PlayerColor.BLUE;
+                        }
 
+                        try {
+                            gameHandler.chooseColor(username, color);
+                        } catch (Exception e){
+                            System.out.println(e.getMessage());
+                        }
+                        validInput = true;
+                        break;
+                    }
 
+                    case "objective":{
+                        System.out.println("You must choose one of the two cards you have in the hand");
+                        System.out.println("You have these cards " + gameStatus.getHandObjectives().get(0).getIdCard() + " " + gameStatus.getHandObjectives().get(1).getIdCard());
+                        System.out.println("Type the id of the card you choose: ");
+                        choice = scanner.nextInt();
 
+                        try {
+                            gameHandler.chooseObjectiveCard(username, choice);
+                        } catch (Exception e){
+                            System.out.println(e.getMessage());
+                        }
+                        validInput = true;
+                        break;
+                    }
 
+                    case "draw":{
+                        System.out.println("From which deck you want to draw?");
+                        System.out.println("Type 1 for Resource Deck, 2 for Gold Deck");
+                        choice = scanner.nextInt();
+                        boolean resourceDeck;
 
+                        if (choice == 1) {
+                            resourceDeck = true;
+                        } else resourceDeck = false;
 
+                        try {
+                            gameHandler.draw(username, resourceDeck);
+                        } catch (Exception e){
+                            System.out.println(e.getMessage());
+                        }
+                        validInput = true;
+                        break;
+                    }
 
+                    case "pick":{
+                        System.out.println("Which card you want to pick?");
+                        System.out.println("You can pick these cards: ");
+                        for (PlayableCard playableCard: gameStatus.getDisplayedCards())
+                            System.out.println(playableCard.getIdCard() + " ");
+                        System.out.println("Type the id of the card you choose: ");
+                        choice = scanner.nextInt();
 
-
+                        try {
+                            gameHandler.DrawDisplayedPlayableCard(username, choice);
+                        } catch (Exception e){
+                            System.out.println(e.getMessage());
+                        }
+                        validInput = true;
+                        break;
+                    }
+                }
             }
-
-
-
-
-
-
-
-            }
-
-
-
-
         }
+    }
 
 
     }
-}

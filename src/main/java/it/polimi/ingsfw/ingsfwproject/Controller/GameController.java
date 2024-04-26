@@ -1,9 +1,6 @@
 package it.polimi.ingsfw.ingsfwproject.Controller;
 import java.rmi.RemoteException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.IllegalFormatCodePointException;
-import java.util.Map;
+import java.util.*;
 
 import it.polimi.ingsfw.ingsfwproject.Exceptions.*;
 import it.polimi.ingsfw.ingsfwproject.Model.*;
@@ -24,7 +21,21 @@ public class GameController {
         starterCardsPlayed = 0;
     }
 
-    public void chooseObjectiveCard(Player player, Card card) throws TurnException, GamePhaseException, CardNotPresentException {
+    public void chooseObjectiveCard(String username, int cardID) throws TurnException, GamePhaseException, CardNotPresentException {
+
+        Player player = null;
+        Card card = null;
+        for (Player p: model.getListOfPlayers()){
+            if (Objects.equals(p.getUsername(), username))
+                player = p;
+        }
+        assert player != null;
+
+        for (ObjectiveCard pc: player.getHandObjective()){
+            if (pc.getIdCard() == cardID)
+                card = pc;
+        }
+
         if (model.getCurrentPlayer() != player)
             throw new TurnException("Not your turn");
 
@@ -36,9 +47,20 @@ public class GameController {
             model.nextTurn();
         }
     }
-
-    public void playCard(Player player, PlayableCard card, boolean upwards, Coordinate coord) throws TurnException, GamePhaseException, PositionNotAvailableException, NotEnoughResourcesException, CardNotInHandException{
+    //TODO: modifica!!
+    public void playCard(String username, int cardID, boolean upwards, Coordinate coord) throws TurnException, GamePhaseException, PositionNotAvailableException, NotEnoughResourcesException, CardNotInHandException{
         int pointsMade = 0;
+        Player player = null;
+        PlayableCard card = null;
+        for (Player p: model.getListOfPlayers()){
+            if (Objects.equals(p.getUsername(), username))
+                player = p;
+        }
+        assert player != null;
+        for (PlayableCard pc: player.getHandCard()){
+            if (pc.getIdCard() == cardID)
+                card = pc;
+        }
 
         if (model.getState() == GameState.WAITING_FOR_PLAYERS || model.getState() == GameState.CHOOSING_OBJECTIVES || model.getState() == GameState.ENDED || model.getState() == GameState.CHOOSING_COLORS)
             throw new GamePhaseException("You can't play a card now");
@@ -64,23 +86,50 @@ public class GameController {
         }
     }
 
-    public void DrawDisplayedPlayableCard(Player player, PlayableCard card) throws RemoteException, TurnException, CardNotPresentException, DeckEmptyException, GamePhaseException{
+    public void DrawDisplayedPlayableCard(String username, int cardID) throws RemoteException, TurnException, CardNotPresentException, DeckEmptyException, GamePhaseException{
+
+        Player player = null;
+        PlayableCard card = null;
+        for (Player p: model.getListOfPlayers()){
+            if (Objects.equals(p.getUsername(), username))
+                player = p;
+        }
+        for (PlayableCard pc: model.getDisplayedPlayableCard()){
+            if (pc.getIdCard() == cardID)
+                card = pc;
+        }
 
         checkIfDrawPossible(player);
 
         synchronized (model){
             model.drawDisplayedPlayableCard(card, player);
 
-            if (model.getCurrentPlayer().equals(model.getPotentialWinner()))
+            if (model.getCurrentPlayer().equals(model.getPotentialWinner())) {
                 model.setState(GameState.ENDING);
-
+                for (ClientCallbackInterface c: model.getListeners().values()) //updating clients
+                    c.updateState(GameState.ENDING);
+            }
             model.nextTurn();
         }
 
 
     }
+    //cambiato Deck in boolean alrimenti era difficile capire da che mazzo volesse pescare e quindi che mazzo aggiornare
+    //true: resource deck, false: gold deck
+    public void draw(String username,boolean resourceDeck) throws TurnException, GamePhaseException, DeckEmptyException, DeckException {
+        Deck deck;
+        Player player = null;
 
-    public void draw(Player player, Deck deck) throws TurnException, GamePhaseException, DeckEmptyException, DeckException {
+        for (Player p: model.getListOfPlayers()){
+            if (Objects.equals(p.getUsername(), username))
+                player = p;
+        }
+
+        if (resourceDeck){
+            deck = model.getResourceDeck();
+        } else {
+            deck = model.getGoldDeck();
+        }
 
         checkIfDrawPossible(player);
 
@@ -90,15 +139,46 @@ public class GameController {
         synchronized (model){
             player.draw(deck);
 
-            if (model.getCurrentPlayer().equals(model.getPotentialWinner()))
-                model.setState(GameState.ENDING);
+            if (resourceDeck){ //updating clients
+               for (ClientCallbackInterface c: model.getListeners().values()) {
+                   try {
+                       c.updateResourceDeck(deck);
+                   } catch (RemoteException e) {
+                       throw new RuntimeException(e);
+                   }
+               }
+            } else {
+                for (ClientCallbackInterface c: model.getListeners().values()) {
+                    try {
+                        c.updateGoldDeck(deck);
+                    } catch (RemoteException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
 
+            if (model.getCurrentPlayer().equals(model.getPotentialWinner())) {
+                model.setState(GameState.ENDING);
+                for (ClientCallbackInterface c: model.getListeners().values()) {
+                    try {
+                        c.updateState(GameState.ENDING);
+                    } catch (RemoteException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
             model.nextTurn();
         }
 
     }
 
-    public void chooseColor(Player player, PlayerColor color) throws ColorNotAvailableException, DeckEmptyException, GamePhaseException, TurnException {
+    public void chooseColor(String username, PlayerColor color) throws ColorNotAvailableException, DeckEmptyException, GamePhaseException, TurnException {
+
+        Player player = null;
+        for (Player p: model.getListOfPlayers()){
+            if (Objects.equals(p.getUsername(), username))
+                player = p;
+        }
 
         if (model.getCurrentPlayer() != player)
             throw new TurnException("Not your turn");
@@ -126,8 +206,18 @@ public class GameController {
     private void starterCardPlayed() {
         starterCardsPlayed++;
         //TODO: deadlock?
-        if (starterCardsPlayed == model.getNumOfPlayers())
+        if (starterCardsPlayed == model.getNumOfPlayers()){
             model.setState(GameState.CHOOSING_COLORS);
+            for (ClientCallbackInterface c: model.getListeners().values()) {
+                try {
+                    c.updateState(GameState.CHOOSING_COLORS);
+                } catch (RemoteException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+
+
     }
 
     public void updateClients(String string) throws RemoteException {

@@ -1,6 +1,7 @@
 package it.polimi.ingsfw.ingsfwproject.Network2;
 import it.polimi.ingsfw.ingsfwproject.Controller.GameController;
 import it.polimi.ingsfw.ingsfwproject.Controller.LobbyController;
+import it.polimi.ingsfw.ingsfwproject.Model.Game;
 import it.polimi.ingsfw.ingsfwproject.Model.GameManager;
 
 import java.net.MalformedURLException;
@@ -43,6 +44,11 @@ public class RMIServer {
             }
             if (command == 0) {
                 break;
+            }
+            if (command == 3){
+                for (Game g: manager.getGameList().values()){
+                    System.out.println(g.getListenerssize());
+                }
             }
             if (command != 0 && command != 1)
                 System.out.println("Invalid command. Type 0 to shut the server down.");

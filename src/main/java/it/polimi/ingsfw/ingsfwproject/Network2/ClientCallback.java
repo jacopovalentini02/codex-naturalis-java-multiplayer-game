@@ -5,6 +5,7 @@ import it.polimi.ingsfw.ingsfwproject.Model.*;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -27,6 +28,14 @@ public class ClientCallback extends UnicastRemoteObject implements ClientCallbac
     private Map<String, Integer> scores;
 
     private GameState state;
+
+    private List<ObjectiveCard> displayedObjectiveCards;
+
+    public HashMap<Content, Integer> getResources() {
+        return resources;
+    }
+
+    private HashMap<Content, Integer> resources;
 
     public Player getPlayer() {
         return player;
@@ -74,6 +83,7 @@ public class ClientCallback extends UnicastRemoteObject implements ClientCallbac
     public GameState getState() {
         return state;
     }
+
 
 
 
@@ -126,6 +136,12 @@ public class ClientCallback extends UnicastRemoteObject implements ClientCallbac
     }
 
     @Override
+    public void updateDisplayedObjectiveCards(List<ObjectiveCard> displayedCards) throws RemoteException {
+        this.displayedObjectiveCards = displayedCards;
+        System.out.println("Displayed objective cards updated");
+    }
+
+    @Override
     public void updateColor(PlayerColor color) throws RemoteException {
         this.color = color;
         System.out.println("Token updated");
@@ -140,11 +156,17 @@ public class ClientCallback extends UnicastRemoteObject implements ClientCallbac
     @Override
     public void updateState(GameState state) throws RemoteException {
         this.state = state;
-        System.out.println("State updated: now it is" + state.toString());
+        System.out.println("State updated: now it is " + state.toString());
     }
 
     public void setPlayer(Player player){
         this.player = player;
         System.out.println("Player successfully set");
     }
+
+    @Override
+    public void updateResources(HashMap<Content, Integer> resources) throws RemoteException {
+        this.resources = resources;
+    }
+
 }

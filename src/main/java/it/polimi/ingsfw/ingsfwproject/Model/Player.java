@@ -7,6 +7,7 @@ import it.polimi.ingsfw.ingsfwproject.Exceptions.PositionNotAvailableException;
 import it.polimi.ingsfw.ingsfwproject.Network2.ClientCallbackInterface;
 
 import java.io.Serializable;
+import java.rmi.RemoteException;
 import java.util.*;
 
 public class Player implements Serializable {
@@ -45,9 +46,19 @@ public class Player implements Serializable {
         } else {
             System.out.println("Deck is empty");
         }
+        try { //updating client's hand
+            client.updateHand(this.getHandCard());
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
     }
     public void pick(Card card){
         handCard.add((PlayableCard) card);
+        try {
+            this.client.updateHand(this.getHandCard());
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public int playCard(PlayableCard cardPlayed, boolean upwards, Coordinate coord) throws CardNotInHandException, PositionNotAvailableException, NotEnoughResourcesException {
@@ -59,6 +70,15 @@ public class Player implements Serializable {
         } else {
             throw new CardNotInHandException("The card chosen is not in the player's hand");
         }
+        try {
+            this.client.updateAvailablePositions(this.ground.getAvailablePositions());
+            this.client.updateHand(this.getHandCard());
+            this.client.updateGrid(this.ground.getGrid());
+            this.client.updateResources(generateContentMap());
+        } catch (RemoteException e) { //updating clients
+            throw new RuntimeException(e);
+        }
+
         return points;
     }
 
@@ -108,6 +128,22 @@ public class Player implements Serializable {
 
     public void addClient(ClientCallbackInterface client){
         this.client = client;
+    }
+
+    private HashMap<Content, Integer> generateContentMap(){
+        HashMap<Content, Integer> resources = new HashMap<>();
+        resources.put(Content.FUNGI_KINGDOM, this.ground.getContentCount(Content.FUNGI_KINGDOM));
+        resources.put(Content.ANIMAL_KINGDOM, this.ground.getContentCount(Content.ANIMAL_KINGDOM));
+        resources.put(Content.INSECT_KINGDOM, this.ground.getContentCount(Content.INSECT_KINGDOM));
+        resources.put(Content.PLANT_KINGDOM, this.ground.getContentCount(Content.PLANT_KINGDOM));
+        resources.put(Content.QUILL, this.ground.getContentCount(Content.QUILL));
+        resources.put(Content.INKWELL, this.ground.getContentCount(Content.INKWELL));
+        resources.put(Content.MANUSCRIPT, this.ground.getContentCount(Content.MANUSCRIPT));
+        return resources;
+    }
+
+    public ClientCallbackInterface getClient(){
+        return this.client;
     }
 
 }

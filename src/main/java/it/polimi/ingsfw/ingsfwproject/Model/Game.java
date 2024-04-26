@@ -213,8 +213,25 @@ public class Game {
         for (Player p : listOfPlayers) {
             StarterCard starter = (StarterCard) starterDeck.draw();
             p.getHandCard().add(starter);
+            try {
+                listeners.get(p.getUsername()).updateHand(p.getHandCard()); //updating clients' hands
+                listeners.get(p.getUsername()).updateAvailablePositions(p.getGround().getAvailablePositions());
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
         }
         this.setState(GameState.CHOOSING_STARTER_CARDS);
+        for (ClientCallbackInterface c: listeners.values()) { //updating clients (maybe do a specific function)
+            try {
+                c.updateGoldDeck(this.goldDeck);
+                c.updateResourceDeck(this.resourceDeck);
+                c.updateDisplayedPlayableCards(displayedPlayableCard);
+                c.updateState(GameState.CHOOSING_STARTER_CARDS);
+                c.update("It's " + this.getCurrentPlayer().getUsername() + "'s turn");
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     public void chooseColor(Player player, PlayerColor color) throws ColorNotAvailableException, DeckEmptyException {
@@ -223,9 +240,15 @@ public class Game {
             throw new ColorNotAvailableException("This color is already taken");
 
         player.setToken(color);
-        tokenAvailable.remove(color);
+        //tokenAvailable.remove(color); //TODO: perché dà problemi?
 
         colorChosen++;
+
+        try {
+            player.getClient().updateColor(color);
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
 
         if (colorChosen == this.numOfPlayers)
             setupHandsAndObjectives();
@@ -240,6 +263,13 @@ public class Game {
         int indexToRemove = player.getHandObjective().get(0).equals(card) ? 1 : 0;
 
         ObjectiveCard cardToPutBack = player.getHandObjective().remove(indexToRemove);
+
+        try {
+            player.getClient().updateHandObjecive(player.getHandObjective()); //updating hand objective
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
+
         this.objectiveDeck.addCard(cardToPutBack);
 
         objectiveCardsChosen++;
@@ -256,6 +286,11 @@ public class Game {
             p.getHandCard().add((PlayableCard) resourceDeck.draw());
             p.getHandCard().add((PlayableCard) resourceDeck.draw());
             p.getHandCard().add((PlayableCard) goldDeck.draw());
+            try { //updating hands
+                p.getClient().updateHand(p.getHandCard());
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
         }
         //shuffling the objectiveDeck
         objectiveDeck.shuffle();
@@ -265,8 +300,22 @@ public class Game {
         for(Player p : listOfPlayers){
             p.getHandObjective().add((ObjectiveCard) objectiveDeck.draw());
             p.getHandObjective().add((ObjectiveCard) objectiveDeck.draw());
+            try {
+                p.getClient().updateHandObjecive(p.getHandObjective()); //updating hand objectives
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
         }
         this.setState(GameState.CHOOSING_OBJECTIVES);
+
+        for (ClientCallbackInterface c: listeners.values()){
+            try {
+                c.updateDisplayedObjectiveCards(displayedObjectiveCard);
+                c.updateState(this.state);
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
 public void randomizeFirstPlayer(){
@@ -276,6 +325,14 @@ public void randomizeFirstPlayer(){
         setFirstPlayer(listOfPlayers.get(index));
         setCurrentPlayer(getFirstPlayer());
         this.setState(GameState.STARTED);
+
+        for (ClientCallbackInterface c: this.listeners.values()) { //updating clients
+            try {
+                c.updateState(GameState.STARTED);
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
 
@@ -340,13 +397,7 @@ public void randomizeFirstPlayer(){
 
     public void addPlayer(Player newPlayer){
         listOfPlayers.add(newPlayer);
-        if(listOfPlayers.size()==this.numOfPlayers){
-            try {
-                this.setupField();
-            } catch (DeckEmptyException e) {
-                e.printStackTrace();
-            }
-        }
+
     }
 
     public void nextTurn() {
@@ -359,7 +410,13 @@ public void randomizeFirstPlayer(){
 
         int newIndex = (listOfPlayers.indexOf(currentPlayer) + 1) % listOfPlayers.size();
         this.setCurrentPlayer(listOfPlayers.get(newIndex));
-
+        for (ClientCallbackInterface c: listeners.values()) {
+            try {
+                c.update("It's now " + this.getCurrentPlayer().getUsername() + "'s turn");
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
+        }
         currentPlayerhasPlayed = false;
     }
 
@@ -434,6 +491,19 @@ public void randomizeFirstPlayer(){
 
         scores.merge(player, score, Integer::sum); //sum the old score with the new score
 
+        Map<String, Integer> playerScoresMap = new HashMap<>(); //creating a new map to send clients
+        for (Map.Entry<Player, Integer> entry: scores.entrySet()){
+            playerScoresMap.put(entry.getKey().getUsername(), entry.getValue());
+        }
+
+        for (ClientCallbackInterface c: listeners.values()){ //updating clients with the new points
+            try {
+                c.updateScores(playerScoresMap);
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
         if (scores.get(player) >= 20) {
             potentialWinner=currentPlayer;
         }
@@ -452,6 +522,14 @@ public void randomizeFirstPlayer(){
             displayedPlayableCard.add((PlayableCard) goldDeck.draw());
         } else if (card instanceof ResourceCard) {
             displayedPlayableCard.add((PlayableCard) resourceDeck.draw());
+        }
+
+        for (ClientCallbackInterface c: listeners.values()) {
+            try {
+                c.updateDisplayedPlayableCards(this.displayedPlayableCard);
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
         }
 
     }
@@ -502,6 +580,22 @@ public void randomizeFirstPlayer(){
                 p.addClient(listener);
             }
         }
+        if(listOfPlayers.size()==this.numOfPlayers){
+            try {
+                this.setupField();
+            } catch (DeckEmptyException e) {
+                e.printStackTrace();
+            }
+        }
     }
+
+    public int getListenerssize(){
+        return this.listeners.size();
+    }
+
+    public HashMap<String, ClientCallbackInterface> getListeners(){
+        return this.listeners;
+    }
+
 }
 

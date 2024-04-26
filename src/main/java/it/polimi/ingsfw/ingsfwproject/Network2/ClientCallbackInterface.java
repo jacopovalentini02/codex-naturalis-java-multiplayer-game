@@ -5,6 +5,7 @@ import it.polimi.ingsfw.ingsfwproject.Model.*;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -18,11 +19,15 @@ public interface ClientCallbackInterface extends Remote {
     void updateHandObjecive(ArrayList <ObjectiveCard> handObjectives) throws RemoteException;
     void updateDisplayedPlayableCards(List<PlayableCard> displayedCards) throws RemoteException;
 
+    void updateDisplayedObjectiveCards(List<ObjectiveCard> displayedCards) throws RemoteException;
+
     void updateColor(PlayerColor color) throws RemoteException;
     void updateScores(Map<String, Integer> scores) throws RemoteException;
 
     void updateState(GameState state) throws RemoteException;
 
     void setPlayer(Player player) throws RemoteException;
+
+    void updateResources(HashMap<Content, Integer> resources) throws RemoteException;
 
 }
