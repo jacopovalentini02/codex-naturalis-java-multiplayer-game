@@ -196,6 +196,10 @@ public class Game {
         this.currentPlayer = currentPlayer;
     }
 
+    public int getLastRoundsplayed() {
+        return lastRoundsplayed;
+    }
+
     public synchronized void setupField() throws DeckEmptyException {
         //invoking the instantiation of all game's cards
         setUpCards();

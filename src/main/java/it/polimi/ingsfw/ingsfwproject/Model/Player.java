@@ -12,7 +12,6 @@ import java.util.*;
 
 public class Player implements Serializable {
     private String username;
-    private int points;
     private PlayerColor token;
     private PlayerGround ground;
     private ArrayList<PlayableCard> handCard;
@@ -32,7 +31,6 @@ public class Player implements Serializable {
 
     public Player(String username) {
         this.username = username;
-        this.points = 0; // At the beginning points are equal to 0
         this.token = null;
         this.ground = new PlayerGround();
         this.handCard = new ArrayList<>();
@@ -88,14 +86,6 @@ public class Player implements Serializable {
 
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    public int getPoints() {
-        return points;
-    }
-
-    public void setPoints(int points) {
-        this.points = points;
     }
 
     public PlayerColor getToken() {
