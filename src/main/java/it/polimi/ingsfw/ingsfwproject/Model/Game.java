@@ -1,14 +1,9 @@
 package it.polimi.ingsfw.ingsfwproject.Model;
 
 import it.polimi.ingsfw.ingsfwproject.Controller.GameController;
-import it.polimi.ingsfw.ingsfwproject.Exceptions.CardNotInHandException;
 import it.polimi.ingsfw.ingsfwproject.Exceptions.DeckEmptyException;
-import it.polimi.ingsfw.ingsfwproject.Exceptions.NotEnoughResourcesException;
-import it.polimi.ingsfw.ingsfwproject.Exceptions.PositionNotAvailableException;
 import it.polimi.ingsfw.ingsfwproject.Exceptions.*;
-import it.polimi.ingsfw.ingsfwproject.Network2.ClientCallback;
 import it.polimi.ingsfw.ingsfwproject.Network2.ClientCallbackInterface;
-import it.polimi.ingsfw.ingsfwproject.faceReader;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -24,6 +19,11 @@ public class Game {
     private GameState state;
     private GameController controller;
     private List<Player> listOfPlayers;
+
+    public List<PlayerColor> getTokenAvailable() {
+        return tokenAvailable;
+    }
+
     private List<PlayerColor> tokenAvailable;
     private int numOfPlayers;
     private Map<Player, Integer> scores;
@@ -240,7 +240,8 @@ public class Game {
             throw new ColorNotAvailableException("This color is already taken");
 
         player.setToken(color);
-        //tokenAvailable.remove(color); //TODO: perché dà problemi?
+
+        tokenAvailable.remove(color);
 
         colorChosen++;
 
@@ -377,15 +378,6 @@ public void randomizeFirstPlayer(){
             // close reader
             reader.close();
 
-            //Shuffle methods that i'll insert in the main function 'setupGame'
-           /* goldDeck.shuffle();
-            starterDeck.shuffle();
-            objectiveDeck.shuffle();
-            resourceDeck.shuffle();
-
-            //check method to see if we did correct
-            goldDeck.printCardsDeck();*/
-
         } catch (IOException | JSONException e) {
             e.printStackTrace();
         }
@@ -418,73 +410,6 @@ public void randomizeFirstPlayer(){
             }
         }
         currentPlayerhasPlayed = false;
-    }
-
-    public void lastTurn(Player firstTwenty) throws PositionNotAvailableException, NotEnoughResourcesException, CardNotInHandException {
-        int flag=0;
-        int turnsPassed =0;
-        boolean firstTwentyFirstTurn = true; // Aggiunta una variabile per tenere traccia del primo turno di firstTwenty
-        while(flag<2){
-            //turn operations
-            if(flag!=0) {
-                if (getCurrentPlayer() != firstTwenty || !firstTwentyFirstTurn) {
-                    Deck lastHand = new Deck();
-                    //letting the player choose the last card to play
-                    System.out.println("Scegli la tua ultima carta da giocare (indicare id): ");
-                    for (int i = 0; i < getCurrentPlayer().getHandCard().size(); i++) {
-                        lastHand.getCardList().add(getCurrentPlayer().getHandCard().get(i));
-                    }
-                    lastHand.printCardsDeck();
-                    //TODO: Mettere poi la logica di scelta della carta, qua ho messo index 1
-                /*Scanner scanner = new Scanner(System.in);
-                int index = scanner.nextInt();
-                scanner.close();
-                PlayableCard rightCard = null;
-                for (Card o : currentPlayer.getHandCard()) {
-                    if (o.getIdCard() == index) {
-                        getCurrentPlayer().getHandCard().remove(o);
-                        rightCard = (PlayableCard) o;
-                        break;
-                    }
-                }*/
-                    PlayableCard rightCard = getCurrentPlayer().getHandCard().get(1);
-                    getCurrentPlayer().getHandCard().remove(1);
-                    //letting the player choose the position on the grid
-                    System.out.println("Scegli la posizione della carta tra queste (indicare prima x e poi y): \n");
-                    for (Coordinate c : getCurrentPlayer().getGround().getAvailablePositions()) {
-                        System.out.println("(" + c.getX() + " , " + c.getY() + ")\n");
-                    }
-                    //TODO: anche qui ho rimpiazzato la scelta delle coordinate su cui giocare con una scelta arbitraria per fare i test
-                /*int x = scanner.nextInt();
-                int y = scanner.nextInt();
-                scanner.close();*/
-                    Coordinate coordinateTest = getCurrentPlayer().getGround().getAvailablePositions().get(1);
-                    //TODO: questo dovrebbe farlo il controller ma per ora lasceremo che sia player a farlo
-                    //invoking the playCard method
-                    getCurrentPlayer().playCard(rightCard, true, coordinateTest);
-                    //TODO : QUA ANDREBBE POI FATTO UN UPDATE DEL PUNTEGGIO DEL GIOCATORE
-                }
-
-                if(firstTwentyFirstTurn){
-                    firstTwentyFirstTurn=false;
-                }
-            }
-            //every time we meet the first player to reach x>=20 points, we keep it in mind
-            if(getCurrentPlayer()==firstTwenty){
-                flag++;
-            }
-            //if flag==2 it means the last turn is completed for every player, so we don't have to go for a nextTurn()
-            if(flag!=2){
-                turnsPassed++;
-                nextTurn();
-            }
-        }
-        System.out.println(turnsPassed);
-        //now that all have completed their last turn, the game is set in ending state
-        setState(GameState.ENDING);
-        //TODO: Rimetterla in funzione post-implementazione
-        //invoking the final function to check who is the winner
-        //finalScoreCheck();
     }
 
     public void updatePoints(int score, Player player){
@@ -535,7 +460,6 @@ public void randomizeFirstPlayer(){
     }
 
     public void finalScoreCheck(){
-        //OPERAZIONI...
 
         //check for additional objective points, from both common and secret objective cards
         for (Player p: this.listOfPlayers){

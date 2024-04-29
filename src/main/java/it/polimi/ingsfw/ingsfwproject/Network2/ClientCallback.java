@@ -10,9 +10,11 @@ import java.util.List;
 import java.util.Map;
 
 public class ClientCallback extends UnicastRemoteObject implements ClientCallbackInterface {
-    protected ClientCallback() throws RemoteException {
+    protected ClientCallback(GameClientModel player) throws RemoteException {
+        this.model=player;
     }
 
+    private GameClientModel model;
     private ArrayList<PlayableCard> handCards;
     private Deck resourceDeck;
     private Deck goldDeck;
@@ -94,79 +96,79 @@ public class ClientCallback extends UnicastRemoteObject implements ClientCallbac
 
     @Override
     public void updateHand(ArrayList<PlayableCard> newHand) throws RemoteException {
-        this.handCards = newHand;
+        model.setHandCards(newHand);
         System.out.println("Hand updated");
     }
 
     @Override
     public void updateGoldDeck(Deck deck) throws RemoteException {
-        this.goldDeck = deck;
+        model.setGoldDeck(deck);
         System.out.println("Gold deck updated");
     }
 
     @Override
     public void updateResourceDeck(Deck deck) throws RemoteException {
-        this.resourceDeck = deck;
+        model.setResourceDeck(deck);
         System.out.println("Resource Deck updated");
     }
 
 
     @Override
     public void updateAvailablePositions(ArrayList<Coordinate> positions) throws RemoteException {
-        this.availablePositions = positions;
+        model.setAvailablePositions(positions);
         System.out.println("Available positions updated");
     }
 
     @Override
     public void updateGrid(Map<Coordinate, Face> grid) throws RemoteException {
-        this.grid = grid;
+        model.setGrid(grid);
         System.out.println("Grid updated");
     }
 
     @Override
     public void updateHandObjecive(ArrayList<ObjectiveCard> handObjectives) throws RemoteException {
-        this.handObjectives = handObjectives;
+        model.setHandObjectives(handObjectives);
         System.out.println("Hand objectives updated");
     }
 
     @Override
     public void updateDisplayedPlayableCards(List<PlayableCard> displayedCards) throws RemoteException {
-        this.displayedCards = (ArrayList<PlayableCard>) displayedCards;
+        model.setDisplayedCards((ArrayList<PlayableCard>) displayedCards);
         System.out.println("Displayed cards updated");
     }
 
     @Override
     public void updateDisplayedObjectiveCards(List<ObjectiveCard> displayedCards) throws RemoteException {
-        this.displayedObjectiveCards = displayedCards;
+        model.setDisplayedObjectiveCards(displayedCards);
         System.out.println("Displayed objective cards updated");
     }
 
     @Override
     public void updateColor(PlayerColor color) throws RemoteException {
-        this.color = color;
+        model.setColor(color);
         System.out.println("Token updated");
     }
 
     @Override
     public void updateScores(Map<String, Integer> scores) throws RemoteException {
-        this.scores = scores;
+        model.setScores(scores);
         System.out.println("Scores updated");
     }
 
     @Override
     public void updateState(GameState state) throws RemoteException {
-        this.state = state;
+        model.setState(state);
         System.out.println("State updated: now it is " + state.toString());
     }
 
-    public void setPlayer(Player player){
-        this.player = player;
+    public void setPlayer(Player p){
+        model.setPlayer(p);
         System.out.println("Player successfully set");
     }
 
     @Override
     public void updateResources(HashMap<Content, Integer> resources) throws RemoteException {
-        this.resources = resources;
+        model.setResources(resources);
     }
 
 }

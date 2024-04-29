@@ -99,12 +99,12 @@ public class RMIClient {
             return;
         }
 
-        ClientCallbackInterface clientCallback = new ClientCallback();
+        GameClientModel gameStatus = new GameClientModel();
+
+        ClientCallbackInterface clientCallback = new ClientCallback(gameStatus);
         gameHandler.registerClient(clientCallback, username);
 
         System.out.println("Successfully registered ClientListener to Server");
-
-        ClientCallback gameStatus = (ClientCallback) clientCallback;
 
         Player me = gameStatus.getPlayer();
 
@@ -167,10 +167,14 @@ public class RMIClient {
                         PlayerColor color = null;
 
                         switch (choice){
-                            case 1: color = PlayerColor.YELLOW;
-                            case 2: color = PlayerColor.GREEN;
-                            case 3: color = PlayerColor.RED;
-                            case 4: color = PlayerColor.BLUE;
+                            case 1:{ color = PlayerColor.YELLOW;
+                            break;}
+                            case 2: {color = PlayerColor.GREEN;
+                                break;}
+                            case 3: {color = PlayerColor.RED;
+                                break;}
+                            case 4: {color = PlayerColor.BLUE;
+                                break;}
                         }
 
                         try {
