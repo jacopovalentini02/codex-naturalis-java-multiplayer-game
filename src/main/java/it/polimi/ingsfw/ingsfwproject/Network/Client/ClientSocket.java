@@ -8,6 +8,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -38,6 +39,18 @@ public class ClientSocket extends Client{
     //Send message to server
     @Override
     public void sendMessage(Message message) throws IOException {
+        try {
+            output.writeObject(message);
+            output.flush();
+            output.reset();
+        } catch (IOException e) {
+            e.printStackTrace();
+            disconnect();
+        }
+    }
+
+
+    public void sendMessage(String message) throws IOException {
         try {
             output.writeObject(message);
             output.flush();
