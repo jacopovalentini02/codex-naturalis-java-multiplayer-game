@@ -4,8 +4,6 @@ import java.util.*;
 
 import it.polimi.ingsfw.ingsfwproject.Exceptions.*;
 import it.polimi.ingsfw.ingsfwproject.Model.*;
-import it.polimi.ingsfw.ingsfwproject.Network.Server.NetworkController;
-import it.polimi.ingsfw.ingsfwproject.Network2.ClientCallback;
 import it.polimi.ingsfw.ingsfwproject.Network2.ClientCallbackInterface;
 
 public class GameController {
