@@ -21,4 +21,6 @@ public interface GameClientHandlerInterface extends Remote {
 
     public String chooseColor(String username, PlayerColor color) throws RemoteException, TurnException, GamePhaseException, ColorNotAvailableException, DeckEmptyException;
 
+    public void heartbeat() throws RemoteException;
+
 }

@@ -525,5 +525,15 @@ public void randomizeFirstPlayer(){
         return this.listeners;
     }
 
+    public void clientDisconnected() {
+
+        for (ClientCallbackInterface c: this.listeners.values()){
+            try {
+                c.update("Client disconnected. Game ended.");
+                c.updateState(GameState.ENDED);
+            } catch (RemoteException ignored) {}
+        }
+        this.endGame();
+    }
 }
 

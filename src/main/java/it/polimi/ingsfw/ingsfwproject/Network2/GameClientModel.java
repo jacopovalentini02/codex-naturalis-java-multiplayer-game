@@ -116,6 +116,8 @@ public class GameClientModel {
 
     public void setState(GameState state) {
         this.state = state;
+        if (state.equals(GameState.ENDED))
+            System.exit(0);
     }
 
     public List<ObjectiveCard> getDisplayedObjectiveCards() {

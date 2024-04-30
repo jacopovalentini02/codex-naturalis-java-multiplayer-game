@@ -13,7 +13,13 @@ public class RMIClient {
 
     public static <Map> void main(String [] args) throws RemoteException, MalformedURLException, NotBoundException, NotValidNumOfPlayerException {
 
-        Registry registry = LocateRegistry.getRegistry("localhost", 1099);
+        System.out.println("Inserisci l'IP del server: ");
+        String ip = null;
+        Scanner scanner = new Scanner(System.in);
+        ip = scanner.nextLine();
+
+
+        Registry registry = LocateRegistry.getRegistry(ip, 1099);
 
         String remoteObjectName = "Factory";
         ClientHandlerFactoryInterface clientHandlerFactory = (ClientHandlerFactoryInterface) registry.lookup(remoteObjectName);
@@ -32,7 +38,7 @@ public class RMIClient {
             System.out.printf("%-10d %-20d %n", entry.getKey(), entry.getValue());
         }
 
-        Scanner scanner = new Scanner(System.in);
+
         int choice = 0;
 
         do {
@@ -103,6 +109,31 @@ public class RMIClient {
 
         ClientCallbackInterface clientCallback = new ClientCallback(gameStatus);
         gameHandler.registerClient(clientCallback, username);
+
+
+        Thread sendHeartBeat = new Thread(()->{
+
+            while (true){
+
+                try {
+                    gameHandler.heartbeat();
+                    Thread.sleep(5000);
+                } catch (RemoteException e) {
+                    System.out.println("Error sending the heartbeat to the server");
+                    break;
+                } catch (InterruptedException e) {
+                    System.out.println("Thread heartbeat stopped.");
+                    break;
+                }
+            }
+        }
+        );
+
+        sendHeartBeat.start();
+
+
+
+
 
         System.out.println("Successfully registered ClientListener to Server");
 

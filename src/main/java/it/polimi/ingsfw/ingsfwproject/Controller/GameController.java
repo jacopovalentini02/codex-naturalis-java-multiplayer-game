@@ -4,7 +4,6 @@ import java.util.*;
 
 import it.polimi.ingsfw.ingsfwproject.Exceptions.*;
 import it.polimi.ingsfw.ingsfwproject.Model.*;
-import it.polimi.ingsfw.ingsfwproject.Network.Server.NetworkController;
 import it.polimi.ingsfw.ingsfwproject.Network2.ClientCallback;
 import it.polimi.ingsfw.ingsfwproject.Network2.ClientCallbackInterface;
 
@@ -47,7 +46,6 @@ public class GameController {
             model.nextTurn();
         }
     }
-    //TODO: modifica!!
     public void playCard(String username, int cardID, boolean upwards, Coordinate coord) throws TurnException, GamePhaseException, PositionNotAvailableException, NotEnoughResourcesException, CardNotInHandException{
         int pointsMade = 0;
         Player player = null;
@@ -205,7 +203,6 @@ public class GameController {
 
     private void starterCardPlayed() {
         starterCardsPlayed++;
-        //TODO: deadlock?
         if (starterCardsPlayed == model.getNumOfPlayers()){
             model.setState(GameState.CHOOSING_COLORS);
             for (ClientCallbackInterface c: model.getListeners().values()) {
@@ -227,6 +224,10 @@ public class GameController {
 
     public void addClient(String username, ClientCallbackInterface clientCallback){
         this.model.addListener(username, clientCallback);
+    }
+
+    public void clientDisconnected(){
+        this.model.clientDisconnected();
     }
 
 }

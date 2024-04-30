@@ -10,10 +10,14 @@ import java.util.ArrayList;
 
 public class GameClientHandler extends UnicastRemoteObject implements GameClientHandlerInterface {
 
+    private long lastHeartbeatReceived;
+
     private final GameController gameController;
 
     protected GameClientHandler(GameController gc) throws RemoteException {
         this.gameController = gc;
+        lastHeartbeatReceived = System.currentTimeMillis();
+        startDisconnectionCheckThread();
     }
     @Override
     public String sum(Player a, int b) throws RemoteException{
@@ -54,4 +58,31 @@ public class GameClientHandler extends UnicastRemoteObject implements GameClient
         gameController.chooseColor(username, color);
         return "Color successfully chosen";
     }
+
+    @Override
+    public void heartbeat() throws RemoteException {
+        lastHeartbeatReceived = System.currentTimeMillis();
+    }
+
+    private void startDisconnectionCheckThread(){
+
+        Thread disconnectionCheck = new Thread(()-> {
+            while (true){
+
+                try{
+                    long timeSinceLastHeartBeat = System.currentTimeMillis() - lastHeartbeatReceived;
+                    if (timeSinceLastHeartBeat > 15000){
+                        gameController.clientDisconnected();
+                    }
+                    Thread.sleep(3000);
+                } catch (InterruptedException e) {
+                    break;
+                }
+            }
+        });
+        disconnectionCheck.start();
+    }
+
+
+
 }
