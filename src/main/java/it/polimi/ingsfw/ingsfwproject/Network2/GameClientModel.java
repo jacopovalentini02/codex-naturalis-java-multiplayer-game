@@ -135,4 +135,8 @@ public class GameClientModel {
     public void setPlayer(Player player) {
         this.player = player;
     }
+
+    public void prova(String prova){
+        System.out.println(prova);
+    }
 }

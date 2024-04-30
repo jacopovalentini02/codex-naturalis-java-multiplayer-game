@@ -1,19 +1,24 @@
 package it.polimi.ingsfw.ingsfwproject.Network.Client;
 
 import it.polimi.ingsfw.ingsfwproject.Network.Actions.Message;
+import it.polimi.ingsfw.ingsfwproject.Network2.GameClientModel;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class ClientSocket extends Client implements Runnable{
+public class ClientSocket extends Client{
     private ObjectInputStream input;
     private ObjectOutputStream output;
     private Socket socket;
+    private ExecutorService readExecutionQueue;
+
+    private GameClientModel model;
 
     public ClientSocket(String nickname, String ip, int port){
         super(ip,port,nickname);
@@ -25,6 +30,9 @@ public class ClientSocket extends Client implements Runnable{
         this.socket.connect(new InetSocketAddress(getIp(), getPort()));
         this.output = new ObjectOutputStream(socket.getOutputStream());
         this.input = new ObjectInputStream(socket.getInputStream());
+        this.readExecutionQueue=Executors.newSingleThreadExecutor();
+        this.model=new GameClientModel();
+
 
     }
 
@@ -41,9 +49,21 @@ public class ClientSocket extends Client implements Runnable{
         }
     }
 
+
+    public void sendMessage(String message) throws IOException {
+        try {
+            output.writeObject(message);
+            output.flush();
+            output.reset();
+        } catch (IOException e) {
+            e.printStackTrace();
+            disconnect();
+        }
+    }
+
     @Override
     public void disconnect(){
-        getReadExecutionQueue().shutdown();
+        readExecutionQueue.shutdown();
         try {
             if (!socket.isClosed()) {
                 socket.close();
@@ -54,13 +74,37 @@ public class ClientSocket extends Client implements Runnable{
         }
     }
 
-    @Override
-    protected Message receiveMessage() throws IOException, ClassNotFoundException {
-        return (Message) input.readObject();
+    public void receiveMessage() throws IOException, ClassNotFoundException {
+        readExecutionQueue.execute(() -> {
+            try {
+                while (!readExecutionQueue.isShutdown()) {
+                    String prova= (String) input.readObject();
+                    model.prova(prova);
+                }
+            } catch (IOException | ClassNotFoundException e) {
+                e.printStackTrace();
+                try {
+                    disconnect();
+                } catch (Exception ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+        });
     }
 
-    @Override
-    public void run() {
+    public static void main(String[] args) {
+        ClientSocket client = new ClientSocket("bea", "127.0.0.1",1337);
 
+        try {
+            client.startConnection();
+        } catch (IOException e) {
+            System.err.println(e.getMessage()); }
+
+        while(true){
+            Scanner in = new Scanner(System.in);
+            String prova = in.nextLine();
+            //sendMessage(prova);
+        }
     }
+
 }
