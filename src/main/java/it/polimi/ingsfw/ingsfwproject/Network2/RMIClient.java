@@ -18,8 +18,11 @@ public class RMIClient {
         Scanner scanner = new Scanner(System.in);
         ip = scanner.nextLine();
 
+        System.out.println("Inserisci la porta a cui connettersi");
+        int port = scanner.nextInt();
 
-        Registry registry = LocateRegistry.getRegistry(ip, 1099);
+
+        Registry registry = LocateRegistry.getRegistry(ip, port);
 
         String remoteObjectName = "Factory";
         ClientHandlerFactoryInterface clientHandlerFactory = (ClientHandlerFactoryInterface) registry.lookup(remoteObjectName);
