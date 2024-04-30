@@ -1,7 +1,9 @@
-package it.polimi.ingsfw.ingsfwproject.Network.Client;
+package it.polimi.ingsfw.ingsfwproject.Network2.Client;
 
-import it.polimi.ingsfw.ingsfwproject.Network.Actions.Message;
+import it.polimi.ingsfw.ingsfwproject.Model.GameState;
+import it.polimi.ingsfw.ingsfwproject.Network2.Messages.CreateGameMessage;
 import it.polimi.ingsfw.ingsfwproject.Network2.GameClientModel;
+import it.polimi.ingsfw.ingsfwproject.Network2.Messages.Message;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -28,11 +30,20 @@ public class ClientSocket extends Client{
     public void startConnection() throws IOException {
         this.socket = new Socket();
         this.socket.connect(new InetSocketAddress(getIp(), getPort()));
-        this.output = new ObjectOutputStream(socket.getOutputStream());
-        this.input = new ObjectInputStream(socket.getInputStream());
-        this.readExecutionQueue=Executors.newSingleThreadExecutor();
-        this.model=new GameClientModel();
 
+        if (socket.isConnected()) {
+            System.out.println("Connessione al server riuscita");
+            this.readExecutionQueue = Executors.newSingleThreadExecutor();
+            this.model = new GameClientModel();
+
+            // Inizializzazione dell'ObjectOutputStream e dell'ObjectInputStream
+            this.output = new ObjectOutputStream(socket.getOutputStream());
+            this.input = new ObjectInputStream(socket.getInputStream());
+
+        } else {
+            System.out.println("Connessione al server fallita");
+            throw new IOException("Connessione al server fallita");
+        }
 
     }
 
@@ -49,17 +60,6 @@ public class ClientSocket extends Client{
         }
     }
 
-
-    public void sendMessage(String message) throws IOException {
-        try {
-            output.writeObject(message);
-            output.flush();
-            output.reset();
-        } catch (IOException e) {
-            e.printStackTrace();
-            disconnect();
-        }
-    }
 
     @Override
     public void disconnect(){
@@ -78,8 +78,9 @@ public class ClientSocket extends Client{
         readExecutionQueue.execute(() -> {
             try {
                 while (!readExecutionQueue.isShutdown()) {
-                    String prova= (String) input.readObject();
-                    model.prova(prova);
+                    Message message = (Message) input.readObject();
+                    System.out.println("Message type risposta dal server: "+ message.getType());
+                    handleMessageReceived(message);
                 }
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
@@ -90,21 +91,30 @@ public class ClientSocket extends Client{
                 }
             }
         });
+
     }
 
-    public static void main(String[] args) {
+    public void handleMessageReceived(Message message){
+        switch (message.getType()){
+            case GAME_CREATED:
+                this.model=new GameClientModel();
+                this.model.setState(GameState.WAITING_FOR_PLAYERS);
+                break;
+        }
+    }
+
+    public static <Map> void main(String [] args)  {
         ClientSocket client = new ClientSocket("bea", "127.0.0.1",1337);
 
         try {
             client.startConnection();
+            client.sendMessage(new CreateGameMessage(2, "jaco"));
+            client.receiveMessage();
         } catch (IOException e) {
-            System.err.println(e.getMessage()); }
-
-        while(true){
-            Scanner in = new Scanner(System.in);
-            String prova = in.nextLine();
-            //sendMessage(prova);
+            System.err.println(e.getMessage()); } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
+
     }
 
 }

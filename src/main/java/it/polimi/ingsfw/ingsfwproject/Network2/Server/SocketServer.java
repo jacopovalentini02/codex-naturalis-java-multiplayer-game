@@ -1,4 +1,7 @@
-package it.polimi.ingsfw.ingsfwproject.Network2;
+package it.polimi.ingsfw.ingsfwproject.Network2.Server;
+
+import it.polimi.ingsfw.ingsfwproject.Controller.LobbyController;
+import it.polimi.ingsfw.ingsfwproject.Model.GameManager;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -21,8 +24,10 @@ public class SocketServer {
         System.out.println("Server ready"); while (true) {
             try {
                 Socket socket = serverSocket.accept();
-                System.out.println("connessione okay");
-                executor.submit(new ServerClientHandler(socket));
+                GameManager manager = new GameManager();
+                LobbyController lobbyController = new LobbyController(manager);
+                System.out.println("Connessione stabilita con client: "+socket.getInetAddress());
+                executor.submit(new ServerClientHandler(socket, lobbyController, manager) );
             } catch(IOException e) {
                 break; // entrerei qui se serverSocket venisse chiuso
             } }
