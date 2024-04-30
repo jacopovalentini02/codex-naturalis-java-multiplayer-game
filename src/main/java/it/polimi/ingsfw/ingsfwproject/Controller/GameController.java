@@ -203,7 +203,6 @@ public class GameController {
 
     private void starterCardPlayed() {
         starterCardsPlayed++;
-        //TODO: deadlock?
         if (starterCardsPlayed == model.getNumOfPlayers()){
             model.setState(GameState.CHOOSING_COLORS);
             for (ClientCallbackInterface c: model.getListeners().values()) {
@@ -225,6 +224,10 @@ public class GameController {
 
     public void addClient(String username, ClientCallbackInterface clientCallback){
         this.model.addListener(username, clientCallback);
+    }
+
+    public void clientDisconnected(){
+        this.model.clientDisconnected();
     }
 
 }
