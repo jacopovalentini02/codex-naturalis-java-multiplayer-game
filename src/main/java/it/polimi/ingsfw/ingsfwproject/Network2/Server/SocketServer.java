@@ -23,14 +23,16 @@ public class SocketServer {
             serverSocket = new ServerSocket(port); } catch (IOException e) {
             System.err.println(e.getMessage()); // porta non disponibile
             return; }
-        System.out.println("Server ready"); while (true) {
+        System.out.println("Server ready");
+        while (true) {
             try {
                 Socket socket = serverSocket.accept();
                 System.out.println("Connessione stabilita con client: "+socket.getInetAddress());
                 executor.submit(new ServerClientHandler(socket, lobbyController, manager) );
             } catch(IOException e) {
                 break; // entrerei qui se serverSocket venisse chiuso
-            } }
+            }
+        }
         executor.shutdown();
     }
     public static void main(String[] args) {

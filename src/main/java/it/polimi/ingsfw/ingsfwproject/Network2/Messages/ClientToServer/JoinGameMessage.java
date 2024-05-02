@@ -1,4 +1,7 @@
-package it.polimi.ingsfw.ingsfwproject.Network2.Messages;
+package it.polimi.ingsfw.ingsfwproject.Network2.Messages.ClientToServer;
+
+import it.polimi.ingsfw.ingsfwproject.Network2.Messages.Message;
+import it.polimi.ingsfw.ingsfwproject.Network2.Messages.MessageType;
 
 import java.io.Serializable;
 

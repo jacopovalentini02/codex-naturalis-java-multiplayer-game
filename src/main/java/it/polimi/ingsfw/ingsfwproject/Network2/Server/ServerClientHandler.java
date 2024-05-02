@@ -7,8 +7,11 @@ import it.polimi.ingsfw.ingsfwproject.Exceptions.GameNotExistingException;
 import it.polimi.ingsfw.ingsfwproject.Exceptions.NickAlreadyTakenException;
 import it.polimi.ingsfw.ingsfwproject.Exceptions.NotValidNumOfPlayerException;
 import it.polimi.ingsfw.ingsfwproject.Model.GameManager;
-import it.polimi.ingsfw.ingsfwproject.Network2.GameClientHandler;
 import it.polimi.ingsfw.ingsfwproject.Network2.Messages.*;
+import it.polimi.ingsfw.ingsfwproject.Network2.Messages.ClientToServer.CreateGameMessage;
+import it.polimi.ingsfw.ingsfwproject.Network2.Messages.ClientToServer.JoinGameMessage;
+import it.polimi.ingsfw.ingsfwproject.Network2.Messages.ServerToClient.GameJoinedMessage;
+import it.polimi.ingsfw.ingsfwproject.Network2.Messages.ServerToClient.SendGameList;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;

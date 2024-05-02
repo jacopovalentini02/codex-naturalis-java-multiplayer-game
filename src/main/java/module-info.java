@@ -14,6 +14,8 @@ module it.polimi.ingsfw.ingsfwproject {
     exports it.polimi.ingsfw.ingsfwproject.Network2 to java.rmi;
     exports it.polimi.ingsfw.ingsfwproject.Network2.Messages to java.rmi;
     exports it.polimi.ingsfw.ingsfwproject.Network2.Server to java.rmi;
+    exports it.polimi.ingsfw.ingsfwproject.Network2.Messages.ServerToClient to java.rmi;
+    exports it.polimi.ingsfw.ingsfwproject.Network2.Messages.ClientToServer to java.rmi;
 
 
 }
