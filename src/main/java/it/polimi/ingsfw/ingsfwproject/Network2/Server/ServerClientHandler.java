@@ -1,12 +1,14 @@
 package it.polimi.ingsfw.ingsfwproject.Network2.Server;
 
+import it.polimi.ingsfw.ingsfwproject.Controller.GameController;
 import it.polimi.ingsfw.ingsfwproject.Controller.LobbyController;
+import it.polimi.ingsfw.ingsfwproject.Exceptions.GameFullException;
+import it.polimi.ingsfw.ingsfwproject.Exceptions.GameNotExistingException;
+import it.polimi.ingsfw.ingsfwproject.Exceptions.NickAlreadyTakenException;
 import it.polimi.ingsfw.ingsfwproject.Exceptions.NotValidNumOfPlayerException;
 import it.polimi.ingsfw.ingsfwproject.Model.GameManager;
-import it.polimi.ingsfw.ingsfwproject.Network2.Messages.CreateGameMessage;
-import it.polimi.ingsfw.ingsfwproject.Network2.Messages.GameCreatedMessage;
-import it.polimi.ingsfw.ingsfwproject.Network2.Messages.Message;
-import it.polimi.ingsfw.ingsfwproject.Network2.Messages.MessageType;
+import it.polimi.ingsfw.ingsfwproject.Network2.GameClientHandler;
+import it.polimi.ingsfw.ingsfwproject.Network2.Messages.*;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -16,65 +18,69 @@ import java.net.Socket;
 public class ServerClientHandler implements Runnable {
     private Socket socket;
     private LobbyController lobbyController;
-    private GameManager manager;
+    private GameController gameController;
     private ObjectInputStream in;
     private ObjectOutputStream out;
+
+    //TODO Aggiungere heartbeat
 
     public ServerClientHandler(Socket socket, LobbyController lobbyController, GameManager manager) throws IOException {
         this.socket = socket;
         this.lobbyController = lobbyController;
-        this.manager = manager;
         this.in = new ObjectInputStream(socket.getInputStream());
-        this.out = new ObjectOutputStream(socket.getOutputStream()); // leggo e scrivo nella connessione finche' non ricevo "quit"
-
+        this.out = new ObjectOutputStream(socket.getOutputStream());
 
         System.out.println("Server client handler inizializzato");
-
 
     }
 
     //Server che riceve
     public void run() {
         try {
-
-            while (true) {
+            while (!Thread.currentThread().isInterrupted()) {
                 Message m = (Message) in.readObject();
                 handleMessages(m);
-
             }
-            //in.close();
-            //out.close();
-            //socket.close();
+            in.close();
+            out.close();
+            socket.close();
         } catch (IOException e) {
             System.err.println(e.getMessage());
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        } catch (NotValidNumOfPlayerException e) {
+        } catch (ClassNotFoundException | NotValidNumOfPlayerException | NickAlreadyTakenException | GameFullException |
+                 GameNotExistingException e) {
             throw new RuntimeException(e);
         }
     }
 
     public void sendMessage(Message message) throws IOException {
-
         try {
             out.writeObject(message);
             out.flush();
             out.reset();
         } catch (IOException e) {
             e.printStackTrace();
-            //disconnect();
+            //disconnect(); //TODO creare metodo disconnect
         }
     }
 
-    public void handleMessages(Message m) throws NotValidNumOfPlayerException, IOException {
+    public void handleMessages(Message m) throws NotValidNumOfPlayerException, IOException, NickAlreadyTakenException, GameFullException, GameNotExistingException {
         switch (m.getType()){
             case GET_GAME_LIST:
+                sendMessage(new SendGameList(lobbyController.getGameList()));
+                break;
 
             case CREATE_GAME:
                 CreateGameMessage message=(CreateGameMessage)m;
-                lobbyController.createGame(message.getNumPlayer(), message.getNickname());
-                sendMessage(new GameCreatedMessage());
+                int gameId=lobbyController.createGame(message.getNumPlayer(), message.getNickname());
+                sendMessage(new GameJoinedMessage(gameId));
                 break;
+
+            case JOIN_GAME:
+                JoinGameMessage joinMess=(JoinGameMessage)m;
+                int id=lobbyController.joinExistingGame(joinMess.getNickname(), joinMess.getGameID());
+                sendMessage(new GameJoinedMessage(id));
+                break;
+
         }
 
     }

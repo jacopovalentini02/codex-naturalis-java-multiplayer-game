@@ -6,11 +6,9 @@ import java.io.IOException;
 import java.util.Timer;
 
 public abstract class Client {
-    private int clientID; //nickname is not unique
     private String ip; //Server IP address
     private int port; //Server port
     private final String nickname;
-
 
     public Client(String ip, int port, String nickname) {
         this.ip = ip;
@@ -36,5 +34,7 @@ public abstract class Client {
     public abstract void sendMessage(Message message) throws IOException;
 
     public abstract void disconnect() throws Exception;
+
+
 
 }

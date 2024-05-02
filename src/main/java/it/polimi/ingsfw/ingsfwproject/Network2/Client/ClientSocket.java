@@ -1,16 +1,14 @@
 package it.polimi.ingsfw.ingsfwproject.Network2.Client;
 
 import it.polimi.ingsfw.ingsfwproject.Model.GameState;
-import it.polimi.ingsfw.ingsfwproject.Network2.Messages.CreateGameMessage;
+import it.polimi.ingsfw.ingsfwproject.Network2.Messages.*;
 import it.polimi.ingsfw.ingsfwproject.Network2.GameClientModel;
-import it.polimi.ingsfw.ingsfwproject.Network2.Messages.Message;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -27,7 +25,7 @@ public class ClientSocket extends Client{
     }
 
     @Override
-    public void startConnection() throws IOException {
+    public void startConnection() throws IOException, ClassNotFoundException {
         this.socket = new Socket();
         this.socket.connect(new InetSocketAddress(getIp(), getPort()));
 
@@ -39,6 +37,8 @@ public class ClientSocket extends Client{
             // Inizializzazione dell'ObjectOutputStream e dell'ObjectInputStream
             this.output = new ObjectOutputStream(socket.getOutputStream());
             this.input = new ObjectInputStream(socket.getInputStream());
+
+            this.receiveMessage();
 
         } else {
             System.out.println("Connessione al server fallita");
@@ -96,25 +96,20 @@ public class ClientSocket extends Client{
 
     public void handleMessageReceived(Message message){
         switch (message.getType()){
-            case GAME_CREATED:
+            case GAME_JOINED: //Create model, set state and gameId
                 this.model=new GameClientModel();
                 this.model.setState(GameState.WAITING_FOR_PLAYERS);
+                GameJoinedMessage mjoined=(GameJoinedMessage) message;
+                this.model.setGameID(mjoined.getGameId());
                 break;
+            case SEND_GAME_LIST: //game list received, print all the games
+                SendGameList m=(SendGameList) message;
+                m.printGameList();
+                break;
+
         }
     }
 
-    public static <Map> void main(String [] args)  {
-        ClientSocket client = new ClientSocket("bea", "127.0.0.1",1337);
 
-        try {
-            client.startConnection();
-            client.sendMessage(new CreateGameMessage(2, "jaco"));
-            client.receiveMessage();
-        } catch (IOException e) {
-            System.err.println(e.getMessage()); } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-
-    }
 
 }

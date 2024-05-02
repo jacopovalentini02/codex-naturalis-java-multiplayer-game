@@ -8,14 +8,13 @@ import java.util.List;
 import java.util.Map;
 
 public class GameClientModel {
+    private int gameID;
     private ArrayList<PlayableCard> handCards;
     private Deck resourceDeck;
     private Deck goldDeck;
     private ArrayList<Coordinate> availablePositions;
     private Map<Coordinate, Face> grid;
-
     private ArrayList<ObjectiveCard> handObjectives;
-
     private ArrayList<PlayableCard>  displayedCards;
 
     private PlayerColor color;
@@ -118,6 +117,14 @@ public class GameClientModel {
         this.state = state;
         if (state.equals(GameState.ENDED))
             System.exit(0);
+    }
+
+    public int getGameID() {
+        return gameID;
+    }
+
+    public void setGameID(int gameID) {
+        this.gameID = gameID;
     }
 
     public List<ObjectiveCard> getDisplayedObjectiveCards() {

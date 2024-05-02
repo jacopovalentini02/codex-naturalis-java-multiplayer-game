@@ -15,6 +15,8 @@ public class SocketServer {
         this.port = port;
     }
     public void startServer() {
+        GameManager manager = new GameManager();
+        LobbyController lobbyController = new LobbyController(manager);
         ExecutorService executor = Executors.newCachedThreadPool();
         ServerSocket serverSocket;
         try {
@@ -24,8 +26,6 @@ public class SocketServer {
         System.out.println("Server ready"); while (true) {
             try {
                 Socket socket = serverSocket.accept();
-                GameManager manager = new GameManager();
-                LobbyController lobbyController = new LobbyController(manager);
                 System.out.println("Connessione stabilita con client: "+socket.getInetAddress());
                 executor.submit(new ServerClientHandler(socket, lobbyController, manager) );
             } catch(IOException e) {
