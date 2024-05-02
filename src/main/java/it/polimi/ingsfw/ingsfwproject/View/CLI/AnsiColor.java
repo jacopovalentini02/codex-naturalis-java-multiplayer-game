@@ -6,9 +6,9 @@ public enum AnsiColor {
     PLANT_TEXT("P", "\u001B[32m\u001B[43m"),  // green on ocra background
     ANIMAL_TEXT("A", "\u001B[34m\u001B[43m"), // blue on ocra background
     INSECT_TEXT("I", "\u001B[35m\u001B[43m"), // magenta on ocra background
-    QUILL_TEXT("Q", "\u001B[47m\u001B[43m"),  // white on ocra background
-    INKWELL_TEXT("I", "\u001B[47m\u001B[43m"),// white on ocra background
-    MANUSCRIPT_TEXT("M", "\u001B[47m\u001B[43m"), // white on ocra background
+    QUILL_TEXT("Q", "\u001B[97m\u001B[43m"),  // white on ocra background
+    INKWELL_TEXT("K", "\u001B[97m\u001B[43m"),// white on ocra background
+    MANUSCRIPT_TEXT("M", "\u001B[97m\u001B[43m"), // white on ocra background
 
     // background colors
     PLANT_BACKGROUND(" ", "\u001B[42m"),  // green background
