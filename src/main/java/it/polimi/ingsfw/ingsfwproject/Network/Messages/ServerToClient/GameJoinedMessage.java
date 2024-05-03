@@ -1,7 +1,7 @@
 package it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient;
 
-import it.polimi.ingsfw.ingsfwproject.Network2.Messages.Message;
-import it.polimi.ingsfw.ingsfwproject.Network2.Messages.MessageType;
+import it.polimi.ingsfw.ingsfwproject.Network.Messages.Message;
+import it.polimi.ingsfw.ingsfwproject.Network.Messages.MessageType;
 import it.polimi.ingsfw.ingsfwproject.ProvisoryNetwork.Server.GameInterface;
 
 import java.io.Serializable;
@@ -13,13 +13,13 @@ public class GameJoinedMessage extends Message implements Serializable {
     GameInterface handler = null;
 
     //QUANDO LO RICEVO DA CLIENT CREO IL CLIENT MODEL E SETTO STATE GAME A WAITING
-    public GameJoinedMessage(int gameId) {
-        super(MessageType.GAME_JOINED);
+    public GameJoinedMessage(int clientID, int gameId) {
+        super(clientID, MessageType.GAME_JOINED);
         this.gameId=gameId;
     }
 
-    public GameJoinedMessage(int gameId, GameInterface RMIHandler){
-        super(MessageType.GAME_JOINED);
+    public GameJoinedMessage(int clientID, int gameId, GameInterface RMIHandler){
+        super(clientID, MessageType.GAME_JOINED);
         this.gameId = gameId;
         this.handler = RMIHandler;
     }

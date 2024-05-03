@@ -1,7 +1,7 @@
 package it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient;
 
-import it.polimi.ingsfw.ingsfwproject.Network2.Messages.Message;
-import it.polimi.ingsfw.ingsfwproject.Network2.Messages.MessageType;
+import it.polimi.ingsfw.ingsfwproject.Network.Messages.Message;
+import it.polimi.ingsfw.ingsfwproject.Network.Messages.MessageType;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -11,8 +11,8 @@ import java.util.Map;
 public class SendGameList extends Message implements Serializable {
     private HashMap<Integer, Integer> gameList;
 
-    public SendGameList(HashMap<Integer, Integer> gameList) {
-        super(MessageType.SEND_GAME_LIST);
+    public SendGameList(int clientID, HashMap<Integer, Integer> gameList) {
+        super(clientID,MessageType.SEND_GAME_LIST);
         this.gameList = gameList;
     }
 

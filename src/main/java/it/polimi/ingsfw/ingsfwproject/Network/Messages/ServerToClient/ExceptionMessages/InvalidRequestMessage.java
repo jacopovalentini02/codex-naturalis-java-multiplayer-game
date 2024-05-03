@@ -1,11 +1,11 @@
 package it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.ExceptionMessages;
 
-import it.polimi.ingsfw.ingsfwproject.Network2.Messages.Message;
-import it.polimi.ingsfw.ingsfwproject.Network2.Messages.MessageType;
+import it.polimi.ingsfw.ingsfwproject.Network.Messages.Message;
+import it.polimi.ingsfw.ingsfwproject.Network.Messages.MessageType;
 
 public class InvalidRequestMessage extends Message {
 
-    public InvalidRequestMessage() {
-        super(MessageType.INVALID_REQUEST);
+    public InvalidRequestMessage(int clientID) {
+        super(clientID, MessageType.INVALID_REQUEST);
     }
 }

@@ -3,12 +3,12 @@ package it.polimi.ingsfw.ingsfwproject.Network.Messages;
 import java.io.Serializable;
 
 public abstract class Message implements Serializable {
-    //todo aggiungere clientID
     int clientID;
     private MessageType type;
 
-    public Message(MessageType messageType) {
+    public Message(int clientID, MessageType messageType) {
         this.type=messageType;
+        this.clientID=clientID;
     }
 
     public MessageType getType() {
