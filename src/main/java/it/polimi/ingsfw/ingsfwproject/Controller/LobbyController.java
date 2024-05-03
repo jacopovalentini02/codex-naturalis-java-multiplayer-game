@@ -59,6 +59,12 @@ public class LobbyController {
         }
     }
 
+    public GameController getGameController(int idGame){
+        synchronized (lobby) {
+            return lobby.getGameList().get(idGame).getController();
+        }
+    }
+
     public HashMap<Integer, Integer> getGameList(){
         HashMap<Integer, Integer> games = new HashMap<>();
 

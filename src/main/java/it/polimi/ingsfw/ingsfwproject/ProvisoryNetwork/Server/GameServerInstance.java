@@ -11,5 +11,11 @@ public class GameServerInstance {
     private ConcurrentLinkedQueue<Message> commandQueue;
     private ArrayList<Handler> connectionHandlers;
 
+    public GameServerInstance(GameController gc, Handler firstPlayerHandler){
+        this.gameController = gc;
+        this.connectionHandlers.add(firstPlayerHandler);
+        this.commandQueue = new ConcurrentLinkedQueue<>();
+    }
+
 
 }

@@ -72,7 +72,7 @@ public class GameClientHandler extends UnicastRemoteObject implements GameClient
                 try{
                     long timeSinceLastHeartBeat = System.currentTimeMillis() - lastHeartbeatReceived;
                     if (timeSinceLastHeartBeat > 15000){
-                        gameController.clientDisconnected();
+                        gameController .clientDisconnected();
                     }
                     Thread.sleep(3000);
                 } catch (InterruptedException e) {
