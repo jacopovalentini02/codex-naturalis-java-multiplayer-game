@@ -1,7 +1,6 @@
 package it.polimi.ingsfw.ingsfwproject.Network.Client;
 
-import it.polimi.ingsfw.ingsfwproject.Network2.GameClientModel;
-import it.polimi.ingsfw.ingsfwproject.Network2.Messages.Message;
+import it.polimi.ingsfw.ingsfwproject.Network.Messages.Message;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;

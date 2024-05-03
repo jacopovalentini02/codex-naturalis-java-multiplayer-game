@@ -131,7 +131,19 @@ public class VirtualView {
         this.player = player;
     }
 
-    public void prova(String prova){
-        System.out.println(prova);
+    public int getClientID() {
+        return clientID;
+    }
+
+    public ArrayList<Game> getAvaibleGames() {
+        return avaibleGames;
+    }
+
+    public void setClientID(int clientID) {
+        this.clientID = clientID;
+    }
+
+    public void setAvaibleGames(ArrayList<Game> avaibleGames) {
+        this.avaibleGames = avaibleGames;
     }
 }

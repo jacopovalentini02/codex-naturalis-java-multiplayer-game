@@ -1,6 +1,7 @@
 package it.polimi.ingsfw.ingsfwproject.Network.Messages;
 
 public enum MessageType {
+    FIRST_MESSSAGE,
     CREATE_GAME,
     GAME_JOINED,
     GET_GAME_LIST, //CLIENT ASKS FOR GAMES - SERVER

@@ -56,14 +56,14 @@ public class ClientApp {
                 System.out.println("Inserisci il numero di giocatori per questa partita, da 2 a 4: ");
                 int numOfPlayers = scanner.nextInt();
                 scanner.nextLine();
-                client.sendMessage(new CreateGameMessage(numOfPlayers, username));
+                //client.sendMessage(new CreateGameMessage(numOfPlayers, username));
             }else if(choice==2){
-                client.sendMessage(new GetGameList());
+                //client.sendMessage(new GetGameList());
                 //Server manda la list
                 //client socket fa la print dei game in corso
                 System.out.println("Inserisci ID del game a cui ti vuoi connettere");
                 int gameID = scanner.nextInt();
-                client.sendMessage(new JoinGameMessage(username, gameID));
+                //client.sendMessage(new JoinGameMessage(username, gameID));
 
             }
 

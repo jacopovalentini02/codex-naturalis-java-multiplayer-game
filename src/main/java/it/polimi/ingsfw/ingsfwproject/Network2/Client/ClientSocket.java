@@ -2,10 +2,10 @@ package it.polimi.ingsfw.ingsfwproject.Network2.Client;
 
 import it.polimi.ingsfw.ingsfwproject.Model.GameState;
 import it.polimi.ingsfw.ingsfwproject.Network.Client.Client;
-import it.polimi.ingsfw.ingsfwproject.Network2.Messages.*;
+import it.polimi.ingsfw.ingsfwproject.Network.Messages.*;
 import it.polimi.ingsfw.ingsfwproject.Network2.GameClientModel;
-import it.polimi.ingsfw.ingsfwproject.Network2.Messages.ServerToClient.GameJoinedMessage;
-import it.polimi.ingsfw.ingsfwproject.Network2.Messages.ServerToClient.SendGameList;
+import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.GameJoinedMessage;
+import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.SendGameList;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
