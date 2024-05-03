@@ -1,11 +1,7 @@
-package it.polimi.ingsfw.ingsfwproject.Network2.Client;
+package it.polimi.ingsfw.ingsfwproject.Network.Client;
 
-import it.polimi.ingsfw.ingsfwproject.Model.GameState;
-import it.polimi.ingsfw.ingsfwproject.Network.Client.Client;
-import it.polimi.ingsfw.ingsfwproject.Network2.Messages.*;
 import it.polimi.ingsfw.ingsfwproject.Network2.GameClientModel;
-import it.polimi.ingsfw.ingsfwproject.Network2.Messages.ServerToClient.GameJoinedMessage;
-import it.polimi.ingsfw.ingsfwproject.Network2.Messages.ServerToClient.SendGameList;
+import it.polimi.ingsfw.ingsfwproject.Network2.Messages.Message;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -15,14 +11,13 @@ import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class ClientSocket extends Client {
+public class SocketClient extends Client{
     private ObjectInputStream input;
     private ObjectOutputStream output;
     private Socket socket;
     private ExecutorService readExecutionQueue;
-    private GameClientModel model;
 
-    public ClientSocket(String nickname, String ip, int port){
+    public SocketClient(String nickname, String ip, int port){
         super(ip,port,nickname);
     }
 
@@ -34,7 +29,6 @@ public class ClientSocket extends Client {
         if (socket.isConnected()) {
             System.out.println("Connessione al server riuscita");
             this.readExecutionQueue = Executors.newSingleThreadExecutor();
-            this.model = new GameClientModel();
 
             // Inizializzazione dell'ObjectOutputStream e dell'ObjectInputStream
             this.output = new ObjectOutputStream(socket.getOutputStream());
@@ -83,7 +77,7 @@ public class ClientSocket extends Client {
                 while (!readExecutionQueue.isShutdown()) {
                     Message message = (Message) input.readObject();
                     System.out.println("Message type risposta dal server: "+ message.getType());
-                    handleMessageReceived(message);
+                    handleMessage(message);
                 }
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
@@ -96,25 +90,4 @@ public class ClientSocket extends Client {
         });
 
     }
-
-    public void handleMessageReceived(Message message){
-        switch (message.getType()){
-            case GAME_JOINED: //Create model, set state and gameId
-                this.model=new GameClientModel();
-                this.model.setState(GameState.WAITING_FOR_PLAYERS);
-                GameJoinedMessage mjoined=(GameJoinedMessage) message;
-                this.model.setGameID(mjoined.getGameId());
-                break;
-            case SEND_GAME_LIST: //game list received, print all the games
-                SendGameList m=(SendGameList) message;
-                m.printGameList();
-                break;
-
-        }
-    }
-
-
-
-
-
 }

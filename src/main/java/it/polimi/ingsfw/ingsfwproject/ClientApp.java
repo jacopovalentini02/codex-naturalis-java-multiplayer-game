@@ -1,6 +1,6 @@
 package it.polimi.ingsfw.ingsfwproject;
 
-import it.polimi.ingsfw.ingsfwproject.Network2.Client.Client;
+import it.polimi.ingsfw.ingsfwproject.Network.Client.Client;
 import it.polimi.ingsfw.ingsfwproject.Network2.Client.ClientSocket;
 import it.polimi.ingsfw.ingsfwproject.Network2.Messages.ClientToServer.CreateGameMessage;
 import it.polimi.ingsfw.ingsfwproject.Network2.Messages.ClientToServer.GetGameList;

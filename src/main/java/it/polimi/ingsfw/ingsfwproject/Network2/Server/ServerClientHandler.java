@@ -25,6 +25,9 @@ public class ServerClientHandler implements Runnable {
     private ObjectInputStream in;
     private ObjectOutputStream out;
 
+    //TODO passo il server dove ci sono i metodi per gestire la lobby - GameServerInstance (gamecontroller) dove chiamo i metodi per la partita
+
+
     //TODO Aggiungere heartbeat
 
     public ServerClientHandler(Socket socket, LobbyController lobbyController, GameManager manager) throws IOException {
@@ -69,11 +72,14 @@ public class ServerClientHandler implements Runnable {
     public void handleMessages(Message m) throws NotValidNumOfPlayerException, IOException, NickAlreadyTakenException, GameFullException, GameNotExistingException {
         switch (m.getType()){
             case GET_GAME_LIST:
-                sendMessage(new SendGameList(lobbyController.getGameList()));
+                sendMessage(new SendGameList(lobbyController.getGameList())); //TODO non mandio ma lo aggiungo alla lista
                 break;
 
             case CREATE_GAME:
                 CreateGameMessage message=(CreateGameMessage)m;
+                //aggiungo coda
+                //Server: chiama send message(game joined message)
+                //server.addToQueue -> server fa handler.sendMessage
                 int gameId=lobbyController.createGame(message.getNumPlayer(), message.getNickname());
                 sendMessage(new GameJoinedMessage(gameId));
                 break;
