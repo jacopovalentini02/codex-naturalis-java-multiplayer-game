@@ -8,23 +8,24 @@ abstract public class Handler {
     private Server server;
     private GameServerInstance gameServerInstance;
 
-    abstract void sendToClient(Message message);
+    abstract void sendMessage(Message message);
 
     //Messaggi ricevuti dal client
     void handleMessageIn(Message message){
         //
+
 
     }
 
     void handleMessageOut(Message message){
         if(message.getType()== MessageType.STARTER_CARD){
             if(message.getClientID()==clientID)
-                sendToClient(message);
+                sendMessage(message);
         }else{
-            sendToClient(message);
+            sendMessage(message);
         }
 
-        
+
 
     }
 

@@ -27,7 +27,7 @@ public class SocketHandler extends Handler implements Runnable{
         System.out.println("Server client handler inizializzato");
     }
 @Override
-    void sendToClient(Message message) {
+    void sendMessage(Message message) {
         try {
             out.writeObject(message);
             out.flush();

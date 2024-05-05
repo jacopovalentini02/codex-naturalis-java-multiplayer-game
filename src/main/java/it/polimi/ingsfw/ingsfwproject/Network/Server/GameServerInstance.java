@@ -26,7 +26,7 @@ public class GameServerInstance {
 
     public void sendUpdateToAll(Message message ){
         for (Handler handler : handlers.values()) {
-            handler.sendToClient(message);
+            handler.sendMessage(message);
         }
     }
 

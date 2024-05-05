@@ -4,7 +4,7 @@ import it.polimi.ingsfw.ingsfwproject.Network.Messages.Message;
 
 public class RMIHandler extends Handler{
     @Override
-    void sendToClient(Message message) {
+    void sendMessage(Message message) {
 
     }
 
