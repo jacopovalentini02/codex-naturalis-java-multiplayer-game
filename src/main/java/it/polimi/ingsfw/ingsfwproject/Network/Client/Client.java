@@ -2,11 +2,10 @@ package it.polimi.ingsfw.ingsfwproject.Network.Client;
 
 import it.polimi.ingsfw.ingsfwproject.Model.GameState;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.FirstMessage;
-import it.polimi.ingsfw.ingsfwproject.Network2.GameClientModel;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.Message;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.GameJoinedMessage;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.SendGameList;
-import it.polimi.ingsfw.ingsfwproject.Network.Client.VirtualView;
+import it.polimi.ingsfw.ingsfwproject.View.VirtualView;
 
 import java.io.IOException;
 
@@ -17,14 +16,12 @@ public abstract class Client {
     private int clientID;
     private VirtualView view;
 
+
     public Client(String ip, int port, String nickname) {
         this.ip = ip;
         this.port = port;
         this.nickname = nickname;
-
         this.view = new VirtualView();
-
-
     }
 
     public String getIp() {
@@ -52,7 +49,6 @@ public abstract class Client {
             case FIRST_MESSSAGE: //set clientID in Client e view
                 FirstMessage firstm=(FirstMessage) message;
                 this.clientID=firstm.getClientID();
-                this.view.setClientID(this.clientID);
             case GAME_JOINED: //set state and gameId
                 this.view.setState(GameState.WAITING_FOR_PLAYERS);
                 GameJoinedMessage mjoined=(GameJoinedMessage) message;
@@ -60,7 +56,7 @@ public abstract class Client {
                 break;
             case SEND_GAME_LIST: //game list received, set dei game nella view
                 SendGameList m=(SendGameList) message;
-                this.view.setAvaibleGames(m.getGameList());
+                //PASSARE A RECEIVE MESSAGE VIEW
                 break;
 
         }
