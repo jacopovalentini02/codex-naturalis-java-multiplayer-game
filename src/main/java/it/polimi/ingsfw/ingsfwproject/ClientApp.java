@@ -1,10 +1,10 @@
 package it.polimi.ingsfw.ingsfwproject;
 
 import it.polimi.ingsfw.ingsfwproject.Network.Client.Client;
-import it.polimi.ingsfw.ingsfwproject.Network2.Client.ClientSocket;
-import it.polimi.ingsfw.ingsfwproject.Network2.Messages.ClientToServer.CreateGameMessage;
-import it.polimi.ingsfw.ingsfwproject.Network2.Messages.ClientToServer.GetGameList;
-import it.polimi.ingsfw.ingsfwproject.Network2.Messages.ClientToServer.JoinGameMessage;
+import it.polimi.ingsfw.ingsfwproject.Network.Client.SocketClient;
+import it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServer.CreateGameMessage;
+import it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServer.GetGameList;
+import it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServer.JoinGameMessage;
 
 import java.io.IOException;
 import java.util.Scanner;
@@ -28,7 +28,7 @@ public class ClientApp {
             }while(choice<1 || choice>2);
 
             if(choice==1)
-                client = new ClientSocket(username, "127.0.0.1",1337);
+                client = new SocketClient("127.0.0.1",1337);
             //TODO CREO CLIENT RMI
 
 
