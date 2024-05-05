@@ -18,4 +18,8 @@ public abstract class Message implements Serializable {
     public void setType(MessageType type) {
         this.type = type;
     }
+
+    public int getClientID() {
+        return clientID;
+    }
 }

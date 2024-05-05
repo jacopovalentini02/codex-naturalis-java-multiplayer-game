@@ -4,6 +4,7 @@ import it.polimi.ingsfw.ingsfwproject.Exceptions.CardNotInHandException;
 import it.polimi.ingsfw.ingsfwproject.Exceptions.DeckEmptyException;
 import it.polimi.ingsfw.ingsfwproject.Exceptions.NotEnoughResourcesException;
 import it.polimi.ingsfw.ingsfwproject.Exceptions.PositionNotAvailableException;
+import it.polimi.ingsfw.ingsfwproject.Network.Server.GameServerInstance;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
@@ -17,8 +18,9 @@ class GameTest {
     @Test
     //Check the size of each deck
     public void testSetUpCards() throws RemoteException {
-        Player player1=new Player("user1");
-        Game game=new Game(new GameManager(), 1,2,player1);
+        GameServerInstance gameServerInstance=new GameServerInstance();
+        Player player1=new Player("user1", gameServerInstance);
+        Game game=new Game(gameServerInstance,new GameManager(), 1,2,player1);
         game.setUpCards();
 
         assertEquals(40, game.getResourceDeck().getCardList().size());
@@ -31,8 +33,9 @@ class GameTest {
     @Test
     //Check resource cards' deck attributes are set up correctly
     public void testSetUpResourceDeck() throws RemoteException {
-        Player player1=new Player("user1");
-        Game game=new Game(new GameManager(),1,2,player1);
+        GameServerInstance gameServerInstance=new GameServerInstance();
+        Player player1=new Player("user1", gameServerInstance);
+        Game game=new Game(gameServerInstance,new GameManager(), 1,2,player1);
         game.setUpCards();
 
         ResourceCard addedCard = (ResourceCard) game.getResourceDeck().getCardList().getFirst();
@@ -49,8 +52,9 @@ class GameTest {
     @Test
     //Check gold cards' deck attributes are set up correctly
     public void testSetUpGoldDeck() throws RemoteException {
-        Player player1=new Player("user1");
-        Game game=new Game(new GameManager(),1,2,player1);
+        GameServerInstance gameServerInstance=new GameServerInstance();
+        Player player1=new Player("user1", gameServerInstance);
+        Game game=new Game(gameServerInstance,new GameManager(), 1,2,player1);
         game.setUpCards();
 
         GoldCard addedCard=  (GoldCard) game.getGoldDeck().getCardList().getFirst();
@@ -74,8 +78,9 @@ class GameTest {
     @Test
     //Check starter's deck attributes are set up correctly
     public void testSetUpStarterDeck() throws RemoteException {
-        Player player1=new Player("user1");
-        Game game=new Game(new GameManager(),1,2,player1);
+        GameServerInstance gameServerInstance=new GameServerInstance();
+        Player player1=new Player("user1", gameServerInstance);
+        Game game=new Game(gameServerInstance,new GameManager(), 1,2,player1);
         game.setUpCards();
 
         StarterCard addedCard=  (StarterCard) game.getStarterDeck().getCardList().getFirst();
@@ -100,8 +105,9 @@ class GameTest {
     @Test
     //Check objective cards' deck attributes are set up correctly
     public void testSetUpStructObjectiveDeck() throws RemoteException {
-        Player player1=new Player("user1");
-        Game game=new Game(new GameManager(), 1,2,player1);
+        GameServerInstance gameServerInstance=new GameServerInstance();
+        Player player1=new Player("user1", gameServerInstance);
+        Game game=new Game(gameServerInstance,new GameManager(), 1,2,player1);
         game.setUpCards();
 
         StructuredObjectiveCard addedCard=  (StructuredObjectiveCard) game.getObjectiveDeck().getCardList().get(0);
@@ -120,8 +126,9 @@ class GameTest {
     @Test
     //Check objective cards' deck attributes are set up correctly
     public void  testSetUpNotStructObjectiveDeck() throws RemoteException {
-        Player player1=new Player("user1");
-        Game game=new Game(new GameManager(),1,2,player1);
+        GameServerInstance gameServerInstance=new GameServerInstance();
+        Player player1=new Player("user1", gameServerInstance);
+        Game game=new Game(gameServerInstance,new GameManager(), 1,2,player1);
         game.setUpCards();
 
         NotStructuredObjectiveCard addedCard=  (NotStructuredObjectiveCard) game.getObjectiveDeck().getCardList().get(8);
@@ -138,10 +145,12 @@ class GameTest {
     @Test
     //Check if the next turn function works correctly
     public void testNextTurn() throws RemoteException {
-        Player player1 = new Player("user1");
-        Player player2 = new Player("user2");
+        GameServerInstance gameServerInstance=new GameServerInstance();
+        Player player1=new Player("user1", gameServerInstance);
+        Game game=new Game(gameServerInstance,new GameManager(), 1,2,player1);
+        Player player2 = new Player("user2", gameServerInstance);
 
-        Game game=new Game(new GameManager(),1,2, player1);
+
         game.addPlayer(player2);
         game.setCurrentPlayer(player1);
 
@@ -178,11 +187,12 @@ class GameTest {
     @Test
     //Check if the player is added correctly and the game state change if the last player join the game
     public void testAddPlayer() throws RemoteException {
-        Player player1 = new Player("user1");
-        Player player2 = new Player("user2");
-        Player player3 = new Player("user3");
+        GameServerInstance gameServerInstance=new GameServerInstance();
+        Player player1 = new Player("user1", gameServerInstance);
+        Player player2 = new Player("user2", gameServerInstance);
+        Player player3 = new Player("user3", gameServerInstance);
 
-        Game game=new Game(new GameManager(),1,3, player1);
+        Game game=new Game(gameServerInstance,new GameManager(),1,3, player1);
         game.addPlayer(player2);
 
         //Player 2 should be in the list of player and GameState should still be waiting
@@ -205,11 +215,12 @@ class GameTest {
     @Test
     //Check the new score is updated and lastTurn is called if the score is >=20
     public void testUpdatePoints() throws RemoteException, DeckEmptyException, PositionNotAvailableException, NotEnoughResourcesException, CardNotInHandException {
-        Player player1 = new Player("user1");
-        Player player2 = new Player("user2");
-        Player player3 = new Player("user3");
+        GameServerInstance gameServerInstance=new GameServerInstance();
+        Player player1 = new Player("user1", gameServerInstance);
+        Player player2 = new Player("user2", gameServerInstance);
+        Player player3 = new Player("user3", gameServerInstance);
 
-        Game game=new Game(new GameManager(),1,3, player1);
+        Game game=new Game(gameServerInstance,new GameManager(),1,3, player1);
         game.addPlayer(player2);
         game.addPlayer(player3);
 
@@ -229,11 +240,14 @@ class GameTest {
 
     @Test
     void testSetupField() throws DeckEmptyException, RemoteException {
-        Player player1 = new Player("user1");
-        Game game = new Game(new GameManager(), 1, 4, player1);
-        Player player2 = new Player("user2");
-        Player player3 = new Player("user3");
-        Player player4 = new Player("user4");
+        GameServerInstance gameServerInstance=new GameServerInstance();
+        Player player1 = new Player("user1", gameServerInstance);
+        Player player2 = new Player("user2", gameServerInstance);
+        Player player3 = new Player("user3", gameServerInstance);
+        Player player4 = new Player("user4", gameServerInstance);
+
+
+        Game game=new Game(gameServerInstance,new GameManager(),1,3, player1);
 
         game.addPlayer(player2);
         game.addPlayer(player3);
@@ -252,11 +266,14 @@ class GameTest {
 
     @Test
     void setupHandsAndObjectives() throws RemoteException, DeckEmptyException {
-        Player player1 = new Player("user1");
-        Game game = new Game(new GameManager(), 1, 4, player1);
-        Player player2 = new Player("user2");
-        Player player3 = new Player("user3");
-        Player player4 = new Player("user4");
+        GameServerInstance gameServerInstance=new GameServerInstance();
+        Player player1 = new Player("user1", gameServerInstance);
+        Player player2 = new Player("user2", gameServerInstance);
+        Player player3 = new Player("user3", gameServerInstance);
+        Player player4 = new Player("user4", gameServerInstance);
+
+
+        Game game=new Game(gameServerInstance,new GameManager(),1,3, player1);
         game.addPlayer(player2);
         game.addPlayer(player3);
         game.addPlayer(player4);
@@ -280,11 +297,12 @@ class GameTest {
 
     @Test
     void randomizeFirstPlayer() throws RemoteException {
-        Player player1 = new Player("user1");
-        Game game = new Game(new GameManager(), 1, 4, player1);
-        Player player2 = new Player("user2");
-        Player player3 = new Player("user3");
-        Player player4 = new Player("user4");
+        GameServerInstance gameServerInstance=new GameServerInstance();
+        Player player1 = new Player("user1", gameServerInstance);
+        Game game = new Game(gameServerInstance,new GameManager(), 1, 4, player1);
+        Player player2 = new Player("user2", gameServerInstance);
+        Player player3 = new Player("user3", gameServerInstance);
+        Player player4 = new Player("user4", gameServerInstance);
         game.addPlayer(player2);
         game.addPlayer(player3);
         game.addPlayer(player4);

@@ -7,7 +7,7 @@ import it.polimi.ingsfw.ingsfwproject.Exceptions.GameNotExistingException;
 import it.polimi.ingsfw.ingsfwproject.Exceptions.NickAlreadyTakenException;
 import it.polimi.ingsfw.ingsfwproject.Exceptions.NotValidNumOfPlayerException;
 import it.polimi.ingsfw.ingsfwproject.Model.GameManager;
-import it.polimi.ingsfw.ingsfwproject.Network2.Messages.Message;
+import it.polimi.ingsfw.ingsfwproject.Network.Messages.Message;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -42,7 +42,7 @@ public class SocketHandler extends Handler implements Runnable{
         try {
             while (!Thread.currentThread().isInterrupted()) {
                 Message m = (Message) in.readObject();
-                handleMessage(m);
+                handleMessageIn(m);
             }
             in.close();
             out.close();

@@ -10,7 +10,7 @@ public class Server {
 
     //todo che tipo di coda scegliere. Candidata: ConcurredLinkedQueue oppure array list che va sincronizzata
 
-    private HashMap<Integer, Handler> handlers;
+    private HashMap<Integer, Handler> handlers; //clientID-handler
 
     private ArrayList<GameServerInstance> games;
 

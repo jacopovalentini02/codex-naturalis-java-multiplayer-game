@@ -1,5 +1,6 @@
 package it.polimi.ingsfw.ingsfwproject.Model;
 
+import it.polimi.ingsfw.ingsfwproject.Network.Server.GameServerInstance;
 import org.junit.jupiter.api.Test;
 
 import java.rmi.RemoteException;
@@ -12,11 +13,12 @@ class NotStructuredObjectiveCardTest {
 
     @Test
     void verifyObjective() throws RemoteException {
+        GameServerInstance gameServerInstance=new GameServerInstance();
 
-        Player player1 = new Player("player1");
+        Player player1 = new Player("player1", gameServerInstance);
         PlayerGround ground = player1.getGround();
         GameManager manager = new GameManager();
-        Game game = new Game(manager, 1, 4, player1);
+        Game game = new Game(gameServerInstance,manager, 1, 4, player1);
         game.setUpCards();
 
         ground.setContentCount(Content.FUNGI_KINGDOM, 5);

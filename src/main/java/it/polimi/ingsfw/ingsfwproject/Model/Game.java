@@ -3,6 +3,11 @@ package it.polimi.ingsfw.ingsfwproject.Model;
 import it.polimi.ingsfw.ingsfwproject.Controller.GameController;
 import it.polimi.ingsfw.ingsfwproject.Exceptions.DeckEmptyException;
 import it.polimi.ingsfw.ingsfwproject.Exceptions.*;
+import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.CurrentPlayerMessage;
+import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.DispPlayCardMessage;
+import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.GoldDeckMessage;
+import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.SendStarterCard;
+import it.polimi.ingsfw.ingsfwproject.Network.Server.GameServerInstance;
 import it.polimi.ingsfw.ingsfwproject.Network2.ClientCallbackInterface;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -47,6 +52,10 @@ public class Game {
 
     int colorChosen;
 
+    private final GameServerInstance gameServerInstance;
+
+    int objectiveCardsChosen;
+
     private HashMap<String, ClientCallbackInterface> listeners = new HashMap<>();
 
     public int getObjectiveCardsChosen() {
@@ -57,7 +66,7 @@ public class Game {
         this.objectiveCardsChosen = objectiveCardsChosen;
     }
 
-    int objectiveCardsChosen;
+
 
     public boolean getifCurrentPlayerhasPlayed() {return currentPlayerhasPlayed;}
     public void setCurrentPlayerhasPlayed(boolean bool){
@@ -65,7 +74,7 @@ public class Game {
     }
 
 
-    public Game(GameManager gameManager, int idGame, int numOfPlayers, Player player1) {
+    public Game(GameServerInstance gameServerInstance, GameManager gameManager, int idGame, int numOfPlayers, Player player1) {
         this.idGame = idGame;
         this.numOfPlayers = numOfPlayers;
         this.state=GameState.WAITING_FOR_PLAYERS;
@@ -89,6 +98,7 @@ public class Game {
         lastRoundsplayed = 0;
         objectiveCardsChosen = 0;
         colorChosen = 0;
+        this.gameServerInstance=gameServerInstance;
         setCurrentPlayer(player1);
     }
 
@@ -213,9 +223,36 @@ public class Game {
         displayedPlayableCard.add((PlayableCard) goldDeck.draw());
         //Each player randomly takes one Starter card and choose the face to be played
         starterDeck.shuffle();
+
+
+
+        for(Player p: listOfPlayers){
+            int clientID=gameServerInstance.getClientID(p);
+            //Send starter card
+            StarterCard starter = (StarterCard) starterDeck.draw();
+            SendStarterCard starterMessage=new SendStarterCard(clientID, starter);
+            gameServerInstance.sendUpdateToAll(starterMessage);
+            //Send gold/resource deck updated
+            GoldDeckMessage goldDeckMsg=new GoldDeckMessage(clientID, this.goldDeck);
+            gameServerInstance.sendUpdateToAll(goldDeckMsg);
+            //Send displayedPlayableCard updated
+            DispPlayCardMessage dispPlayCardMsg=new DispPlayCardMessage(clientID, (ArrayList<PlayableCard>) this.displayedPlayableCard);
+            gameServerInstance.sendUpdateToAll(dispPlayCardMsg);
+            //Send currentPlayer
+            CurrentPlayerMessage currentPlayerMsg=new CurrentPlayerMessage(clientID, this.currentPlayer);
+            gameServerInstance.sendUpdateToAll(currentPlayerMsg);
+        }
+
+
+
+
+
+        //TODO DA CANCELLARE
         //cycling on every player the beginning operations
         for (Player p : listOfPlayers) {
             StarterCard starter = (StarterCard) starterDeck.draw();
+
+
             p.getHandCard().add(starter);
             try {
                 listeners.get(p.getUsername()).updateHand(p.getHandCard()); //updating clients' hands
@@ -534,6 +571,10 @@ public void randomizeFirstPlayer(){
             } catch (RemoteException ignored) {}
         }
         this.endGame();
+    }
+
+    public GameServerInstance getGameServerInstance() {
+        return gameServerInstance;
     }
 }
 

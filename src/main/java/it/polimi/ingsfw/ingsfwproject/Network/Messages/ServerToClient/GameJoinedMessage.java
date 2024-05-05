@@ -8,7 +8,7 @@ import java.io.Serializable;
 
 //Server-Client. Client need to create its client model and set game state to WAITING
 public class GameJoinedMessage extends Message implements Serializable {
-    int gameId;
+    private int gameId;
 
     GameInterface handler = null;
 

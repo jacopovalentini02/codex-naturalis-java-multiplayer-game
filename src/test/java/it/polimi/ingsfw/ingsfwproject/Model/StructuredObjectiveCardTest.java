@@ -1,6 +1,7 @@
 package it.polimi.ingsfw.ingsfwproject.Model;
 
 import it.polimi.ingsfw.ingsfwproject.Exceptions.DeckEmptyException;
+import it.polimi.ingsfw.ingsfwproject.Network.Server.GameServerInstance;
 import org.junit.jupiter.api.Test;
 
 import java.rmi.RemoteException;
@@ -15,11 +16,12 @@ class StructuredObjectiveCardTest {
 
     @Test
     void verifyRightDiagonalObjective() throws RemoteException, DeckEmptyException {
-        Player player1 = new Player("player1");
+        GameServerInstance gameServerInstance=new GameServerInstance();
+        Player player1 = new Player("player1", gameServerInstance);
         PlayerGround ground = player1.getGround();
         Map<Coordinate, Face> grid = ground.getGrid();
         GameManager manager = new GameManager();
-        Game game = new Game(manager, 1, 4, player1);
+        Game game = new Game(gameServerInstance,manager, 1, 4, player1);
         game.setUpCards();
         Deck resourceDeck = game.getResourceDeck();
         Deck goldDeck = game.getGoldDeck();
@@ -99,11 +101,12 @@ class StructuredObjectiveCardTest {
 
     @Test
     void verifyLeftDiagonalObjective() throws RemoteException, DeckEmptyException{
-        Player player1 = new Player("player1");
+        GameServerInstance gameServerInstance=new GameServerInstance();
+        Player player1 = new Player("player1", gameServerInstance);
         PlayerGround ground = player1.getGround();
         Map<Coordinate, Face> grid = ground.getGrid();
         GameManager manager = new GameManager();
-        Game game = new Game(manager, 1, 4, player1);
+        Game game = new Game(gameServerInstance,manager, 1, 4, player1);
         game.setUpCards();
         Deck resourceDeck = game.getResourceDeck();
         Deck goldDeck = game.getGoldDeck();
@@ -178,11 +181,12 @@ class StructuredObjectiveCardTest {
 
     @Test
     void verifyDoubleStructureObjective() throws RemoteException, DeckEmptyException{
-        Player player1 = new Player("player1");
+        GameServerInstance gameServerInstance=new GameServerInstance();
+        Player player1 = new Player("player1", gameServerInstance);
         PlayerGround ground = player1.getGround();
         Map<Coordinate, Face> grid = ground.getGrid();
         GameManager manager = new GameManager();
-        Game game = new Game(manager, 1, 4, player1);
+        Game game = new Game(gameServerInstance,manager, 1, 4, player1);
         game.setUpCards();
         Deck resourceDeck = game.getResourceDeck();
         Deck goldDeck = game.getGoldDeck();

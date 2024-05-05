@@ -6,6 +6,7 @@ import it.polimi.ingsfw.ingsfwproject.Exceptions.DeckEmptyException;
 import it.polimi.ingsfw.ingsfwproject.Model.*;
 import it.polimi.ingsfw.ingsfwproject.Model.GameManager;
 import it.polimi.ingsfw.ingsfwproject.Model.Player;
+import it.polimi.ingsfw.ingsfwproject.Network.Server.GameServerInstance;
 import it.polimi.ingsfw.ingsfwproject.Network2.ClientCallback;
 import org.junit.jupiter.api.Test;
 
@@ -17,8 +18,9 @@ class CliTest {
 
     @Test
     void testPrintFacePlayed() throws DeckEmptyException, RemoteException {
-        Player player1=new Player("user1");
-        Game game=new Game(new GameManager(),1,2,player1);
+        GameServerInstance gameServerInstance=new GameServerInstance();
+        Player player1=new Player("user1", gameServerInstance);
+        Game game=new Game(gameServerInstance,new GameManager(),1,2,player1);
         ClientCallback clientCallback = new ClientCallback();
         game.getController().addClient("user1", clientCallback);
         game.setupField();
@@ -44,8 +46,9 @@ class CliTest {
 
     @Test
     void testPrintPlayerHand() throws RemoteException, DeckEmptyException {
-        Player player1=new Player("user1");
-        Game game=new Game(new GameManager(),1,2,player1);
+        GameServerInstance gameServerInstance=new GameServerInstance();
+        Player player1=new Player("user1", gameServerInstance);
+        Game game=new Game(gameServerInstance,new GameManager(),1,2,player1);
         ClientCallback clientCallback = new ClientCallback();
         game.getController().addClient("user1", clientCallback);
         game.setupField();

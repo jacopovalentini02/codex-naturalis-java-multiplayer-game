@@ -1,6 +1,7 @@
 package it.polimi.ingsfw.ingsfwproject.Model;
 
 import it.polimi.ingsfw.ingsfwproject.Exceptions.DeckEmptyException;
+import it.polimi.ingsfw.ingsfwproject.Network.Server.GameServerInstance;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -19,7 +20,8 @@ class PlayerTest {
         ResourceCard card1 = new ResourceCard(front,backFace,1);
         deck.addCard(card1);
 
-        Player player=new Player("player1");
+        GameServerInstance gameServerInstance=new GameServerInstance();
+        Player player=new Player("player1", gameServerInstance);
         player.draw(deck);
 
         //Check if the card was added to the player's Hand
@@ -30,7 +32,9 @@ class PlayerTest {
     @Test
     //Check if the card picked from the displayed card is in the player's hand
     void TestPick() {
-        Player player=new Player("player1");
+        GameServerInstance gameServerInstance=new GameServerInstance();
+
+        Player player=new Player("player1", gameServerInstance);
         Content[] emptyCorners = {Content.valueOf("EMPTY"),Content.valueOf("EMPTY"),Content.valueOf("EMPTY"),Content.valueOf("EMPTY")};
         Content[] corner = { Content.FUNGI_KINGDOM, Content.EMPTY, Content.FUNGI_KINGDOM, Content.HIDDEN };
         NormalBack backFace=new NormalBack(1, emptyCorners, Content.FUNGI_KINGDOM);
@@ -45,7 +49,9 @@ class PlayerTest {
     @Test
     void TestPlayCard() throws DeckEmptyException {
         Deck deck = new Deck();
-        Player player=new Player("player1");
+        GameServerInstance gameServerInstance=new GameServerInstance();
+
+        Player player=new Player("player1", gameServerInstance);
 
         Content[] emptyCorners = {Content.valueOf("EMPTY"),Content.valueOf("EMPTY"),Content.valueOf("EMPTY"),Content.valueOf("EMPTY")};
         //Create and add a card to the deck

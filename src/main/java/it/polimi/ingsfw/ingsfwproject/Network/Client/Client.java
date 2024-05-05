@@ -1,10 +1,8 @@
 package it.polimi.ingsfw.ingsfwproject.Network.Client;
 
 import it.polimi.ingsfw.ingsfwproject.Model.GameState;
-import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.FirstMessage;
+import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.*;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.Message;
-import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.GameJoinedMessage;
-import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.SendGameList;
 import it.polimi.ingsfw.ingsfwproject.View.VirtualView;
 
 import java.io.IOException;
@@ -51,8 +49,8 @@ public abstract class Client {
     public void handleMessage(Message message){
         switch (message.getType()){
             case FIRST_MESSSAGE: //set clientID in Client e view
-                FirstMessage firstm=(FirstMessage) message;
-                this.clientID=firstm.getClientID();
+                FirstMessage firstMsg=(FirstMessage) message;
+                this.clientID=firstMsg.getClientID();
             case GAME_JOINED: //set state and gameId
                 this.view.setState(GameState.WAITING_FOR_PLAYERS);
                 GameJoinedMessage mjoined=(GameJoinedMessage) message;
@@ -62,6 +60,27 @@ public abstract class Client {
                 SendGameList m=(SendGameList) message;
                 //PASSARE A RECEIVE MESSAGE VIEW
                 break;
+            case STARTER_CARD:
+                SendStarterCard starterMsg=(SendStarterCard) message;
+                this.view.setState(GameState.CHOOSING_STARTER_CARDS); //Change state
+                this.view.getHandCards().add(starterMsg.getStarterCard()); //Add starter card to hand
+                break;
+            case GOLD_DECK:
+                GoldDeckMessage goldMsg=(GoldDeckMessage) message;
+                this.view.setGoldDeck(goldMsg.getGoldDeck());
+                break;
+            case RESOURCE_DECK:
+                ResourceDeckMessage resourceMsg=(ResourceDeckMessage) message;
+                this.view.setGoldDeck(resourceMsg.getResourceDeck());
+            case DISPLAYED_PLAYABLE_CARDS:
+                DispPlayCardMessage displayedCardMsg=(DispPlayCardMessage) message;
+                this.view.setDisplayedCards(displayedCardMsg.getDisplayedPlayableCard());
+                break;
+            case CURRENT_PLAYER:
+                CurrentPlayerMessage currentPlayerMsg=(CurrentPlayerMessage) message;
+                this.view.setCurrentPlayer(currentPlayerMsg.getCurrentPlayer());
+                break;
+
 
         }
 

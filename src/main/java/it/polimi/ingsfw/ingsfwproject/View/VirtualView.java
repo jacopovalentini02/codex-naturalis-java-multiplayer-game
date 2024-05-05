@@ -20,6 +20,7 @@ public class VirtualView {
     private PlayerColor color;
     private Map<String, Integer> scores;
     private GameState state;
+    private Player currentPlayer;
     private List<ObjectiveCard> displayedObjectiveCards;
     private boolean currentPlayerhasPlayed;
     public HashMap<Content, Integer> getResources() {
@@ -139,5 +140,21 @@ public class VirtualView {
 
     public void setAvaibleGames(ArrayList<Game> avaibleGames) {
         this.avaibleGames = avaibleGames;
+    }
+
+    public Player getCurrentPlayer() {
+        return currentPlayer;
+    }
+
+    public boolean isCurrentPlayerhasPlayed() {
+        return currentPlayerhasPlayed;
+    }
+
+    public void setCurrentPlayer(Player currentPlayer) {
+        this.currentPlayer = currentPlayer;
+    }
+
+    public void setCurrentPlayerhasPlayed(boolean currentPlayerhasPlayed) {
+        this.currentPlayerhasPlayed = currentPlayerhasPlayed;
     }
 }

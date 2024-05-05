@@ -1,4 +1,6 @@
 package it.polimi.ingsfw.ingsfwproject.Model;
+import it.polimi.ingsfw.ingsfwproject.Network.Server.GameServerInstance;
+
 import java.util.*;
 
 public class GameManager {
@@ -11,7 +13,9 @@ public class GameManager {
     }
 
     public int createGame(int numOfPlayers, String username) {
-        Game newGame = new Game(this, firstAvailableGameID, numOfPlayers, new Player(username));
+        //todo cambio e aggiungo server instance
+        GameServerInstance gameServerInstance=new GameServerInstance();
+        Game newGame = new Game(gameServerInstance,this, firstAvailableGameID, numOfPlayers, new Player(username,gameServerInstance));
         gameList.put(firstAvailableGameID, newGame);
         int gameID = firstAvailableGameID;
         firstAvailableGameID++;
@@ -20,8 +24,9 @@ public class GameManager {
 
     public void joinGame(String nick, int idGame){
         Game gameToJoin = gameList.get(idGame);
+        GameServerInstance gameServerInstance = gameToJoin.getGameServerInstance();
 
-        Player newPlayer = new Player(nick);
+        Player newPlayer = new Player(nick, gameServerInstance);
         gameToJoin.addPlayer(newPlayer);
     }
 
