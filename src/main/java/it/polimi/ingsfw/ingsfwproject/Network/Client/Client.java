@@ -12,15 +12,14 @@ import java.io.IOException;
 public abstract class Client {
     private String ip; //Server IP address
     private int port; //Server port
-    private final String nickname;
+    private String nickname;
     private int clientID;
     private VirtualView view;
 
 
-    public Client(String ip, int port, String nickname) {
+    public Client(String ip, int port) {
         this.ip = ip;
         this.port = port;
-        this.nickname = nickname;
         this.view = new VirtualView();
     }
 
@@ -34,6 +33,11 @@ public abstract class Client {
 
     public String getNickname() {
         return nickname;
+    }
+
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
     }
 
     public abstract void startConnection() throws Exception;

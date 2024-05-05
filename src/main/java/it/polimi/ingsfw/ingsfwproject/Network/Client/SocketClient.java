@@ -16,8 +16,8 @@ public class SocketClient extends Client{
     private Socket socket;
     private ExecutorService readExecutionQueue;
 
-    public SocketClient(String nickname, String ip, int port){
-        super(ip,port,nickname);
+    public SocketClient(String ip, int port){
+        super(ip,port);
     }
 
     @Override

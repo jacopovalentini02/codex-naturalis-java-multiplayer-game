@@ -6,8 +6,8 @@ import java.io.IOException;
 
 public class RMIClient extends Client{
 
-    public RMIClient(String ip, int port, String nickname) {
-        super(ip, port, nickname);
+    public RMIClient(String ip, int port) {
+        super(ip, port);
     }
 
     @Override
