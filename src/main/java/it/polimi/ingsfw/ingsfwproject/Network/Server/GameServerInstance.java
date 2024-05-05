@@ -4,6 +4,7 @@ import it.polimi.ingsfw.ingsfwproject.Controller.GameController;
 import it.polimi.ingsfw.ingsfwproject.Model.Player;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.Message;
 
+import java.rmi.RemoteException;
 import java.util.HashMap;
 
 public class GameServerInstance {
@@ -26,7 +27,12 @@ public class GameServerInstance {
 
     public void sendUpdateToAll(Message message ){
         for (Handler handler : handlers.values()) {
-            handler.sendMessage(message);
+            try {
+                handler.handleMessageOut(message);
+            } catch (RemoteException e){
+                System.out.println("RemoteException occoured");
+            }
+
         }
     }
 

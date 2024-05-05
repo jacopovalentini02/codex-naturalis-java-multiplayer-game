@@ -44,7 +44,6 @@ public abstract class Client {
 
     public abstract void disconnect() throws Exception;
 
-    public abstract void receiveMessage() throws IOException, ClassNotFoundException;
 
     public void handleMessage(Message message){
         switch (message.getType()){

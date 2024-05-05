@@ -25,8 +25,7 @@ public class RMIClient extends Client{
 
     }
 
-    @Override
-    public void receiveMessage() throws IOException, ClassNotFoundException {
-
+    public void receiveMessage(Message m) throws IOException, ClassNotFoundException {
+        handleMessage(m);
     }
 }

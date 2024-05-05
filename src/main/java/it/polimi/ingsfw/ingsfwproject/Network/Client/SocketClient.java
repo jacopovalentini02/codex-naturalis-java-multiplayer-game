@@ -69,7 +69,7 @@ public class SocketClient extends Client{
         }
     }
 
-    @Override
+
     public void receiveMessage() throws IOException, ClassNotFoundException {
         readExecutionQueue.execute(() -> {
             try {

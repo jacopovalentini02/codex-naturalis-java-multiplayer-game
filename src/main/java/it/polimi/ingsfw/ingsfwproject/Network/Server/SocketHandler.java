@@ -14,7 +14,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-public class SocketHandler extends Handler implements Runnable{
+public class SocketHandler extends AbstractHandler implements Runnable{
     private Socket socket;
     private ObjectInputStream in;
     private ObjectOutputStream out;
@@ -27,7 +27,7 @@ public class SocketHandler extends Handler implements Runnable{
         System.out.println("Server client handler inizializzato");
     }
 @Override
-    void sendMessage(Message message) {
+    public void sendMessage(Message message) {
         try {
             out.writeObject(message);
             out.flush();

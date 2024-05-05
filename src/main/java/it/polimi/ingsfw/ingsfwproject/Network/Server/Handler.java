@@ -1,34 +1,14 @@
 package it.polimi.ingsfw.ingsfwproject.Network.Server;
 
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.Message;
-import it.polimi.ingsfw.ingsfwproject.Network.Messages.MessageType;
 
-abstract public class Handler {
-    private int clientID;
-    private Server server;
-    private GameServerInstance gameServerInstance;
+import java.rmi.Remote;
+import java.rmi.RemoteException;
 
-    abstract void sendMessage(Message message);
+public interface Handler extends Remote {
 
-    //Messaggi ricevuti dal client
-    void handleMessageIn(Message message){
-        //
+    public void sendMessage(Message m) throws RemoteException;
 
-
-    }
-
-    void handleMessageOut(Message message){
-        if(message.getType()== MessageType.STARTER_CARD){
-            if(message.getClientID()==clientID)
-                sendMessage(message);
-        }else{
-            sendMessage(message);
-        }
-
-
-
-    }
-
-
+    public void handleMessageOut(Message m) throws RemoteException;
 
 }
