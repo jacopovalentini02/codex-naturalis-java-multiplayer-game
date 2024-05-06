@@ -165,8 +165,20 @@ public class CLI extends View implements Runnable {
     @Override
     public void handleMessage(Message message){
         switch (message.getType()) {
-            case SEND_GAME_LIST :
+            case SEND_GAME_LIST:
                 scegliPartitaEUnisciti(((SendGameListMessage) message).getGameList());
+                break;
+            case GAME_JOINED:
+                //todo:stampare le info della partita
+                System.out.println("game joined");
+                break;
+            case STARTER_CARD:
+                //todo: stampare la carta
+                System.out.println("starter card selected correctly");
+                break;
+            case GOLD_DECK:
+
+
         }
     }
 

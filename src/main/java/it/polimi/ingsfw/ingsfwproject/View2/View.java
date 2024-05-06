@@ -1,10 +1,8 @@
 package it.polimi.ingsfw.ingsfwproject.View2;
 
-import it.polimi.ingsfw.ingsfwproject.Model.Game;
 import it.polimi.ingsfw.ingsfwproject.Network.Client.Client;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.Message;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Queue;
 
@@ -20,7 +18,7 @@ public abstract class View implements Runnable{
 
     public abstract void scegliPartitaEUnisciti(HashMap<Integer, Integer> gamesMap);
 
-    public void riceviMessaggio(Message message) {
+    public void receiveMessage(Message message) {
         synchronized (messages) {
             messages.add(message);
             messages.notifyAll();
