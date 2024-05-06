@@ -14,4 +14,5 @@ public class RMIHandlerServer extends AbstractHandler{
         handleMessageIn(message);
     }
 
+
 }

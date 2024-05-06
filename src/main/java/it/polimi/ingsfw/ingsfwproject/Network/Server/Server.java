@@ -34,7 +34,7 @@ public class Server {
 
     }
 
-    public int getClientsCounter(){
+    public synchronized int getClientsCounter(){
         int counter = clientsCounter;
         clientsCounter++;
         return counter;
@@ -54,6 +54,4 @@ public class Server {
             throw new RuntimeException(e);
         }
     }
-
-
 }

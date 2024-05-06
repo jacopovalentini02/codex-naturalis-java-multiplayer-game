@@ -16,6 +16,10 @@ abstract public class AbstractHandler extends UnicastRemoteObject implements Han
         this.server = server;
     }
 
+    protected AbstractHandler(int clientID) throws RemoteException{
+        this.clientID = clientID;
+    }
+
     public abstract void sendMessage(Message message);
 
     //Messaggi ricevuti dal client
@@ -34,6 +38,10 @@ abstract public class AbstractHandler extends UnicastRemoteObject implements Han
 
     public void setGameServerInstance(GameServerInstance instance){
         this.gameServerInstance = instance;
+    }
+
+    public int getClientID(){
+        return this.clientID;
     }
 
 
