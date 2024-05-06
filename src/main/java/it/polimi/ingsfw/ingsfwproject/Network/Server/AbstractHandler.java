@@ -24,11 +24,10 @@ abstract public class AbstractHandler extends UnicastRemoteObject implements Han
 
     //Messaggi ricevuti dal client
     void handleMessageIn(Message message){
-        //
+
 
 
     }
-
     public void handleMessageOut(Message message){
         if(message.getClientID() == -10 || message.getClientID() == clientID){ //se messaggio in broadcast oppure per il client associato
                 sendMessage(message);

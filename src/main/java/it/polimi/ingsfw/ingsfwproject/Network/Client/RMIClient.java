@@ -3,6 +3,7 @@ package it.polimi.ingsfw.ingsfwproject.Network.Client;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.Message;
 import it.polimi.ingsfw.ingsfwproject.Network.Server.Handler;
 import it.polimi.ingsfw.ingsfwproject.Network.Server.RMIFactory;
+import it.polimi.ingsfw.ingsfwproject.Network.Server.RMIHandlerServer;
 
 import java.io.IOException;
 import java.rmi.RemoteException;
@@ -11,7 +12,7 @@ import java.rmi.registry.Registry;
 
 public class RMIClient extends Client{
 
-    private RMIHandlerClient handler;
+    private Handler handler;
 
     public RMIClient(String ip, int port) throws RemoteException {
         super(ip, port);
@@ -30,6 +31,9 @@ public class RMIClient extends Client{
         }
 
         Handler serverHandler = (Handler) serverFactory.getServerHandler();
+
+        this.handler = serverHandler;
+
         int clientID = serverHandler.getClientID();
 
         //creazione dell'handler client
@@ -43,7 +47,7 @@ public class RMIClient extends Client{
 
     @Override
     public void sendMessage(Message message) throws IOException {
-
+        handler.sendMessage(message);
     }
 
     @Override

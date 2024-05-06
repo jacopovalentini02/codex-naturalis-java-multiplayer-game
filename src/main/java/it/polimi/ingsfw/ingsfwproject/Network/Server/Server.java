@@ -1,9 +1,15 @@
 package it.polimi.ingsfw.ingsfwproject.Network.Server;
 
 import it.polimi.ingsfw.ingsfwproject.Controller.LobbyController;
+import it.polimi.ingsfw.ingsfwproject.Exceptions.NotValidNumOfPlayerException;
 import it.polimi.ingsfw.ingsfwproject.Model.GameManager;
+import it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServer.CreateGameMessage;
+import it.polimi.ingsfw.ingsfwproject.Network.Messages.Message;
+import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.ExceptionMessages.InvalidNumOfPlayerMessage;
+import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.GameJoinedMessage;
 
 import java.io.IOException;
+import java.io.SyncFailedException;
 import java.net.MalformedURLException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -12,6 +18,8 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.concurrent.ConcurrentLinkedDeque;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -20,25 +28,87 @@ public class Server {
 
     //todo che tipo di coda scegliere. Candidata: ConcurredLinkedQueue oppure array list che va sincronizzata
 
+
+    private ConcurrentLinkedQueue<Message> queue;
+
     private ArrayList<Handler> handlers; //clientID-handler
 
     private ArrayList<GameServerInstance> games;
 
     private int clientsCounter;
 
-    public void startsServers(){
+    public Server(){
         //Socket server e rmi server partono
+        GameManager manager = new GameManager();
+        lobbyController = new LobbyController(manager);
+        queue = new ConcurrentLinkedQueue<Message>();
+        handlers = new ArrayList<Handler>();
+        games = new ArrayList<GameServerInstance>();
+        this.clientsCounter = 0;
         this.startRMIServer();
         this.startSocketServer();
 
+        Thread readerThread = new Thread(this::readQueue);
+        readerThread.start();
     }
 
-    public void readQueue(){
+    public void readQueue(){//read and process messages in the queue
+        System.out.println("Reader Thread started");
+        while (true){
+            Message toProcess = queue.poll();
+            if (toProcess != null){
+                processMessage(toProcess);
+            } else {
+                //coda vuota
+                try{
+                    Thread.sleep(100);
+                }catch (InterruptedException e){
+                    System.out.println("Interrupted Exception");
+                    Thread.currentThread().interrupt();
+                    return;
+                }
+            }
+        }
+    }
+
+    public void processMessage(Message message){
+
+        switch (message.getType()){
+            case CREATE_GAME:
+                CreateGameMessage m = (CreateGameMessage) message;
+                int createdGameID;
+                try{
+                    createdGameID = this.lobbyController.createGame(m.getNumPlayer(), m.getNickname());
+                } catch (NotValidNumOfPlayerException e){
+                    this.sendResponse(new InvalidNumOfPlayerMessage(m.getClientID()));
+                    return;
+                }
+                this.sendResponse(new GameJoinedMessage(m.getClientID(), createdGameID));
+                break;
+        }
 
     }
 
-    public void addToQueue(){
 
+
+    public synchronized void sendResponse(Message m){
+        try {
+            for (Handler handler : handlers) {
+                if (m.getClientID() == -10 || m.getClientID() == handler.getClientID()) { //se messaggio in broadcast oppure per il client associato
+                    handler.sendMessage(m);
+                }
+            }
+        } catch (RemoteException e){
+            throw new RuntimeException(e);
+        }
+    }
+
+
+
+
+
+    public void addToQueue(Message message){
+        this.queue.add(message);
     }
 
     public synchronized int getClientsCounter(){
@@ -81,4 +151,5 @@ public class Server {
         }
         executor.shutdown();
     }
+
 }
