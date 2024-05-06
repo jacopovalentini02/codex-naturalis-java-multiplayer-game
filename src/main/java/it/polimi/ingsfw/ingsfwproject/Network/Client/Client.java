@@ -94,4 +94,8 @@ public abstract class Client {
         }
 
     }
+
+    public int getClientID(){
+        return this.clientID;
+    }
 }
