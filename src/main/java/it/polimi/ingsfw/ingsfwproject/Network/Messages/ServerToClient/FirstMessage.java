@@ -7,12 +7,8 @@ import java.io.Serializable;
 
 //Message sent from server after the connection is established to set clientID
 public class FirstMessage extends Message implements Serializable {
-    private int clientID;
     public FirstMessage(int clientID, MessageType messageType) {
         super(clientID, messageType);
     }
 
-    public int getClientID() {
-        return clientID;
-    }
 }

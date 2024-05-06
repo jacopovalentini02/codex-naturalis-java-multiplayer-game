@@ -5,10 +5,11 @@ import it.polimi.ingsfw.ingsfwproject.Network.Messages.Message;
 
 import java.util.HashMap;
 import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 public abstract class View implements Runnable{
     Client client;
-    Queue<Message> messages;
+    public ConcurrentLinkedQueue<Message> messages;
 
     public abstract void scegliPrimaAzione();
 
@@ -18,12 +19,29 @@ public abstract class View implements Runnable{
 
     public abstract void scegliPartitaEUnisciti(HashMap<Integer, Integer> gamesMap);
 
-    public void receiveMessage(Message message) {
-        synchronized (messages) {
-            messages.add(message);
-            messages.notifyAll();
+    public void receiveMessage() {
+        while (true){
+            Message toProcess = messages.poll();
+            if (toProcess != null){
+                handleMessage(toProcess);
+            } else {
+                //coda vuota
+                try{
+                    Thread.sleep(100);
+                }catch (InterruptedException e){
+                    System.out.println("Interrupted Exception");
+                    Thread.currentThread().interrupt();
+                    return;
+                }
+            }
         }
+
     }
 
     public abstract void handleMessage(Message message);
+
+    public void addToQueue(Message message){
+        this.messages.add(message);
+    }
+
 }

@@ -1,6 +1,7 @@
 package it.polimi.ingsfw.ingsfwproject.Network.Client;
 
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.Message;
+import it.polimi.ingsfw.ingsfwproject.View2.View;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -16,8 +17,8 @@ public class SocketClient extends Client{
     private Socket socket;
     private ExecutorService readExecutionQueue;
 
-    public SocketClient(String ip, int port){
-        super(ip,port);
+    public SocketClient(String ip, int port, View view){
+        super(ip,port, view);
     }
 
     @Override

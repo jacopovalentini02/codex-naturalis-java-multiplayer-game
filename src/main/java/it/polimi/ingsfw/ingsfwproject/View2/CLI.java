@@ -6,18 +6,23 @@ import it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServer.CreateGame
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServer.GetGameListMessage;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServer.JoinGameMessage;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.Message;
+import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.FirstMessage;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.SendGameListMessage;
 
 import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.Scanner;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class CLI extends View implements Runnable {
     Scanner scanner;
 
     public CLI(){
         this.scanner = new Scanner(System.in);
+        super.messages=new ConcurrentLinkedQueue<Message>();
+        Thread receive=new Thread(super::receiveMessage);
+        receive.start();
     }
 
     @Override
@@ -90,7 +95,7 @@ public class CLI extends View implements Runnable {
         scanner.nextLine();
 
         try {
-            this.client = (option == 0? new RMIClient(ip,port) : new SocketClient(ip,port));
+            this.client = (option == 0? new RMIClient(ip,port,this) : new SocketClient(ip,port,this));
             client.startConnection();
         } catch (RemoteException e) {
             throw new RuntimeException(e);
@@ -151,16 +156,17 @@ public class CLI extends View implements Runnable {
         this.scegliPrimaAzione();
 
         while (true){
-            synchronized (messages) {
-                while (messages.isEmpty()) {
-                    try {
-                        wait();
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
+            if(messages.isEmpty()){
+
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
                 }
+
+            }else
                 handleMessage(messages.remove());
-            }
+
         }
 
     }
@@ -168,6 +174,10 @@ public class CLI extends View implements Runnable {
     @Override
     public void handleMessage(Message message){
         switch (message.getType()) {
+            case FIRST_MESSSAGE:
+                FirstMessage firstM=(FirstMessage) message;
+                System.out.println(firstM.getClientID());
+                break;
             case SEND_GAME_LIST:
                 scegliPartitaEUnisciti(((SendGameListMessage) message).getGameList());
                 break;

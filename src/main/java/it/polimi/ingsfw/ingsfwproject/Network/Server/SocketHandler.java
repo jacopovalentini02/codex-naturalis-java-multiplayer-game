@@ -8,6 +8,8 @@ import it.polimi.ingsfw.ingsfwproject.Exceptions.NickAlreadyTakenException;
 import it.polimi.ingsfw.ingsfwproject.Exceptions.NotValidNumOfPlayerException;
 import it.polimi.ingsfw.ingsfwproject.Model.GameManager;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.Message;
+import it.polimi.ingsfw.ingsfwproject.Network.Messages.MessageType;
+import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.FirstMessage;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -21,14 +23,18 @@ public class SocketHandler extends AbstractHandler implements Runnable{
 
     public SocketHandler(Socket socket, int clientID, Server server) throws IOException {
         super(clientID, server);
+        System.out.println("Client id prima di mandarlo a client: "+clientID);
         this.socket = socket;
         this.in = new ObjectInputStream(socket.getInputStream());
         this.out = new ObjectOutputStream(socket.getOutputStream());
+        FirstMessage firstMessage=new FirstMessage(clientID, MessageType.FIRST_MESSSAGE);
+        this.sendMessage(firstMessage);
         System.out.println("Server client handler inizializzato");
     }
 @Override
     public void sendMessage(Message message) {
         try {
+            System.out.println("Mandando messaggio: "+message.getType());
             out.writeObject(message);
             out.flush();
             out.reset();

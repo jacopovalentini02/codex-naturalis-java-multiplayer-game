@@ -17,10 +17,11 @@ public abstract class Client {
     private View view;
 
 
-    public Client(String ip, int port) {
+    public Client(String ip, int port, View view) {
         this.ip = ip;
         this.port = port;
         this.virtualView = new VirtualView();
+        this.view=view;
     }
 
     public String getIp() {
@@ -51,14 +52,11 @@ public abstract class Client {
             case FIRST_MESSSAGE: //set clientID in Client e view
                 FirstMessage firstMsg=(FirstMessage) message;
                 this.clientID=firstMsg.getClientID();
+                break;
             case GAME_JOINED: //set state and gameId
                 this.virtualView.setState(GameState.WAITING_FOR_PLAYERS);
                 GameJoinedMessage mjoined=(GameJoinedMessage) message;
                 this.virtualView.setGameID(mjoined.getGameId());
-                break;
-            case SEND_GAME_LIST: //game list received, set dei game nella view
-                SendGameListMessage m=(SendGameListMessage) message;
-                this.view.receiveMessage(m);
                 break;
             case STARTER_CARD:
                 SendStarterCardMessage starterMsg=(SendStarterCardMessage) message;
@@ -93,13 +91,15 @@ public abstract class Client {
 
 
         }
-        this.view.receiveMessage(message);
 
-        this.view.receiveMessage(message);
+        this.view.addToQueue(message);
 
     }
 
     public int getClientID(){
         return this.clientID;
     }
+
+
+    public void setClientID(int clientID){this.clientID = clientID;}
 }

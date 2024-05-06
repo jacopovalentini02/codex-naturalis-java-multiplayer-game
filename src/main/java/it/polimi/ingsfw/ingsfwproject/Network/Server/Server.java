@@ -38,11 +38,11 @@ public class Server {
         handlers = new ArrayList<Handler>();
         games = new ArrayList<GameServerInstance>();
         this.clientsCounter = 0;
+        Thread readerThread = new Thread(this::readQueue);
+        readerThread.start();
         this.startRMIServer();
         this.startSocketServer();
 
-        Thread readerThread = new Thread(this::readQueue);
-        readerThread.start();
     }
 
     public void readQueue(){//read and process messages in the queue
@@ -135,7 +135,9 @@ public class Server {
             try {
                 Socket socket = serverSocket.accept();
                 System.out.println("Connessione stabilita con client: "+socket.getInetAddress());
-                SocketHandler socketHandler=new SocketHandler(socket, getClientsCounter(), this);
+                int id=getClientsCounter();
+                System.out.println("client id: "+id);
+                SocketHandler socketHandler=new SocketHandler(socket,id, this);
                 handlers.add(socketHandler);
                 executor.submit(socketHandler);
             } catch(IOException e) {
