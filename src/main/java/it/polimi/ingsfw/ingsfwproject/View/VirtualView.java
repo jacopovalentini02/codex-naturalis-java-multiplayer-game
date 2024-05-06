@@ -50,16 +50,6 @@ public class VirtualView {
         this.goldDeck = goldDeck;
     }
 
-    public ArrayList<Coordinate> getAvailablePositions() {
-        return availablePositions;
-    }
-
-    public void setAvailablePositions(ArrayList<Coordinate> availablePositions) {
-        this.availablePositions = availablePositions;
-    }
-
-
-
     public ArrayList<ObjectiveCard> getHandObjectives() {
         return handObjectives;
     }
