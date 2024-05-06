@@ -7,7 +7,7 @@ import it.polimi.ingsfw.ingsfwproject.Network.Client.SocketClient;
 import java.io.IOException;
 import java.util.Scanner;
 
-public class ClientApp {
+public class ClientAppNONUSARE {
     public static void main(String [] args)  {
         Client client = null;
 
