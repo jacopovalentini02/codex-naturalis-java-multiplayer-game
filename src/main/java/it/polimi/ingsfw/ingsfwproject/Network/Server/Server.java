@@ -4,9 +4,11 @@ import it.polimi.ingsfw.ingsfwproject.Controller.LobbyController;
 import it.polimi.ingsfw.ingsfwproject.Exceptions.NotValidNumOfPlayerException;
 import it.polimi.ingsfw.ingsfwproject.Model.GameManager;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServer.CreateGameMessage;
+import it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServer.GetGameListMessage;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.Message;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.ExceptionMessages.InvalidNumOfPlayerMessage;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.GameJoinedMessage;
+import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.SendGameListMessage;
 
 import java.io.IOException;
 import java.io.SyncFailedException;
@@ -67,17 +69,23 @@ public class Server {
     public void processMessage(Message message){
 
         switch (message.getType()){
-            case CREATE_GAME:
+            case CREATE_GAME: {
                 CreateGameMessage m = (CreateGameMessage) message;
                 int createdGameID;
-                try{
+                try {
                     createdGameID = this.lobbyController.createGame(m.getNumPlayer(), m.getNickname());
-                } catch (NotValidNumOfPlayerException e){
+                } catch (NotValidNumOfPlayerException e) {
                     this.sendResponse(new InvalidNumOfPlayerMessage(m.getClientID()));
                     return;
                 }
                 this.sendResponse(new GameJoinedMessage(m.getClientID(), createdGameID));
                 break;
+            }
+            case GET_GAME_LIST: {
+                GetGameListMessage m = (GetGameListMessage) message;
+                this.sendResponse(new SendGameListMessage(m.getClientID(), lobbyController.getGameList()));
+                break;
+            }
         }
 
     }
