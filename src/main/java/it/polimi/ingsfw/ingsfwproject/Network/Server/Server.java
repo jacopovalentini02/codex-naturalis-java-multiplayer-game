@@ -84,21 +84,19 @@ public class Server {
 
 
 
-    public synchronized void sendResponse(Message m){
+    public synchronized void sendResponse(Message m) {
         try {
             for (Handler handler : handlers) {
                 if (m.getClientID() == -10 || m.getClientID() == handler.getClientID()) { //se messaggio in broadcast oppure per il client associato
                     handler.sendMessage(m);
                 }
             }
-        } catch (RemoteException e){
+        } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
 
 
-
-
-}
+    }
 
     public void addToQueue(Message message){
         this.queue.add(message);

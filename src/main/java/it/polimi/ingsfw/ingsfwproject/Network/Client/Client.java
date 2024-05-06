@@ -4,6 +4,7 @@ import it.polimi.ingsfw.ingsfwproject.Model.GameState;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.*;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.Message;
 import it.polimi.ingsfw.ingsfwproject.View.VirtualView;
+import it.polimi.ingsfw.ingsfwproject.View2.View;
 
 import java.io.IOException;
 
@@ -12,13 +13,15 @@ public abstract class Client {
     private int port; //Server port
     private String nickname;
     private int clientID;
-    private VirtualView view;
+    private VirtualView virtualView;
+
+    private View view;
 
 
     public Client(String ip, int port) {
         this.ip = ip;
         this.port = port;
-        this.view = new VirtualView();
+        this.virtualView = new VirtualView();
     }
 
     public String getIp() {
@@ -51,44 +54,44 @@ public abstract class Client {
                 FirstMessage firstMsg=(FirstMessage) message;
                 this.clientID=firstMsg.getClientID();
             case GAME_JOINED: //set state and gameId
-                this.view.setState(GameState.WAITING_FOR_PLAYERS);
+                this.virtualView.setState(GameState.WAITING_FOR_PLAYERS);
                 GameJoinedMessage mjoined=(GameJoinedMessage) message;
-                this.view.setGameID(mjoined.getGameId());
+                this.virtualView.setGameID(mjoined.getGameId());
                 break;
             case SEND_GAME_LIST: //game list received, set dei game nella view
-                SendGameList m=(SendGameList) message;
-                //
+                SendGameListMessage m=(SendGameListMessage) message;
+                this.view.receiveMessage(m);
                 break;
             case STARTER_CARD:
                 SendStarterCardMessage starterMsg=(SendStarterCardMessage) message;
-                this.view.getHandCards().add(starterMsg.getStarterCard()); //Add starter card to hand
+                this.virtualView.getHandCards().add(starterMsg.getStarterCard()); //Add starter card to hand
                 break;
             case GOLD_DECK:
                 GoldDeckMessage goldMsg=(GoldDeckMessage) message;
-                this.view.setGoldDeck(goldMsg.getGoldDeck());
+                this.virtualView.setGoldDeck(goldMsg.getGoldDeck());
                 break;
             case RESOURCE_DECK:
                 ResourceDeckMessage resourceMsg=(ResourceDeckMessage) message;
-                this.view.setGoldDeck(resourceMsg.getResourceDeck());
+                this.virtualView.setGoldDeck(resourceMsg.getResourceDeck());
             case DISPLAYED_PLAYABLE_CARDS:
                 DispPlayCardMessage displayedCardMsg=(DispPlayCardMessage) message;
-                this.view.setDisplayedCards(displayedCardMsg.getDisplayedPlayableCard());
+                this.virtualView.setDisplayedCards(displayedCardMsg.getDisplayedPlayableCard());
                 break;
             case CURRENT_PLAYER:
                 CurrentPlayerMessage currentPlayerMsg=(CurrentPlayerMessage) message;
-                this.view.setCurrentPlayer(currentPlayerMsg.getCurrentPlayer());
+                this.virtualView.setCurrentPlayer(currentPlayerMsg.getCurrentPlayer());
                 break;
             case COORDINATES_AVAILABLE:
                 CoordinatesAvailableMessage coordMsg=(CoordinatesAvailableMessage) message;
-                this.view.getPlayer().getGround().setAvailablePositions(coordMsg.getCoords());
+                this.virtualView.getPlayer().getGround().setAvailablePositions(coordMsg.getCoords());
                 break;
             case HAND_OBJECTIVE:
                 HandObjectiveMessage handObjectiveMsg=(HandObjectiveMessage) message;
-                this.view.setHandObjectives(handObjectiveMsg.getCards());
+                this.virtualView.setHandObjectives(handObjectiveMsg.getCards());
                 break;
             case GAME_STATE:
                 GameStateMessage gameStateMsg=(GameStateMessage) message;
-                this.view.setState(gameStateMsg.getGameState());
+                this.virtualView.setState(gameStateMsg.getGameState());
 
 
         }
