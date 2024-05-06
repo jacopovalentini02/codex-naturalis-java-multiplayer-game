@@ -26,7 +26,7 @@ public class GameServerInstance {
 
     }
 
-    public void addToQueue(){
+    public void addToQueue(Message message){
 
     }
 

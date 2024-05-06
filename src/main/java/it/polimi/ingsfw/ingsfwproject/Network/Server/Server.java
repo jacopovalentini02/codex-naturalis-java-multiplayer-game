@@ -20,7 +20,7 @@ public class Server {
 
     //todo che tipo di coda scegliere. Candidata: ConcurredLinkedQueue oppure array list che va sincronizzata
 
-    private ArrayList<Handler> handlers; //clientID-handler
+    private ArrayList<Handler> handlers; //Handler ha dentro client associato
 
     private ArrayList<GameServerInstance> games;
 
@@ -74,7 +74,9 @@ public class Server {
             try {
                 Socket socket = serverSocket.accept();
                 System.out.println("Connessione stabilita con client: "+socket.getInetAddress());
-                executor.submit(new SocketHandler(socket, getClientsCounter(), this) );
+                SocketHandler socketHandler=new SocketHandler(socket, getClientsCounter(), this);
+                handlers.add(socketHandler);
+                executor.submit(socketHandler);
             } catch(IOException e) {
                 break; // entrerei qui se serverSocket venisse chiuso
             }

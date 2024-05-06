@@ -57,7 +57,7 @@ public abstract class Client {
                 break;
             case SEND_GAME_LIST: //game list received, set dei game nella view
                 SendGameList m=(SendGameList) message;
-                //PASSARE A RECEIVE MESSAGE VIEW
+                //
                 break;
             case STARTER_CARD:
                 SendStarterCard starterMsg=(SendStarterCard) message;

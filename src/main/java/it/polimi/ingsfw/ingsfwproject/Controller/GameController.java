@@ -4,15 +4,12 @@ import java.util.*;
 
 import it.polimi.ingsfw.ingsfwproject.Exceptions.*;
 import it.polimi.ingsfw.ingsfwproject.Model.*;
-import it.polimi.ingsfw.ingsfwproject.Network2.ClientCallback;
-import it.polimi.ingsfw.ingsfwproject.Network2.ClientCallbackInterface;
+
 
 public class GameController {
     private Game model;
 
     private int starterCardsPlayed;
-
-    private ArrayList<ClientCallbackInterface> clientCallbacks = new ArrayList<>();
 
 
     public GameController(Game model){
@@ -104,8 +101,9 @@ public class GameController {
 
             if (model.getCurrentPlayer().equals(model.getPotentialWinner())) {
                 model.setState(GameState.ENDING);
-                for (ClientCallbackInterface c: model.getListeners().values()) //updating clients
-                    c.updateState(GameState.ENDING);
+                //TODO messaggio
+//                for (ClientCallbackInterface c: model.getListeners().values()) //updating clients
+//                    c.updateState(GameState.ENDING);
             }
             model.nextTurn();
         }
@@ -138,32 +136,35 @@ public class GameController {
             player.draw(deck);
 
             if (resourceDeck){ //updating clients
-               for (ClientCallbackInterface c: model.getListeners().values()) {
-                   try {
-                       c.updateResourceDeck(deck);
-                   } catch (RemoteException e) {
-                       throw new RuntimeException(e);
-                   }
-               }
+                //todo mess
+//               for (ClientCallbackInterface c: model.getListeners().values()) {
+//                   try {
+//                       c.updateResourceDeck(deck);
+//                   } catch (RemoteException e) {
+//                       throw new RuntimeException(e);
+//                   }
+//               }
             } else {
-                for (ClientCallbackInterface c: model.getListeners().values()) {
-                    try {
-                        c.updateGoldDeck(deck);
-                    } catch (RemoteException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
+                //todo mess
+//                for (ClientCallbackInterface c: model.getListeners().values()) {
+//                    try {
+//                        c.updateGoldDeck(deck);
+//                    } catch (RemoteException e) {
+//                        throw new RuntimeException(e);
+//                    }
+//                }
             }
 
             if (model.getCurrentPlayer().equals(model.getPotentialWinner())) {
                 model.setState(GameState.ENDING);
-                for (ClientCallbackInterface c: model.getListeners().values()) {
-                    try {
-                        c.updateState(GameState.ENDING);
-                    } catch (RemoteException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
+                //todo mess
+//                for (ClientCallbackInterface c: model.getListeners().values()) {
+//                    try {
+//                        c.updateState(GameState.ENDING);
+//                    } catch (RemoteException e) {
+//                        throw new RuntimeException(e);
+//                    }
+//                }
             }
             model.nextTurn();
         }
@@ -205,25 +206,21 @@ public class GameController {
         starterCardsPlayed++;
         if (starterCardsPlayed == model.getNumOfPlayers()){
             model.setState(GameState.CHOOSING_COLORS);
-            for (ClientCallbackInterface c: model.getListeners().values()) {
-                try {
-                    c.updateState(GameState.CHOOSING_COLORS);
-                } catch (RemoteException e) {
-                    throw new RuntimeException(e);
-                }
-            }
+//            for (ClientCallbackInterface c: model.getListeners().values()) {
+//                try {
+//                    c.updateState(GameState.CHOOSING_COLORS);
+//                } catch (RemoteException e) {
+//                    throw new RuntimeException(e);
+//                }
+//            }
         }
 
 
     }
 
     public void updateClients(String string) throws RemoteException {
-        for (ClientCallbackInterface c: clientCallbacks)
-            c.update(string);
-    }
-
-    public void addClient(String username, ClientCallbackInterface clientCallback){
-        this.model.addListener(username, clientCallback);
+//        for (ClientCallbackInterface c: clientCallbacks)
+//            c.update(string);
     }
 
     public void clientDisconnected(){
