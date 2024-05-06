@@ -30,30 +30,21 @@ public class GameServerInstance {
 
     }
 
-    public void sendUpdateToAll(Message message ){
-        for (Handler handler : handlers.values()) {
-            try {
-                handler.handleMessageOut(message);
-            } catch (RemoteException e){
-                System.out.println("RemoteException occoured");
+    public void sendUpdateToAll(Message message){
+        try {
+            for (Handler handler : handlers.values()) {
+                if (message.getClientID() == -10 || message.getClientID() == handler.getClientID()) { //se messaggio in broadcast oppure per il client associato
+                    handler.sendMessage(message);
+                }
             }
-
+        } catch (RemoteException e){
+            throw new RuntimeException(e);
         }
-    }
-
-    public void handleMessageOut(Message message) throws RemoteException {
-        for (Handler handler : handlers.values()) {
-            if (message.getClientID() == -10 || message.getClientID() == han) { //se messaggio in broadcast oppure per il client associato
-                handler.sendMessage(message);
-            }
-        }
-
     }
 
 
     public int getClientID(Player player){
         return players.get(player);
-
     }
 
     //METODI PER L'UPDATE AL CLIENT

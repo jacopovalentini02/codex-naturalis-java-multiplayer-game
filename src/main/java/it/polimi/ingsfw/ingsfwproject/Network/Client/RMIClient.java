@@ -1,9 +1,13 @@
 package it.polimi.ingsfw.ingsfwproject.Network.Client;
 
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.Message;
+import it.polimi.ingsfw.ingsfwproject.Network.Server.Handler;
+import it.polimi.ingsfw.ingsfwproject.Network.Server.RMIFactory;
 
 import java.io.IOException;
 import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 
 public class RMIClient extends Client{
 
@@ -15,6 +19,25 @@ public class RMIClient extends Client{
 
     @Override
     public void startConnection() throws Exception {
+        Registry registry = LocateRegistry.getRegistry(this.getIp(), this.getPort());
+        RMIFactory serverFactory = (RMIFactory) registry.lookup("Factory");
+
+        if (serverFactory == null){
+            System.out.println("Error while obtaining RMI Factory Object");
+            throw new RuntimeException();
+        } else {
+            System.out.println("Successfully connected to RMI Factory Object");
+        }
+
+        Handler serverHandler = (Handler) serverFactory.getServerHandler();
+        int clientID = serverHandler.getClientID();
+
+        //creazione dell'handler client
+        Handler clientHandler = new RMIHandlerClient(this, clientID);
+
+        //passaggio al server del client handler
+        serverFactory.setClientHandler(clientHandler);
+
 
     }
 

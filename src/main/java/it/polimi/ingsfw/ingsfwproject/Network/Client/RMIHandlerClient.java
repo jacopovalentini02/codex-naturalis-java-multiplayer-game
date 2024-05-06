@@ -8,8 +8,8 @@ import java.rmi.RemoteException;
 
 public class RMIHandlerClient extends AbstractHandler {
     private final RMIClient client;
-    protected RMIHandlerClient(RMIClient c, int clientID, Server server) throws RemoteException {
-        super(clientID, server);
+    protected RMIHandlerClient(RMIClient c, int clientID) throws RemoteException {
+        super(clientID);
         this.client = c;
     }
 
