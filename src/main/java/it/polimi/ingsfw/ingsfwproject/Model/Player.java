@@ -76,9 +76,9 @@ public class Player implements Serializable {
         //TODO MESSAGGIO
 //
 //        try {
-//            this.client.updateAvailablePositions(this.ground.getAvailablePositions());
-//            this.client.updateHand(this.getHandCard());
-//            this.client.updateGrid(this.ground.getGrid());
+//            this.client.updateAvailablePositions(this.ground.getAvailablePositions()); solo per me
+//            this.client.updateHand(this.getHandCard()); per me
+//            this.client.updateGrid(this.ground.getGrid()); per me - il client se è il suo nickname setta il suo player
 //            this.client.updateResources(generateContentMap());
 //        } catch (RemoteException e) { //updating clients
 //            throw new RuntimeException(e);

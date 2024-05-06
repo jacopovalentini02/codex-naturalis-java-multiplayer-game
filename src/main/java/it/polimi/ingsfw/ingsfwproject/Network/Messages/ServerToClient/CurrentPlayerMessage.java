@@ -5,7 +5,7 @@ import it.polimi.ingsfw.ingsfwproject.Network.Messages.Message;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.MessageType;
 
 public class CurrentPlayerMessage extends Message {
-    Player currentPlayer;
+    private Player currentPlayer;
     public CurrentPlayerMessage(int clientID, Player currentPlayer) {
         super(clientID, MessageType.CURRENT_PLAYER);
         this.currentPlayer=currentPlayer;

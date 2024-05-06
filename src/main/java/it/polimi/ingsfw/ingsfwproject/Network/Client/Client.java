@@ -61,7 +61,6 @@ public abstract class Client {
                 break;
             case STARTER_CARD:
                 SendStarterCard starterMsg=(SendStarterCard) message;
-                this.view.setState(GameState.CHOOSING_STARTER_CARDS); //Change state
                 this.view.getHandCards().add(starterMsg.getStarterCard()); //Add starter card to hand
                 break;
             case GOLD_DECK:
@@ -79,6 +78,17 @@ public abstract class Client {
                 CurrentPlayerMessage currentPlayerMsg=(CurrentPlayerMessage) message;
                 this.view.setCurrentPlayer(currentPlayerMsg.getCurrentPlayer());
                 break;
+            case COORDINATES_AVAILABLE:
+                CoordinatesAvailableMessage coordMsg=(CoordinatesAvailableMessage) message;
+                this.view.getPlayer().getGround().setAvailablePositions(coordMsg.getCoords());
+                break;
+            case HAND_OBJECTIVE:
+                HandObjectiveMessage handObjectiveMsg=(HandObjectiveMessage) message;
+                this.view.setHandObjectives(handObjectiveMsg.getCards());
+                break;
+            case GAME_STATE:
+                GameStateMessage gameStateMsg=(GameStateMessage) message;
+                this.view.setState(gameStateMsg.getGameState());
 
 
         }

@@ -1,25 +1,33 @@
 package it.polimi.ingsfw.ingsfwproject.Network.Messages;
 
 public enum MessageType {
-
-    FIRST_MESSSAGE,
+    //Client - Server
     CREATE_GAME,
-    GAME_JOINED,
     GET_GAME_LIST, //CLIENT ASKS FOR GAMES - SERVER
-    SEND_GAME_LIST, //SERVER - CLIENT
     JOIN_GAME,
+
+    //Exception
     INVALID_NUM_OF_PLAYERS,
     NICK_ALREADY_TAKEN,
     GAME_FULL,
     GAME_NOT_EXISTS,
     INVALID_REQUEST,
 
-    //set up game messages
+    //Server-client
+    FIRST_MESSSAGE,
+    SEND_GAME_LIST,
+    GAME_JOINED,
     STARTER_CARD,
     GOLD_DECK,
     RESOURCE_DECK,
     DISPLAYED_PLAYABLE_CARDS,
-    CURRENT_PLAYER
+    CURRENT_PLAYER,
+    COORDINATES_AVAILABLE,
+    COLOR_CHOSEN,
+    HAND_OBJECTIVE,
+    DISPLAYED_OBJECTIVE,
+    HAND_CARDS,
+    GAME_STATE,
 
 
 }

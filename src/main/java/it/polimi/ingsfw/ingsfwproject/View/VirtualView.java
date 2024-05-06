@@ -8,13 +8,12 @@ import java.util.List;
 import java.util.Map;
 
 public class VirtualView {
-    private ArrayList<Game> avaibleGames;
+    private Player player;
+    private ArrayList<String> listOfPlayers;
     private int gameID;
     private ArrayList<PlayableCard> handCards;
     private Deck resourceDeck;
     private Deck goldDeck;
-    private ArrayList<Coordinate> availablePositions;
-    private Map<Coordinate, Face> grid;
     private ArrayList<ObjectiveCard> handObjectives;
     private ArrayList<PlayableCard>  displayedCards;
     private PlayerColor color;
@@ -23,14 +22,15 @@ public class VirtualView {
     private Player currentPlayer;
     private List<ObjectiveCard> displayedObjectiveCards;
     private boolean currentPlayerhasPlayed;
+    private HashMap<Content, Integer> resources;
+
     public HashMap<Content, Integer> getResources() {
         return resources;
     }
-    private HashMap<Content, Integer> resources;
     public Player getPlayer() {
         return player;
     }
-    private Player player;
+
     public ArrayList<PlayableCard> getHandCards() {
         return handCards;
     }
@@ -58,13 +58,7 @@ public class VirtualView {
         this.availablePositions = availablePositions;
     }
 
-    public Map<Coordinate, Face> getGrid() {
-        return grid;
-    }
 
-    public void setGrid(Map<Coordinate, Face> grid) {
-        this.grid = grid;
-    }
 
     public ArrayList<ObjectiveCard> getHandObjectives() {
         return handObjectives;
@@ -130,16 +124,6 @@ public class VirtualView {
 
     public void setPlayer(Player player) {
         this.player = player;
-    }
-
-
-    public ArrayList<Game> getAvaibleGames() {
-        return avaibleGames;
-    }
-
-
-    public void setAvaibleGames(ArrayList<Game> avaibleGames) {
-        this.avaibleGames = avaibleGames;
     }
 
     public Player getCurrentPlayer() {

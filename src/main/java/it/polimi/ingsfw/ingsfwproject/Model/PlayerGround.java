@@ -183,4 +183,8 @@ public class PlayerGround implements Serializable {
 
         return sortedEntries.iterator();
     }
+
+    public void setAvailablePositions(ArrayList<Coordinate> availablePositions) {
+        this.availablePositions = availablePositions;
+    }
 }

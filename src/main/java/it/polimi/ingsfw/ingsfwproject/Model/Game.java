@@ -3,10 +3,7 @@ package it.polimi.ingsfw.ingsfwproject.Model;
 import it.polimi.ingsfw.ingsfwproject.Controller.GameController;
 import it.polimi.ingsfw.ingsfwproject.Exceptions.DeckEmptyException;
 import it.polimi.ingsfw.ingsfwproject.Exceptions.*;
-import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.CurrentPlayerMessage;
-import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.DispPlayCardMessage;
-import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.GoldDeckMessage;
-import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.SendStarterCard;
+import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.*;
 import it.polimi.ingsfw.ingsfwproject.Network.Server.GameServerInstance;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -55,6 +52,7 @@ public class Game {
 
     int objectiveCardsChosen;
 
+
     public int getObjectiveCardsChosen() {
         return objectiveCardsChosen;
     }
@@ -82,6 +80,8 @@ public class Game {
         objectiveDeck=new Deck();
         listOfPlayers = new ArrayList<>();
         listOfPlayers.add(player1);
+        //todo mando lista player
+        //todo mando anche player
         controller = new GameController(this);
         displayedPlayableCard = new ArrayList<PlayableCard>();
         displayedObjectiveCard = new ArrayList<>();
@@ -221,59 +221,25 @@ public class Game {
         //Each player randomly takes one Starter card and choose the face to be played
         starterDeck.shuffle();
 
-
-
+        //Send new: starterCard, goldDeck, resourceDeck, displayedPlayableCards, currentPlayer
+        this.setState(GameState.CHOOSING_STARTER_CARDS);
+        gameServerInstance.sendGameStateUpdate(this.state);
         for(Player p: listOfPlayers){
             int clientID=gameServerInstance.getClientID(p);
-            //Send starter card
             StarterCard starter = (StarterCard) starterDeck.draw();
-            SendStarterCard starterMessage=new SendStarterCard(clientID, starter);
-            gameServerInstance.sendUpdateToAll(starterMessage);
-            //Send gold/resource deck updated
-            GoldDeckMessage goldDeckMsg=new GoldDeckMessage(clientID, this.goldDeck);
-            gameServerInstance.sendUpdateToAll(goldDeckMsg);
-            //Send displayedPlayableCard updated
-            DispPlayCardMessage dispPlayCardMsg=new DispPlayCardMessage(clientID, (ArrayList<PlayableCard>) this.displayedPlayableCard);
-            gameServerInstance.sendUpdateToAll(dispPlayCardMsg);
-            //Send currentPlayer
-            CurrentPlayerMessage currentPlayerMsg=new CurrentPlayerMessage(clientID, this.currentPlayer);
-            gameServerInstance.sendUpdateToAll(currentPlayerMsg);
+            p.getHandCard().add(starter); //Add starter card to player's hand
+            gameServerInstance.sendStarterCardMessage(clientID, starter);
+            gameServerInstance.sendAvaiblePositionUpdate(clientID,  p.getGround().getAvailablePositions());
+
         }
+        gameServerInstance.sendGoldDeckUpdate(this.goldDeck);
+        gameServerInstance.sendDisplayedPlayableCardUpdate(this.displayedPlayableCard);
+        gameServerInstance.sendCurrentPlayerUpdate(this.currentPlayer);
 
-
-
-
-
-        //TODO DA CANCELLARE
-        //cycling on every player the beginning operations
-//        for (Player p : listOfPlayers) {
-//            StarterCard starter = (StarterCard) starterDeck.draw();
-//
-//
-//            p.getHandCard().add(starter);
-//            try {
-//                listeners.get(p.getUsername()).updateHand(p.getHandCard()); //updating clients' hands
-//                listeners.get(p.getUsername()).updateAvailablePositions(p.getGround().getAvailablePositions());
-//            } catch (RemoteException e) {
-//                throw new RuntimeException(e);
-//            }
-//        }
-//        this.setState(GameState.CHOOSING_STARTER_CARDS);
-//        for (ClientCallbackInterface c: listeners.values()) { //updating clients (maybe do a specific function)
-//            try {
-//                c.updateGoldDeck(this.goldDeck);
-//                c.updateResourceDeck(this.resourceDeck);
-//                c.updateDisplayedPlayableCards(displayedPlayableCard);
-//                c.updateState(GameState.CHOOSING_STARTER_CARDS);
-//                c.update("It's " + this.getCurrentPlayer().getUsername() + "'s turn");
-//            } catch (RemoteException e) {
-//                throw new RuntimeException(e);
-//            }
-//        }
     }
 
     public void chooseColor(Player player, PlayerColor color) throws ColorNotAvailableException, DeckEmptyException {
-
+        //todo: la view deve chiedere la lista aggiornata - come gestisco le excpetion? - mando messaggio
         if(!tokenAvailable.contains(color))
             throw new ColorNotAvailableException("This color is already taken");
 
@@ -283,12 +249,7 @@ public class Game {
 
         colorChosen++;
 
-        //TODO MESSAGGIO
-//        try {
-//            player.getClient().updateColor(color);
-//        } catch (RemoteException e) {
-//            throw new RuntimeException(e);
-//        }
+        gameServerInstance.sendColorChosen(gameServerInstance.getClientID(player), color);
 
         if (colorChosen == this.numOfPlayers)
             setupHandsAndObjectives();
@@ -304,12 +265,7 @@ public class Game {
 
         ObjectiveCard cardToPutBack = player.getHandObjective().remove(indexToRemove);
 
-        //TODO MESSAGGIO
-//        try {
-//            player.getClient().updateHandObjecive(player.getHandObjective()); //updating hand objective
-//        } catch (RemoteException e) {
-//            throw new RuntimeException(e);
-//        }
+        gameServerInstance.sendHandObjectiveUpdate(gameServerInstance.getClientID(player), player.getHandObjective());
 
         this.objectiveDeck.addCard(cardToPutBack);
 
@@ -327,44 +283,30 @@ public class Game {
             p.getHandCard().add((PlayableCard) resourceDeck.draw());
             p.getHandCard().add((PlayableCard) resourceDeck.draw());
             p.getHandCard().add((PlayableCard) goldDeck.draw());
-            //TODO MESSAGGIO
 
-//            try { //updating hands
-//                p.getClient().updateHand(p.getHandCard());
-//            } catch (RemoteException e) {
-//                throw new RuntimeException(e);
-//            }
+            gameServerInstance.sendHandCardsUpdate(gameServerInstance.getClientID(p), p.getHandCard());
+
         }
         //shuffling the objectiveDeck
         objectiveDeck.shuffle();
         //placing the 2 common objective on the table
         displayedObjectiveCard.add((ObjectiveCard) objectiveDeck.draw());
         displayedObjectiveCard.add((ObjectiveCard) objectiveDeck.draw());
+
+
         for(Player p : listOfPlayers){
             p.getHandObjective().add((ObjectiveCard) objectiveDeck.draw());
             p.getHandObjective().add((ObjectiveCard) objectiveDeck.draw());
-            //TODO MESSAGGIO
-
-//            try {
-//                p.getClient().updateHandObjecive(p.getHandObjective()); //updating hand objectives
-//            } catch (RemoteException e) {
-//                throw new RuntimeException(e);
-            //}
+            gameServerInstance.sendHandObjectiveUpdate(gameServerInstance.getClientID(p), p.getHandObjective());
         }
         this.setState(GameState.CHOOSING_OBJECTIVES);
-        //TODO MESSAGGIO
 
-//        for (ClientCallbackInterface c: listeners.values()){
-//            try {
-//                c.updateDisplayedObjectiveCards(displayedObjectiveCard);
-//                c.updateState(this.state);
-//            } catch (RemoteException e) {
-//                throw new RuntimeException(e);
-//            }
-//        }
+        gameServerInstance.sendGameStateUpdate(this.state);
+        gameServerInstance.sendDisplayedObjectiveCardUpdate(displayedObjectiveCard);
+
     }
 
-public void randomizeFirstPlayer(){
+    public void randomizeFirstPlayer(){
         //choosing randomly the first player
         Random rand = new Random();
         int index = rand.nextInt(listOfPlayers.size());
@@ -372,15 +314,7 @@ public void randomizeFirstPlayer(){
         setCurrentPlayer(getFirstPlayer());
         this.setState(GameState.STARTED);
 
-    //TODO MESSAGGIO
-
-//        for (ClientCallbackInterface c: this.listeners.values()) { //updating clients
-//            try {
-//                c.updateState(GameState.STARTED);
-//            } catch (RemoteException e) {
-//                throw new RuntimeException(e);
-//            }
-//        }
+        gameServerInstance.sendGameStateUpdate(this.state);
     }
 
 
@@ -436,6 +370,8 @@ public void randomizeFirstPlayer(){
 
     public void addPlayer(Player newPlayer){
         listOfPlayers.add(newPlayer);
+        //todo mando lista player - broadcast
+        //todo mando anche newPlayer
 
     }
 
@@ -449,16 +385,11 @@ public void randomizeFirstPlayer(){
 
         int newIndex = (listOfPlayers.indexOf(currentPlayer) + 1) % listOfPlayers.size();
         this.setCurrentPlayer(listOfPlayers.get(newIndex));
-        //TODO MESSAGGIO
 
-//        for (ClientCallbackInterface c: listeners.values()) {
-//            try {
-//                c.update("It's now " + this.getCurrentPlayer().getUsername() + "'s turn");
-//            } catch (RemoteException e) {
-//                throw new RuntimeException(e);
-//            }
-//        }
-        currentPlayerhasPlayed = false;
+        gameServerInstance.sendCurrentPlayerUpdate(this.currentPlayer);
+
+        currentPlayerhasPlayed = false; //todo non va mandato alla view?
+
     }
 
     public void updatePoints(int score, Player player){
@@ -561,5 +492,7 @@ public void randomizeFirstPlayer(){
     public GameServerInstance getGameServerInstance() {
         return gameServerInstance;
     }
+
+
 }
 
