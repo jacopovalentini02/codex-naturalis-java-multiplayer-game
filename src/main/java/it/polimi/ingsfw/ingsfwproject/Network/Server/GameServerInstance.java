@@ -49,7 +49,7 @@ public class GameServerInstance {
 
     //METODI PER L'UPDATE AL CLIENT
     public void sendStarterCardMessage(int clientID, StarterCard starter) {
-        SendStarterCard starterMessage = new SendStarterCard(clientID, starter);
+        SendStarterCardMessage starterMessage = new SendStarterCardMessage(clientID, starter);
         sendUpdateToAll(starterMessage);
     }
 

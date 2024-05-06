@@ -30,8 +30,10 @@ abstract public class AbstractHandler extends UnicastRemoteObject implements Han
         else
             gameServerInstance.addToQueue(message);
 
-
     }
+
+
+
 
 
     public void setGameServerInstance(GameServerInstance instance){

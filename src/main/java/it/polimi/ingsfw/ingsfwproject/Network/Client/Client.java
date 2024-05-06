@@ -60,7 +60,7 @@ public abstract class Client {
                 //
                 break;
             case STARTER_CARD:
-                SendStarterCard starterMsg=(SendStarterCard) message;
+                SendStarterCardMessage starterMsg=(SendStarterCardMessage) message;
                 this.view.getHandCards().add(starterMsg.getStarterCard()); //Add starter card to hand
                 break;
             case GOLD_DECK:
@@ -93,5 +93,9 @@ public abstract class Client {
 
         }
 
+    }
+
+    public int getClientID(){
+        return this.clientID;
     }
 }
