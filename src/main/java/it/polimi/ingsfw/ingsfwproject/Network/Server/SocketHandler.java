@@ -19,11 +19,11 @@ public class SocketHandler extends AbstractHandler implements Runnable{
     private ObjectInputStream in;
     private ObjectOutputStream out;
 
-    public SocketHandler(Socket socket) throws IOException {
+    public SocketHandler(Socket socket, int clientID, Server server) throws IOException {
+        super(clientID, server);
         this.socket = socket;
         this.in = new ObjectInputStream(socket.getInputStream());
         this.out = new ObjectOutputStream(socket.getOutputStream());
-
         System.out.println("Server client handler inizializzato");
     }
 @Override

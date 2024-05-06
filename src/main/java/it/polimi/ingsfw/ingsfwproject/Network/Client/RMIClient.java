@@ -3,10 +3,13 @@ package it.polimi.ingsfw.ingsfwproject.Network.Client;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.Message;
 
 import java.io.IOException;
+import java.rmi.RemoteException;
 
 public class RMIClient extends Client{
 
-    public RMIClient(String ip, int port) {
+    private RMIHandlerClient handler;
+
+    public RMIClient(String ip, int port) throws RemoteException {
         super(ip, port);
     }
 
@@ -25,7 +28,7 @@ public class RMIClient extends Client{
 
     }
 
-    public void receiveMessage(Message m) throws IOException, ClassNotFoundException {
+    public void receiveMessage(Message m) {
         handleMessage(m);
     }
 }
