@@ -79,12 +79,15 @@ public class CLI extends View implements Runnable {
 
         }while(option <0 || option > 1);
 
+        scanner.nextLine();
+
         System.out.println("Inserisci l'IP del server: ");
         ip = scanner.nextLine();
 
         System.out.println("Inserisci la porta a cui connettersi");
         port = scanner.nextInt();
 
+        scanner.nextLine();
 
         try {
             this.client = (option == 0? new RMIClient(ip,port) : new SocketClient(ip,port));
