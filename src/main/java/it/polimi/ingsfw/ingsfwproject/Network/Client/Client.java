@@ -96,6 +96,8 @@ public abstract class Client {
         }
         this.view.receiveMessage(message);
 
+        this.view.receiveMessage(message);
+
     }
 
     public int getClientID(){

@@ -39,6 +39,7 @@ public class RMIClient extends Client{
         //creazione dell'handler client
         Handler clientHandler = new RMIHandlerClient(this, clientID);
 
+
         //passaggio al server del client handler
         serverFactory.setClientHandler(clientHandler);
 

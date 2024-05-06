@@ -1,4 +1,10 @@
 package it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServer;
 
-public class GetColorAvailableMessage {
+import it.polimi.ingsfw.ingsfwproject.Network.Messages.Message;
+import it.polimi.ingsfw.ingsfwproject.Network.Messages.MessageType;
+
+public class GetColorAvailableMessage extends Message {
+    public GetColorAvailableMessage(int clientID, MessageType messageType) {
+        super(clientID, messageType.ASK_FOR_COLORS);
+    }
 }

@@ -5,6 +5,13 @@ public enum MessageType {
     CREATE_GAME,
     GET_GAME_LIST, //CLIENT ASKS FOR GAMES - SERVER
     JOIN_GAME,
+    DRAW,
+    PICK,
+    ASK_FOR_COLORS,
+    SKIP_TURN,
+    PLAY_CARD,
+    WANTED_COLOR,
+
 
     //Exception
     INVALID_NUM_OF_PLAYERS,

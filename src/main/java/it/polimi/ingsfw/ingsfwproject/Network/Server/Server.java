@@ -25,16 +25,9 @@ import java.util.concurrent.Executors;
 
 public class Server {
     private LobbyController lobbyController;
-
-    //todo che tipo di coda scegliere. Candidata: ConcurredLinkedQueue oppure array list che va sincronizzata
-
-
     private ConcurrentLinkedQueue<Message> queue;
-
     private ArrayList<Handler> handlers; //clientID-handler
-
     private ArrayList<GameServerInstance> games;
-
     private int clientsCounter;
 
     public Server(){
