@@ -14,7 +14,6 @@ public abstract class Client {
     private String nickname;
     private int clientID;
     private VirtualView virtualView;
-
     private View view;
 
 
@@ -94,6 +93,7 @@ public abstract class Client {
 
 
         }
+        this.view.receiveMessage(message);
 
         this.view.receiveMessage(message);
 
