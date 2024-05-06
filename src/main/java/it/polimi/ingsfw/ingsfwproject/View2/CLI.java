@@ -1,14 +1,12 @@
 package it.polimi.ingsfw.ingsfwproject.View2;
 
-import it.polimi.ingsfw.ingsfwproject.Model.Game;
-import it.polimi.ingsfw.ingsfwproject.Network.Client.Client;
 import it.polimi.ingsfw.ingsfwproject.Network.Client.RMIClient;
 import it.polimi.ingsfw.ingsfwproject.Network.Client.SocketClient;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServer.CreateGameMessage;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServer.GetGameListMessage;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServer.JoinGameMessage;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.Message;
-import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.SendGameList;
+import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.SendGameListMessage;
 
 import java.io.IOException;
 import java.rmi.RemoteException;
@@ -168,7 +166,7 @@ public class CLI extends View implements Runnable {
     public void handleMessage(Message message){
         switch (message.getType()) {
             case SEND_GAME_LIST :
-                scegliPartitaEUnisciti(((SendGameList) message).getGameList());
+                scegliPartitaEUnisciti(((SendGameListMessage) message).getGameList());
         }
     }
 
