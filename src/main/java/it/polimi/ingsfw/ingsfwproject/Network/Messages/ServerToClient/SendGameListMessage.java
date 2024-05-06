@@ -8,10 +8,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 //Server - client, clients receive the list of the game
-public class SendGameList extends Message implements Serializable {
+public class SendGameListMessage extends Message implements Serializable {
     private HashMap<Integer, Integer> gameList;
 
-    public SendGameList(int clientID, HashMap<Integer, Integer> gameList) {
+    public SendGameListMessage(int clientID, HashMap<Integer, Integer> gameList) {
         super(clientID,MessageType.SEND_GAME_LIST);
         this.gameList = gameList;
     }

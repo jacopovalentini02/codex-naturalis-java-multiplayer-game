@@ -56,11 +56,11 @@ public abstract class Client {
                 this.view.setGameID(mjoined.getGameId());
                 break;
             case SEND_GAME_LIST: //game list received, set dei game nella view
-                SendGameList m=(SendGameList) message;
+                SendGameListMessage m=(SendGameListMessage) message;
                 //PASSARE A RECEIVE MESSAGE VIEW
                 break;
             case STARTER_CARD:
-                SendStarterCard starterMsg=(SendStarterCard) message;
+                SendStarterCardMessage starterMsg=(SendStarterCardMessage) message;
                 this.view.getHandCards().add(starterMsg.getStarterCard()); //Add starter card to hand
                 break;
             case GOLD_DECK:
@@ -93,5 +93,9 @@ public abstract class Client {
 
         }
 
+    }
+
+    public int getClientID(){
+        return this.clientID;
     }
 }
