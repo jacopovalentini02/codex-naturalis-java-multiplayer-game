@@ -80,6 +80,8 @@ public class Server {
                 }
                 this.sendResponse(new GameJoinedMessage(m.getClientID(), createdGameID));
                 break;
+
+                //todo creo un gameserverinstance ->lo setto nell'handler
             }
             case GET_GAME_LIST: {
                 GetGameListMessage m = (GetGameListMessage) message;

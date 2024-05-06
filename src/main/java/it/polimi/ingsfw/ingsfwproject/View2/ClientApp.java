@@ -20,7 +20,7 @@ public class ClientApp {
         View view = null;
 
         do {
-            System.out.println("con che interfaccia vuoi giocare? \n1) CLI \n2) GUI\n");
+            System.out.println("Con che interfaccia vuoi giocare? \n1) CLI \n2) GUI");
             if (scanner.hasNextInt()) {
                 choice = scanner.nextInt();
                 if (choice == 1 || choice == 2) {

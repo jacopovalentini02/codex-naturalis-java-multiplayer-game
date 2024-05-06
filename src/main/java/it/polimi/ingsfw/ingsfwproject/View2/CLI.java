@@ -72,19 +72,19 @@ public class CLI extends View implements Runnable {
     public void scegliMetodoConnessione(){
         String ip;
         int port;
-        int option = 0;
+        int option = 1;
         Message messageToSend;
 
         do {
-            if(option <0 || option > 1)
-                System.out.println("opzione non valida");
-            System.out.println("vuoi usare RMI o Socket? 1 per RMI, 2 per Socket");
+            if(option <1 || option > 2)
+                System.out.println("Opzione non valida");
+            System.out.println("\nVuoi usare Socket o RMI? \n1) Socket \n2) RMI");
             if(scanner.hasNextInt())
                 option = scanner.nextInt();
+            scanner.nextLine();
 
-        }while(option <0 || option > 1);
+        }while(option <1 || option > 2);
 
-        scanner.nextLine();
 
         System.out.println("Inserisci l'IP del server: ");
         ip = scanner.nextLine();
@@ -95,7 +95,7 @@ public class CLI extends View implements Runnable {
         scanner.nextLine();
 
         try {
-            this.client = (option == 0? new RMIClient(ip,port,this) : new SocketClient(ip,port,this));
+            this.client = (option == 2? new RMIClient(ip,port,this) : new SocketClient(ip,port,this));
             client.startConnection();
         } catch (RemoteException e) {
             throw new RuntimeException(e);
