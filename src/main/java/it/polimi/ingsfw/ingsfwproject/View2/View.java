@@ -5,11 +5,12 @@ import it.polimi.ingsfw.ingsfwproject.Network.Messages.Message;
 
 import java.util.HashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 public abstract class View implements Runnable{
     Client client;
     //todo: usare blockinglinkedqueue come tipo di coda
-    public ConcurrentLinkedQueue<Message> messages;
+    public LinkedBlockingQueue<Message> messages;
 
     public abstract void chooseFirstAction();
 
@@ -22,6 +23,15 @@ public abstract class View implements Runnable{
     public void receiveMessage() {
         //todo: cambiare questo ciclo con un metodo piu intelligente
         while (true){
+            try {
+                Message toProcess = messages.take();
+                handleMessage(toProcess);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+
+
+            /*
             Message toProcess = messages.poll();
             if (toProcess != null){
                 handleMessage(toProcess);
@@ -35,6 +45,8 @@ public abstract class View implements Runnable{
                     return;
                 }
             }
+
+             */
         }
 
     }
