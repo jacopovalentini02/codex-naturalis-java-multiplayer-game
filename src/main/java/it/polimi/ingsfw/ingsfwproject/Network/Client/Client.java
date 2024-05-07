@@ -57,6 +57,11 @@ public abstract class Client {
                 this.virtualView.setState(GameState.WAITING_FOR_PLAYERS);
                 GameJoinedMessage mjoined=(GameJoinedMessage) message;
                 this.virtualView.setGameID(mjoined.getGameId());
+                this.virtualView.setNickname(mjoined.getNickName());
+                break;
+            case NEW_PLAYER_JOINED:
+                PlayersListMessage newPlayerJoinedMsg=(PlayersListMessage) message;
+                this.virtualView.setListOfPlayers(newPlayerJoinedMsg.getNicknames());
                 break;
             case STARTER_CARD:
                 SendStarterCardMessage starterMsg=(SendStarterCardMessage) message;
@@ -80,7 +85,7 @@ public abstract class Client {
                 break;
             case COORDINATES_AVAILABLE:
                 CoordinatesAvailableMessage coordMsg=(CoordinatesAvailableMessage) message;
-                this.virtualView.getPlayer().getGround().setAvailablePositions(coordMsg.getCoords());
+                this.virtualView.setAvailablePositions(coordMsg.getCoords());
                 break;
             case HAND_OBJECTIVE:
                 HandObjectiveMessage handObjectiveMsg=(HandObjectiveMessage) message;
@@ -89,7 +94,15 @@ public abstract class Client {
             case GAME_STATE:
                 GameStateMessage gameStateMsg=(GameStateMessage) message;
                 this.virtualView.setState(gameStateMsg.getGameState());
-
+                break;
+            case GRID:
+                GridMessage gridMsg=(GridMessage) message;
+                this.virtualView.setGridForPlayer(gridMsg.getNickName(),gridMsg.getGrid());
+                break;
+            case RESOURCES:
+                ResourcesMessage resourcesMessage=(ResourcesMessage) message;
+                this.virtualView.setResourcesForPlayer(resourcesMessage.getNickname(),resourcesMessage.getResources());
+                break;
 
         }
 

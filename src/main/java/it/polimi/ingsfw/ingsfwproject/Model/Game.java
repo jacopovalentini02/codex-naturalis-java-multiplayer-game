@@ -370,8 +370,12 @@ public class Game {
 
     public void addPlayer(Player newPlayer){
         listOfPlayers.add(newPlayer);
-        //todo mando lista player - broadcast
-        //todo mando anche newPlayer
+
+        ArrayList<String> nicknames = new ArrayList<>();
+        for (Player player : listOfPlayers) {
+            nicknames.add(player.getUsername());
+        }
+        gameServerInstance.sendPlayersListUpdate(nicknames);
 
     }
 
