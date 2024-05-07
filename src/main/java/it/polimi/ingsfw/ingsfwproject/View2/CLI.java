@@ -42,21 +42,23 @@ public class CLI extends View implements Runnable {
     private void handleInput(String input){
         Message messageToSend;
         String name;
+        input= input.toLowerCase();
+
         try {
             switch (input) {
-                case "CreateGame":
+                case "creategame":
                     int numOfPlayers = askForIntInput("insert the number of players between 2 and 4", 2, 4);
                     name = askForStringInput("insert your nickname");
                     messageToSend = new CreateGameMessage(client.getClientID(), numOfPlayers, name);
                     client.sendMessage(messageToSend);
                     break;
-                case "JoinGame":
+                case "joingame":
                     int gameID = askForIntInput("insert the game ID", 0, Integer.MAX_VALUE);
                     name = askForStringInput("insert your nickname");
                     messageToSend = new JoinGameMessage(client.getClientID(), name, gameID);
                     client.sendMessage(messageToSend);
                     break;
-                case "GetGameList":
+                case "getgamelist":
                     messageToSend = new GetGameListMessage(client.getClientID());
                     client.sendMessage(messageToSend);
                     break;
@@ -125,7 +127,7 @@ public class CLI extends View implements Runnable {
             case GAME_STATE:
                 Message gameStateMessage = (GameStateMessage) message;
                 //todo: scrivere lo stato in cui viene cambiato il gioco
-                System.out.println("the game state have been changed to: " );
+                System.out.println("the game state has been changed to: " );
                 break;
             case GRID:
                 GridMessage gridMsg=(GridMessage) message;
