@@ -45,23 +45,13 @@ public class Player implements Serializable {
             System.out.println("Deck is empty");
         }
 
-        //TODO MESSAGGIO
+        gameServerInstance.sendHandCardsUpdate(gameServerInstance.getClientID(this), this.getHandCard() );
 
-//        try { //updating client's hand
-//            client.updateHand(this.getHandCard());
-//        } catch (RemoteException e) {
-//            throw new RuntimeException(e);
-//        }
     }
     public void pick(Card card){
         handCard.add((PlayableCard) card);
-        //TODO MESSAGGIO
+        gameServerInstance.sendHandCardsUpdate(gameServerInstance.getClientID(this), this.getHandCard() );
 
-//        try {
-//            this.client.updateHand(this.getHandCard());
-//        } catch (RemoteException e) {
-//            throw new RuntimeException(e);
-//        }
     }
 
     public int playCard(PlayableCard cardPlayed, boolean upwards, Coordinate coord) throws CardNotInHandException, PositionNotAvailableException, NotEnoughResourcesException {
@@ -74,6 +64,9 @@ public class Player implements Serializable {
             throw new CardNotInHandException("The card chosen is not in the player's hand");
         }
         //TODO MESSAGGIO
+        int clientID=gameServerInstance.getClientID(this);
+        gameServerInstance.sendAvaiblePositionUpdate(clientID, this.ground.getAvailablePositions());
+        gameServerInstance.sendHandCardsUpdate(clientID, this.getHandCard());
 //
 //        try {
 //            this.client.updateAvailablePositions(this.ground.getAvailablePositions()); solo per me

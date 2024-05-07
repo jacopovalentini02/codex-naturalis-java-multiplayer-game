@@ -400,15 +400,8 @@ public class Game {
         for (Map.Entry<Player, Integer> entry: scores.entrySet()){
             playerScoresMap.put(entry.getKey().getUsername(), entry.getValue());
         }
-        //TODO MESSAGGIO
 
-//        for (ClientCallbackInterface c: listeners.values()){ //updating clients with the new points
-//            try {
-//                c.updateScores(playerScoresMap);
-//            } catch (RemoteException e) {
-//                throw new RuntimeException(e);
-//            }
-//        }
+        gameServerInstance.sendScoreUpdate(playerScoresMap);
 
         if (scores.get(player) >= 20) {
             potentialWinner=currentPlayer;
@@ -429,15 +422,8 @@ public class Game {
         } else if (card instanceof ResourceCard) {
             displayedPlayableCard.add((PlayableCard) resourceDeck.draw());
         }
-        //TODO MESSAGGIO
 
-//        for (ClientCallbackInterface c: listeners.values()) {
-//            try {
-//                c.updateDisplayedPlayableCards(this.displayedPlayableCard);
-//            } catch (RemoteException e) {
-//                throw new RuntimeException(e);
-//            }
-//        }
+        gameServerInstance.sendDisplayedPlayableCardUpdate(this.displayedPlayableCard);
 
     }
 
@@ -457,8 +443,8 @@ public class Game {
         }
 
         winner = Collections.max(scores.entrySet(), Map.Entry.comparingByValue()).getKey();
-        //TODO: notify clients with a listener
         setState(GameState.ENDED);
+        gameServerInstance.sendGameStateUpdate(this.state);
 
         this.endGame();
     }
