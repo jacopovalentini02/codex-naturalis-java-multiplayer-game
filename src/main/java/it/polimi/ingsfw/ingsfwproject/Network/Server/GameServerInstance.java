@@ -158,7 +158,7 @@ public class GameServerInstance {
         sendUpdateToAll(dispPlayCardMsg);
     }
 
-    public void sendCurrentPlayerUpdate(Player currentPlayer) {
+    public void sendCurrentPlayerUpdate(String currentPlayer) {
         CurrentPlayerMessage currentPlayerMsg = new CurrentPlayerMessage(sendBroadcast, currentPlayer);
         sendUpdateToAll(currentPlayerMsg);
     }

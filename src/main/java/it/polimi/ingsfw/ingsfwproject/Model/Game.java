@@ -236,7 +236,7 @@ public class Game {
         gameServerInstance.sendGoldDeckUpdate(this.goldDeck);
         gameServerInstance.sendResourceDeckUpdate(this.resourceDeck);
         gameServerInstance.sendDisplayedPlayableCardUpdate(this.displayedPlayableCard);
-        gameServerInstance.sendCurrentPlayerUpdate(this.currentPlayer);
+        gameServerInstance.sendCurrentPlayerUpdate(this.currentPlayer.getUsername());
 
     }
 
@@ -392,7 +392,7 @@ public class Game {
         int newIndex = (listOfPlayers.indexOf(currentPlayer) + 1) % listOfPlayers.size();
         this.setCurrentPlayer(listOfPlayers.get(newIndex));
 
-        gameServerInstance.sendCurrentPlayerUpdate(this.currentPlayer);
+        gameServerInstance.sendCurrentPlayerUpdate(this.currentPlayer.getUsername());
 
         currentPlayerhasPlayed = false; //todo non va mandato alla view?
 
