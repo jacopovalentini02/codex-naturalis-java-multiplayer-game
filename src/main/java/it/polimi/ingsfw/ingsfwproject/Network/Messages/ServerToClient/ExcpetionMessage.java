@@ -6,7 +6,7 @@ import it.polimi.ingsfw.ingsfwproject.Network.Messages.MessageType;
 public class ExcpetionMessage extends Message {
     String description;
     public ExcpetionMessage(int clientID, String description) {
-        super(clientID, MessageType.EXCPETION_MESSAGE);
+        super(clientID, MessageType.EXCEPTION_MESSAGE);
         this.description=description;
     }
 
