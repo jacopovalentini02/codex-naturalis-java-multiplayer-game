@@ -35,6 +35,8 @@ public enum MessageType {
     DISPLAYED_OBJECTIVE,
     HAND_CARDS,
     GAME_STATE,
+    SCORE,
+    CONTENT_COUNTER
 
 
 }

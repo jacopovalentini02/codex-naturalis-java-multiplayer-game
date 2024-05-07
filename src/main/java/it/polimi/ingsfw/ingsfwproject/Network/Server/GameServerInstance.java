@@ -9,6 +9,7 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class GameServerInstance {
     private GameController gameController;
@@ -21,6 +22,7 @@ public class GameServerInstance {
 
     private HashMap<Integer, Handler> handlers;
     private HashMap<Player, Integer> players;
+
 
     public void readQueue(){
 
@@ -59,7 +61,7 @@ public class GameServerInstance {
     }
 
     public void sendDisplayedPlayableCardUpdate(List<PlayableCard> displayedPlayableCard) {
-        DispPlayCardMessage dispPlayCardMsg = new DispPlayCardMessage(sendBroadcast, new ArrayList<>(displayedPlayableCard));
+        DispayedPlayableCardMessage dispPlayCardMsg = new DispayedPlayableCardMessage(sendBroadcast, new ArrayList<>(displayedPlayableCard));
         sendUpdateToAll(dispPlayCardMsg);
     }
 
@@ -97,5 +99,14 @@ public class GameServerInstance {
     public void sendDisplayedObjectiveCardUpdate(List<ObjectiveCard> displayedObjectiveCard){
         DisplayedObjectiveMessage displayedObjectiveMsg=new DisplayedObjectiveMessage(sendBroadcast, displayedObjectiveCard);
         sendUpdateToAll(displayedObjectiveMsg);
+    }
+
+    public void sendScoreUpdate(Map<String, Integer> scores){
+        ScoreMessage scoreMessage=new ScoreMessage(sendBroadcast, scores);
+        sendUpdateToAll(scoreMessage);
+    }
+
+    public void sendContentCounterUpdate(int clientID, ContentCounter contentCounter){
+
     }
 }

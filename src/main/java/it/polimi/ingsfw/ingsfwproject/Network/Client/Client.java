@@ -69,8 +69,9 @@ public abstract class Client {
             case RESOURCE_DECK:
                 ResourceDeckMessage resourceMsg=(ResourceDeckMessage) message;
                 this.virtualView.setGoldDeck(resourceMsg.getResourceDeck());
+                break;
             case DISPLAYED_PLAYABLE_CARDS:
-                DispPlayCardMessage displayedCardMsg=(DispPlayCardMessage) message;
+                DispayedPlayableCardMessage displayedCardMsg=(DispayedPlayableCardMessage) message;
                 this.virtualView.setDisplayedCards(displayedCardMsg.getDisplayedPlayableCard());
                 break;
             case CURRENT_PLAYER:

@@ -6,9 +6,9 @@ import it.polimi.ingsfw.ingsfwproject.Network.Messages.MessageType;
 
 import java.util.ArrayList;
 
-public class DispPlayCardMessage extends Message {
+public class DispayedPlayableCardMessage extends Message {
     private ArrayList<PlayableCard> displayedPlayableCard;
-    public DispPlayCardMessage(int clientID, ArrayList<PlayableCard> displayedPlayableCard) {
+    public DispayedPlayableCardMessage(int clientID, ArrayList<PlayableCard> displayedPlayableCard) {
         super(clientID, MessageType.DISPLAYED_PLAYABLE_CARDS);
         this.displayedPlayableCard=displayedPlayableCard;
     }
