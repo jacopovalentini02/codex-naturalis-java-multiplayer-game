@@ -234,6 +234,7 @@ public class Game {
 
         }
         gameServerInstance.sendGoldDeckUpdate(this.goldDeck);
+        gameServerInstance.sendResourceDeckUpdate(this.resourceDeck);
         gameServerInstance.sendDisplayedPlayableCardUpdate(this.displayedPlayableCard);
         gameServerInstance.sendCurrentPlayerUpdate(this.currentPlayer);
 

@@ -6,17 +6,20 @@ import it.polimi.ingsfw.ingsfwproject.Network.Messages.Message;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.MessageType;
 
 public class PlayCardMessage extends Message {
-    PlayableCard card;
+    String nickname;
+    int cardID;
     boolean face;
     Coordinate coordinate;
-    public PlayCardMessage(int clientID, PlayableCard card, boolean face, Coordinate coordinate) {
+    public PlayCardMessage(int clientID, int card, boolean face, Coordinate coordinate, String nickname) {
         super(clientID, MessageType.PLAY_CARD);
-        this.card = card;
+        this.cardID = card;
         this.face=face;
         this.coordinate=coordinate;
+        this.nickname=nickname;
     }
-    public PlayableCard getCard() {
-        return card;
+
+    public int getCardID() {
+        return cardID;
     }
 
     public boolean isFace() {
@@ -27,4 +30,7 @@ public class PlayCardMessage extends Message {
         return coordinate;
     }
 
+    public String getNickname() {
+        return nickname;
+    }
 }

@@ -4,12 +4,22 @@ import it.polimi.ingsfw.ingsfwproject.Network.Messages.Message;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.MessageType;
 
 public class DrawMessage extends Message{
-    Deck deck;
-    public DrawMessage(int clientID, Deck deck) {
+
+    String nickname;
+    boolean resourceDeck;
+
+    public DrawMessage(int clientID, String nickname, boolean resourceDeck) {
         super(clientID, MessageType.DRAW);
-        this.deck = deck;
+        this.nickname=nickname;
+        this.resourceDeck=resourceDeck;
+
     }
-    public Deck getDeck() {
-        return deck;
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public boolean isResourceDeck() {
+        return resourceDeck;
     }
 }

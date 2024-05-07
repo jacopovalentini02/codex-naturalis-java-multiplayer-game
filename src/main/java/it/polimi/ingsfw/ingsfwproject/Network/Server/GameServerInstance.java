@@ -1,7 +1,9 @@
 package it.polimi.ingsfw.ingsfwproject.Network.Server;
 
 import it.polimi.ingsfw.ingsfwproject.Controller.GameController;
+import it.polimi.ingsfw.ingsfwproject.Exceptions.*;
 import it.polimi.ingsfw.ingsfwproject.Model.*;
+import it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServer.*;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.Message;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.*;
 
@@ -44,6 +46,60 @@ public class GameServerInstance {
 
 
     private void processMessage(Message message) {
+        switch (message.getType()){
+            case DRAW:
+                DrawMessage drawMessage=(DrawMessage) message;
+                try{
+                    gameController.draw(drawMessage.getNickname(), drawMessage.isResourceDeck());
+                }catch (TurnException | GamePhaseException | DeckEmptyException | DeckException e){
+                    sendException(drawMessage.getClientID(), e.getMessage());
+                }
+                break;
+
+            case PLAY_CARD:
+                PlayCardMessage playCardMessage=(PlayCardMessage) message;
+                try{
+                    gameController.playCard(playCardMessage.getNickname(),playCardMessage.getCardID(),playCardMessage.isFace(),playCardMessage.getCoordinate());
+                }catch (TurnException | GamePhaseException | PositionNotAvailableException | NotEnoughResourcesException | CardNotInHandException e){
+                    sendException(playCardMessage.getClientID(), e.getMessage());
+                }
+                break;
+
+            case SKIP_TURN:
+                //todo gestirlo
+                break;
+
+            case PICK:
+                PickMessage drawDispPlayableCard=(PickMessage) message;
+                try{
+                    gameController.drawDisplayedPlayableCard(drawDispPlayableCard.getNickname(),drawDispPlayableCard.getCardID());
+                }catch(TurnException | CardNotPresentException | DeckEmptyException | GamePhaseException e){
+                    sendException(drawDispPlayableCard.getClientID(), e.getMessage());
+                }
+                break;
+
+            case WANTED_COLOR:
+                WantThatColorMessage wantThatColorMessage=(WantThatColorMessage) message;
+                try{
+                    gameController.chooseColor(wantThatColorMessage.getNickname(),wantThatColorMessage.getColor());
+                }catch(ColorNotAvailableException| DeckEmptyException| GamePhaseException| TurnException e){
+                    sendException(wantThatColorMessage.getClientID(), e.getMessage());
+                }
+                break;
+            case ASK_FOR_COLORS:
+                sendColorsAvailable(message.getClientID(), gameController.getModel().getTokenAvailable());
+                break;
+
+            case CHOSEN_OBJECTIVE_CARD:
+                ObjectiveCardChosenMessage objectiveCardChosenMessage=(ObjectiveCardChosenMessage) message;
+                try{
+                    gameController.chooseObjectiveCard(objectiveCardChosenMessage.getNickname(),objectiveCardChosenMessage.getCardID());
+                }catch(TurnException| GamePhaseException| CardNotPresentException e){
+                    sendException(objectiveCardChosenMessage.getClientID(), e.getMessage());
+                }
+                break;
+        }
+
     }
 
     public void addToQueue(Message message){
@@ -89,6 +145,11 @@ public class GameServerInstance {
     public void sendGoldDeckUpdate(Deck goldDeck) {
         GoldDeckMessage goldDeckMsg = new GoldDeckMessage(sendBroadcast, goldDeck);
         sendUpdateToAll(goldDeckMsg);
+    }
+
+    public void sendResourceDeckUpdate(Deck resourceDeck){
+        ResourceDeckMessage resourceDeckMessage=new ResourceDeckMessage(sendBroadcast,resourceDeck);
+        sendUpdateToAll(resourceDeckMessage);
     }
 
     public void sendDisplayedPlayableCardUpdate(List<PlayableCard> displayedPlayableCard) {
@@ -155,5 +216,15 @@ public class GameServerInstance {
     public void sendWinner(String winner){
         WinnerMessage winnerMsg=new WinnerMessage(sendBroadcast, winner);
         sendUpdateToAll(winnerMsg);
+    }
+
+    public void sendException(int clientID, String error){
+        ExcpetionMessage excpetionMessage=new ExcpetionMessage(clientID,error);
+        sendUpdateToAll(excpetionMessage);
+    }
+
+    public void sendColorsAvailable(int clientID, List<PlayerColor> tokenAvailable){
+        ColorAvailableMessage colorAvailableMessage=new ColorAvailableMessage(clientID, tokenAvailable);
+        sendUpdateToAll(colorAvailableMessage);
     }
 }
