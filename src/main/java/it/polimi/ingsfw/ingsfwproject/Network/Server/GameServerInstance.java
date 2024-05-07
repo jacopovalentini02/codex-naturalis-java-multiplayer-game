@@ -10,26 +10,49 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.BlockingDeque;
+import java.util.concurrent.LinkedBlockingDeque;
 
 public class GameServerInstance {
     private GameController gameController;
 
     int sendBroadcast=-10;
 
-
     //coda dei messaggi in entrata
-    //todo che tipo di coda scegliere. Candidata: ConcurredLinkedQueue oppure array list che va sincronizzata
-
+    private BlockingDeque<Message> queue;
     private HashMap<Integer, Handler> handlers;
     private HashMap<Player, Integer> players;
 
+    public GameServerInstance() {
+        this.queue = new LinkedBlockingDeque<>(); // Inizializzazione della coda
+        this.handlers = new HashMap<>();
+        this.players = new HashMap<>();
+        readQueue();
+    }
 
     public void readQueue(){
+        try {
+            while (true) {
+                Message message = queue.take(); // Rimane in attesa finché non c'è un messaggio disponibile
+                processMessage(message);
+            }
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
 
     }
 
-    public void addToQueue(Message message){
 
+    private void processMessage(Message message) {
+    }
+
+    public void addToQueue(Message message){
+        try {
+            queue.put(message); // Aggiunge il messaggio alla coda
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt(); // Gestione dell'interruzione
+            System.err.println("Errore durante l'aggiunta del messaggio alla coda: " + e.getMessage());
+        }
     }
 
     public void sendUpdateToAll(Message message){

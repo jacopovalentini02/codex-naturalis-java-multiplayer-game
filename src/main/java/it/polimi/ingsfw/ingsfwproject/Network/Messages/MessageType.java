@@ -39,7 +39,8 @@ public enum MessageType {
     RESOURCES,
     NEW_PLAYER_JOINED,
     GRID,
-    WINNER
+    WINNER,
+    EXCPETION_MESSAGE
 
 
 }
