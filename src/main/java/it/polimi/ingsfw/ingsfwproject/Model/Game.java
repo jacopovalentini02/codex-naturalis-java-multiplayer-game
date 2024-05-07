@@ -95,8 +95,8 @@ public class Game {
         lastRoundsplayed = 0;
         objectiveCardsChosen = 0;
         colorChosen = 0;
+        gameServerInstance.setGameController(this.controller);
         this.gameServerInstance=gameServerInstance;
-        this.gameServerInstance.setGameController(this.controller);
         setCurrentPlayer(player1);
     }
 
@@ -483,6 +483,14 @@ public class Game {
 
     public GameServerInstance getGameServerInstance() {
         return gameServerInstance;
+    }
+
+    public Player getPlayer(String nickname){
+        Player toReturn = null;
+        for (Player p: this.listOfPlayers)
+            if (Objects.equals(p.getUsername(), nickname))
+                toReturn = p;
+        return toReturn;
     }
 
 

@@ -227,5 +227,11 @@ public class GameController {
         this.model.clientDisconnected();
     }
 
+    public Player getPlayer(String username){
+       synchronized (model){
+           return model.getPlayer(username);
+       }
+    }
+
 }
 

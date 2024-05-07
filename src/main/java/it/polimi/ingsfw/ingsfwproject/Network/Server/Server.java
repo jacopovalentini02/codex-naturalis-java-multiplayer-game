@@ -6,6 +6,7 @@ import it.polimi.ingsfw.ingsfwproject.Exceptions.GameNotExistingException;
 import it.polimi.ingsfw.ingsfwproject.Exceptions.NickAlreadyTakenException;
 import it.polimi.ingsfw.ingsfwproject.Exceptions.NotValidNumOfPlayerException;
 import it.polimi.ingsfw.ingsfwproject.Model.GameManager;
+import it.polimi.ingsfw.ingsfwproject.Model.Player;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServer.CreateGameMessage;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServer.GetGameListMessage;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServer.JoinGameMessage;
@@ -14,6 +15,7 @@ import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.ExceptionM
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.ExceptionMessages.InvalidNumOfPlayerMessage;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.ExceptionMessages.NickAlreadyTakenMessage;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.ExceptionMessages.NotExistingGameMessage;
+import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.ExcpetionMessage;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.GameJoinedMessage;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.SendGameListMessage;
 
@@ -27,14 +29,11 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.concurrent.ConcurrentLinkedDeque;
-import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.*;
 
 public class Server {
     private LobbyController lobbyController;
-    private ConcurrentLinkedQueue<Message> queue;
+    private BlockingQueue<Message> queue;
     private HashMap<Integer, Handler> handlers; //clientID-handler
     private HashMap<Integer, GameServerInstance> games; //gameID-serverinstance
     private int clientsCounter;
@@ -43,7 +42,7 @@ public class Server {
         //Socket server e rmi server partono
         GameManager manager = new GameManager();
         lobbyController = new LobbyController(manager);
-        queue = new ConcurrentLinkedQueue<Message>();
+        queue = new LinkedBlockingQueue<Message>();
         handlers = new HashMap<Integer, Handler>();
         games = new HashMap<Integer, GameServerInstance>();
         this.clientsCounter = 0;
@@ -57,18 +56,12 @@ public class Server {
     public void readQueue(){//read and process messages in the queue
         System.out.println("Reader Thread started");
         while (true){
-            Message toProcess = queue.poll();
-            if (toProcess != null){
+            try {
+                Message toProcess = queue.take();
                 processMessage(toProcess);
-            } else {
-                //coda vuota
-                try{
-                    Thread.sleep(100);
-                }catch (InterruptedException e){
-                    System.out.println("Interrupted Exception");
-                    Thread.currentThread().interrupt();
-                    return;
-                }
+            } catch (InterruptedException e){
+                System.out.println("Reader thread interrotto");
+                return;
             }
         }
     }
@@ -82,7 +75,7 @@ public class Server {
                 try {
                     createdGameID = this.lobbyController.createGame(m.getNumPlayer(), m.getNickname());
                 } catch (NotValidNumOfPlayerException e) {
-                    this.sendResponse(new InvalidNumOfPlayerMessage(m.getClientID()));
+                    this.sendResponse(new ExcpetionMessage(m.getClientID(), e.getMessage()));
                     return;
                 }
                 //gets the gameserverinstance, puts it in the map, puts the client handler in the gameserverinstance
@@ -90,6 +83,15 @@ public class Server {
                 this.games.put(createdGameID, gameInstance);
                 Handler requestingClientHandler = handlers.get(m.getClientID());
                 gameInstance.setHandler(m.getClientID(), requestingClientHandler);
+
+                Player addedPlayer = gameInstance.getPlayer(m.getNickname());
+
+                if (addedPlayer != null){ //adding the new player to the game server instance
+                    gameInstance.addPlayer(addedPlayer, m.getClientID());
+                } else {
+                    throw new RuntimeException();
+                }
+
                 this.sendResponse(new GameJoinedMessage(m.getClientID(), createdGameID, m.getNickname()));
                 break;
             }
@@ -104,14 +106,8 @@ public class Server {
 
                 try {
                     joinedGameID = this.lobbyController.joinExistingGame(m.getNickname(), m.getGameID());
-                } catch (GameNotExistingException e){
-                    this.sendResponse(new NotExistingGameMessage(m.getClientID()));
-                    return;
-                } catch (GameFullException e){
-                    this.sendResponse(new GameFullMessage(m.getClientID()));
-                    return;
-                } catch (NickAlreadyTakenException e){
-                    this.sendResponse(new NickAlreadyTakenMessage(m.getClientID()));
+                } catch (GameNotExistingException | GameFullException | NickAlreadyTakenException e){
+                    this.sendResponse(new ExcpetionMessage(m.getClientID(), e.getMessage()));
                     return;
                 }
 
@@ -119,7 +115,19 @@ public class Server {
                 Handler requestingClientHandler = handlers.get(m.getClientID()); //gets the handler of the player
                 gameInstance.setHandler(m.getClientID(), requestingClientHandler);//puts the player's handler into the handlers map in GameServerInstamce
 
+                Player addedPlayer = gameInstance.getPlayer(m.getNickname());
+
+                if (addedPlayer != null){ //add the new player to the gameserverinstance
+                    gameInstance.addPlayer(addedPlayer, m.getClientID());
+                } else {
+                    throw new RuntimeException();
+                }
+
                 this.sendResponse(new GameJoinedMessage(m.getClientID(), joinedGameID, m.getNickname()));
+
+                //check if the game has reached the desired number of players. If so, start it
+                lobbyController.checkIfGameNeedsToBeStarted(joinedGameID);
+
                 break;
             }
 
@@ -128,8 +136,8 @@ public class Server {
     }
 
 
-
     public synchronized void sendResponse(Message m) {
+        System.out.println("Sending response");
         try {
             if (m.getClientID() == -10){ //broadcast message
                 for (Handler h: handlers.values())
@@ -145,6 +153,7 @@ public class Server {
     }
 
     public void addToQueue(Message message){
+        System.out.println("Adding message to queue");
         this.queue.add(message);
     }
 

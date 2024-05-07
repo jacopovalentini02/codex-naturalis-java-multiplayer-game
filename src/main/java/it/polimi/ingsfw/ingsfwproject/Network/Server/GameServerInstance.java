@@ -27,7 +27,8 @@ public class GameServerInstance {
         this.queue = new LinkedBlockingDeque<>(); // Inizializzazione della coda
         this.handlers = new HashMap<>();
         this.players = new HashMap<>();
-        readQueue();
+        Thread instanceReaderThread = new Thread(this::readQueue);
+        instanceReaderThread.start();
     }
 
     public void readQueue(){
@@ -156,4 +157,14 @@ public class GameServerInstance {
         WinnerMessage winnerMsg=new WinnerMessage(sendBroadcast, winner);
         sendUpdateToAll(winnerMsg);
     }
+
+    public Player getPlayer(String nickname){
+        return this.gameController.getPlayer(nickname);
+    }
+
+    public void addPlayer(Player player, int clientID){
+        this.players.put(player, clientID);
+    }
+
+
 }
