@@ -112,7 +112,7 @@ public class Server {
                     return;
                 }
 
-                this.sendResponse(new GameJoinedMessage(m.getClientID(), joinedGameID));
+                this.sendResponse(new GameJoinedMessage(m.getClientID(), joinedGameID, m.getNickname()));
                 break;
             } //aggiungere caso default
 
