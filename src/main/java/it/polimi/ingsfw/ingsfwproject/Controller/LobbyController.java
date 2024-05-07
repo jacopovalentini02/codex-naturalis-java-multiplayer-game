@@ -84,4 +84,12 @@ public class LobbyController {
         }
     }
 
+    public void checkIfGameNeedsToBeStarted(int gameID){
+        synchronized (lobby){
+            Game game = lobby.getGameList().get(gameID);
+            if (game.getListOfPlayers().size() == game.getNumOfPlayers())
+                lobby.startGame(gameID);
+        }
+    }
+
 }

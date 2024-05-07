@@ -1,23 +1,22 @@
 package it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServer;
 
-import it.polimi.ingsfw.ingsfwproject.Model.Card;
-import it.polimi.ingsfw.ingsfwproject.Model.PlayableCard;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.Message;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.MessageType;
 
-public class PickMessage extends Message {
+public class ObjectiveCardChosenMessage extends Message {
     String nickname;
     int cardID;
-    public PickMessage(int clientID, int cardID, String nickname) {
-        super(clientID, MessageType.PICK);
-        this.cardID=cardID;
+    public ObjectiveCardChosenMessage(int clientID, String nickname, int cardID) {
+        super(clientID, MessageType.CHOSEN_OBJECTIVE_CARD);
         this.nickname=nickname;
-    }
-    public int getCardID() {
-        return cardID;
+        this.cardID=cardID;
     }
 
     public String getNickname() {
         return nickname;
+    }
+
+    public int getCardID() {
+        return cardID;
     }
 }

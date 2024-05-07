@@ -1,4 +1,5 @@
 package it.polimi.ingsfw.ingsfwproject.Model;
+import it.polimi.ingsfw.ingsfwproject.Exceptions.DeckEmptyException;
 import it.polimi.ingsfw.ingsfwproject.Network.Server.GameServerInstance;
 
 import java.util.*;
@@ -40,6 +41,13 @@ public class GameManager {
 
     public HashMap<Integer, Game> getGameList(){
         return gameList;
+    }
+
+    public void startGame(int gameID){
+        Game gameToStart = gameList.get(gameID);
+        try {
+            gameToStart.setupField();
+        } catch (DeckEmptyException ignore){}
     }
 
 }
