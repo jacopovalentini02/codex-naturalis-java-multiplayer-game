@@ -20,6 +20,7 @@ public class RMIFactoryImpl extends UnicastRemoteObject implements RMIFactory {
 
     @Override
     public synchronized void setClientHandler(Handler clientHandler) throws RemoteException {
-        server.addHandler(clientHandler);
+        int clientID = clientHandler.getClientID();
+        server.addHandler(clientID, clientHandler);
     }
 }

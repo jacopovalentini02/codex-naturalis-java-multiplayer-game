@@ -35,8 +35,8 @@ import java.util.concurrent.Executors;
 public class Server {
     private LobbyController lobbyController;
     private ConcurrentLinkedQueue<Message> queue;
-    private ArrayList<Handler> handlers; //clientID-handler
-    private ArrayList<GameServerInstance> games;
+    private HashMap<Integer, Handler> handlers; //clientID-handler
+    private HashMap<Integer, GameServerInstance> games; //gameID-serverinstance
     private int clientsCounter;
 
     public Server(){
@@ -44,8 +44,8 @@ public class Server {
         GameManager manager = new GameManager();
         lobbyController = new LobbyController(manager);
         queue = new ConcurrentLinkedQueue<Message>();
-        handlers = new ArrayList<Handler>();
-        games = new ArrayList<GameServerInstance>();
+        handlers = new HashMap<Integer, Handler>();
+        games = new HashMap<Integer, GameServerInstance>();
         this.clientsCounter = 0;
         Thread readerThread = new Thread(this::readQueue);
         readerThread.start();
@@ -85,10 +85,13 @@ public class Server {
                     this.sendResponse(new InvalidNumOfPlayerMessage(m.getClientID()));
                     return;
                 }
+                //gets the gameserverinstance, puts it in the map, puts the client handler in the gameserverinstance
+                GameServerInstance gameInstance = lobbyController.getGameServerInstance(createdGameID);
+                this.games.put(createdGameID, gameInstance);
+                Handler requestingClientHandler = handlers.get(m.getClientID());
+                gameInstance.setHandler(m.getClientID(), requestingClientHandler);
                 this.sendResponse(new GameJoinedMessage(m.getClientID(), createdGameID, m.getNickname()));
                 break;
-
-                //todo creo un gameserverinstance ->lo setto nell'handler
             }
             case GET_GAME_LIST: {
                 GetGameListMessage m = (GetGameListMessage) message;
@@ -112,9 +115,13 @@ public class Server {
                     return;
                 }
 
+                GameServerInstance gameInstance = games.get(joinedGameID); //gets the instance for the game that the player has joined
+                Handler requestingClientHandler = handlers.get(m.getClientID()); //gets the handler of the player
+                gameInstance.setHandler(m.getClientID(), requestingClientHandler);//puts the player's handler into the handlers map in GameServerInstamce
+
                 this.sendResponse(new GameJoinedMessage(m.getClientID(), joinedGameID, m.getNickname()));
                 break;
-            } //aggiungere caso default
+            }
 
         }
 
@@ -124,16 +131,17 @@ public class Server {
 
     public synchronized void sendResponse(Message m) {
         try {
-            for (Handler handler : handlers) {
-                if (m.getClientID() == -10 || m.getClientID() == handler.getClientID()) { //se messaggio in broadcast oppure per il client associato
-                    handler.sendMessage(m);
-                }
+            if (m.getClientID() == -10){ //broadcast message
+                for (Handler h: handlers.values())
+                    h.sendMessage(m);
+            } else {
+                Handler recipient = handlers.get(m.getClientID());
+                recipient.sendMessage(m);
             }
+
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
-
-
     }
 
     public void addToQueue(Message message){
@@ -146,8 +154,8 @@ public class Server {
         return counter;
     }
 
-    public void addHandler(Handler h){
-        this.handlers.add(h);
+    public void addHandler(Integer clientID, Handler handler){
+        this.handlers.put(clientID, handler);
     }
 
     private void startRMIServer(){
@@ -176,7 +184,7 @@ public class Server {
                 int id=getClientsCounter();
                 System.out.println("client id: "+id);
                 SocketHandler socketHandler=new SocketHandler(socket,id, this);
-                handlers.add(socketHandler);
+                this.addHandler(id, socketHandler);
                 executor.submit(socketHandler);
             } catch(IOException e) {
                 break; // entrerei qui se serverSocket venisse chiuso
