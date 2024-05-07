@@ -1,12 +1,19 @@
 package it.polimi.ingsfw.ingsfwproject.Network.Server;
 
 import it.polimi.ingsfw.ingsfwproject.Controller.LobbyController;
+import it.polimi.ingsfw.ingsfwproject.Exceptions.GameFullException;
+import it.polimi.ingsfw.ingsfwproject.Exceptions.GameNotExistingException;
+import it.polimi.ingsfw.ingsfwproject.Exceptions.NickAlreadyTakenException;
 import it.polimi.ingsfw.ingsfwproject.Exceptions.NotValidNumOfPlayerException;
 import it.polimi.ingsfw.ingsfwproject.Model.GameManager;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServer.CreateGameMessage;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServer.GetGameListMessage;
+import it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServer.JoinGameMessage;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.Message;
+import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.ExceptionMessages.GameFullMessage;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.ExceptionMessages.InvalidNumOfPlayerMessage;
+import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.ExceptionMessages.NickAlreadyTakenMessage;
+import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.ExceptionMessages.NotExistingGameMessage;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.GameJoinedMessage;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.SendGameListMessage;
 
@@ -79,6 +86,7 @@ public class Server {
                     return;
                 }
                 this.sendResponse(new GameJoinedMessage(m.getClientID(), createdGameID));
+
                 break;
 
                 //todo creo un gameserverinstance ->lo setto nell'handler
@@ -88,6 +96,27 @@ public class Server {
                 this.sendResponse(new SendGameListMessage(m.getClientID(), lobbyController.getGameList()));
                 break;
             }
+            case JOIN_GAME: {
+                JoinGameMessage m = (JoinGameMessage) message;
+                int joinedGameID;
+
+                try {
+                    joinedGameID = this.lobbyController.joinExistingGame(m.getNickname(), m.getGameID());
+                } catch (GameNotExistingException e){
+                    this.sendResponse(new NotExistingGameMessage(m.getClientID()));
+                    return;
+                } catch (GameFullException e){
+                    this.sendResponse(new GameFullMessage(m.getClientID()));
+                    return;
+                } catch (NickAlreadyTakenException e){
+                    this.sendResponse(new NickAlreadyTakenMessage(m.getClientID()));
+                    return;
+                }
+
+                this.sendResponse(new GameJoinedMessage(m.getClientID(), joinedGameID));
+                break;
+            } //aggiungere caso default
+
         }
 
     }

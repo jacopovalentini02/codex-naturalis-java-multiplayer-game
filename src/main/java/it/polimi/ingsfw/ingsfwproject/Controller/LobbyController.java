@@ -8,6 +8,7 @@ import it.polimi.ingsfw.ingsfwproject.Model.Game;
 import it.polimi.ingsfw.ingsfwproject.Model.GameManager;
 import it.polimi.ingsfw.ingsfwproject.Model.GameState;
 import it.polimi.ingsfw.ingsfwproject.Model.Player;
+import it.polimi.ingsfw.ingsfwproject.Network.Server.GameServerInstance;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -75,4 +76,12 @@ public class LobbyController {
         }
         return games;
     }
+
+
+    public GameServerInstance getGameServerInstance(int idGame){
+        synchronized (lobby){
+            return lobby.getGameList().get(idGame).getGameServerInstance();
+        }
+    }
+
 }

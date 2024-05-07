@@ -44,6 +44,14 @@ public class GameServerInstance {
         }
     }
 
+    public void setGameController(GameController gc){
+        this.gameController = gc;
+    }
+
+    public void setHandler(int clientID, Handler handler){
+        this.handlers.put(clientID, handler);
+    }
+
 
     public int getClientID(Player player){
         return players.get(player);

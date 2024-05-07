@@ -96,6 +96,7 @@ public class Game {
         objectiveCardsChosen = 0;
         colorChosen = 0;
         this.gameServerInstance=gameServerInstance;
+        this.gameServerInstance.setGameController(this.controller);
         setCurrentPlayer(player1);
     }
 
