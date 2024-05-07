@@ -85,8 +85,7 @@ public class Server {
                     this.sendResponse(new InvalidNumOfPlayerMessage(m.getClientID()));
                     return;
                 }
-                this.sendResponse(new GameJoinedMessage(m.getClientID(), createdGameID));
-
+                this.sendResponse(new GameJoinedMessage(m.getClientID(), createdGameID, m.getNickname()));
                 break;
 
                 //todo creo un gameserverinstance ->lo setto nell'handler

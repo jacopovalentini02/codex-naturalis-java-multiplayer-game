@@ -371,8 +371,12 @@ public class Game {
 
     public void addPlayer(Player newPlayer){
         listOfPlayers.add(newPlayer);
-        //todo mando lista player - broadcast
-        //todo mando anche newPlayer
+
+        ArrayList<String> nicknames = new ArrayList<>();
+        for (Player player : listOfPlayers) {
+            nicknames.add(player.getUsername());
+        }
+        gameServerInstance.sendPlayersListUpdate(nicknames);
 
     }
 
@@ -442,8 +446,9 @@ public class Game {
 
             updatePoints(pointsToAdd, p); //points update
         }
-
+        //l'update dei points è gia mandato da updatePoints
         winner = Collections.max(scores.entrySet(), Map.Entry.comparingByValue()).getKey();
+        gameServerInstance.sendWinner(winner.getUsername());
         setState(GameState.ENDED);
         gameServerInstance.sendGameStateUpdate(this.state);
 

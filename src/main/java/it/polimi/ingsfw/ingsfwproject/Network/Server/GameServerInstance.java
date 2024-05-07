@@ -114,7 +114,23 @@ public class GameServerInstance {
         sendUpdateToAll(scoreMessage);
     }
 
-    public void sendContentCounterUpdate(int clientID, ContentCounter contentCounter){
+    public void sendResourcesUpdate(HashMap<Content, Integer> resources,String nickname){
+        ResourcesMessage resourcesMessage=new ResourcesMessage(sendBroadcast, resources, nickname);
+        sendUpdateToAll(resourcesMessage);
+    }
 
+    public void sendPlayersListUpdate(ArrayList<String> nicknames){
+        PlayersListMessage playersListMsg=new PlayersListMessage(sendBroadcast, nicknames);
+        sendUpdateToAll(playersListMsg);
+    }
+
+    public void sendGridUpdate(Map<Coordinate, Face> grid, String nickname){
+        GridMessage gridMessage=new GridMessage(sendBroadcast, grid, nickname);
+        sendUpdateToAll(gridMessage);
+    }
+
+    public void sendWinner(String winner){
+        WinnerMessage winnerMsg=new WinnerMessage(sendBroadcast, winner);
+        sendUpdateToAll(winnerMsg);
     }
 }

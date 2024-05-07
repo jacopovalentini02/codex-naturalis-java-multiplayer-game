@@ -36,7 +36,10 @@ public enum MessageType {
     HAND_CARDS,
     GAME_STATE,
     SCORE,
-    CONTENT_COUNTER
+    RESOURCES,
+    NEW_PLAYER_JOINED,
+    GRID,
+    WINNER
 
 
 }

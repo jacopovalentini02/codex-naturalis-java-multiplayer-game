@@ -10,29 +10,29 @@ import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.FirstMessa
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.SendGameListMessage;
 
 import java.io.IOException;
-import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.Scanner;
-import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 public class CLI extends View implements Runnable {
     Scanner scanner;
 
     public CLI(){
         this.scanner = new Scanner(System.in);
-        super.messages=new ConcurrentLinkedQueue<Message>();
+        super.messages=new LinkedBlockingQueue<Message>();
         Thread receive=new Thread(super::receiveMessage);
         receive.start();
     }
 
     @Override
-    public void scegliPrimaAzione(){
+    public void chooseFirstAction(){
+
         int choice = 0;
         Message messageToSend;
 
         //------------------------SCELTA DELLA PRIMA AZIONE (CREA, JOINA...)
 
-            do {
+        do {
             System.out.println("Scegli un'opzione:");
             System.out.println("1. Crea una nuova partita");
             System.out.println("2. Unisciti a una partita esistente");
@@ -55,7 +55,7 @@ public class CLI extends View implements Runnable {
         scanner.nextLine();
 
         if (choice == 1) {
-            creaPartita();
+            createGame();
         }else if (choice == 2) {
             messageToSend = new GetGameListMessage(client.getClientID());
             try {
@@ -69,11 +69,10 @@ public class CLI extends View implements Runnable {
 }
 
     @Override
-    public void scegliMetodoConnessione(){
+    public void chooseConnectionMethod(){
         String ip;
         int port;
         int option = 1;
-        Message messageToSend;
 
         do {
             if(option <1 || option > 2)
@@ -85,7 +84,8 @@ public class CLI extends View implements Runnable {
 
         }while(option <1 || option > 2);
 
-
+        //todo: togliere questa parte commentata per far inserire questi dati all'utente a fine sviluppo
+        /*
         System.out.println("Inserisci l'IP del server: ");
         ip = scanner.nextLine();
 
@@ -93,12 +93,14 @@ public class CLI extends View implements Runnable {
         port = scanner.nextInt();
 
         scanner.nextLine();
+        */
+
+        ip = "localhost";
+        port = (option ==2? 1099 : 1337);
 
         try {
             this.client = (option == 2? new RMIClient(ip,port,this) : new SocketClient(ip,port,this));
             client.startConnection();
-        } catch (RemoteException e) {
-            throw new RuntimeException(e);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -106,7 +108,7 @@ public class CLI extends View implements Runnable {
     }
 
     @Override
-    public void creaPartita() {
+    public void createGame() {
         String username;
         Message messageToSend;
 
@@ -127,7 +129,7 @@ public class CLI extends View implements Runnable {
     }
 
     @Override
-    public void scegliPartitaEUnisciti(HashMap<Integer, Integer> gamesMap) {
+    public void chooseGameAndJoin(HashMap<Integer, Integer> gamesMap) {
         String username;
         Message messageToSend;
 
@@ -136,12 +138,12 @@ public class CLI extends View implements Runnable {
             System.out.printf("%-10d %-20d %n", entry.getKey(), entry.getValue());
         }
         System.out.println("Inserisci l'ID della partita a cui vuoi unirti: ");
-        int GameID = scanner.nextInt();
+        int gameID = scanner.nextInt();
         scanner.nextLine();
         System.out.println("Inserisci il tuo username: ");
         username = scanner.nextLine();
 
-        messageToSend = new JoinGameMessage(client.getClientID(), username, GameID);
+        messageToSend = new JoinGameMessage(client.getClientID(), username, gameID);
         try {
             client.sendMessage(messageToSend);
         } catch (IOException e) {
@@ -152,21 +154,28 @@ public class CLI extends View implements Runnable {
 
     @Override
     public void run() {
-        this.scegliMetodoConnessione();
-        this.scegliPrimaAzione();
+        this.chooseConnectionMethod();
+        this.chooseFirstAction();
 
-        while (true){
-            if(messages.isEmpty()){
+        Thread commandThread = new Thread(this::receiveInput);
+        commandThread.start();
+    }
 
-                try {
-                    Thread.sleep(100);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
+    public void receiveInput(){
+        Scanner scanner1 = new Scanner(System.in);
+        while(true){
+            String command = scanner1.nextLine();
+            executeCommand(command);
+        }
 
-            }else
-                handleMessage(messages.remove());
 
+    }
+
+    public void executeCommand(String command){
+        switch(command){
+            case "prova":
+                System.out.println("prova recepita");
+                break;
         }
 
     }
@@ -179,7 +188,7 @@ public class CLI extends View implements Runnable {
                 System.out.println(firstM.getClientID());
                 break;
             case SEND_GAME_LIST:
-                scegliPartitaEUnisciti(((SendGameListMessage) message).getGameList());
+                chooseGameAndJoin(((SendGameListMessage) message).getGameList());
                 break;
             case GAME_JOINED:
                 //todo:stampare le info della partita

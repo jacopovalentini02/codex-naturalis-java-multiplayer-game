@@ -63,19 +63,12 @@ public class Player implements Serializable {
         } else {
             throw new CardNotInHandException("The card chosen is not in the player's hand");
         }
-        //TODO MESSAGGIO
+
         int clientID=gameServerInstance.getClientID(this);
         gameServerInstance.sendAvaiblePositionUpdate(clientID, this.ground.getAvailablePositions());
         gameServerInstance.sendHandCardsUpdate(clientID, this.getHandCard());
-//
-//        try {
-//            this.client.updateAvailablePositions(this.ground.getAvailablePositions()); solo per me
-//            this.client.updateHand(this.getHandCard()); per me
-//            this.client.updateGrid(this.ground.getGrid()); per me - il client se è il suo nickname setta il suo player
-//            this.client.updateResources(generateContentMap());
-//        } catch (RemoteException e) { //updating clients
-//            throw new RuntimeException(e);
-//        }
+        gameServerInstance.sendGridUpdate(this.ground.getGrid(), this.getUsername());
+        gameServerInstance.sendResourcesUpdate(generateContentMap(),this.getUsername());
 
         return points;
     }
