@@ -10,11 +10,134 @@ import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.FirstMessa
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.SendGameListMessage;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Scanner;
+import java.rmi.RemoteException;
+import java.util.*;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 public class CLI extends View implements Runnable {
+    Scanner scanner;
+
+    public CLI(){
+        this.scanner = new Scanner(System.in);
+        super.messages = new ConcurrentLinkedQueue<>();
+    }
+
+    public void run(){
+        chooseConnectionMethod();
+        Thread readUserInputThread = new Thread(this::readInputUser);
+        readUserInputThread.start();
+
+        Thread readMessageThread = new Thread(super::receiveMessage);
+        readMessageThread.start();
+
+    }
+
+    private void readInputUser(){
+        while(true){
+            handleInput(scanner.nextLine());
+        }
+    }
+
+    private void handleInput(String input){
+        Message messageToSend;
+        String name;
+        try {
+            switch (input) {
+                case "CreateGame":
+                    int numOfPlayers = askForIntInput("insert the number of players between 2 and 4", 2, 4);
+                    name = askForStringInput("insert your nickname");
+                    messageToSend = new CreateGameMessage(client.getClientID(), numOfPlayers, name);
+                    client.sendMessage(messageToSend);
+                    break;
+                case "JoinGame":
+                    int gameID = askForIntInput("insert the game ID", 0, Integer.MAX_VALUE);
+                    name = askForStringInput("insert your nickname");
+                    messageToSend = new JoinGameMessage(client.getClientID(), name, gameID);
+                    client.sendMessage(messageToSend);
+                    break;
+                case "GetGameList":
+                    messageToSend = new GetGameListMessage(client.getClientID());
+                    client.sendMessage(messageToSend);
+                    break;
+            }
+        }catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void handleMessage(Message message){
+        switch(message.getType()){
+            case FIRST_MESSSAGE:
+                FirstMessage firstMessage = (FirstMessage) message;
+                System.out.println("the connection was successfully established, your ClientID is: " + message.getClientID());
+                System.out.println("now you can insert the command:");
+                System.out.println("\t-> CreateGame");
+                System.out.println("\t-> JoinGame");
+                break;
+            case SEND_GAME_LIST:
+                SendGameListMessage sendGameListMessage = (SendGameListMessage) message;
+                System.out.println("the game currently available are:");
+                HashMap<Integer, Integer> gameList = sendGameListMessage.getGameList();
+                System.out.println("ID\tNumberOfPlayers");
+                for(Integer gameID : gameList.keySet())
+                    System.out.println(gameID + "\t" + gameList.get(gameID));
+                System.out.println("now you can insert the command:");
+                System.out.println("\t-> CreateGame");
+                System.out.println("\t-> JoinGame");
+                System.out.println("\t-> GetGameList");
+                break;
+            case GAME_JOINED:
+                System.out.println("you have joined the game correctly");
+                break;
+        }
+
+    }
+
+    @Override
+    public void chooseConnectionMethod() {
+
+        int choice = askForIntInput("Choose a connection method\n1. Socket\n2. RMI", 1, 2);
+
+        String ip = "localhost";
+        int port = choice == 1? 1337 : 1099;
+
+        try {
+            super.client = choice == 1? new SocketClient(ip,port, this) : new RMIClient(ip,port, this);
+            client.startConnection();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    private int askForIntInput(String stringToPrompt, int lowerBound, int upperBound){
+        int choice = lowerBound;
+        String errorString = "Error: you have to insert a number between " + lowerBound + " and " + upperBound;
+        do {
+            try {
+                if (choice < lowerBound && choice > upperBound)
+                    System.out.println(errorString);
+                System.out.println(stringToPrompt);
+                choice = scanner.nextInt();
+                scanner.nextLine();
+            }catch (InputMismatchException e){
+                System.out.println(errorString);
+            }
+        }while(choice <lowerBound && choice > upperBound);
+
+        return choice;
+    }
+
+    private String askForStringInput(String stringToPrompt){
+        System.out.println(stringToPrompt);
+        return scanner.nextLine();
+    }
+
+
+
+    /*
     Scanner scanner;
 
     public CLI(){
@@ -40,6 +163,7 @@ public class CLI extends View implements Runnable {
 
             if (scanner.hasNextInt()) {
                 choice = scanner.nextInt();
+                scanner.nextLine();
                 if (choice == 1 || choice == 2) {
                     break;
                 }
@@ -52,7 +176,7 @@ public class CLI extends View implements Runnable {
 
         //------------------------CREAZIONE DELLA PARTITA o SCELTA DELLA PARTITA GIà IN CORSO
 
-        scanner.nextLine();
+//        scanner.nextLine();
 
         if (choice == 1) {
             createGame();
@@ -78,14 +202,14 @@ public class CLI extends View implements Runnable {
             if(option <1 || option > 2)
                 System.out.println("Opzione non valida");
             System.out.println("\nVuoi usare Socket o RMI? \n1) Socket \n2) RMI");
-            if(scanner.hasNextInt())
+            if(scanner.hasNextInt()) {
                 option = scanner.nextInt();
-            scanner.nextLine();
-
+                scanner.nextLine();
+            }
         }while(option <1 || option > 2);
 
         //todo: togliere questa parte commentata per far inserire questi dati all'utente a fine sviluppo
-        /*
+
         System.out.println("Inserisci l'IP del server: ");
         ip = scanner.nextLine();
 
@@ -93,7 +217,7 @@ public class CLI extends View implements Runnable {
         port = scanner.nextInt();
 
         scanner.nextLine();
-        */
+
 
         ip = "localhost";
         port = (option ==2? 1099 : 1337);
@@ -132,14 +256,21 @@ public class CLI extends View implements Runnable {
     public void chooseGameAndJoin(HashMap<Integer, Integer> gamesMap) {
         String username;
         Message messageToSend;
+        int gameID = 0;
 
         System.out.printf("%-10s %-20s %n", "ID", "Numero di Giocatori");
         for (HashMap.Entry<Integer, Integer> entry : gamesMap.entrySet()) {
             System.out.printf("%-10d %-20d %n", entry.getKey(), entry.getValue());
         }
+
         System.out.println("Inserisci l'ID della partita a cui vuoi unirti: ");
-        int gameID = scanner.nextInt();
-        scanner.nextLine();
+        if(scanner.hasNextInt()) {
+            gameID = scanner.nextInt();
+            scanner.nextLine();
+        }
+
+
+
         System.out.println("Inserisci il tuo username: ");
         username = scanner.nextLine();
 
@@ -154,17 +285,19 @@ public class CLI extends View implements Runnable {
 
     @Override
     public void run() {
+
         this.chooseConnectionMethod();
         this.chooseFirstAction();
 
         Thread commandThread = new Thread(this::receiveInput);
         commandThread.start();
+
+
     }
 
     public void receiveInput(){
-        Scanner scanner1 = new Scanner(System.in);
         while(true){
-            String command = scanner1.nextLine();
+            String command = scanner.nextLine();
             executeCommand(command);
         }
 
@@ -173,8 +306,11 @@ public class CLI extends View implements Runnable {
 
     public void executeCommand(String command){
         switch(command){
-            case "prova":
-                System.out.println("prova recepita");
+            case "chooseConnectionMethod":
+                chooseConnectionMethod();
+                break;
+            case "chooseFirstAction":
+                chooseFirstAction();
                 break;
         }
 
@@ -203,6 +339,7 @@ public class CLI extends View implements Runnable {
 
         }
     }
+    */
 
 
 }

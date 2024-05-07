@@ -23,6 +23,7 @@ public class ClientApp {
             System.out.println("Con che interfaccia vuoi giocare? \n1) CLI \n2) GUI");
             if (scanner.hasNextInt()) {
                 choice = scanner.nextInt();
+                scanner.nextLine();
                 if (choice == 1 || choice == 2) {
                     break;
                 }
