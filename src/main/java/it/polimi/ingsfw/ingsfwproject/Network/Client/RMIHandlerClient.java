@@ -14,5 +14,8 @@ public class RMIHandlerClient extends AbstractHandler {
     }
 
     @Override
-    public void sendMessage(Message message) {client.receiveMessage(message);}
+    public void sendMessage(Message message) {
+        System.out.println("Arrivato messaggio dal server di tipo " + message.getType());
+        client.receiveMessage(message);
+    }
 }
