@@ -1,13 +1,13 @@
 package it.polimi.ingsfw.ingsfwproject.View2;
 
+import it.polimi.ingsfw.ingsfwproject.Model.Coordinate;
 import it.polimi.ingsfw.ingsfwproject.Network.Client.RMIClient;
 import it.polimi.ingsfw.ingsfwproject.Network.Client.SocketClient;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServer.CreateGameMessage;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServer.GetGameListMessage;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServer.JoinGameMessage;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.Message;
-import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.FirstMessage;
-import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.SendGameListMessage;
+import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.*;
 
 import java.io.IOException;
 import java.rmi.RemoteException;
@@ -68,30 +68,90 @@ public class CLI extends View implements Runnable {
 
     @Override
     public void handleMessage(Message message){
+
+        //todo: bloccare i comandi CreateGame, JoinGame e GetGameList direttamente da qui, oppure la cli li manda e poi ci penserà il lobbycontroller?
+
+        String lobbyCommands = "now you can insert one of the following commands:" + "\n\t-> CreateGame" + "\n\t-> JoinGame" + "\n\t-> GetGameList";
+        String GameStartingCommands = "now you can do one of the following actions: \n\t-> ChooseObjectiveCard \n\t-> getColorAvailable \n\t-> chooseColor";
+        String gameCommands = "now you can do one of the following actions: \n\t-> PlayCard \n\t-> DrawCard \n\t-> PickCard  \n\t-> SkipTurn";
+
         switch(message.getType()){
             case FIRST_MESSSAGE:
                 FirstMessage firstMessage = (FirstMessage) message;
                 System.out.println("the connection was successfully established, your ClientID is: " + message.getClientID());
-                System.out.println("now you can insert the command:");
-                System.out.println("\t-> CreateGame");
-                System.out.println("\t-> JoinGame");
-                System.out.println("\t-> GetGameList");
+                System.out.println(lobbyCommands);
+                break;
+            case GAME_JOINED:
+                System.out.println("you have joined the game correctly. Your ID is: " + message.getClientID());
+                break;
+            case NEW_PLAYER_JOINED:
+                //todo: stampare le info del player che ha joinato la partita
+                System.out.println("a player has joined the game");
+                break;
+            case STARTER_CARD:
+                //todo: stampare la carta
+                System.out.println("you have a new starter card");
+                break;
+            case GOLD_DECK:
+                //todo: forse da eliminare??
+                System.out.println("the gold deck has been changed");
+                break;
+            case RESOURCE_DECK:
+                //todo: forse da eliminare??
+                System.out.println("the resource deck has been changed");
+                break;
+            case DISPLAYED_PLAYABLE_CARDS:
+                //todo: stampare le displayed card nuove!
+                System.out.println("the displayed cards have been changed");
+                break;
+            case CURRENT_PLAYER:
+                CurrentPlayerMessage currentPlayerMessage = (CurrentPlayerMessage) message;
+                System.out.println("it' now " + currentPlayerMessage.getCurrentPlayer() + "'s turn");
+                //todo: se è il mio turno, devo stampare la stringa gameCommands;
+                break;
+            case COORDINATES_AVAILABLE:
+                CoordinatesAvailableMessage coordinatesAvailableMessage = (CoordinatesAvailableMessage) message;
+                if(coordinatesAvailableMessage.getCoords().isEmpty()) {
+                    System.out.println("you have no more coordinates available!");
+                    break;
+                }
+                System.out.println("your available positions have changed: now you can play a card in the following coordinates:");
+                for(Coordinate c : coordinatesAvailableMessage.getCoords())
+                    System.out.println(c);
+                break;
+            case HAND_OBJECTIVE:
+                //todo: che cosa deve fare? viene ricevuto quando ha scelto la carta o quando gli vengono assegnate tutte e due?
+                break;
+            case GAME_STATE:
+                Message gameStateMessage = (GameStateMessage) message;
+                //todo: scrivere lo stato in cui viene cambiato il gioco
+                System.out.println("the game state have been changed to: " );
+                break;
+            case GRID:
+                GridMessage gridMsg=(GridMessage) message;
+                //todo: stampare la nuova grid aggiornata
+                System.out.println("Your grid has been changed to: " );
+                break;
+            case RESOURCES:
+                ResourcesMessage resourcesMessage=(ResourcesMessage) message;
+                //todo: controllare che la stampa delle risorse sia corretta
+                System.out.println("You now have these resources:  " + resourcesMessage.getResources());
+                break;
+            case WINNER:
+                WinnerMessage winnerMessage=(WinnerMessage) message;
+                System.out.println("the winner is " + winnerMessage.getNickname() + "!!!");
                 break;
             case SEND_GAME_LIST:
                 SendGameListMessage sendGameListMessage = (SendGameListMessage) message;
-                System.out.println("the game currently available are:");
+                System.out.println("the currently available games are:");
                 HashMap<Integer, Integer> gameList = sendGameListMessage.getGameList();
                 System.out.println("ID\tNumberOfPlayers");
                 for(Integer gameID : gameList.keySet())
                     System.out.println(gameID + "\t" + gameList.get(gameID));
-                System.out.println("now you can insert the command:");
-                System.out.println("\t-> CreateGame");
-                System.out.println("\t-> JoinGame");
-                System.out.println("\t-> GetGameList");
+                System.out.println(lobbyCommands);
                 break;
-            case GAME_JOINED:
-                System.out.println("you have joined the game correctly");
-                break;
+
+
         }
 
     }
@@ -101,6 +161,7 @@ public class CLI extends View implements Runnable {
 
         int choice = askForIntInput("Choose a connection method\n1. Socket\n2. RMI", 1, 2);
 
+        //todo: a fine sviluppo va chiesto all'utente!
         String ip = "localhost";
         int port = choice == 1? 1337 : 1099;
 
@@ -118,15 +179,16 @@ public class CLI extends View implements Runnable {
         String errorString = "Error: you have to insert a number between " + lowerBound + " and " + upperBound;
         do {
             try {
-                if (choice < lowerBound && choice > upperBound)
+                if (choice < lowerBound || choice > upperBound)
                     System.out.println(errorString);
                 System.out.println(stringToPrompt);
                 choice = scanner.nextInt();
                 scanner.nextLine();
             }catch (InputMismatchException e){
                 System.out.println(errorString);
+                choice--;
             }
-        }while(choice <lowerBound && choice > upperBound);
+        }while(choice <lowerBound || choice > upperBound);
 
         return choice;
     }
