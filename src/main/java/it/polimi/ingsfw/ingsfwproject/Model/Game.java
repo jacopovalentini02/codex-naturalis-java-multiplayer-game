@@ -238,6 +238,19 @@ public class Game {
         gameServerInstance.sendDisplayedPlayableCardUpdate(this.displayedPlayableCard);
         gameServerInstance.sendCurrentPlayerUpdate(this.currentPlayer.getUsername());
 
+        //todo messaggi da eliminare
+//        gameServerInstance.sendColorsAvailable(0, this.tokenAvailable);
+//        gameServerInstance.sendColorChosen(0, PlayerColor.BLUE);
+//        gameServerInstance.sendDisplayedObjectiveCardUpdate((null));
+//        gameServerInstance.sendGridUpdate(currentPlayer.getGround().getGrid(),currentPlayer.getUsername());
+//        gameServerInstance.sendHandCardsUpdate(0, currentPlayer.getHandCard());
+//        gameServerInstance.sendHandObjectiveUpdate(0,currentPlayer.getHandObjective());
+//        //gameServerInstance.sendResourcesUpdate(currentPlayer.generateContentMap(),currentPlayer.getUsername());
+//        Map<String, Integer> prova = new HashMap<>();
+//        prova.put("bea", 0);
+//        gameServerInstance.sendScoreUpdate(prova);
+//        gameServerInstance.sendWinner(currentPlayer.getUsername());
+
     }
 
     public void chooseColor(Player player, PlayerColor color) throws ColorNotAvailableException, DeckEmptyException {
