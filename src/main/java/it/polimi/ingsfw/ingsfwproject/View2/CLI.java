@@ -10,29 +10,29 @@ import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.FirstMessa
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.SendGameListMessage;
 
 import java.io.IOException;
-import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.Scanner;
-import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 public class CLI extends View implements Runnable {
     Scanner scanner;
 
     public CLI(){
         this.scanner = new Scanner(System.in);
-        super.messages=new ConcurrentLinkedQueue<Message>();
+        super.messages=new LinkedBlockingQueue<Message>();
         Thread receive=new Thread(super::receiveMessage);
         receive.start();
     }
 
     @Override
     public void chooseFirstAction(){
+
         int choice = 0;
         Message messageToSend;
 
         //------------------------SCELTA DELLA PRIMA AZIONE (CREA, JOINA...)
 
-            do {
+        do {
             System.out.println("Scegli un'opzione:");
             System.out.println("1. Crea una nuova partita");
             System.out.println("2. Unisciti a una partita esistente");
@@ -138,12 +138,12 @@ public class CLI extends View implements Runnable {
             System.out.printf("%-10d %-20d %n", entry.getKey(), entry.getValue());
         }
         System.out.println("Inserisci l'ID della partita a cui vuoi unirti: ");
-        int GameID = scanner.nextInt();
+        int gameID = scanner.nextInt();
         scanner.nextLine();
         System.out.println("Inserisci il tuo username: ");
         username = scanner.nextLine();
 
-        messageToSend = new JoinGameMessage(client.getClientID(), username, GameID);
+        messageToSend = new JoinGameMessage(client.getClientID(), username, gameID);
         try {
             client.sendMessage(messageToSend);
         } catch (IOException e) {
@@ -162,11 +162,13 @@ public class CLI extends View implements Runnable {
     }
 
     public void receiveInput(){
+        Scanner scanner1 = new Scanner(System.in);
         while(true){
-            String command = scanner.nextLine();
+            String command = scanner1.nextLine();
             executeCommand(command);
-
         }
+
+
     }
 
     public void executeCommand(String command){
