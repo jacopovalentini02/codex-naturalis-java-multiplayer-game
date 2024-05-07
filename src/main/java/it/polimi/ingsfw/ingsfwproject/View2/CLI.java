@@ -75,6 +75,7 @@ public class CLI extends View implements Runnable {
                 System.out.println("now you can insert the command:");
                 System.out.println("\t-> CreateGame");
                 System.out.println("\t-> JoinGame");
+                System.out.println("\t-> GetGameList");
                 break;
             case SEND_GAME_LIST:
                 SendGameListMessage sendGameListMessage = (SendGameListMessage) message;
