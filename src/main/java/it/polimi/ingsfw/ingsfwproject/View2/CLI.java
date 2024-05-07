@@ -96,7 +96,7 @@ public class CLI extends View implements Runnable {
         */
 
         ip = "localhost";
-        port = (option ==2? 1337 : 1099);
+        port = (option ==2? 1099 : 1337);
 
         try {
             this.client = (option == 2? new RMIClient(ip,port,this) : new SocketClient(ip,port,this));
