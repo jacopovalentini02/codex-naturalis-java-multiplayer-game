@@ -25,6 +25,7 @@ public class VirtualView {
     private Player currentPlayer;
     private List<ObjectiveCard> displayedObjectiveCards;
     private boolean currentPlayerhasPlayed;
+    private String winner;
 
     public VirtualView() {
         this.listOfPlayers = new ArrayList<String>();
@@ -149,7 +150,7 @@ public class VirtualView {
         resources.put(nickname, playerResources);
     }
 
-
-
-
+    public void setWinner(String winner) {
+        this.winner = winner;
+    }
 }

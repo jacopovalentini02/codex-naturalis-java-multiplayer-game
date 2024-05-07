@@ -445,8 +445,9 @@ public class Game {
 
             updatePoints(pointsToAdd, p); //points update
         }
-
+        //l'update dei points è gia mandato da updatePoints
         winner = Collections.max(scores.entrySet(), Map.Entry.comparingByValue()).getKey();
+        gameServerInstance.sendWinner(winner.getUsername());
         setState(GameState.ENDED);
         gameServerInstance.sendGameStateUpdate(this.state);
 

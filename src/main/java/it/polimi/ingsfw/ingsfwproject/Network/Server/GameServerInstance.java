@@ -120,4 +120,9 @@ public class GameServerInstance {
         GridMessage gridMessage=new GridMessage(sendBroadcast, grid, nickname);
         sendUpdateToAll(gridMessage);
     }
+
+    public void sendWinner(String winner){
+        WinnerMessage winnerMsg=new WinnerMessage(sendBroadcast, winner);
+        sendUpdateToAll(winnerMsg);
+    }
 }

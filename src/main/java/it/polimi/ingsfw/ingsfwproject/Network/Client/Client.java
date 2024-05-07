@@ -103,6 +103,10 @@ public abstract class Client {
                 ResourcesMessage resourcesMessage=(ResourcesMessage) message;
                 this.virtualView.setResourcesForPlayer(resourcesMessage.getNickname(),resourcesMessage.getResources());
                 break;
+            case WINNER:
+                WinnerMessage winnerMessage=(WinnerMessage) message;
+                this.virtualView.setWinner(winnerMessage.getNickname());
+                break;
 
         }
 

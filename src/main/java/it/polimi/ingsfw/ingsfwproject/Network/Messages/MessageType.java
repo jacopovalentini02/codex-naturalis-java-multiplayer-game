@@ -38,7 +38,8 @@ public enum MessageType {
     SCORE,
     RESOURCES,
     NEW_PLAYER_JOINED,
-    GRID
+    GRID,
+    WINNER
 
 
 }
