@@ -8,13 +8,9 @@ public class ObjectiveCardChosenMessage extends Message {
     int cardID;
     public ObjectiveCardChosenMessage(int clientID, String nickname, int cardID) {
         super(clientID, MessageType.CHOSEN_OBJECTIVE_CARD);
-        this.nickname=nickname;
         this.cardID=cardID;
     }
 
-    public String getNickname() {
-        return nickname;
-    }
 
     public int getCardID() {
         return cardID;

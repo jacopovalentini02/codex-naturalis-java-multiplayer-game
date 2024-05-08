@@ -8,7 +8,7 @@ public class WantThatColorMessage extends Message {
 
     String nickname;
     PlayerColor color;
-    public WantThatColorMessage(int clientID, PlayerColor color, String nickname) {
+    public WantThatColorMessage(int clientID, String nickname, PlayerColor color) {
         super(clientID, MessageType.WANTED_COLOR);
         this.color=color;
         this.nickname=nickname;
@@ -17,7 +17,4 @@ public class WantThatColorMessage extends Message {
         return color;
     }
 
-    public String getNickname() {
-        return nickname;
-    }
 }
