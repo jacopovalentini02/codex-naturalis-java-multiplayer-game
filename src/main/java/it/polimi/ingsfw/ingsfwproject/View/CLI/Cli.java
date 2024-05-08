@@ -134,8 +134,13 @@ public class Cli extends View implements Runnable {
         System.out.println("Inserisci il numero di giocatori per questa partita, da 2 a 4: ");
         int numOfPlayers = scanner.nextInt();
         scanner.nextLine();
-        System.out.println("Inserisci il tuo username:");
-        username = scanner.nextLine();
+        do{
+            System.out.println("Inserisci il tuo username: ");
+            username = scanner.nextLine();
+            if(username.length()<2){
+                System.out.println("Username non valido, la lunghezza minima è di 2 caratteri!\n");
+            }
+        }while(username.length()<2);
 
         messageToSend = new CreateGameMessage(client.getClientID(), numOfPlayers, username);
         try {
@@ -157,8 +162,14 @@ public class Cli extends View implements Runnable {
         System.out.println("Inserisci l'ID della partita a cui vuoi unirti: ");
         int GameID = scanner.nextInt();
         scanner.nextLine();
-        System.out.println("Inserisci il tuo username: ");
-        username = scanner.nextLine();
+
+        do{
+            System.out.println("Inserisci il tuo username: ");
+            username = scanner.nextLine();
+            if(username.length()<2){
+                System.out.println("Username non valido, la lunghezza minima è di 2 caratteri!\n");
+            }
+        }while(username.length()<2);
 
         messageToSend = new JoinGameMessage(client.getClientID(), username, GameID);
         try {
