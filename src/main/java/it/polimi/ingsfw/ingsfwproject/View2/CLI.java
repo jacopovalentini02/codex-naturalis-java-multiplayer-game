@@ -1,4 +1,4 @@
-package it.polimi.ingsfw.ingsfwproject.View2;
+/*package it.polimi.ingsfw.ingsfwproject.View2;
 
 import it.polimi.ingsfw.ingsfwproject.Network.Client.RMIClient;
 import it.polimi.ingsfw.ingsfwproject.Network.Client.SocketClient;
@@ -196,4 +196,4 @@ public class CLI extends View implements Runnable {
     }
 
 
-}
+}*/

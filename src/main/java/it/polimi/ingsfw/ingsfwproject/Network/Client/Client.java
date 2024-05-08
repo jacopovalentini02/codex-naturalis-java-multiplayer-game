@@ -4,7 +4,7 @@ import it.polimi.ingsfw.ingsfwproject.Model.GameState;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.*;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.Message;
 import it.polimi.ingsfw.ingsfwproject.View.VirtualView;
-import it.polimi.ingsfw.ingsfwproject.View2.View;
+import it.polimi.ingsfw.ingsfwproject.View.View;
 
 import java.io.IOException;
 
@@ -69,6 +69,7 @@ public abstract class Client {
             case RESOURCE_DECK:
                 ResourceDeckMessage resourceMsg=(ResourceDeckMessage) message;
                 this.virtualView.setGoldDeck(resourceMsg.getResourceDeck());
+                break;
             case DISPLAYED_PLAYABLE_CARDS:
                 DispPlayCardMessage displayedCardMsg=(DispPlayCardMessage) message;
                 this.virtualView.setDisplayedCards(displayedCardMsg.getDisplayedPlayableCard());
@@ -88,8 +89,7 @@ public abstract class Client {
             case GAME_STATE:
                 GameStateMessage gameStateMsg=(GameStateMessage) message;
                 this.virtualView.setState(gameStateMsg.getGameState());
-
-
+                break;
         }
 
         this.view.addToQueue(message);
