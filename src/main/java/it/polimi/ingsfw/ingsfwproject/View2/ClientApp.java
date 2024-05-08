@@ -38,7 +38,9 @@ public class ClientApp {
             Thread thread = new Thread(view);
             thread.start();
         }else if(choice == 2) {
-            //todo: view = new GUI();
+            view = new GUIView();
+            Thread thread = new Thread(view);
+            thread.start();
         }
 
 
