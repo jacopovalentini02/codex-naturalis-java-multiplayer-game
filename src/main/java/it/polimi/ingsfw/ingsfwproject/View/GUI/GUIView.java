@@ -13,12 +13,15 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.util.HashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class GUIView extends View {
+
+    private Stage stage;
 
     @FXML
     private Button socketButton;
@@ -96,6 +99,9 @@ public class GUIView extends View {
                     alert.setTitle("Messaggio");
                     alert.setHeaderText(null);
                     alert.setContentText("Connessione stabilita");
+                    alert.setOnCloseRequest(e->{
+                        stage.close();
+                    });
                     alert.showAndWait();
                 });
             }
@@ -115,6 +121,10 @@ public class GUIView extends View {
 
     public void setClient(Client c){
         super.client = c;
+    }
+
+    public void setStage(Stage stage){
+        this.stage = stage;
     }
 
 
