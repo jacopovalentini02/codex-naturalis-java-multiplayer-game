@@ -95,6 +95,7 @@ public class Game {
         lastRoundsplayed = 0;
         objectiveCardsChosen = 0;
         colorChosen = 0;
+        gameServerInstance.setGameController(this.controller);
         this.gameServerInstance=gameServerInstance;
         setCurrentPlayer(player1);
     }
@@ -233,8 +234,22 @@ public class Game {
 
         }
         gameServerInstance.sendGoldDeckUpdate(this.goldDeck);
+        gameServerInstance.sendResourceDeckUpdate(this.resourceDeck);
         gameServerInstance.sendDisplayedPlayableCardUpdate(this.displayedPlayableCard);
-        gameServerInstance.sendCurrentPlayerUpdate(this.currentPlayer);
+        gameServerInstance.sendCurrentPlayerUpdate(this.currentPlayer.getUsername());
+
+        //todo messaggi da eliminare
+//        gameServerInstance.sendColorsAvailable(0, this.tokenAvailable);
+//        gameServerInstance.sendColorChosen(0, PlayerColor.BLUE);
+//        gameServerInstance.sendDisplayedObjectiveCardUpdate((null));
+//        gameServerInstance.sendGridUpdate(currentPlayer.getGround().getGrid(),currentPlayer.getUsername());
+//        gameServerInstance.sendHandCardsUpdate(0, currentPlayer.getHandCard());
+//        gameServerInstance.sendHandObjectiveUpdate(0,currentPlayer.getHandObjective());
+//        //gameServerInstance.sendResourcesUpdate(currentPlayer.generateContentMap(),currentPlayer.getUsername());
+//        Map<String, Integer> prova = new HashMap<>();
+//        prova.put("bea", 0);
+//        gameServerInstance.sendScoreUpdate(prova);
+//        gameServerInstance.sendWinner(currentPlayer.getUsername());
 
     }
 
@@ -370,8 +385,12 @@ public class Game {
 
     public void addPlayer(Player newPlayer){
         listOfPlayers.add(newPlayer);
-        //todo mando lista player - broadcast
-        //todo mando anche newPlayer
+
+        ArrayList<String> nicknames = new ArrayList<>();
+        for (Player player : listOfPlayers) {
+            nicknames.add(player.getUsername());
+        }
+        gameServerInstance.sendPlayersListUpdate(nicknames);
 
     }
 
@@ -386,7 +405,7 @@ public class Game {
         int newIndex = (listOfPlayers.indexOf(currentPlayer) + 1) % listOfPlayers.size();
         this.setCurrentPlayer(listOfPlayers.get(newIndex));
 
-        gameServerInstance.sendCurrentPlayerUpdate(this.currentPlayer);
+        gameServerInstance.sendCurrentPlayerUpdate(this.currentPlayer.getUsername());
 
         currentPlayerhasPlayed = false; //todo non va mandato alla view?
 
@@ -400,15 +419,8 @@ public class Game {
         for (Map.Entry<Player, Integer> entry: scores.entrySet()){
             playerScoresMap.put(entry.getKey().getUsername(), entry.getValue());
         }
-        //TODO MESSAGGIO
 
-//        for (ClientCallbackInterface c: listeners.values()){ //updating clients with the new points
-//            try {
-//                c.updateScores(playerScoresMap);
-//            } catch (RemoteException e) {
-//                throw new RuntimeException(e);
-//            }
-//        }
+        gameServerInstance.sendScoreUpdate(playerScoresMap);
 
         if (scores.get(player) >= 20) {
             potentialWinner=currentPlayer;
@@ -429,15 +441,8 @@ public class Game {
         } else if (card instanceof ResourceCard) {
             displayedPlayableCard.add((PlayableCard) resourceDeck.draw());
         }
-        //TODO MESSAGGIO
 
-//        for (ClientCallbackInterface c: listeners.values()) {
-//            try {
-//                c.updateDisplayedPlayableCards(this.displayedPlayableCard);
-//            } catch (RemoteException e) {
-//                throw new RuntimeException(e);
-//            }
-//        }
+        gameServerInstance.sendDisplayedPlayableCardUpdate(this.displayedPlayableCard);
 
     }
 
@@ -455,10 +460,11 @@ public class Game {
 
             updatePoints(pointsToAdd, p); //points update
         }
-
+        //l'update dei points è gia mandato da updatePoints
         winner = Collections.max(scores.entrySet(), Map.Entry.comparingByValue()).getKey();
-        //TODO: notify clients with a listener
+        gameServerInstance.sendWinner(winner.getUsername());
         setState(GameState.ENDED);
+        gameServerInstance.sendGameStateUpdate(this.state);
 
         this.endGame();
     }
@@ -491,6 +497,14 @@ public class Game {
 
     public GameServerInstance getGameServerInstance() {
         return gameServerInstance;
+    }
+
+    public Player getPlayer(String nickname){
+        Player toReturn = null;
+        for (Player p: this.listOfPlayers)
+            if (Objects.equals(p.getUsername(), nickname))
+                toReturn = p;
+        return toReturn;
     }
 
 

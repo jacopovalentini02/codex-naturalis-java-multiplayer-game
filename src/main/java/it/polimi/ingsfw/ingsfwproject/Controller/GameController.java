@@ -81,7 +81,7 @@ public class GameController {
         }
     }
 
-    public void DrawDisplayedPlayableCard(String username, int cardID) throws RemoteException, TurnException, CardNotPresentException, DeckEmptyException, GamePhaseException{
+    public void drawDisplayedPlayableCard(String username, int cardID) throws TurnException, CardNotPresentException, DeckEmptyException, GamePhaseException{
 
         Player player = null;
         PlayableCard card = null;
@@ -101,9 +101,7 @@ public class GameController {
 
             if (model.getCurrentPlayer().equals(model.getPotentialWinner())) {
                 model.setState(GameState.ENDING);
-                //TODO messaggio
-//                for (ClientCallbackInterface c: model.getListeners().values()) //updating clients
-//                    c.updateState(GameState.ENDING);
+                model.getGameServerInstance().sendGameStateUpdate(model.getState());
             }
             model.nextTurn();
         }
@@ -135,36 +133,15 @@ public class GameController {
         synchronized (model){
             player.draw(deck);
 
-            if (resourceDeck){ //updating clients
-                //todo mess
-//               for (ClientCallbackInterface c: model.getListeners().values()) {
-//                   try {
-//                       c.updateResourceDeck(deck);
-//                   } catch (RemoteException e) {
-//                       throw new RuntimeException(e);
-//                   }
-//               }
+            if (resourceDeck){
+                model.getGameServerInstance().sendResourceDeckUpdate(deck);
             } else {
-                //todo mess
-//                for (ClientCallbackInterface c: model.getListeners().values()) {
-//                    try {
-//                        c.updateGoldDeck(deck);
-//                    } catch (RemoteException e) {
-//                        throw new RuntimeException(e);
-//                    }
-//                }
+                model.getGameServerInstance().sendGoldDeckUpdate(deck);
             }
 
             if (model.getCurrentPlayer().equals(model.getPotentialWinner())) {
                 model.setState(GameState.ENDING);
-                //todo mess
-//                for (ClientCallbackInterface c: model.getListeners().values()) {
-//                    try {
-//                        c.updateState(GameState.ENDING);
-//                    } catch (RemoteException e) {
-//                        throw new RuntimeException(e);
-//                    }
-//                }
+                model.getGameServerInstance().sendGameStateUpdate(GameState.ENDING);
             }
             model.nextTurn();
         }
@@ -206,25 +183,23 @@ public class GameController {
         starterCardsPlayed++;
         if (starterCardsPlayed == model.getNumOfPlayers()){
             model.setState(GameState.CHOOSING_COLORS);
-//            for (ClientCallbackInterface c: model.getListeners().values()) {
-//                try {
-//                    c.updateState(GameState.CHOOSING_COLORS);
-//                } catch (RemoteException e) {
-//                    throw new RuntimeException(e);
-//                }
-//            }
+            model.getGameServerInstance().sendGameStateUpdate(GameState.CHOOSING_COLORS);
         }
 
-
     }
 
-    public void updateClients(String string) throws RemoteException {
-//        for (ClientCallbackInterface c: clientCallbacks)
-//            c.update(string);
-    }
 
     public void clientDisconnected(){
         this.model.clientDisconnected();
+    }
+
+    public Game getModel() {
+        return model;
+    }
+    public Player getPlayer(String username){
+       synchronized (model){
+           return model.getPlayer(username);
+       }
     }
 
 }

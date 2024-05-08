@@ -1,16 +1,5 @@
 /*package it.polimi.ingsfw.ingsfwproject.View2;
 
-import it.polimi.ingsfw.ingsfwproject.Model.Game;
-import it.polimi.ingsfw.ingsfwproject.Network.Client.Client;
-import it.polimi.ingsfw.ingsfwproject.Network.Client.RMIClient;
-import it.polimi.ingsfw.ingsfwproject.Network.Client.SocketClient;
-import it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServer.CreateGameMessage;
-import it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServer.GetGameListMessage;
-import it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServer.JoinGameMessage;
-import it.polimi.ingsfw.ingsfwproject.Network.Messages.Message;
-
-import java.io.IOException;
-import java.util.HashMap;
 import java.util.Scanner;
 
 public class ClientApp {
@@ -20,16 +9,17 @@ public class ClientApp {
         View view = null;
 
         do {
-            System.out.println("Con che interfaccia vuoi giocare? \n1) CLI \n2) GUI");
+            System.out.println("Which interface you want to play with? \n1) CLI \n2) GUI");
             if (scanner.hasNextInt()) {
                 choice = scanner.nextInt();
+                scanner.nextLine();
                 if (choice == 1 || choice == 2) {
                     break;
                 }
             } else {
                 scanner.next();
             }
-            System.out.println("Input non valido. Riprova.");
+            System.out.println("invalid input, try again.");
         }while(true);
 
         if(choice == 1) {

@@ -8,9 +8,12 @@ import java.util.List;
 import java.util.Map;
 
 public class VirtualView {
-    private Player player;
-    private ArrayList<String> listOfPlayers;
     private int gameID;
+    private String nickname;
+    private ArrayList<String> listOfPlayers;
+    private HashMap<String, Map<Coordinate, Face>> grids; //tutte le grid, compresa quella di player
+    private HashMap<String, HashMap<Content, Integer>> resources;
+    private ArrayList<Coordinate> availablePositions;
     private ArrayList<PlayableCard> handCards;
     private Deck resourceDeck;
     private Deck goldDeck;
@@ -19,16 +22,15 @@ public class VirtualView {
     private PlayerColor color;
     private Map<String, Integer> scores;
     private GameState state;
-    private Player currentPlayer;
+    private String currentPlayer;
     private List<ObjectiveCard> displayedObjectiveCards;
     private boolean currentPlayerhasPlayed;
-    private HashMap<Content, Integer> resources;
+    private String winner;
 
-    public HashMap<Content, Integer> getResources() {
-        return resources;
-    }
-    public Player getPlayer() {
-        return player;
+    public VirtualView() {
+        this.listOfPlayers = new ArrayList<String>();
+        this.grids = new HashMap<>();
+        this.handCards=new ArrayList<>();
     }
 
     public ArrayList<PlayableCard> getHandCards() {
@@ -108,27 +110,57 @@ public class VirtualView {
         this.displayedObjectiveCards = displayedObjectiveCards;
     }
 
-    public void setResources(HashMap<Content, Integer> resources) {
-        this.resources = resources;
-    }
-
-    public void setPlayer(Player player) {
-        this.player = player;
-    }
-
-    public Player getCurrentPlayer() {
-        return currentPlayer;
-    }
 
     public boolean isCurrentPlayerhasPlayed() {
         return currentPlayerhasPlayed;
     }
 
-    public void setCurrentPlayer(Player currentPlayer) {
+    public String getNickname() {
+        return nickname;
+    }
+
+    public String getCurrentPlayer() {
+        return currentPlayer;
+    }
+
+    public void setCurrentPlayer(String currentPlayer) {
         this.currentPlayer = currentPlayer;
+    }
+
+    public String getWinner() {
+        return winner;
     }
 
     public void setCurrentPlayerhasPlayed(boolean currentPlayerhasPlayed) {
         this.currentPlayerhasPlayed = currentPlayerhasPlayed;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public void setListOfPlayers(ArrayList<String> listOfPlayers) {
+        this.listOfPlayers = listOfPlayers;
+    }
+
+
+    public void setAvailablePositions(ArrayList<Coordinate> availablePositions) {
+        this.availablePositions = availablePositions;
+    }
+
+    public void addPlayer(String player) {
+        listOfPlayers.add(player);
+    }
+
+    public void setGridForPlayer(String nickname, Map<Coordinate, Face> grid) {
+        grids.put(nickname, grid);
+    }
+
+    public void setResourcesForPlayer(String nickname, HashMap<Content, Integer> playerResources) {
+        resources.put(nickname, playerResources);
+    }
+
+    public void setWinner(String winner) {
+        this.winner = winner;
     }
 }

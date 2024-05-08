@@ -45,23 +45,13 @@ public class Player implements Serializable {
             System.out.println("Deck is empty");
         }
 
-        //TODO MESSAGGIO
+        gameServerInstance.sendHandCardsUpdate(gameServerInstance.getClientID(this), this.getHandCard() );
 
-//        try { //updating client's hand
-//            client.updateHand(this.getHandCard());
-//        } catch (RemoteException e) {
-//            throw new RuntimeException(e);
-//        }
     }
     public void pick(Card card){
         handCard.add((PlayableCard) card);
-        //TODO MESSAGGIO
+        gameServerInstance.sendHandCardsUpdate(gameServerInstance.getClientID(this), this.getHandCard() );
 
-//        try {
-//            this.client.updateHand(this.getHandCard());
-//        } catch (RemoteException e) {
-//            throw new RuntimeException(e);
-//        }
     }
 
     public int playCard(PlayableCard cardPlayed, boolean upwards, Coordinate coord) throws CardNotInHandException, PositionNotAvailableException, NotEnoughResourcesException {
@@ -73,16 +63,12 @@ public class Player implements Serializable {
         } else {
             throw new CardNotInHandException("The card chosen is not in the player's hand");
         }
-        //TODO MESSAGGIO
-//
-//        try {
-//            this.client.updateAvailablePositions(this.ground.getAvailablePositions()); solo per me
-//            this.client.updateHand(this.getHandCard()); per me
-//            this.client.updateGrid(this.ground.getGrid()); per me - il client se è il suo nickname setta il suo player
-//            this.client.updateResources(generateContentMap());
-//        } catch (RemoteException e) { //updating clients
-//            throw new RuntimeException(e);
-//        }
+
+        int clientID=gameServerInstance.getClientID(this);
+        gameServerInstance.sendAvaiblePositionUpdate(clientID, this.ground.getAvailablePositions());
+        gameServerInstance.sendHandCardsUpdate(clientID, this.getHandCard());
+        gameServerInstance.sendGridUpdate(this.ground.getGrid(), this.getUsername());
+        gameServerInstance.sendResourcesUpdate(generateContentMap(),this.getUsername());
 
         return points;
     }
@@ -124,7 +110,8 @@ public class Player implements Serializable {
     }
 
 
-    private HashMap<Content, Integer> generateContentMap(){
+    //todo mettere priavate
+    public HashMap<Content, Integer> generateContentMap(){
         HashMap<Content, Integer> resources = new HashMap<>();
         resources.put(Content.FUNGI_KINGDOM, this.ground.getContentCount(Content.FUNGI_KINGDOM));
         resources.put(Content.ANIMAL_KINGDOM, this.ground.getContentCount(Content.ANIMAL_KINGDOM));

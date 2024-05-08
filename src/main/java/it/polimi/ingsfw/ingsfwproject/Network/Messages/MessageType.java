@@ -11,6 +11,7 @@ public enum MessageType {
     SKIP_TURN,
     PLAY_CARD,
     WANTED_COLOR,
+    CHOSEN_OBJECTIVE_CARD,
 
 
     //Exception
@@ -35,6 +36,14 @@ public enum MessageType {
     DISPLAYED_OBJECTIVE,
     HAND_CARDS,
     GAME_STATE,
+    SCORE,
+    RESOURCES,
+    NEW_PLAYER_JOINED,
+    GRID,
+    WINNER,
+    EXCEPTION_MESSAGE,
+
+    COLORS_AVAILABLE
 
 
 }
