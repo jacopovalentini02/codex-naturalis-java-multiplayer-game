@@ -6,6 +6,10 @@ import it.polimi.ingsfw.ingsfwproject.Network.Messages.MessageType;
 
 public class WantThatColorMessage extends Message {
 
+    public String getNickname() {
+        return nickname;
+    }
+
     String nickname;
     PlayerColor color;
     public WantThatColorMessage(int clientID, String nickname, PlayerColor color) {

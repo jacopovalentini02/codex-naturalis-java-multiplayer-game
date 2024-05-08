@@ -52,10 +52,20 @@ public class Cli extends View implements Runnable {
     }
 
     private Coordinate askForCoordinateInput(){
-        System.out.println("Where do you want to play the chosen card?");
-        //TODO: COME SI PASSA L'ECCEZIONE? FACCIO UNA PROVA
-        //TODO: Ora returno un valore a caso solo per fare push
-        return new Coordinate(0,0);
+        Coordinate coord;
+        int x = -9999;
+        int y = -9999;
+        //TODO : Bisognerebbe passare l'eccezione correttamente ma non ho idea di come fare -> sono un tacchino!
+        System.out.println("Give me the coordinates where you want to play the card:");
+        do{
+            try{
+               x = scanner.nextInt();
+               y = scanner.nextInt();
+            }catch (InputMismatchException e){
+                System.out.println("Invalid coordinate!");
+            }
+        }while((x==-9999) || (y==-9999));
+        return coord = new Coordinate(x,y);
     }
 
     private boolean askForFaceToPlay(){
@@ -87,48 +97,6 @@ public class Cli extends View implements Runnable {
         return scanner.nextLine();
     };
 
-    @Override
-    public void chooseFirstAction() {
-        int choice = 0;
-        Message messageToSend;
-
-        //------------------------SCELTA DELLA PRIMA AZIONE (CREA, JOINA...)
-
-        do {
-            System.out.println("Scegli un'opzione:");
-            System.out.println("1. Crea una nuova partita");
-            System.out.println("2. Unisciti a una partita esistente");
-            System.out.print("Inserisci il numero dell'opzione (1 o 2): ");
-
-            if (scanner.hasNextInt()) {
-                choice = scanner.nextInt();
-                if (choice == 1 || choice == 2) {
-                    break;
-                }
-            } else {
-                scanner.next();
-            }
-            System.out.println("Input non valido. Riprova.");
-        } while (true);
-
-
-        //------------------------CREAZIONE DELLA PARTITA o SCELTA DELLA PARTITA GIà IN CORSO
-
-        scanner.nextLine();
-
-        if (choice == 1) {
-            createGame();
-        }else if (choice == 2) {
-            messageToSend = new GetGameListMessage(client.getClientID());
-            try {
-                client.sendMessage(messageToSend);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
-
-    }
-
 
     @Override
     public void chooseConnection() {
@@ -147,63 +115,13 @@ public class Cli extends View implements Runnable {
 
     }
 
-    @Override
-    public void createGame() {
-        String username;
-        Message messageToSend;
 
-
-        System.out.println("Inserisci il numero di giocatori per questa partita, da 2 a 4: ");
-        int numOfPlayers = scanner.nextInt();
-        scanner.nextLine();
-        do{
-            System.out.println("Inserisci il tuo username: ");
-            username = scanner.nextLine();
-            if(username.length()<2){
-                System.out.println("Username non valido, la lunghezza minima è di 2 caratteri!\n");
-            }
-        }while(username.length()<2);
-
-        messageToSend = new CreateGameMessage(client.getClientID(), numOfPlayers, username);
-        try {
-            client.sendMessage(messageToSend);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @Override
-    public void chooseGameToJoin(HashMap<Integer, Integer> gamesMap) {
-        String username;
-        Message messageToSend;
-
-        System.out.printf("%-10s %-20s %n", "ID", "Numero di Giocatori");
-        for (HashMap.Entry<Integer, Integer> entry : gamesMap.entrySet()) {
-            System.out.printf("%-10d %-20d %n", entry.getKey(), entry.getValue());
-        }
-        System.out.println("Inserisci l'ID della partita a cui vuoi unirti: ");
-        int GameID = scanner.nextInt();
-        scanner.nextLine();
-
-        do{
-            System.out.println("Inserisci il tuo username: ");
-            username = scanner.nextLine();
-            if(username.length()<2){
-                System.out.println("Username non valido, la lunghezza minima è di 2 caratteri!");
-            }
-        }while(username.length()<2);
-
-        messageToSend = new JoinGameMessage(client.getClientID(), username, GameID);
-        try {
-            client.sendMessage(messageToSend);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     @Override
     public void handleMessage(Message message) {
         String lobbyCommands = "now you can insert one of the following commands:" + "\n\t-> CreateGame" + "\n\t-> JoinGame" + "\n\t-> GetGameList";
+        //TODO : Forse conviene gestire questo output in base al game state -> se è in choosing colors mando gli ultimi due,
+        // se è in choose objectives solo il primo
         String GameStartingCommands = "now you can do one of the following actions: \n\t-> ChooseObjectiveCard \n\t-> getColorAvailable \n\t-> chooseColor";
         String gameCommands = "now you can do one of the following actions: \n\t-> PlayCard \n\t-> DrawCard \n\t-> PickCard  \n\t-> SkipTurn";
 
@@ -255,7 +173,7 @@ public class Cli extends View implements Runnable {
             case CURRENT_PLAYER:
                 CurrentPlayerMessage currentPlayerMessage = (CurrentPlayerMessage) message;
                 System.out.println("it' now " + currentPlayerMessage.getCurrentPlayer() + "'s turn");
-                //todo: se è il mio turno, devo stampare la stringa gameCommands;
+                //todo: se è il mio turno, devo stampare la stringa gameCommands; <-> Non sono sicuro di averlo gestito bene
                 if(client.getClientID() == currentPlayerMessage.getClientID()){
                     System.out.println(gameCommands);
                 }
@@ -278,6 +196,10 @@ public class Cli extends View implements Runnable {
                 break;
             case GAME_STATE:
                 System.out.println("Game state updated to: '" +((GameStateMessage) message).getGameState() +"'\n" );
+                //TODO: Se il game è nelle fasi iniziali devo poter stampare i relativi comandi
+                if(client.getVirtualView().getState()==GameState.CHOOSING_STARTER_CARDS){
+                    System.out.println("now you can do the following actions: \n\t-> PlayCard");
+                }
                 break;
             case GRID:
                 System.out.println("Grid updated. Here's how: ");
@@ -339,17 +261,21 @@ public class Cli extends View implements Runnable {
                     //TODO : fare un'altro metodo al posto di askForIntInput che mi permetta di lanciare
                     // un eccezione se l'id della carta non è presente tra le due mostrate
                     int objWanted = askForIntInput("What objective do you prefer?", 1, 120);
-                    messageToSend = new ObjectiveCardChosenMessage(client.getClientID(), client.getNickname(), idCard);
+                    messageToSend = new ObjectiveCardChosenMessage(client.getClientID(), client.getNickname(), objWanted);
                     client.sendMessage(messageToSend);
                 case "playcard" :
-                    //TODO : Com'è il flusso per la visualizzazione delle coordinate disponibili?
+                    //TODO : Com'è il flusso per la visualizzazione delle coordinate e delle carte disponibili?
                     //TODO: fare altro metodo al posto di askForIntInput che mi permetta di choosare fra gli
                     //TODO: delle carte in mano, altrimenti da errore.
+                    System.out.println("Here's the id of the cards in your hand: ");
+                    for(PlayableCard card : client.getVirtualView().getHandCards()){
+                        System.out.println(card.getIdCard());
+                    }
                     int idCard = askForIntInput("Among the cards in your hand, which one do you want to play?", 1, 120);
                     boolean face = askForFaceToPlay();
-                    System.out.println("Give me the coordinates where you want to play the card:");
-                    scanner.
-                    messageToSend = new PlayCardMessage(client.getClientID(),idCard, face, );
+                    Coordinate coords = askForCoordinateInput();
+                    messageToSend = new PlayCardMessage(client.getClientID(),idCard, face,coords, client.getNickname());
+                    client.sendMessage(messageToSend);
                     break;
                 case "drawcard" :
 

@@ -12,15 +12,11 @@ public abstract class View implements Runnable{
     public ConcurrentLinkedQueue<Message> messages;
 
 
-    public abstract void chooseFirstAction();
 
 
 
     public abstract void chooseConnection();
 
-    public abstract void createGame();
-
-    public abstract void chooseGameToJoin(HashMap<Integer, Integer> gamesMap);
 
     public void receiveMessage() {
         while(true){
