@@ -66,25 +66,14 @@ public class GUIView extends View {
 
 
 
-    @Override
-    public void chooseFirstAction() {
 
-    }
 
     @Override
     public void chooseConnection() {
 
     }
 
-    @Override
-    public void createGame() {
 
-    }
-
-    @Override
-    public void chooseGameToJoin(HashMap<Integer, Integer> gamesMap) {
-
-    }
 
     @Override
     public void handleMessage(Message message) {
@@ -104,7 +93,7 @@ public class GUIView extends View {
     }
 
     @Override
-    public void handleInput(Message message) {
+    public void handleInput(String input) {
 
     }
 
