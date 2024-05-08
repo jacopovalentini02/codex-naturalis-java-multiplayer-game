@@ -4,7 +4,7 @@ import it.polimi.ingsfw.ingsfwproject.Network.Messages.Message;
 import it.polimi.ingsfw.ingsfwproject.Network.Server.Handler;
 import it.polimi.ingsfw.ingsfwproject.Network.Server.RMIFactory;
 import it.polimi.ingsfw.ingsfwproject.Network.Server.RMIHandlerServer;
-import it.polimi.ingsfw.ingsfwproject.View2.View;
+import it.polimi.ingsfw.ingsfwproject.View.View;
 
 import java.io.IOException;
 import java.rmi.RemoteException;

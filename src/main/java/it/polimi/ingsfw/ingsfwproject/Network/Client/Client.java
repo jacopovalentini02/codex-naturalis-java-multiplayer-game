@@ -4,7 +4,7 @@ import it.polimi.ingsfw.ingsfwproject.Model.GameState;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.*;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.Message;
 import it.polimi.ingsfw.ingsfwproject.View.VirtualView;
-import it.polimi.ingsfw.ingsfwproject.View2.View;
+import it.polimi.ingsfw.ingsfwproject.View.View;
 
 import java.io.IOException;
 
@@ -13,6 +13,15 @@ public abstract class Client {
     private int port; //Server port
     private String nickname;
     private int clientID;
+
+    public VirtualView getVirtualView() {
+        return virtualView;
+    }
+
+    public void setVirtualView(VirtualView virtualView) {
+        this.virtualView = virtualView;
+    }
+
     private VirtualView virtualView;
     private View view;
 
@@ -106,6 +115,9 @@ public abstract class Client {
             case WINNER:
                 WinnerMessage winnerMessage=(WinnerMessage) message;
                 this.virtualView.setWinner(winnerMessage.getNickname());
+                break;
+            case HAND_CARDS:
+                this.virtualView.setHandCards(((HandCardsMessage) message).getHandCards());
                 break;
 
         }

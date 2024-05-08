@@ -110,7 +110,8 @@ public class Player implements Serializable {
     }
 
 
-    private HashMap<Content, Integer> generateContentMap(){
+    //todo mettere priavate
+    public HashMap<Content, Integer> generateContentMap(){
         HashMap<Content, Integer> resources = new HashMap<>();
         resources.put(Content.FUNGI_KINGDOM, this.ground.getContentCount(Content.FUNGI_KINGDOM));
         resources.put(Content.ANIMAL_KINGDOM, this.ground.getContentCount(Content.ANIMAL_KINGDOM));
