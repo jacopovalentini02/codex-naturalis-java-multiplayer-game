@@ -9,26 +9,25 @@
 <?import javafx.scene.text.Text?>
 
 <AnchorPane prefHeight="411.0" prefWidth="449.0" style="-fx-background-color: #E1D4A4;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsfw.ingsfwproject.View.GUI.GUIView">
-   <children>
-      <ImageView fitHeight="254.0" fitWidth="468.0" layoutY="-10.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@Slider-Codex-2-1920x1080.jpg" />
-         </image>
-      </ImageView>
-      <Button fx:id="rmiButton" layoutX="99.0" layoutY="316.0" mnemonicParsing="false" onAction="#handleRMIConnection" prefHeight="37.0" prefWidth="75.0" style="-fx-background-color: #5F3075;" text="RMI" textFill="WHITE">
-         <font>
-            <Font size="14.0" />
-         </font></Button>
-      <Button fx:id="socketButton" layoutX="276.0" layoutY="314.0" mnemonicParsing="false" onAction="#handleSocketConnection" prefHeight="37.0" prefWidth="75.0" style="-fx-background-color: #5F3075;" text="Socket" textFill="WHITE">
-         <font>
-            <Font size="14.0" />
-         </font></Button>
-      <Text fill="#5f3075" layoutX="125.0" layoutY="293.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Choose your connection">
-         <font>
-            <Font size="19.0" />
-         </font></Text>
-   </children>
    <effect>
       <Blend />
    </effect>
+   <ImageView fitHeight="254.0" fitWidth="468.0" layoutY="-10.0" pickOnBounds="true" preserveRatio="true">
+      <Image url="@Slider-Codex-2-1920x1080.jpg" />
+   </ImageView>
+   <Button fx:id="rmiButton" layoutX="99.0" layoutY="316.0" mnemonicParsing="false" onAction="#handleRMIConnection" prefHeight="37.0" prefWidth="75.0" style="-fx-background-color: #5F3075;" text="RMI" textFill="WHITE">
+      <font>
+         <Font size="14.0" />
+      </font>
+   </Button>
+   <Button fx:id="socketButton" layoutX="276.0" layoutY="314.0" mnemonicParsing="false" onAction="#handleSocketConnection" prefHeight="37.0" prefWidth="75.0" style="-fx-background-color: #5F3075;" text="Socket" textFill="WHITE">
+      <font>
+         <Font size="14.0" />
+      </font>
+   </Button>
+   <Text fill="#5f3075" layoutX="125.0" layoutY="293.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Choose your connection">
+      <font>
+         <Font size="19.0" />
+      </font>
+   </Text>
 </AnchorPane>

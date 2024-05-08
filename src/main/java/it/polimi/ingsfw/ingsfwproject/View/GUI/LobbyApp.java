@@ -9,15 +9,12 @@ import javafx.stage.Stage;
 public class LobbyApp extends Application {
     @Override
     public void start(Stage stage) throws Exception {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polimi/ingsfw/ingsfwproject/Lobby.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polimi/ingsfw/ingsfwproject/prova-lobby.fxml"));
         Parent root = loader.load();
         Scene scene = new Scene(root);
         stage.setTitle("Lobby");
         stage.setScene(scene);
         stage.show();
-
-
-
 
     }
 }

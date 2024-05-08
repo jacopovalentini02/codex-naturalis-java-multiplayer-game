@@ -33,6 +33,13 @@ public class GUIView extends View {
     private Button aleButton;
 
     @FXML
+    private Button createButton;
+
+    @FXML
+    private Button refreshButton;
+
+
+    @FXML
     private ImageView ale;
 
 
@@ -40,12 +47,43 @@ public class GUIView extends View {
     private void handleSocketConnection() throws Exception {
         super.client = new SocketClient("localhost", 1337, this);
         super.client.startConnection();
+        if (super.client.isConnected()) {
+            openLobby();
+        } else {
+            showConnectionError();
+        }
     }
 
     @FXML
     private void handleRMIConnection() throws Exception {
         super.client = new RMIClient("localhost", 1099, this);
         super.client.startConnection();
+        if (super.client.isConnected()) {
+            openLobby();
+        } else {
+            showConnectionError();
+        }
+    }
+
+    private void openLobby() {
+        Platform.runLater(() -> {
+            try {
+                new LobbyApp().start(new Stage());
+                stage.close();
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+    }
+
+    private void showConnectionError() {
+        Platform.runLater(() -> {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Connection Error");
+            alert.setHeaderText(null);
+            alert.setContentText("Connection could be not established. Please retry");
+            alert.showAndWait();
+        });
     }
 
     @FXML

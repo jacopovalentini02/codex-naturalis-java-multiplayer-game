@@ -27,6 +27,7 @@ public class RMIClient extends Client{
 
         if (serverFactory == null){
             System.out.println("Error while obtaining RMI Factory Object");
+            this.setConnected(false);
             throw new RuntimeException();
         } else {
             System.out.println("Successfully connected to RMI Factory Object");
@@ -46,6 +47,7 @@ public class RMIClient extends Client{
 
         //passaggio al server del client handler
         serverFactory.setClientHandler(clientHandler);
+        this.setConnected(true);
 
 
     }

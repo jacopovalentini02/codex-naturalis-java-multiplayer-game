@@ -25,6 +25,8 @@ public abstract class Client {
     private VirtualView virtualView;
     private View view;
 
+    private boolean connected;
+
 
     public Client(String ip, int port, View view) {
         this.ip = ip;
@@ -132,4 +134,12 @@ public abstract class Client {
 
 
     public void setClientID(int clientID){this.clientID = clientID;}
+
+    public boolean isConnected() {
+        return connected;
+    }
+
+    public void setConnected(boolean connected) {
+        this.connected = connected;
+    }
 }

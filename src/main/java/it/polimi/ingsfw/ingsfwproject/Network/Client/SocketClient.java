@@ -34,10 +34,13 @@ public class SocketClient extends Client{
             this.output = new ObjectOutputStream(socket.getOutputStream());
             this.input = new ObjectInputStream(socket.getInputStream());
 
+            this.setConnected(true);
+
             this.receiveMessage();
 
         } else {
             System.out.println("Connessione al server fallita");
+            this.setConnected(false);
             throw new IOException("Connessione al server fallita");
         }
 
