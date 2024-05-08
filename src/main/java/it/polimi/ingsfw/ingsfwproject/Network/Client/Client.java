@@ -107,6 +107,9 @@ public abstract class Client {
                 WinnerMessage winnerMessage=(WinnerMessage) message;
                 this.virtualView.setWinner(winnerMessage.getNickname());
                 break;
+            case HAND_CARDS:
+                this.virtualView.setHandCards(((HandCardsMessage) message).getHandCards());
+                break;
 
         }
 
