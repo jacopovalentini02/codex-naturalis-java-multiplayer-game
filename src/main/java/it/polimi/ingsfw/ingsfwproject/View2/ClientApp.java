@@ -1,4 +1,4 @@
-package it.polimi.ingsfw.ingsfwproject.View2;
+/*package it.polimi.ingsfw.ingsfwproject.View2;
 
 import java.util.Scanner;
 
@@ -34,4 +34,4 @@ public class ClientApp {
     }
 
 
-}
+}*/

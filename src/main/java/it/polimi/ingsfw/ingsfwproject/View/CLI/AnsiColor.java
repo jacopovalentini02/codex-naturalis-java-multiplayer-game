@@ -2,39 +2,48 @@ package it.polimi.ingsfw.ingsfwproject.View.CLI;
 
 public enum AnsiColor {
     // text color with background -> busy corner
-    FUNGI_TEXT("F", "\u001B[31m\u001B[43m"),  // red on ocra background
-    PLANT_TEXT("P", "\u001B[32m\u001B[43m"),  // green on ocra background
-    ANIMAL_TEXT("A", "\u001B[34m\u001B[43m"), // blue on ocra background
-    INSECT_TEXT("I", "\u001B[35m\u001B[43m"), // magenta on ocra background
-    QUILL_TEXT("Q", "\u001B[97m\u001B[43m"),  // white on ocra background
-    INKWELL_TEXT("K", "\u001B[97m\u001B[43m"),// white on ocra background
-    MANUSCRIPT_TEXT("M", "\u001B[97m\u001B[43m"), // white on ocra background
+    FUNGI_TEXT("\u001B[43m \uD83C\uDF44 "),  // red on ocra background
+    PLANT_TEXT("\u001B[43m \uD83C\uDF3F "),  // green on ocra background
+    ANIMAL_TEXT("\u001B[43m \uD83D\uDC3A "), // blue on ocra background
+    INSECT_TEXT("\u001B[43m \uD83E\uDD8B "), // magenta on ocra background
+    QUILL_TEXT("\u001B[43m \uD83E\uDEB6 "),  // white on ocra background
+    INKWELL_TEXT("\u001B[43m \uD83E\uDED9 "),// white on ocra background
+    MANUSCRIPT_TEXT("\u001B[43m \uD83D\uDCDC "), // white on ocra background
 
     // background colors
-    PLANT_BACKGROUND(" ", "\u001B[42m"),  // green background
-    FUNGI_BACKGROUND(" ", "\u001B[41m"),    // red background
-    ANIMAL_BACKGROUND(" ", "\u001B[44m"),   // blue background
-    INSECT_BACKGROUND(" ", "\u001B[45m"), // magenta background
+    PLANT_BACKGROUND("\u001B[42m    "),  // green background
+    FUNGI_BACKGROUND("\u001B[41m    "),    // red background
+    ANIMAL_BACKGROUND("\u001B[44m    "),   // blue background
+    INSECT_BACKGROUND("\u001B[45m    "), // magenta background
 
-    EMPTY_BACKGROUND(" ","\u001B[43m"), // ocra background -> empty corner
+    B_GOLD_PLANT_BACKGROUND("\u001B[43m \u001B[42m   "),  // green background
+    B_GOLD_FUNGI_BACKGROUND("\u001B[43m \u001B[41m   "),    // red background
+    B_GOLD_ANIMAL_BACKGROUND("\u001B[43m \u001B[44m   "),   // blue background
+    B_GOLD_INSECT_BACKGROUND("\u001B[43m \u001B[45m   "), // magenta background
+    E_GOLD_PLANT_BACKGROUND("\u001B[42m   \u001B[43m "),  // green background
+    E_GOLD_FUNGI_BACKGROUND("\u001B[41m   \u001B[43m "),    // red background
+    E_GOLD_ANIMAL_BACKGROUND("\u001B[44m   \u001B[43m "),   // blue background
+    E_GOLD_INSECT_BACKGROUND("\u001B[45m   \u001B[43m "), // magenta background
 
-    RED_DOT("•", "\u001B[31m"),
-    BLUE_DOT("•", "\u001B[34m"),
-    YELLOW_DOT("•", "\u001B[33m"),
-    GREEN_DOT("•", "\u001B[32m"),
-    BLACK_DOT("•", "\u001B[30m");
 
-    private final String character;
+    EMPTY_TEXT("\u001B[43m    "), // ocra background -> empty corner
+
+    RED_DOT("\uD83D\uDD34"),
+    BLUE_DOT("\uD83D\uDD35"),
+    YELLOW_DOT("\uD83D\uDFE1"),
+    GREEN_DOT("\uD83D\uDFE2");
+
+
     private final String colorAndBackground;
 
-    AnsiColor(String character, String colorAndBackground) {
-        this.character = character;
+
+    AnsiColor(String colorAndBackground) {
         this.colorAndBackground = colorAndBackground;
     }
 
     public String getFormattedCharacter() {
         // Restituisce il carattere con il colore del testo e dello sfondo specificati,
         // seguito dal codice di reset ANSI per assicurare che i colori successivi non siano influenzati
-        return colorAndBackground + character + "\u001B[0m";
+        return colorAndBackground + "\u001B[0m";
     }
 }

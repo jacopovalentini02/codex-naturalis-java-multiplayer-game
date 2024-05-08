@@ -1,4 +1,4 @@
-package it.polimi.ingsfw.ingsfwproject.View2;
+/*package it.polimi.ingsfw.ingsfwproject.View2;
 
 import it.polimi.ingsfw.ingsfwproject.Model.Coordinate;
 import it.polimi.ingsfw.ingsfwproject.Network.Client.RMIClient;
@@ -407,4 +407,4 @@ public class CLI extends View implements Runnable {
     */
 
 
-}
+}*/

@@ -1,7 +1,7 @@
 package it.polimi.ingsfw.ingsfwproject.Network.Client;
 
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.Message;
-import it.polimi.ingsfw.ingsfwproject.View2.View;
+import it.polimi.ingsfw.ingsfwproject.View.View;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
