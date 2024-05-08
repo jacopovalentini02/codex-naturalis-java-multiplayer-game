@@ -11,6 +11,7 @@ public abstract class View implements Runnable{
     protected Client client;
     public ConcurrentLinkedQueue<Message> messages;
 
+
     public abstract void chooseFirstAction();
 
     public abstract void chooseConnection();

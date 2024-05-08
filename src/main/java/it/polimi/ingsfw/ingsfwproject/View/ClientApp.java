@@ -1,24 +1,15 @@
-package it.polimi.ingsfw.ingsfwproject.View.CLI;
+package it.polimi.ingsfw.ingsfwproject.View;
 
-import it.polimi.ingsfw.ingsfwproject.Model.Game;
-import it.polimi.ingsfw.ingsfwproject.Network.Client.Client;
-import it.polimi.ingsfw.ingsfwproject.Network.Client.RMIClient;
-import it.polimi.ingsfw.ingsfwproject.Network.Client.SocketClient;
-import it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServer.CreateGameMessage;
-import it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServer.GetGameListMessage;
-import it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServer.JoinGameMessage;
-import it.polimi.ingsfw.ingsfwproject.Network.Messages.Message;
 import it.polimi.ingsfw.ingsfwproject.View.CLI.Cli;
+import it.polimi.ingsfw.ingsfwproject.View.GUI.GUIView;
 
-import java.io.IOException;
-import java.util.HashMap;
 import java.util.Scanner;
 
 public class ClientApp {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         int choice;
-        Cli view = null;
+        View view = null;
 
         do {
             System.out.println("Con che interfaccia vuoi giocare? \n1) CLI \n2) GUI");

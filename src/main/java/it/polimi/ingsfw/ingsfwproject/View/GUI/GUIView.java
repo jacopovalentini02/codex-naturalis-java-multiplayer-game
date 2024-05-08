@@ -1,10 +1,11 @@
-/*package it.polimi.ingsfw.ingsfwproject.View2;
+package it.polimi.ingsfw.ingsfwproject.View.GUI;
 
 import it.polimi.ingsfw.ingsfwproject.Network.Client.Client;
 import it.polimi.ingsfw.ingsfwproject.Network.Client.RMIClient;
 import it.polimi.ingsfw.ingsfwproject.Network.Client.SocketClient;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.Message;
 import it.polimi.ingsfw.ingsfwproject.View.GUI.ChooseConnectionApp;
+import it.polimi.ingsfw.ingsfwproject.View.View;
 import javafx.animation.RotateTransition;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -14,9 +15,10 @@ import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
 import javafx.util.Duration;
 
+import java.util.HashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-public class GUIView extends View{
+public class GUIView extends View {
 
     @FXML
     private Button socketButton;
@@ -65,7 +67,22 @@ public class GUIView extends View{
 
 
     @Override
-    public void chooseConnectionMethod() {
+    public void chooseFirstAction() {
+
+    }
+
+    @Override
+    public void chooseConnection() {
+
+    }
+
+    @Override
+    public void createGame() {
+
+    }
+
+    @Override
+    public void chooseGameToJoin(HashMap<Integer, Integer> gamesMap) {
 
     }
 
@@ -87,6 +104,11 @@ public class GUIView extends View{
     }
 
     @Override
+    public void handleInput(Message message) {
+
+    }
+
+    @Override
     public void run() {
         Application.launch(ChooseConnectionApp.class);
     }
@@ -97,4 +119,3 @@ public class GUIView extends View{
 
 
 }
-*/

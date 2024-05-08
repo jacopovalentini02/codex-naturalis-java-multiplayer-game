@@ -12,8 +12,8 @@ module it.polimi.ingsfw.ingsfwproject {
     exports it.polimi.ingsfw.ingsfwproject.Exceptions;
     exports it.polimi.ingsfw.ingsfwproject.Network.Server;
 
-    opens it.polimi.ingsfw.ingsfwproject.View2.GUI to javafx.fxml;
-    exports it.polimi.ingsfw.ingsfwproject.View2.GUI to javafx.graphics;
+    opens it.polimi.ingsfw.ingsfwproject.View.GUI to javafx.fxml;
+    exports it.polimi.ingsfw.ingsfwproject.View.GUI to javafx.graphics;
     exports it.polimi.ingsfw.ingsfwproject.View2;
 
     exports it.polimi.ingsfw.ingsfwproject.Network.Messages;
