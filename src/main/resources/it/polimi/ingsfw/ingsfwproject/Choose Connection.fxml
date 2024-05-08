@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: DCDCDC;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsfw.ingsfwproject.View.GUI.GUIView">
+   <children>
+      <BorderPane prefHeight="211.0" prefWidth="600.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <center>
+            <ImageView fitHeight="181.0" fitWidth="287.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
+               <image>
+                  <Image url="@Slider-Codex-2-1920x1080.jpg" />
+               </image>
+               <BorderPane.margin>
+                  <Insets top="15.0" />
+               </BorderPane.margin>
+            </ImageView>
+         </center>
+         <bottom>
+            <StackPane prefHeight="67.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Choose your connection method">
+                     <font>
+                        <Font size="19.0" />
+                     </font>
+                  </Text>
+               </children>
+            </StackPane>
+         </bottom>
+      </BorderPane>
+      <Button fx:id="socketButton" layoutX="146.0" layoutY="254.0" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" onAction="#handleSocketConnection" text="Socket" AnchorPane.leftAnchor="146.0" AnchorPane.topAnchor="254.0" />
+      <Button fx:id="rmiButton" layoutX="400.0" layoutY="255.0" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" onAction="#handleRMIConnection" text="RMI" AnchorPane.rightAnchor="146.5" AnchorPane.topAnchor="255.0" />
+      <Button fx:id="aleButton" layoutX="283.0" layoutY="310.0" mnemonicParsing="false" onAction="#showAle" text="Ale" />
+      <ImageView fx:id="ale" visible="false" fitHeight="337.0" fitWidth="299.0" layoutX="120.0" layoutY="25.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@IMG_7355.jpg" />
+         </image>
+      </ImageView>
+   </children>
+</AnchorPane>
