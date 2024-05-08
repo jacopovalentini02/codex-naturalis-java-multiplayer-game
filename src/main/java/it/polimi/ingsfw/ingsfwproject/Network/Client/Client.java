@@ -4,7 +4,7 @@ import it.polimi.ingsfw.ingsfwproject.Model.GameState;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.*;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.Message;
 import it.polimi.ingsfw.ingsfwproject.View.VirtualView;
-import it.polimi.ingsfw.ingsfwproject.View2.View;
+import it.polimi.ingsfw.ingsfwproject.View.View;
 
 import java.io.IOException;
 
