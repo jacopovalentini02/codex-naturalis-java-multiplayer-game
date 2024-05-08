@@ -13,6 +13,15 @@ public abstract class Client {
     private int port; //Server port
     private String nickname;
     private int clientID;
+
+    public VirtualView getVirtualView() {
+        return virtualView;
+    }
+
+    public void setVirtualView(VirtualView virtualView) {
+        this.virtualView = virtualView;
+    }
+
     private VirtualView virtualView;
     private View view;
 

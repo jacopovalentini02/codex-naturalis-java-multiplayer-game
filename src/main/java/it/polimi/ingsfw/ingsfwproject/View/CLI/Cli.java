@@ -167,7 +167,7 @@ public class Cli extends View implements Runnable {
             System.out.println("Inserisci il tuo username: ");
             username = scanner.nextLine();
             if(username.length()<2){
-                System.out.println("Username non valido, la lunghezza minima è di 2 caratteri!\n");
+                System.out.println("Username non valido, la lunghezza minima è di 2 caratteri!");
             }
         }while(username.length()<2);
 
@@ -191,31 +191,53 @@ public class Cli extends View implements Runnable {
                 break;
             case GAME_JOINED:
                 //todo:stampare le info della partita
-                System.out.println("game joined");
+                System.out.println("Game joined");
+                break;
+            case NEW_PLAYER_JOINED:
+                //TODO: recuperare username del player che ha joinato e farne display
+                System.out.println("A new player joined the game!");
                 break;
             case STARTER_CARD:
                 //todo: stampare la carta
-                System.out.println("starter card selected correctly");
+                System.out.println("Starter card selected correctly");
                 break;
             case GOLD_DECK:
-
+                System.out.println("Gold deck updated!");
                 break;
             case RESOURCE_DECK:
-
+                System.out.println("Resourced deck updated!");
                 break;
             case DISPLAYED_PLAYABLE_CARDS:
-
+                System.out.println("Displayed playable cards updated! Here's how:\n");
+                for(PlayableCard c : ((DispayedPlayableCardMessage) message).getDisplayedPlayableCard()){
+                    //TODO: Stampare la carta (solo fronte suppongo)
+                }
                 break;
             case CURRENT_PLAYER:
-
+                System.out.println("Now it's " + /*((CurrentPlayerMessage) message).getCurrentPlayer()*/ client.getVirtualView().getCurrentPlayer() + " turn");
                 break;
             case COORDINATES_AVAILABLE:
-
+                System.out.println("Here's the available positions on your player ground: \n" + ((CoordinatesAvailableMessage) message).getCoords());
                 break;
             case HAND_OBJECTIVE:
-
+                System.out.println("Now you have to choose between these two objectives. The choice will be your secret objective!\n");
+                for(ObjectiveCard c : ((HandObjectiveMessage) message).getCards() ){
+                    //TODO: stampare gli obiettivi
+                }
                 break;
             case GAME_STATE:
+
+                break;
+            case GRID:
+
+                break;
+            case RESOURCES:
+
+                break;
+            case WINNER:
+
+                break;
+            case HAND_CARDS:
 
                 break;
         }
