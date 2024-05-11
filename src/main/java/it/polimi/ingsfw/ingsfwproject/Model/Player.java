@@ -11,6 +11,7 @@ import java.rmi.RemoteException;
 import java.util.*;
 
 public class Player implements Serializable {
+    private int prova;
     private String username;
     private PlayerColor token;
     private PlayerGround ground;
