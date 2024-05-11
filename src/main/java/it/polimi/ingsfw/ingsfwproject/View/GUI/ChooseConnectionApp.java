@@ -11,7 +11,8 @@ import javafx.stage.Stage;
 
 public class ChooseConnectionApp extends Application {
 
-
+    private static final double MIN_WIDTH = 449.0;
+    private static final double MIN_HEIGHT = 441.0;
     @Override
     public void start(Stage stage) throws Exception {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polimi/ingsfw/ingsfwproject/prova-connection.fxml"));
@@ -21,6 +22,26 @@ public class ChooseConnectionApp extends Application {
         Scene scene = new Scene(root);
         stage.setTitle("Choose connection");
         stage.setScene(scene);
+
+        // Ascoltatore per gestire le dimensioni della finestra
+        stage.widthProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.doubleValue() < MIN_WIDTH) {
+                stage.setMinWidth(newValue.doubleValue());
+            } else {
+                stage.setMinWidth(MIN_WIDTH);
+            }
+        });
+
+        stage.heightProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.doubleValue() < MIN_HEIGHT) {
+                stage.setMinHeight(newValue.doubleValue());
+            } else {
+                stage.setMinHeight(MIN_HEIGHT);
+            }
+        });
+
+
+        stage.show();
 
 //        stage.setOnCloseRequest(e->{
 //            try {
@@ -46,7 +67,9 @@ public class ChooseConnectionApp extends Application {
 //        lobbyButton1.setOnAction(goToLobby);
 //        lobbyButton2.setOnAction(goToLobby);
 
-        stage.show();
+
+
+
     }
 
 

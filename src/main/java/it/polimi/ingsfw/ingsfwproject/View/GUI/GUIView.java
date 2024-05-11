@@ -3,6 +3,7 @@ package it.polimi.ingsfw.ingsfwproject.View.GUI;
 import it.polimi.ingsfw.ingsfwproject.Network.Client.Client;
 import it.polimi.ingsfw.ingsfwproject.Network.Client.RMIClient;
 import it.polimi.ingsfw.ingsfwproject.Network.Client.SocketClient;
+import it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServer.CreateGameMessage;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.Message;
 import it.polimi.ingsfw.ingsfwproject.View.GUI.ChooseConnectionApp;
 import it.polimi.ingsfw.ingsfwproject.View.View;
@@ -12,15 +13,23 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.Spinner;
+import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import java.io.IOException;
+import java.net.ConnectException;
 import java.util.HashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class GUIView extends View {
 
+    @FXML
+    public TextField nickname_input;
+    @FXML
+    public Spinner num_of_players;
     private Stage stage;
 
     @FXML
@@ -45,25 +54,46 @@ public class GUIView extends View {
 
     @FXML
     private void handleSocketConnection() throws Exception {
-        super.client = new SocketClient("localhost", 1337, this);
-        super.client.startConnection();
-        if (super.client.isConnected()) {
-            openLobby();
-        } else {
+        try {
+            super.client = new SocketClient("localhost", 1337, this);
+            super.client.startConnection();
+            if (super.client.isConnected()) {
+                openLobby();
+            } else {
+                showConnectionError();
+            }
+        } catch (ConnectException e) {
             showConnectionError();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
     @FXML
-    private void handleRMIConnection() throws Exception {
-        super.client = new RMIClient("localhost", 1099, this);
-        super.client.startConnection();
-        if (super.client.isConnected()) {
+    private void handleRMIConnection() {
+        //todo qua c'è un'eccezione che da errore, l'alert viene comunue visualizzato
+        try {
+            // Codice per la connessione RMI
+            super.client = new RMIClient("localhost", 1099, this);
+            super.client.startConnection();
             openLobby();
-        } else {
+        } catch (Exception e) {
             showConnectionError();
+            e.printStackTrace();
         }
+
     }
+
+
+    @FXML
+    private void sendCreateGame() throws IOException {
+        String nickname = nickname_input.getText();
+        int numberOfPlayers = (int) num_of_players.getValue();
+        CreateGameMessage createGameMessage=new CreateGameMessage(super.client.getClientID(), numberOfPlayers, nickname);
+        System.out.println(nickname);
+        this.client.sendMessage(createGameMessage);
+    }
+
 
     private void openLobby() {
         Platform.runLater(() -> {
@@ -76,14 +106,27 @@ public class GUIView extends View {
         });
     }
 
+    @FXML
+    private void openCreateGame(){
+        Platform.runLater(() -> {
+            try {
+                new CreateGameApp().start(new Stage());
+                stage.close();
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+    }
+
     private void showConnectionError() {
         Platform.runLater(() -> {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Connection Error");
             alert.setHeaderText(null);
-            alert.setContentText("Connection could be not established. Please retry");
+            alert.setContentText("Connection could not be established. Please retry. Server may be down.");
             alert.showAndWait();
         });
+
     }
 
     @FXML
@@ -119,7 +162,8 @@ public class GUIView extends View {
     @Override
     public void handleMessage(Message message) {
         switch (message.getType()){
-            case FIRST_MESSSAGE: {
+            case FIRST_MESSSAGE:
+                this.client.setClientID(message.getClientID());
                 Platform.runLater(() -> {
                     // Mostra una finestra di dialogo con il messaggio
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -131,7 +175,8 @@ public class GUIView extends View {
                     });
                     alert.showAndWait();
                 });
-            }
+
+
         }
 
     }

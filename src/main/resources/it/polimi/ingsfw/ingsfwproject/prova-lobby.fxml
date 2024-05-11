@@ -17,12 +17,12 @@
    </effect>
    <children>
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#5f3075" height="124.0" stroke="TRANSPARENT" strokeType="INSIDE" width="772.0" />
-      <Button fx:id="createButton" layoutX="431.0" layoutY="461.0" mnemonicParsing="false" onAction="#handleRMIConnection" prefHeight="37.0" prefWidth="115.0" style="-fx-background-color: #5F3075;" text="Create Game" textFill="WHITE">
+      <Button fx:id="createButton" layoutX="431.0" layoutY="461.0" mnemonicParsing="false" onAction="#openCreateGame" prefHeight="37.0" prefWidth="115.0" style="-fx-background-color: #5F3075;" text="Create Game" textFill="WHITE">
          <font>
             <Font size="14.0" />
          </font>
       </Button>
-      <Button fx:id="refreshButton" layoutX="273.0" layoutY="461.0" mnemonicParsing="false" onAction="#handleSocketConnection" prefHeight="37.0" prefWidth="115.0" style="-fx-background-color: #5F3075;" text="Refresh List" textFill="WHITE">
+      <Button fx:id="refreshButton" layoutX="273.0" layoutY="461.0" mnemonicParsing="false"  prefHeight="37.0" prefWidth="115.0" style="-fx-background-color: #5F3075;" text="Refresh List" textFill="WHITE">
          <font>
             <Font size="14.0" />
          </font>

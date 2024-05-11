@@ -22,7 +22,6 @@ public class RMIClient extends Client{
     @Override
     public void startConnection() throws Exception {
         Registry registry = LocateRegistry.getRegistry(this.getIp(), this.getPort());
-        System.out.println("ops");
         RMIFactory serverFactory = (RMIFactory) registry.lookup("Factory");
 
         if (serverFactory == null){
