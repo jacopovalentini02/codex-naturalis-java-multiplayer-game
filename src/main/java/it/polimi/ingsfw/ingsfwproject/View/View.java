@@ -5,11 +5,12 @@ import it.polimi.ingsfw.ingsfwproject.Network.Messages.Message;
 
 import java.util.HashMap;
 import java.util.Queue;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public abstract class View implements Runnable{
     protected Client client;
-    public ConcurrentLinkedQueue<Message> messages;
+    public BlockingQueue<Message> messages;
 
 
 

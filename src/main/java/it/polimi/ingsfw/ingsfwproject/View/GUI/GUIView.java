@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.net.ConnectException;
 import java.util.HashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 public class GUIView extends View {
 
@@ -143,7 +144,7 @@ public class GUIView extends View {
 
 
     public GUIView(){
-        super.messages = new ConcurrentLinkedQueue<>();
+        super.messages = new LinkedBlockingQueue<>();
         Thread readerthread = new Thread(super::receiveMessage);
         readerthread.start();
     }

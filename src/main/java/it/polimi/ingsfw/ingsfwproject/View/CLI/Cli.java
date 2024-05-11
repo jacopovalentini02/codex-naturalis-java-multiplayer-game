@@ -9,10 +9,10 @@ import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.*;
 
 import java.io.IOException;
 import java.util.*;
-import java.util.concurrent.ConcurrentLinkedQueue;
 
 import java.util.HashMap;
 import java.util.Scanner;
+import java.util.concurrent.LinkedBlockingQueue;
 
 import it.polimi.ingsfw.ingsfwproject.View.View;
 
@@ -22,7 +22,7 @@ public class Cli extends View implements Runnable {
 
     public Cli(){
         this.scanner = new Scanner(System.in);
-        super.messages = new ConcurrentLinkedQueue<>();
+        super.messages = new LinkedBlockingQueue<>();
     }
 
     public void init(){
@@ -51,22 +51,31 @@ public class Cli extends View implements Runnable {
         }
     }
 
-    private Coordinate askForCoordinateInput(){
-        Coordinate coord;
-        int x = -9999;
-        int y = -9999;
-        //TODO : Bisognerebbe passare l'eccezione correttamente ma non ho idea di come fare -> sono un tacchino!
-        System.out.println("Give me the coordinates where you want to play the card:");
-        do{
-            try{
-               x = scanner.nextInt();
-               y = scanner.nextInt();
-            }catch (InputMismatchException e){
-                System.out.println("Invalid coordinate!");
+    private Coordinate askForCoordinateInput(ArrayList<Coordinate> availablePositions) {
+        Coordinate coord = new Coordinate(-9999, -9999);
+        String errorString = "Invalid coordinates! Please insert valid ones.\n";
+        System.out.println("Choose the coordinates where you want to play the card between these:");
+        for (Coordinate c : availablePositions) {
+            System.out.println("[" + c.getX() + ", " + c.getY() + "]");
+        }
+        do {
+            try {
+                System.out.println("Insert X and Y coordinates:");
+                int x = scanner.nextInt();
+                int y = scanner.nextInt();
+                coord = new Coordinate(x, y);
+                if (!availablePositions.contains(coord)) {
+                    System.out.println(errorString);
+                }
+            } catch (InputMismatchException e) {
+                System.out.println(errorString);
+                scanner.nextLine();
             }
-        }while((x==-9999) || (y==-9999));
-        return coord = new Coordinate(x,y);
+        } while (!availablePositions.contains(coord));
+
+        return coord;
     }
+
 
     private boolean askForFaceToPlay(){
         int iFace = askForIntInput("Which side?\n1)Front\n2)Back", 1, 2);
@@ -89,6 +98,57 @@ public class Cli extends View implements Runnable {
             }
         }while(choice <lowerBound || choice > upperBound);
 
+        return choice;
+    }
+
+    private int askForIdCardInput(String stringToPrompt, ArrayList<PlayableCard> cards){
+        int choice = -1;
+        Set<Integer> idCards = new HashSet<>();
+        for(PlayableCard c : cards){
+            idCards.add(c.getIdCard());
+        }
+        System.out.println(stringToPrompt);
+        String errorString = "Error: you have to insert a card id among the displayed cards!\n";
+        do{
+            try{
+                for(PlayableCard c : cards){
+                    System.out.println(c.getIdCard());
+                    printFacePlayed(c.getFront());
+                }
+                System.out.println("Insert the id of the card chosen: ");
+                choice = scanner.nextInt();
+                if (!idCards.contains(choice)){
+                    System.out.println(errorString);
+                }
+            }catch (InputMismatchException e){
+                System.out.println(errorString);
+            }
+        }while(!idCards.contains(choice));
+        return choice;
+    }
+    private int askForIdObjectiveInput(String stringToPrompt, ArrayList<ObjectiveCard> cards){
+        int choice = -1;
+        Set<Integer> idCards = new HashSet<>();
+        for(Card c : cards){
+            idCards.add(c.getIdCard());
+        }
+        System.out.println(stringToPrompt);
+        String errorString = "Error: you have to insert a card id among the displayed cards!\n";
+        do{
+            try{
+                for(Card c : cards){
+                    System.out.println(c.getIdCard());
+                    //TODO: Stampare fronte delle carte date come parametro d'ingresso
+                }
+                System.out.println("Insert the id of the card chosen: ");
+                choice = scanner.nextInt();
+                if (!idCards.contains(choice)){
+                    System.out.println(errorString);
+                }
+            }catch (InputMismatchException e){
+                System.out.println(errorString);
+            }
+        }while(!idCards.contains(choice));
         return choice;
     }
 
@@ -148,7 +208,6 @@ public class Cli extends View implements Runnable {
                 System.out.println("A new player joined the game!");
                 break;
             case STARTER_CARD:
-                //todo: stampare la carta
                 System.out.println("Starter card selected correctly");
                 break;
             case COLORS_AVAILABLE:
@@ -258,33 +317,35 @@ public class Cli extends View implements Runnable {
                     client.sendMessage(messageToSend);
                     break;
                 case "chooseobjectivecard" :
-                    //TODO : fare un'altro metodo al posto di askForIntInput che mi permetta di lanciare
-                    // un eccezione se l'id della carta non è presente tra le due mostrate
-                    int objWanted = askForIntInput("What objective do you prefer?", 1, 120);
+                    int objWanted = askForIdObjectiveInput("What objective do you prefer?", (client.getVirtualView().getHandObjectives()));
                     messageToSend = new ObjectiveCardChosenMessage(client.getClientID(), client.getNickname(), objWanted);
                     client.sendMessage(messageToSend);
                 case "playcard" :
-                    //TODO : Com'è il flusso per la visualizzazione delle coordinate e delle carte disponibili?
-                    //TODO: fare altro metodo al posto di askForIntInput che mi permetta di choosare fra gli
-                    //TODO: delle carte in mano, altrimenti da errore.
-                    System.out.println("Here's the id of the cards in your hand: ");
-                    for(PlayableCard card : client.getVirtualView().getHandCards()){
-                        System.out.println(card.getIdCard());
-                    }
-                    int idCard = askForIntInput("Among the cards in your hand, which one do you want to play?", 1, 120);
+                    int idCard = askForIdCardInput("Among the cards in your hand, which one do you want to play? Here the cards' id:\n", client.getVirtualView().getHandCards());
                     boolean face = askForFaceToPlay();
-                    Coordinate coords = askForCoordinateInput();
+                    Coordinate coords = askForCoordinateInput(client.getVirtualView().getAvailablePositions());
                     messageToSend = new PlayCardMessage(client.getClientID(),idCard, face,coords, client.getNickname());
                     client.sendMessage(messageToSend);
                     break;
                 case "drawcard" :
-
+                    //defalt value for deckWanted
+                    boolean deckWanted = true;
+                    int idDeck = askForIntInput("From which deck you want to draw?\n1)Resource deck\n2)Gold deck", 1, 2);
+                    switch(idDeck){
+                        case 1 -> deckWanted = true;
+                        case 2 -> deckWanted = false;
+                    }
+                    messageToSend = new DrawMessage(client.getClientID(), client.getNickname(), deckWanted);
+                    client.sendMessage(messageToSend);
                     break;
                 case "pickcard" :
-
+                    idCard = askForIdCardInput("Among those, which card do you want?", client.getVirtualView().getDisplayedCards());
+                    messageToSend = new PickMessage(client.getClientID(), idCard, client.getNickname());
+                    client.sendMessage(messageToSend);
                     break;
                 case "skipturn" :
-
+                    messageToSend = new SkipTurnMessage(client.getClientID(), client.getNickname());
+                    client.sendMessage(messageToSend);
                     break;
             }
         }catch(Exception e) {
@@ -297,23 +358,31 @@ public class Cli extends View implements Runnable {
 
     }
     public void printFacePlayed(Face face){
-        // TODO: Questo metodo possiamo lasciarlo qui oppure creare una classe printer per la CLI e metterla li
-        // TODO: Inoltre, forse non è necessare passare sia Card che Face...da rivedere!
-        // TODO: Questo metodo si può usare per tutte le carte della grid tranne che per la back face della starter
-        // TODO: -> Consigliato metodo a parte
         int i;
         AnsiColor cardType = getCardType(face);
+        //TODO: PRIMA RIGA!
         //upper-left corner
         printCorner(face.getTL(), 0, cardType);
         //space
-        for (i=0; i<9; i++){
-            System.out.print(cardType.getFormattedCharacter());
+        System.out.print(cardType.getFormattedCharacter());
+        if(face instanceof GoldFront){
+            printGoldFrontPoints(((GoldFront) face), cardType);
+        }
+        else{
+            for(i=0; i<2; i++){
+                System.out.print(cardType.getFormattedCharacter());
+            }
         }
         //upper-right corner
-         printCorner(face.getTR(), 1, cardType);
-        for(i=0; i<5; i++){
+        printCorner(face.getTR(), 1, cardType);
+        //TODO: SECONDA RIGA!
+        if(face instanceof GoldFront){
+            printGoldBorder(cardType, 0);
+        }
+        else{
             System.out.print(cardType.getFormattedCharacter());
         }
+        System.out.print(cardType.getFormattedCharacter());
         //center, if exists
         if(face instanceof NormalBack){
             switch(((NormalBack) face).getCenter()){
@@ -326,18 +395,55 @@ public class Cli extends View implements Runnable {
         else{
             System.out.print(cardType.getFormattedCharacter());
         }
-        for(i=0; i<4; i++){
-            System.out.print(cardType.getFormattedCharacter());
+        System.out.print(cardType.getFormattedCharacter());
+        if(face instanceof GoldFront){
+            printGoldBorder(cardType, 1);
         }
-        System.out.println(cardType.getFormattedCharacter());
+        else{
+            System.out.println(cardType.getFormattedCharacter());
+        }
+        //TODO : TERZA RIGA
         //lower-left corner
         printCorner(face.getBL(), 0, cardType);
         //space
-        for (i=0; i<9; i++){
+        for (i=0; i<3; i++){
             System.out.print(cardType.getFormattedCharacter());
         }
         //lower-right corner
         printCorner(face.getBR(), 1, cardType);
+    }
+
+    public void printGoldFrontPoints(GoldFront face, AnsiColor cardType){
+        switch(face.getPoints()){
+            case 1 -> System.out.print(AnsiColor.POINT_ONE.getFormattedCharacter());
+            case 2 -> System.out.println(AnsiColor.POINT_TWO.getFormattedCharacter());
+            case 3 -> System.out.println(AnsiColor.POINT_THREE.getFormattedCharacter());
+        }
+        if(face.getObjectNeeded() != null){
+            printCorner(face.getObjectNeeded(),0, cardType);
+        }
+        else{
+            System.out.print(cardType.getFormattedCharacter());
+        }
+    }
+
+    public void printGoldBorder(AnsiColor cardType, int bORe){
+        if(bORe ==0){
+            switch(cardType){
+                case PLANT_BACKGROUND -> System.out.print(AnsiColor.B_GOLD_PLANT_BACKGROUND);
+                case ANIMAL_BACKGROUND -> System.out.print(AnsiColor.B_GOLD_ANIMAL_BACKGROUND);
+                case INSECT_BACKGROUND -> System.out.print(AnsiColor.B_GOLD_INSECT_BACKGROUND);
+                case FUNGI_BACKGROUND -> System.out.print(AnsiColor.B_GOLD_FUNGI_BACKGROUND);
+            }
+        }
+        if(bORe == 1){
+            switch(cardType){
+                case PLANT_BACKGROUND -> System.out.println(AnsiColor.E_GOLD_PLANT_BACKGROUND);
+                case ANIMAL_BACKGROUND -> System.out.println(AnsiColor.E_GOLD_ANIMAL_BACKGROUND);
+                case INSECT_BACKGROUND -> System.out.println(AnsiColor.E_GOLD_INSECT_BACKGROUND);
+                case FUNGI_BACKGROUND -> System.out.println(AnsiColor.E_GOLD_FUNGI_BACKGROUND);
+            }
+        }
     }
 
     public void printCorner(Content content, int rOrl, AnsiColor cardType) {
@@ -370,16 +476,17 @@ public class Cli extends View implements Runnable {
 
     public AnsiColor getCardType(Face face){
         Content background = Card.getType(face.getIdCard());
+        assert background != null;
         return switch(background){
             case FUNGI_KINGDOM -> AnsiColor.FUNGI_BACKGROUND;
             case PLANT_KINGDOM ->  AnsiColor.PLANT_BACKGROUND;
             case INSECT_KINGDOM -> AnsiColor.INSECT_BACKGROUND;
             case ANIMAL_KINGDOM -> AnsiColor.ANIMAL_BACKGROUND;
-            case QUILL -> null;
-            case INKWELL -> null;
-            case MANUSCRIPT -> null;
-            case EMPTY -> null;
-            case HIDDEN -> null;
+            case QUILL -> AnsiColor.EMPTY_TEXT;
+            case INKWELL -> AnsiColor.EMPTY_TEXT;
+            case MANUSCRIPT -> AnsiColor.EMPTY_TEXT;
+            case EMPTY -> AnsiColor.EMPTY_TEXT;
+            case HIDDEN -> AnsiColor.EMPTY_TEXT;
         };
     }
 
@@ -388,6 +495,13 @@ public class Cli extends View implements Runnable {
         for (PlayableCard c :player.getHandCard()){
             System.out.println("Front of card "+ i + ":");
             printFacePlayed(c.getFront());
+            if(c.getFront() instanceof GoldFront){
+                System.out.print("Costs: ");
+                for(Content cost : ((GoldFront)c.getFront()).getCost()){
+                    System.out.print(cost.toString() +" ");
+                }
+                System.out.println("");
+            }
             System.out.println("Back of card "+ i + ":");
             printFacePlayed(c.getBack());
             i++;
