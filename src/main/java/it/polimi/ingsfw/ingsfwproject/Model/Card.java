@@ -23,7 +23,7 @@ abstract public class Card implements Serializable {
         else if(id<=40 || (id>=71 && id<=80))
             return Content.INSECT_KINGDOM;
         else
-            return null;
+            return Content.EMPTY;
     }
 
     public Card(int idCard) {

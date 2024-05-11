@@ -10,6 +10,10 @@ public enum AnsiColor {
     INKWELL_TEXT("\u001B[43m \uD83E\uDED9 "),// white on ocra background
     MANUSCRIPT_TEXT("\u001B[43m \uD83D\uDCDC "), // white on ocra background
 
+    POINT_ONE("\u001B[43m 1\uFE0F⃣ "),
+    POINT_TWO("\u001B[43m 2\uFE0F⃣ "),
+    POINT_THREE("\u001B[43m 3\uFE0F⃣ "),
+
     // background colors
     PLANT_BACKGROUND("\u001B[42m    "),  // green background
     FUNGI_BACKGROUND("\u001B[41m    "),    // red background

@@ -13,6 +13,11 @@ public class VirtualView {
     private ArrayList<String> listOfPlayers;
     private HashMap<String, Map<Coordinate, Face>> grids; //tutte le grid, compresa quella di player
     private HashMap<String, HashMap<Content, Integer>> resources;
+
+    public ArrayList<Coordinate> getAvailablePositions() {
+        return availablePositions;
+    }
+
     private ArrayList<Coordinate> availablePositions;
     private ArrayList<PlayableCard> handCards;
     private Deck resourceDeck;
