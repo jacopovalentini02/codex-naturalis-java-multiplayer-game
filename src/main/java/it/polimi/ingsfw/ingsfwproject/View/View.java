@@ -47,6 +47,8 @@ public abstract class View implements Runnable{
 
     public abstract void handleInput(String input);
 
+    public abstract void notifyException(String message);
+
     public void addToQueue(Message message){
         messages.add(message);
 

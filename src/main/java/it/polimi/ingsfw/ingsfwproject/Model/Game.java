@@ -82,7 +82,7 @@ public class Game {
         listOfPlayers.add(player1);
         //todo mando lista player
         //todo mando anche player
-        controller = new GameController(this);
+        controller = new GameController(this, gameServerInstance);
         displayedPlayableCard = new ArrayList<PlayableCard>();
         displayedObjectiveCard = new ArrayList<>();
         scores = new HashMap<>();

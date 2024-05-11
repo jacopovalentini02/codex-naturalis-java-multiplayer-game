@@ -4,18 +4,23 @@ import java.util.*;
 
 import it.polimi.ingsfw.ingsfwproject.Exceptions.*;
 import it.polimi.ingsfw.ingsfwproject.Model.*;
+import it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServerMessage;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.Message;
+import it.polimi.ingsfw.ingsfwproject.Network.Server.GameServerInstance;
 
 
 public class GameController implements Controller {
-    private Game model;
+    private final Game model;
 
     private int starterCardsPlayed;
 
+    private final GameServerInstance serverInstance;
 
-    public GameController(Game model){
+
+    public GameController(Game model, GameServerInstance serverInstance){
         this.model = model;
         starterCardsPlayed = 0;
+        this.serverInstance = serverInstance;
     }
 
     public void chooseObjectiveCard(String username, int cardID) throws TurnException, GamePhaseException, CardNotPresentException {
@@ -204,7 +209,7 @@ public class GameController implements Controller {
     }
 
     @Override
-    public void handleMessage(Message m) {
+    public void handleMessage(ClientToServerMessage m) {
         m.execute(this);
     }
 }

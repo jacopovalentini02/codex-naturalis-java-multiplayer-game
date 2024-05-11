@@ -2,17 +2,19 @@ package it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient;
 
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.Message;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.MessageType;
+import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClientMessage;
+import it.polimi.ingsfw.ingsfwproject.View.View;
 
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
 //Server - client, clients receive the list of the game
-public class SendGameListMessage extends Message implements Serializable {
-    private HashMap<Integer, Integer> gameList;
+public class SendGameListMessage extends ServerToClientMessage implements Serializable {
+    private final HashMap<Integer, Integer> gameList;
 
     public SendGameListMessage(int clientID, HashMap<Integer, Integer> gameList) {
-        super(clientID,MessageType.SEND_GAME_LIST);
+        super(clientID);
         this.gameList = gameList;
     }
 
@@ -32,4 +34,8 @@ public class SendGameListMessage extends Message implements Serializable {
         }
     }
 
+    @Override
+    public void execute(View view) {
+
+    }
 }

@@ -8,8 +8,13 @@ import it.polimi.ingsfw.ingsfwproject.Model.Game;
 import it.polimi.ingsfw.ingsfwproject.Model.GameManager;
 import it.polimi.ingsfw.ingsfwproject.Model.GameState;
 import it.polimi.ingsfw.ingsfwproject.Model.Player;
+import it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServerMessage;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.Message;
+import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.ExcpetionMessage;
+import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.GameJoinedMessage;
+import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.SendGameListMessage;
 import it.polimi.ingsfw.ingsfwproject.Network.Server.GameServerInstance;
+import it.polimi.ingsfw.ingsfwproject.Network.Server.Server;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -17,36 +22,39 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class LobbyController implements Controller {
-    private GameManager lobby;
+    private final GameManager lobby;
+    private final Server server;
 
-    public LobbyController(GameManager lobby){
+    public LobbyController(GameManager lobby, Server server){
         this.lobby = lobby;
+        this.server = server;
     }
 
-    public int createGame(int numOfPlayers, String thisPlayer, int clientID) throws NotValidNumOfPlayerException {
+    public void createGame(int numOfPlayers, String thisPlayer, int clientID) throws NotValidNumOfPlayerException {
         if(numOfPlayers < 2 || numOfPlayers > 4)
-            throw new NotValidNumOfPlayerException("the player's number must be between 2 and 4, but you entered: " + numOfPlayers);
+            server.sendResponse(new ExcpetionMessage(clientID, "The number of players must be between 2 and 4, but you entered " + numOfPlayers));
         int gameID;
         synchronized (lobby){
             gameID = lobby.createGame(numOfPlayers, thisPlayer, clientID);
         }
-        return gameID;
+        server.setHandlersAndInstance(getGameServerInstance(gameID), clientID, thisPlayer);
+        server.sendResponse(new GameJoinedMessage(clientID, gameID, thisPlayer));
     }
 
     public int joinExistingGame(String nick, int idGame, int clientID) throws GameNotExistingException, GameFullException, NickAlreadyTakenException {
         synchronized (lobby) {
 
             if (!lobby.getGameIDs().contains(idGame))
-                throw new GameNotExistingException("there's no game with ID:" + idGame);
+                server.sendResponse(new ExcpetionMessage(clientID, "There is no game with ID " + idGame));
 
             Game gameToJoin = lobby.getGameList().get(idGame);
 
             if(gameToJoin.getListOfPlayers().size() == gameToJoin.getNumOfPlayers())
-                throw new GameFullException("Game " + idGame + " is full.");
+                server.sendResponse(new ExcpetionMessage(clientID, "Game " + idGame + " is full"));
 
             for(Player player : gameToJoin.getListOfPlayers()) {
                 if(player.getUsername().equals(nick)) {
-                    throw new NickAlreadyTakenException("there's another player with the nick: " + nick);
+                    server.sendResponse(new ExcpetionMessage(clientID, "Nickname " + nick + " is already taken"));
                 }}
             lobby.joinGame(nick, idGame, clientID);
         }
@@ -67,7 +75,7 @@ public class LobbyController implements Controller {
         }
     }
 
-    public HashMap<Integer, Integer> getGameList(){
+    public void getGameList(int ClientID){
         HashMap<Integer, Integer> games = new HashMap<>();
 
         for (Map.Entry<Integer, Game> entry: lobby.getGameList().entrySet()) {
@@ -75,7 +83,7 @@ public class LobbyController implements Controller {
                 games.put(entry.getKey(), entry.getValue().getListOfPlayers().size());
             }
         }
-        return games;
+        server.sendResponse(new SendGameListMessage(ClientID, games));
     }
 
 
@@ -94,7 +102,7 @@ public class LobbyController implements Controller {
     }
 
     @Override
-    public void handleMessage(Message m) {
+    public void handleMessage(ClientToServerMessage m) {
         m.execute(this);
     }
 }

@@ -10,6 +10,7 @@ import it.polimi.ingsfw.ingsfwproject.Model.Player;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServer.CreateGameMessage;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServer.GetGameListMessage;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServer.JoinGameMessage;
+import it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServerMessage;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.Message;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.ExceptionMessages.GameFullMessage;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.ExceptionMessages.InvalidNumOfPlayerMessage;
@@ -18,6 +19,7 @@ import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.ExceptionM
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.ExcpetionMessage;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.GameJoinedMessage;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.SendGameListMessage;
+import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClientMessage;
 
 import java.io.IOException;
 import java.io.SyncFailedException;
@@ -34,16 +36,16 @@ import java.util.concurrent.*;
 public class Server {
     private LobbyController lobbyController;
     private BlockingQueue<Message> queue;
-    private HashMap<Integer, Handler> handlers; //clientID-handler
+    private HashMap<Integer, AbstractHandler> handlers; //clientID-handler
     private HashMap<Integer, GameServerInstance> games; //gameID-serverinstance
     private int clientsCounter;
 
     public Server(){
         //Socket server e rmi server partono
         GameManager manager = new GameManager();
-        lobbyController = new LobbyController(manager);
+        lobbyController = new LobbyController(manager, this);
         queue = new LinkedBlockingQueue<Message>();
-        handlers = new HashMap<Integer, Handler>();
+        handlers = new HashMap<Integer, AbstractHandler>();
         games = new HashMap<Integer, GameServerInstance>();
         this.clientsCounter = 0;
         Thread readerThread = new Thread(this::readQueue);
@@ -66,8 +68,25 @@ public class Server {
         }
     }
 
-    public void processMessage(Message message){
+    public void processMessage(ClientToServerMessage message){
     //TODO: cambiare
+
+        lobbyController.handleMessage(message);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         switch (message.getType()){
             case CREATE_GAME: {
@@ -82,18 +101,7 @@ public class Server {
                 //gets the gameserverinstance, puts it in the map, puts the client handler in the gameserverinstance
                 GameServerInstance gameInstance = lobbyController.getGameServerInstance(createdGameID);
                 this.games.put(createdGameID, gameInstance);
-                Handler requestingClientHandler = handlers.get(m.getClientID());
-                gameInstance.setHandler(m.getClientID(), requestingClientHandler);
-
-                Player addedPlayer = gameInstance.getPlayer(m.getNickname());
-
-                if (addedPlayer != null){ //adding the new player to the game server instance
-                    gameInstance.addPlayer(addedPlayer, m.getClientID());
-                } else {
-                    throw new RuntimeException();
-                }
-
-                this.sendResponse(new GameJoinedMessage(m.getClientID(), createdGameID, m.getNickname()));
+                setHandlersAndInstance(createdGameID, gameInstance, m.getClientID(), m.getNickname(), m);
                 break;
             }
             case GET_GAME_LIST: {
@@ -113,18 +121,7 @@ public class Server {
                 }
 
                 GameServerInstance gameInstance = games.get(joinedGameID); //gets the instance for the game that the player has joined
-                Handler requestingClientHandler = handlers.get(m.getClientID()); //gets the handler of the player
-                gameInstance.setHandler(m.getClientID(), requestingClientHandler);//puts the player's handler into the handlers map in GameServerInstamce
-
-                Player addedPlayer = gameInstance.getPlayer(m.getNickname());
-
-                if (addedPlayer != null){ //add the new player to the gameserverinstance
-                    gameInstance.addPlayer(addedPlayer, m.getClientID());
-                } else {
-                    throw new RuntimeException();
-                }
-
-                this.sendResponse(new GameJoinedMessage(m.getClientID(), joinedGameID, m.getNickname()));
+                setHandlersAndInstance(joinedGameID, gameInstance, m.getClientID(), m.getNickname(), m);
 
                 //check if the game has reached the desired number of players. If so, start it
                 lobbyController.checkIfGameNeedsToBeStarted(joinedGameID);
@@ -136,8 +133,23 @@ public class Server {
 
     }
 
+    public void setHandlersAndInstance(GameServerInstance gameInstance, int clientID, String nickname) {
+        AbstractHandler requestingClientHandler = handlers.get(clientID);
+        gameInstance.setHandler(clientID, requestingClientHandler);
+        requestingClientHandler.setGameServerInstance(gameInstance);
 
-    public synchronized void sendResponse(Message m) {
+        Player addedPlayer = gameInstance.getPlayer(nickname);
+
+        if (addedPlayer != null){ //adding the new player to the game server instance
+            gameInstance.addPlayer(addedPlayer, clientID);
+        } else {
+            throw new RuntimeException();
+        }
+
+    }
+
+
+    public synchronized void sendResponse(ServerToClientMessage m) {
         System.out.println("Sending response");
         try {
             if (m.getClientID() == -10){ //broadcast message
