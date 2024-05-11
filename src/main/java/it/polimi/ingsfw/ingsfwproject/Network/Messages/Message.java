@@ -1,5 +1,7 @@
 package it.polimi.ingsfw.ingsfwproject.Network.Messages;
 
+import it.polimi.ingsfw.ingsfwproject.Controller.Controller;
+
 import java.io.Serializable;
 
 public abstract class Message implements Serializable {
@@ -22,4 +24,6 @@ public abstract class Message implements Serializable {
     public int getClientID() {
         return clientID;
     }
+
+    public abstract void execute(Controller controller);
 }

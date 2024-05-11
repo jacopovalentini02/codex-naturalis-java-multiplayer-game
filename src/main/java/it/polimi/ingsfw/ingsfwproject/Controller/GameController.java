@@ -4,9 +4,10 @@ import java.util.*;
 
 import it.polimi.ingsfw.ingsfwproject.Exceptions.*;
 import it.polimi.ingsfw.ingsfwproject.Model.*;
+import it.polimi.ingsfw.ingsfwproject.Network.Messages.Message;
 
 
-public class GameController {
+public class GameController implements Controller {
     private Game model;
 
     private int starterCardsPlayed;
@@ -202,5 +203,9 @@ public class GameController {
        }
     }
 
+    @Override
+    public void handleMessage(Message m) {
+        m.execute(this);
+    }
 }
 

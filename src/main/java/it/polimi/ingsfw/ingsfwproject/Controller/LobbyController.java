@@ -8,6 +8,7 @@ import it.polimi.ingsfw.ingsfwproject.Model.Game;
 import it.polimi.ingsfw.ingsfwproject.Model.GameManager;
 import it.polimi.ingsfw.ingsfwproject.Model.GameState;
 import it.polimi.ingsfw.ingsfwproject.Model.Player;
+import it.polimi.ingsfw.ingsfwproject.Network.Messages.Message;
 import it.polimi.ingsfw.ingsfwproject.Network.Server.GameServerInstance;
 
 import java.rmi.RemoteException;
@@ -15,7 +16,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class LobbyController {
+public class LobbyController implements Controller {
     private GameManager lobby;
 
     public LobbyController(GameManager lobby){
@@ -92,4 +93,8 @@ public class LobbyController {
         }
     }
 
+    @Override
+    public void handleMessage(Message m) {
+        m.execute(this);
+    }
 }
