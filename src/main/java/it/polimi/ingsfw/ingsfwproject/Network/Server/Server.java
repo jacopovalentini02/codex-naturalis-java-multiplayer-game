@@ -67,6 +67,7 @@ public class Server {
     }
 
     public void processMessage(Message message){
+    //TODO: cambiare
 
         switch (message.getType()){
             case CREATE_GAME: {

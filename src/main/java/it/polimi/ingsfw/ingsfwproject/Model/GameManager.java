@@ -13,21 +13,21 @@ public class GameManager {
         this.firstAvailableGameID = 0;
     }
 
-    public int createGame(int numOfPlayers, String username) {
+    public int createGame(int numOfPlayers, String username, int clientID) {
         //todo cambio e aggiungo server instance
         GameServerInstance gameServerInstance=new GameServerInstance();
-        Game newGame = new Game(gameServerInstance,this, firstAvailableGameID, numOfPlayers, new Player(username,gameServerInstance));
+        Game newGame = new Game(gameServerInstance,this, firstAvailableGameID, numOfPlayers, new Player(username,gameServerInstance, clientID));
         gameList.put(firstAvailableGameID, newGame);
         int gameID = firstAvailableGameID;
         firstAvailableGameID++;
         return gameID;
     }
 
-    public void joinGame(String nick, int idGame){
+    public void joinGame(String nick, int idGame, int clientID){
         Game gameToJoin = gameList.get(idGame);
         GameServerInstance gameServerInstance = gameToJoin.getGameServerInstance();
 
-        Player newPlayer = new Player(nick, gameServerInstance);
+        Player newPlayer = new Player(nick, gameServerInstance, clientID);
         gameToJoin.addPlayer(newPlayer);
     }
 

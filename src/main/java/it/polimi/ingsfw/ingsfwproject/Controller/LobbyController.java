@@ -23,17 +23,17 @@ public class LobbyController implements Controller {
         this.lobby = lobby;
     }
 
-    public int createGame(int numOfPlayers, String thisPlayer) throws NotValidNumOfPlayerException {
+    public int createGame(int numOfPlayers, String thisPlayer, int clientID) throws NotValidNumOfPlayerException {
         if(numOfPlayers < 2 || numOfPlayers > 4)
             throw new NotValidNumOfPlayerException("the player's number must be between 2 and 4, but you entered: " + numOfPlayers);
         int gameID;
         synchronized (lobby){
-            gameID = lobby.createGame(numOfPlayers, thisPlayer);
+            gameID = lobby.createGame(numOfPlayers, thisPlayer, clientID);
         }
         return gameID;
     }
 
-    public int joinExistingGame(String nick, int idGame) throws GameNotExistingException, GameFullException, NickAlreadyTakenException {
+    public int joinExistingGame(String nick, int idGame, int clientID) throws GameNotExistingException, GameFullException, NickAlreadyTakenException {
         synchronized (lobby) {
 
             if (!lobby.getGameIDs().contains(idGame))
@@ -48,7 +48,7 @@ public class LobbyController implements Controller {
                 if(player.getUsername().equals(nick)) {
                     throw new NickAlreadyTakenException("there's another player with the nick: " + nick);
                 }}
-            lobby.joinGame(nick, idGame);
+            lobby.joinGame(nick, idGame, clientID);
         }
         return idGame;
     }

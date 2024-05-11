@@ -11,7 +11,7 @@ import java.rmi.RemoteException;
 import java.util.*;
 
 public class Player implements Serializable {
-    private int prova;
+    private int clientID;
     private String username;
     private PlayerColor token;
     private PlayerGround ground;
@@ -29,13 +29,14 @@ public class Player implements Serializable {
     private ArrayList<ObjectiveCard> handObjective;
 
 
-    public Player(String username, GameServerInstance gameServerInstance) {
+    public Player(String username, GameServerInstance gameServerInstance, int clientID) {
         this.username = username;
         this.gameServerInstance = gameServerInstance;
         this.token = null;
         this.ground = new PlayerGround();
         this.handCard = new ArrayList<>();
         this.handObjective = new ArrayList<>();
+        this.clientID = clientID;
     }
 
     public void draw(Deck deck) throws DeckEmptyException {
@@ -122,6 +123,11 @@ public class Player implements Serializable {
         resources.put(Content.INKWELL, this.ground.getContentCount(Content.INKWELL));
         resources.put(Content.MANUSCRIPT, this.ground.getContentCount(Content.MANUSCRIPT));
         return resources;
+    }
+
+    public void addToHand(PlayableCard card){
+        this.handCard.add(card);
+        //TODO: notify clients
     }
 
 
