@@ -12,7 +12,7 @@ import java.io.Serializable;
 public class GetGameListMessage extends ClientToServerMessage implements Serializable {
     public GetGameListMessage(int clientID) {
 
-        super(clientID, MessageType.GET_GAME_LIST);
+        super(clientID, MessageType.GET_GAME_LIST,true);
     }
 
     @Override

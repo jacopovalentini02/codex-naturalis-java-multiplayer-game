@@ -13,7 +13,7 @@ public class DrawMessage extends ClientToServerMessage {
     boolean resourceDeck;
 
     public DrawMessage(int clientID, String nickname, boolean resourceDeck) {
-        super(clientID, MessageType.DRAW);
+        super(clientID, MessageType.DRAW, false);
         this.nickname=nickname;
         this.resourceDeck=resourceDeck;
 

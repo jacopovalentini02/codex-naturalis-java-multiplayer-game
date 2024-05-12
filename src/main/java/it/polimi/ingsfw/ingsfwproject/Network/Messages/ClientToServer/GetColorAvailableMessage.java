@@ -10,7 +10,7 @@ import it.polimi.ingsfw.ingsfwproject.Network.Messages.MessageType;
 
 public class GetColorAvailableMessage extends ClientToServerMessage {
     public GetColorAvailableMessage(int clientID) {
-        super(clientID, MessageType.ASK_FOR_COLORS);
+        super(clientID, MessageType.ASK_FOR_COLORS, false);
     }
 
     @Override

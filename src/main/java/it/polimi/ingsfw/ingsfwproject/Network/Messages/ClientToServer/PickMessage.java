@@ -13,7 +13,7 @@ public class PickMessage extends ClientToServerMessage {
     String nickname;
     int cardID;
     public PickMessage(int clientID, int cardID, String nickname) {
-        super(clientID, MessageType.PICK);
+        super(clientID, MessageType.PICK, false);
         this.cardID=cardID;
         this.nickname=nickname;
     }

@@ -9,9 +9,12 @@ public abstract class ClientToServerMessage extends Message implements Serializa
     int clientID;
     private MessageType type;
 
-    public ClientToServerMessage(int clientID, MessageType messageType) {
+    private boolean isForServer;
+
+    public ClientToServerMessage(int clientID, MessageType messageType, Boolean isForServer) {
         this.type=messageType;
         this.clientID=clientID;
+        this.isForServer=isForServer;
     }
 
     public MessageType getType() {
@@ -27,4 +30,8 @@ public abstract class ClientToServerMessage extends Message implements Serializa
     }
 
     public abstract void execute(Controller controller);
+
+    public boolean isForServer() {
+        return isForServer;
+    }
 }

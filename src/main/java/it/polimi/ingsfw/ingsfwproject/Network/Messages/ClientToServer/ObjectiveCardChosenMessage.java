@@ -15,7 +15,7 @@ public class ObjectiveCardChosenMessage extends ClientToServerMessage {
     String nickname;
     int cardID;
     public ObjectiveCardChosenMessage(int clientID, String nickname, int cardID) {
-        super(clientID, MessageType.CHOSEN_OBJECTIVE_CARD);
+        super(clientID, MessageType.CHOSEN_OBJECTIVE_CARD,false);
         this.nickname=nickname;
         this.cardID=cardID;
     }

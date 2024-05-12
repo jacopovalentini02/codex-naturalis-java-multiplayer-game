@@ -14,7 +14,7 @@ public class JoinGameMessage extends ClientToServerMessage implements Serializab
     private int gameID;
 
     public JoinGameMessage(int clientID, String nickname, int gameID) {
-        super(clientID, MessageType.JOIN_GAME);
+        super(clientID, MessageType.JOIN_GAME,true);
         this.nickname=nickname;
         this.gameID=gameID;
     }

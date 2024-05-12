@@ -17,7 +17,7 @@ public class WantThatColorMessage extends ClientToServerMessage {
     String nickname;
     PlayerColor color;
     public WantThatColorMessage(int clientID, String nickname, PlayerColor color) {
-        super(clientID, MessageType.WANTED_COLOR);
+        super(clientID, MessageType.WANTED_COLOR,false);
         this.color=color;
         this.nickname=nickname;
     }

@@ -58,10 +58,10 @@ public class LobbyController implements Controller {
         return idGame;
     }
 
-    public void deleteGame(int idGame) throws GameNotExistingException {
+    public void deleteGame(int idGame, int clientID){
         synchronized (lobby) {
             if (!lobby.getGameIDs().contains(idGame))
-                throw new GameNotExistingException("there's no game with ID:" + idGame);
+                server.sendResponse(new ExcpetionMessage(clientID, "there's no game with ID:" + idGame));
             lobby.deleteGame(idGame);
         }
     }
@@ -99,7 +99,7 @@ public class LobbyController implements Controller {
     }
 
     @Override
-    public void handleMessage(ClientToServerMessage m) throws NickAlreadyTakenException, TurnException, GameFullException, GameNotExistingException, DeckEmptyException, DeckException, NotValidNumOfPlayerException, GamePhaseException, PositionNotAvailableException, ColorNotAvailableException, NotEnoughResourcesException, CardNotPresentException, CardNotInHandException {
+    public void handleMessage(ClientToServerMessage m) {
         m.execute(this);
     }
 }

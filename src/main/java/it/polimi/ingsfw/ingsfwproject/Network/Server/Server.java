@@ -60,7 +60,8 @@ public class Server {
         while (true){
             try {
                 Message toProcess = queue.take();
-                processMessage((ClientToServerMessage) toProcess);
+                //processMessage((ClientToServerMessage) toProcess);
+                lobbyController.handleMessage((ClientToServerMessage) toProcess);
             } catch (InterruptedException e){
                 System.out.println("Reader thread interrotto");
                 return;
@@ -69,7 +70,7 @@ public class Server {
     }
 
     public void processMessage(ClientToServerMessage message){
-    //TODO: cambiare
+    //TODO: cambiare - fatto direttamente in readQueue
 
         lobbyController.handleMessage(message);
 

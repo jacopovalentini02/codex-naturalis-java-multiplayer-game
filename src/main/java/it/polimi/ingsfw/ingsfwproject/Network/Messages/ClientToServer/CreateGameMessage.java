@@ -15,7 +15,7 @@ public class CreateGameMessage extends ClientToServerMessage implements Serializ
     private String nickname;
 
     public CreateGameMessage(int clientID, int numPlayer, String nickname) {
-        super(clientID, MessageType.CREATE_GAME);
+        super(clientID, MessageType.CREATE_GAME, true);
         this.numPlayer = numPlayer;
         this.nickname = nickname;
     }

@@ -15,7 +15,7 @@ public class PlayCardMessage extends ClientToServerMessage {
     boolean face;
     Coordinate coordinate;
     public PlayCardMessage(int clientID, int card, boolean face, Coordinate coordinate, String nickname) {
-        super(clientID, MessageType.PLAY_CARD);
+        super(clientID, MessageType.PLAY_CARD, false);
         this.cardID = card;
         this.face=face;
         this.coordinate=coordinate;

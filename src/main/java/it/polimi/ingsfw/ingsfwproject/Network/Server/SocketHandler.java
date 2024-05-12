@@ -34,10 +34,11 @@ public class SocketHandler extends AbstractHandler implements Runnable{
 @Override
     public void sendMessage(Message message) {
         try {
-            System.out.println("Mandando messaggio: "+message.getType());
-            out.writeObject(message);
-            out.flush();
-            out.reset();
+            if(this.getClientID()==message.getClientID() || message.getClientID()==-10){
+                out.writeObject(message);
+                out.flush();
+                out.reset();
+            }
         } catch (IOException e) {
             e.printStackTrace();
             //disconnect(); //TODO creare metodo disconnect

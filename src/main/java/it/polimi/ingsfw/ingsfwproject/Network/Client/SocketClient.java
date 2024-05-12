@@ -79,7 +79,6 @@ public class SocketClient extends Client{
             try {
                 while (!readExecutionQueue.isShutdown()) {
                     Message message = (Message) input.readObject();
-                    System.out.println("Message type risposta dal server: "+ message.getType());
                     handleMessage(message);
                 }
             } catch (IOException | ClassNotFoundException e) {
