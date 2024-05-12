@@ -60,7 +60,7 @@ public class Server {
         while (true){
             try {
                 Message toProcess = queue.take();
-                processMessage(toProcess);
+                processMessage((ClientToServerMessage) toProcess);
             } catch (InterruptedException e){
                 System.out.println("Reader thread interrotto");
                 return;

@@ -1,9 +1,6 @@
 package it.polimi.ingsfw.ingsfwproject.Controller;
 
-import it.polimi.ingsfw.ingsfwproject.Exceptions.GameFullException;
-import it.polimi.ingsfw.ingsfwproject.Exceptions.GameNotExistingException;
-import it.polimi.ingsfw.ingsfwproject.Exceptions.NickAlreadyTakenException;
-import it.polimi.ingsfw.ingsfwproject.Exceptions.NotValidNumOfPlayerException;
+import it.polimi.ingsfw.ingsfwproject.Exceptions.*;
 import it.polimi.ingsfw.ingsfwproject.Model.Game;
 import it.polimi.ingsfw.ingsfwproject.Model.GameManager;
 import it.polimi.ingsfw.ingsfwproject.Model.GameState;
@@ -30,7 +27,7 @@ public class LobbyController implements Controller {
         this.server = server;
     }
 
-    public void createGame(int numOfPlayers, String thisPlayer, int clientID) throws NotValidNumOfPlayerException {
+    public void createGame(int numOfPlayers, String thisPlayer, int clientID){
         if(numOfPlayers < 2 || numOfPlayers > 4)
             server.sendResponse(new ExcpetionMessage(clientID, "The number of players must be between 2 and 4, but you entered " + numOfPlayers));
         int gameID;
@@ -41,7 +38,7 @@ public class LobbyController implements Controller {
         server.sendResponse(new GameJoinedMessage(clientID, gameID, thisPlayer));
     }
 
-    public int joinExistingGame(String nick, int idGame, int clientID) throws GameNotExistingException, GameFullException, NickAlreadyTakenException {
+    public int joinExistingGame(String nick, int idGame, int clientID) {
         synchronized (lobby) {
 
             if (!lobby.getGameIDs().contains(idGame))
@@ -102,7 +99,7 @@ public class LobbyController implements Controller {
     }
 
     @Override
-    public void handleMessage(ClientToServerMessage m) {
+    public void handleMessage(ClientToServerMessage m) throws NickAlreadyTakenException, TurnException, GameFullException, GameNotExistingException, DeckEmptyException, DeckException, NotValidNumOfPlayerException, GamePhaseException, PositionNotAvailableException, ColorNotAvailableException, NotEnoughResourcesException, CardNotPresentException, CardNotInHandException {
         m.execute(this);
     }
 }

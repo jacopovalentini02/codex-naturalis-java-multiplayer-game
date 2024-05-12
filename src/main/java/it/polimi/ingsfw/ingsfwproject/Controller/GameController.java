@@ -6,7 +6,9 @@ import it.polimi.ingsfw.ingsfwproject.Exceptions.*;
 import it.polimi.ingsfw.ingsfwproject.Model.*;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServerMessage;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.Message;
+import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.ExcpetionMessage;
 import it.polimi.ingsfw.ingsfwproject.Network.Server.GameServerInstance;
+import it.polimi.ingsfw.ingsfwproject.Network.Server.Server;
 
 
 public class GameController implements Controller {
@@ -23,7 +25,7 @@ public class GameController implements Controller {
         this.serverInstance = serverInstance;
     }
 
-    public void chooseObjectiveCard(String username, int cardID) throws TurnException, GamePhaseException, CardNotPresentException {
+    public void chooseObjectiveCard(String username, int cardID){
 
         Player player = null;
         Card card = null;
@@ -39,17 +41,17 @@ public class GameController implements Controller {
         }
 
         if (model.getCurrentPlayer() != player)
-            throw new TurnException("Not your turn");
+            serverInstance.sendUpdateToAll(new ExcpetionMessage(player.getClientID(),"Not your turn"));
 
         if (model.getState() != GameState.CHOOSING_OBJECTIVES)
-            throw new GamePhaseException("Phase exception");
+            serverInstance.sendUpdateToAll(new ExcpetionMessage(player.getClientID(),"Phase exception"));
 
         synchronized (model){
             model.chooseObjectiveCard(player, card);
             model.nextTurn();
         }
     }
-    public void playCard(String username, int cardID, boolean upwards, Coordinate coord) throws TurnException, GamePhaseException, PositionNotAvailableException, NotEnoughResourcesException, CardNotInHandException{
+    public void playCard(String username, int cardID, boolean upwards, Coordinate coord){
         int pointsMade = 0;
         Player player = null;
         PlayableCard card = null;
@@ -64,13 +66,14 @@ public class GameController implements Controller {
         }
 
         if (model.getState() == GameState.WAITING_FOR_PLAYERS || model.getState() == GameState.CHOOSING_OBJECTIVES || model.getState() == GameState.ENDED || model.getState() == GameState.CHOOSING_COLORS)
-            throw new GamePhaseException("You can't play a card now");
+            serverInstance.sendUpdateToAll(new ExcpetionMessage(player.getClientID(), "You can't play a card now"));
+
 
         if (model.getCurrentPlayer() != player)
-            throw new TurnException("Not your turn");
+            serverInstance.sendUpdateToAll(new ExcpetionMessage(player.getClientID(),"Not your turn"));
 
         if(model.getifCurrentPlayerhasPlayed())
-            throw new GamePhaseException("You have already played, it's time to draw");
+            serverInstance.sendUpdateToAll(new ExcpetionMessage(player.getClientID(),"You have already played, it's time to draw"));
 
         synchronized (model){
             pointsMade = player.playCard(card, upwards, coord);
@@ -87,7 +90,7 @@ public class GameController implements Controller {
         }
     }
 
-    public void drawDisplayedPlayableCard(String username, int cardID) throws TurnException, CardNotPresentException, DeckEmptyException, GamePhaseException{
+    public void drawDisplayedPlayableCard(String username, int cardID){
 
         Player player = null;
         PlayableCard card = null;
@@ -116,7 +119,7 @@ public class GameController implements Controller {
     }
     //cambiato Deck in boolean alrimenti era difficile capire da che mazzo volesse pescare e quindi che mazzo aggiornare
     //true: resource deck, false: gold deck
-    public void draw(String username,boolean resourceDeck) throws TurnException, GamePhaseException, DeckEmptyException, DeckException {
+    public void draw(String username,boolean resourceDeck)  {
         Deck deck;
         Player player = null;
 
@@ -134,7 +137,7 @@ public class GameController implements Controller {
         checkIfDrawPossible(player);
 
         if (deck.equals(model.getObjectiveDeck()))
-            throw new DeckException("You can't draw from objective deck!");
+            serverInstance.sendUpdateToAll(new ExcpetionMessage(player.getClientID(),"You can't draw from objective deck!"));
 
         synchronized (model){
             player.draw(deck);
@@ -154,7 +157,7 @@ public class GameController implements Controller {
 
     }
 
-    public void chooseColor(String username, PlayerColor color) throws ColorNotAvailableException, DeckEmptyException, GamePhaseException, TurnException {
+    public void chooseColor(String username, PlayerColor color) {
 
         Player player = null;
         for (Player p: model.getListOfPlayers()){
@@ -163,10 +166,10 @@ public class GameController implements Controller {
         }
 
         if (model.getCurrentPlayer() != player)
-            throw new TurnException("Not your turn");
+            serverInstance.sendUpdateToAll(new ExcpetionMessage(player.getClientID(),"Not your turn"));
 
         if (model.getState() != GameState.CHOOSING_COLORS)
-            throw new GamePhaseException("You must choose a color now");
+            serverInstance.sendUpdateToAll(new ExcpetionMessage(player.getClientID(),"You must choose a color now"));
 
         synchronized (model){
             model.chooseColor(player, color);
@@ -174,15 +177,15 @@ public class GameController implements Controller {
         }
     }
 
-    private void checkIfDrawPossible(Player player) throws GamePhaseException, TurnException {
+    private void checkIfDrawPossible(Player player){
         if (model.getState() == GameState.WAITING_FOR_PLAYERS || model.getState() == GameState.CHOOSING_STARTER_CARDS || model.getState() == GameState.CHOOSING_OBJECTIVES || model.getState() == GameState.ENDING || model.getState() == GameState.CHOOSING_COLORS)
-            throw new GamePhaseException("You can't draw now");
+            serverInstance.sendUpdateToAll(new ExcpetionMessage(player.getClientID(),"You can't draw now"));
 
         if (model.getCurrentPlayer() != player)
-            throw new TurnException("It's not your turn");
+            serverInstance.sendUpdateToAll(new ExcpetionMessage(player.getClientID(),"It's not your turn"));
 
         if (!(model.getifCurrentPlayerhasPlayed()))
-            throw new GamePhaseException("You should play a card before drawing");
+            serverInstance.sendUpdateToAll(new ExcpetionMessage(player.getClientID(),"You should play a card before drawing"));
     }
 
     private void starterCardPlayed() {
@@ -209,7 +212,7 @@ public class GameController implements Controller {
     }
 
     @Override
-    public void handleMessage(ClientToServerMessage m) {
+    public void handleMessage(ClientToServerMessage m){
         m.execute(this);
     }
 }

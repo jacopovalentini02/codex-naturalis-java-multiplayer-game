@@ -1,11 +1,15 @@
 package it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServer;
 
+import it.polimi.ingsfw.ingsfwproject.Controller.Controller;
+import it.polimi.ingsfw.ingsfwproject.Controller.LobbyController;
+import it.polimi.ingsfw.ingsfwproject.Exceptions.*;
+import it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServerMessage;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.Message;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.MessageType;
 
 import java.io.Serializable;
 
-public class JoinGameMessage extends Message implements Serializable {
+public class JoinGameMessage extends ClientToServerMessage implements Serializable {
     private String nickname;
     private int gameID;
 
@@ -21,5 +25,12 @@ public class JoinGameMessage extends Message implements Serializable {
 
     public int getGameID() {
         return gameID;
+    }
+
+
+    @Override
+    public void execute(Controller controller){
+        LobbyController lobbyController=(LobbyController) controller;
+        lobbyController.joinExistingGame(this.nickname,this.gameID,this.getClientID());
     }
 }
