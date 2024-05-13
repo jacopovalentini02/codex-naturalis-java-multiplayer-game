@@ -19,7 +19,7 @@ public class PlayerGround implements Serializable {
         availablePositions.add(new Coordinate(0,0));
     }
 
-    public int playCard(PlayableCard card, boolean upwards, Coordinate coord) throws PositionNotAvailableException, NotEnoughResourcesException {
+    public int playCard(PlayableCard card, boolean upwards, Coordinate coord) throws NotEnoughResourcesException, PositionNotAvailableException {
         checkIfPlayable(card, upwards, coord);
 
         //get the face

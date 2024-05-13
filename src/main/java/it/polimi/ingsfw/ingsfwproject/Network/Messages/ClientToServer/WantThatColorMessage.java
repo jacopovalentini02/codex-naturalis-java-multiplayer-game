@@ -1,10 +1,14 @@
 package it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServer;
 
+import it.polimi.ingsfw.ingsfwproject.Controller.Controller;
+import it.polimi.ingsfw.ingsfwproject.Controller.GameController;
+import it.polimi.ingsfw.ingsfwproject.Exceptions.*;
 import it.polimi.ingsfw.ingsfwproject.Model.PlayerColor;
+import it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServerMessage;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.Message;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.MessageType;
 
-public class WantThatColorMessage extends Message {
+public class WantThatColorMessage extends ClientToServerMessage {
 
     public String getNickname() {
         return nickname;
@@ -13,7 +17,7 @@ public class WantThatColorMessage extends Message {
     String nickname;
     PlayerColor color;
     public WantThatColorMessage(int clientID, String nickname, PlayerColor color) {
-        super(clientID, MessageType.WANTED_COLOR);
+        super(clientID, MessageType.WANTED_COLOR,false);
         this.color=color;
         this.nickname=nickname;
     }
@@ -21,4 +25,10 @@ public class WantThatColorMessage extends Message {
         return color;
     }
 
+    @Override
+    public void execute(Controller controller){
+        GameController gameController=(GameController)  controller;
+        gameController.chooseColor(this.nickname,this.color);
+
+    }
 }

@@ -45,9 +45,7 @@ public class GameManager {
 
     public void startGame(int gameID){
         Game gameToStart = gameList.get(gameID);
-        try {
-            gameToStart.setupField();
-        } catch (DeckEmptyException ignore){}
+        gameToStart.setupField();
     }
 
 }

@@ -7,7 +7,6 @@ import it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServer.*;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.Message;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.*;
 
-import java.io.IOException;
 import java.util.*;
 
 import java.util.HashMap;
@@ -19,6 +18,8 @@ import it.polimi.ingsfw.ingsfwproject.View.View;
 public class Cli extends View implements Runnable {
 
     Scanner scanner;
+    String lobbyCommands = "now you can insert one of the following commands:" + "\n\t-> CreateGame" + "\n\t-> JoinGame" + "\n\t-> GetGameList";
+    String gameCommands = "now you can do one of the following actions: \n\t-> PlayCard \n\t-> DrawCard \n\t-> PickCard  \n\t-> SkipTurn";
 
     public Cli(){
         this.scanner = new Scanner(System.in);
@@ -40,8 +41,8 @@ public class Cli extends View implements Runnable {
         Thread readUserInputThread = new Thread(this::readInputUser);
         readUserInputThread.start();
 
-        Thread readMessageThread = new Thread(super::receiveMessage);
-        readMessageThread.start();
+        //Thread readMessageThread = new Thread(super::receiveMessage);
+        //readMessageThread.start();
 
     }
 
@@ -62,11 +63,14 @@ public class Cli extends View implements Runnable {
             try {
                 System.out.println("Insert X and Y coordinates:");
                 int x = scanner.nextInt();
+                scanner.nextLine();
                 int y = scanner.nextInt();
+                scanner.nextLine();
                 coord = new Coordinate(x, y);
                 if (!availablePositions.contains(coord)) {
                     System.out.println(errorString);
                 }
+                System.out.println("coord inserite");
             } catch (InputMismatchException e) {
                 System.out.println(errorString);
                 scanner.nextLine();
@@ -117,6 +121,7 @@ public class Cli extends View implements Runnable {
                 }
                 System.out.println("Insert the id of the card chosen: ");
                 choice = scanner.nextInt();
+                scanner.nextLine();
                 if (!idCards.contains(choice)){
                     System.out.println(errorString);
                 }
@@ -142,6 +147,7 @@ public class Cli extends View implements Runnable {
                 }
                 System.out.println("Insert the id of the card chosen: ");
                 choice = scanner.nextInt();
+                scanner.nextLine();
                 if (!idCards.contains(choice)){
                     System.out.println(errorString);
                 }
@@ -175,9 +181,148 @@ public class Cli extends View implements Runnable {
 
     }
 
-
+    @Override
+    public void displayFirstMessage(int clientID){
+        System.out.println("the connection was successfully established, your ClientID is: " + clientID);
+        System.out.println(lobbyCommands);
+    }
 
     @Override
+    public void displayGameList(HashMap<Integer, Integer> gameList){
+        System.out.println("the currently available games are:");
+        System.out.println("ID\tNumberOfPlayers");
+        for(Integer gameID : gameList.keySet())
+            System.out.println(gameID + "\t" + gameList.get(gameID));
+        System.out.println(lobbyCommands);
+    }
+
+    @Override
+    public void notifyGameJoined(int idGame){
+        System.out.println("You have joined the game " + idGame+ " correctly.");
+    }
+
+    @Override
+    public void notifyNewPlayerJoined(ArrayList<String> nicknames){
+        System.out.println("A new player has joined the game.");
+        System.out.println("Players in this lobby: ");
+
+        for (String s: nicknames){
+            System.out.print(s+ " ");
+        }
+        System.out.println();
+    }
+
+    @Override
+    public void notifyStarterCard(){
+        System.out.println("Starter card selected successfully");
+    }
+
+    @Override
+    public void notifyColorsAvailable(List<PlayerColor> colors){
+        System.out.println("The following colors are available :");
+        for(PlayerColor color : colors){
+            System.out.println(color.name());
+        }
+    }
+
+    @Override
+    public void notifyGoldDeckUpdate(){
+        System.out.println("Gold deck updated!");
+    }
+
+    @Override
+    public void notifyResourceDeckUpdate() {
+        System.out.println("Resourced deck updated!");
+    }
+
+    @Override
+    public void notifyDisplayedCardsUpdate(ArrayList<PlayableCard> displayedCards) {
+        System.out.println("Displayed playable cards updated! Here's how:\n");
+        //TODO: stampare le carte
+
+    }
+
+    @Override
+    public void notifyCurrentPlayer(String nickname){
+        System.out.println("it' now " + nickname + "'s turn");
+        if (client.getVirtualView().getNickname().equals(nickname)) //è il mio turno
+            System.out.println(gameCommands);
+    }
+
+    @Override
+    public void notifyAvailablePositions(ArrayList<Coordinate> coord) {
+        if (coord.isEmpty()){
+            System.out.println("You have no more cooedinates available!");
+            return;
+        }
+        System.out.println("your available positions have changed: now you can play a card in the following coordinates:");
+        for(Coordinate c : coord)
+            System.out.println(c);
+    }
+
+    @Override
+    public void notifyHandObjectives(ArrayList<ObjectiveCard> cards){
+        System.out.println("Now you have to choose between these two objectives. The choice will be your secret objective!\n");
+        //TODO: stampare gli obiettivi
+        for (ObjectiveCard oc: cards)
+            System.out.println(oc.getIdCard());
+    }
+
+    @Override
+    public void notifyGameState(GameState state){
+        System.out.println("Game state updated to: '" + state);
+        //TODO: Se il game è nelle fasi iniziali devo poter stampare i relativi comandi
+        if(client.getVirtualView().getState()==GameState.CHOOSING_STARTER_CARDS){
+            System.out.println("now you can do the following actions: \n\t-> PlayCard");
+        }
+    }
+
+    @Override
+    public void notifyGridUpdate(String nickname, Map<Coordinate,Face> grid){
+        System.out.println(nickname + "'s grid has been updated. Here's how: ");
+        //TODO stampare grid
+    }
+
+    @Override
+    public void notifyResourcesUpdate(String nickname, HashMap<Content, Integer> resources){
+        System.out.println(nickname+ "'s resource count has been updated to: ");
+        for (Content c: resources.keySet())
+            System.out.println(c+ ": " + resources.get(c));
+        System.out.println("\n");
+    }
+
+    @Override
+    public void notifyWinnerUpdate(String nick){
+        System.out.println("The winner is " + nick + "! Congrats!");
+    }
+
+    @Override
+    public void notifyHandCardsUpdate(ArrayList<PlayableCard> cards){
+        System.out.println("Your hand has just been updated. Look at what you have: \n");
+        for (PlayableCard pc: cards)
+            System.out.print(pc.getIdCard() + " ");
+        System.out.println("\n");
+        //TODO: stampare le carte
+    }
+
+    @Override
+    public void notifyDisplayedObjectives(List<ObjectiveCard> cards){
+        System.out.println("Displayed objective cards updated. Here they are: ");
+        for (ObjectiveCard o: cards)
+            System.out.print(o.getIdCard()+" ");
+        System.out.println("\n");
+    }
+
+    @Override
+    public void notifyScores(Map<String, Integer> scores){
+        System.out.println("There's been a change in scores. The new ones are: ");
+        for (Map.Entry<String, Integer> e : scores.entrySet())
+            System.out.println(e.getKey() + ": " + e.getValue());
+    }
+
+
+    //TODO: rimuovere
+    @Override//TODO: stampare gli obiettivi
     public void handleMessage(Message message) {
         String lobbyCommands = "now you can insert one of the following commands:" + "\n\t-> CreateGame" + "\n\t-> JoinGame" + "\n\t-> GetGameList";
         //TODO : Forse conviene gestire questo output in base al game state -> se è in choosing colors mando gli ultimi due,
@@ -185,105 +330,9 @@ public class Cli extends View implements Runnable {
         String GameStartingCommands = "now you can do one of the following actions: \n\t-> ChooseObjectiveCard \n\t-> getColorAvailable \n\t-> chooseColor";
         String gameCommands = "now you can do one of the following actions: \n\t-> PlayCard \n\t-> DrawCard \n\t-> PickCard  \n\t-> SkipTurn";
 
-        switch (message.getType()) {
-            case FIRST_MESSSAGE:
-                FirstMessage firstMessage = (FirstMessage) message;
-                System.out.println("the connection was successfully established, your ClientID is: " + message.getClientID());
-                System.out.println(lobbyCommands);
-                break;
-            case SEND_GAME_LIST:
-                SendGameListMessage sendGameListMessage = (SendGameListMessage) message;
-                System.out.println("the currently available games are:");
-                HashMap<Integer, Integer> gameList = sendGameListMessage.getGameList();
-                System.out.println("ID\tNumberOfPlayers");
-                for(Integer gameID : gameList.keySet())
-                    System.out.println(gameID + "\t" + gameList.get(gameID));
-                System.out.println(lobbyCommands);
-                break;
-            case GAME_JOINED:
-                System.out.println("You have joined the game correctly. Your ID is: " + message.getClientID());
-                break;
-            case NEW_PLAYER_JOINED:
-                //TODO: recuperare username del player che ha joinato e farne display
-                System.out.println("A new player joined the game!");
-                break;
-            case STARTER_CARD:
-                System.out.println("Starter card selected correctly");
-                break;
-            case COLORS_AVAILABLE:
-                ColorAvailableMessage colorAvailableMessage = (ColorAvailableMessage) message;
-                System.out.println("The following colors are available :");
-                for(PlayerColor color : colorAvailableMessage.getTokenAvailable()){
-                    System.out.println(color.name());
-                }
-                break;
-            case GOLD_DECK:
-                System.out.println("Gold deck updated!");
-                break;
-            case RESOURCE_DECK:
-                System.out.println("Resourced deck updated!");
-                break;
-            case DISPLAYED_PLAYABLE_CARDS:
-                System.out.println("Displayed playable cards updated! Here's how:\n");
-                for(PlayableCard c : ((DispayedPlayableCardMessage) message).getDisplayedPlayableCard()){
-                    //TODO: Stampare la carta (solo fronte suppongo)
-                }
-                break;
-            case CURRENT_PLAYER:
-                CurrentPlayerMessage currentPlayerMessage = (CurrentPlayerMessage) message;
-                System.out.println("it' now " + currentPlayerMessage.getCurrentPlayer() + "'s turn");
-                //todo: se è il mio turno, devo stampare la stringa gameCommands; <-> Non sono sicuro di averlo gestito bene
-                if(client.getClientID() == currentPlayerMessage.getClientID()){
-                    System.out.println(gameCommands);
-                }
-                break;
-            case COORDINATES_AVAILABLE:
-                CoordinatesAvailableMessage coordinatesAvailableMessage = (CoordinatesAvailableMessage) message;
-                if(coordinatesAvailableMessage.getCoords().isEmpty()) {
-                    System.out.println("you have no more coordinates available!");
-                    break;
-                }
-                System.out.println("your available positions have changed: now you can play a card in the following coordinates:");
-                for(Coordinate c : coordinatesAvailableMessage.getCoords())
-                    System.out.println(c);
-                break;
-            case HAND_OBJECTIVE:
-                System.out.println("Now you have to choose between these two objectives. The choice will be your secret objective!\n");
-                for(ObjectiveCard c : ((HandObjectiveMessage) message).getCards() ){
-                    //TODO: stampare gli obiettivi
-                }
-                break;
-            case GAME_STATE:
-                System.out.println("Game state updated to: '" +((GameStateMessage) message).getGameState() +"'\n" );
-                //TODO: Se il game è nelle fasi iniziali devo poter stampare i relativi comandi
-                if(client.getVirtualView().getState()==GameState.CHOOSING_STARTER_CARDS){
-                    System.out.println("now you can do the following actions: \n\t-> PlayCard");
-                }
-                break;
-            case GRID:
-                System.out.println("Grid updated. Here's how: ");
-                //TODO: Stampare grid
-                break;
-            case RESOURCES:
-                System.out.println("Your resources count has been updated to: ");
-                for(Content c : ((ResourcesMessage) message).getResources().keySet()){
-                    System.out.println(c +": "+ ((ResourcesMessage) message).getResources().get(c));
-                }
-                System.out.println("\n");
-                break;
-            case WINNER:
-                System.out.println("The winner is... " + ((WinnerMessage) message).getNickname() +"! Congrats!!!");
-                break;
-            case HAND_CARDS:
-                System.out.println("Your hand has just been updated. Look at what you have: \n");
-                for(PlayableCard c : ((HandCardsMessage) message).getHandCards()){
-                    //TODO: Stampare la carta (sia fronte che retro)
-                }
-                break;
-        }
     }
 
-    @Override
+
     public void handleInput(String input) {
         Message messageToSend;
         String name;
@@ -321,7 +370,7 @@ public class Cli extends View implements Runnable {
                     messageToSend = new ObjectiveCardChosenMessage(client.getClientID(), client.getNickname(), objWanted);
                     client.sendMessage(messageToSend);
                 case "playcard" :
-                    int idCard = askForIdCardInput("Among the cards in your hand, which one do you want to play? Here the cards' id:\n", client.getVirtualView().getHandCards());
+                    int idCard = askForIdCardInput("Among the cards in your hand, which one do you want to play? Here the cards' id:", client.getVirtualView().getHandCards());
                     boolean face = askForFaceToPlay();
                     Coordinate coords = askForCoordinateInput(client.getVirtualView().getAvailablePositions());
                     messageToSend = new PlayCardMessage(client.getClientID(),idCard, face,coords, client.getNickname());
@@ -351,6 +400,11 @@ public class Cli extends View implements Runnable {
         }catch(Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void notifyException(String message) {
+        System.out.println(message);
     }
 
 
@@ -386,10 +440,10 @@ public class Cli extends View implements Runnable {
         //center, if exists
         if(face instanceof NormalBack){
             switch(((NormalBack) face).getCenter()){
-                case FUNGI_KINGDOM -> System.out.println(AnsiColor.FUNGI_TEXT.getFormattedCharacter());
-                case PLANT_KINGDOM -> System.out.println(AnsiColor.PLANT_TEXT.getFormattedCharacter());
-                case INSECT_KINGDOM -> System.out.println(AnsiColor.INSECT_TEXT.getFormattedCharacter());
-                case ANIMAL_KINGDOM -> System.out.println(AnsiColor.ANIMAL_TEXT.getFormattedCharacter());
+                case FUNGI_KINGDOM -> System.out.print(AnsiColor.FUNGI_TEXT.getFormattedCharacter());
+                case PLANT_KINGDOM -> System.out.print(AnsiColor.PLANT_TEXT.getFormattedCharacter());
+                case INSECT_KINGDOM -> System.out.print(AnsiColor.INSECT_TEXT.getFormattedCharacter());
+                case ANIMAL_KINGDOM -> System.out.print(AnsiColor.ANIMAL_TEXT.getFormattedCharacter());
             }
         }
         else{
@@ -416,8 +470,8 @@ public class Cli extends View implements Runnable {
     public void printGoldFrontPoints(GoldFront face, AnsiColor cardType){
         switch(face.getPoints()){
             case 1 -> System.out.print(AnsiColor.POINT_ONE.getFormattedCharacter());
-            case 2 -> System.out.println(AnsiColor.POINT_TWO.getFormattedCharacter());
-            case 3 -> System.out.println(AnsiColor.POINT_THREE.getFormattedCharacter());
+            case 2 -> System.out.print(AnsiColor.POINT_TWO.getFormattedCharacter());
+            case 3 -> System.out.print(AnsiColor.POINT_THREE.getFormattedCharacter());
         }
         if(face.getObjectNeeded() != null){
             printCorner(face.getObjectNeeded(),0, cardType);
@@ -430,18 +484,18 @@ public class Cli extends View implements Runnable {
     public void printGoldBorder(AnsiColor cardType, int bORe){
         if(bORe ==0){
             switch(cardType){
-                case PLANT_BACKGROUND -> System.out.print(AnsiColor.B_GOLD_PLANT_BACKGROUND);
-                case ANIMAL_BACKGROUND -> System.out.print(AnsiColor.B_GOLD_ANIMAL_BACKGROUND);
-                case INSECT_BACKGROUND -> System.out.print(AnsiColor.B_GOLD_INSECT_BACKGROUND);
-                case FUNGI_BACKGROUND -> System.out.print(AnsiColor.B_GOLD_FUNGI_BACKGROUND);
+                case PLANT_BACKGROUND -> System.out.print(AnsiColor.B_GOLD_PLANT_BACKGROUND.getFormattedCharacter());
+                case ANIMAL_BACKGROUND -> System.out.print(AnsiColor.B_GOLD_ANIMAL_BACKGROUND.getFormattedCharacter());
+                case INSECT_BACKGROUND -> System.out.print(AnsiColor.B_GOLD_INSECT_BACKGROUND.getFormattedCharacter());
+                case FUNGI_BACKGROUND -> System.out.print(AnsiColor.B_GOLD_FUNGI_BACKGROUND.getFormattedCharacter());
             }
         }
         if(bORe == 1){
             switch(cardType){
-                case PLANT_BACKGROUND -> System.out.println(AnsiColor.E_GOLD_PLANT_BACKGROUND);
-                case ANIMAL_BACKGROUND -> System.out.println(AnsiColor.E_GOLD_ANIMAL_BACKGROUND);
-                case INSECT_BACKGROUND -> System.out.println(AnsiColor.E_GOLD_INSECT_BACKGROUND);
-                case FUNGI_BACKGROUND -> System.out.println(AnsiColor.E_GOLD_FUNGI_BACKGROUND);
+                case PLANT_BACKGROUND -> System.out.println(AnsiColor.E_GOLD_PLANT_BACKGROUND.getFormattedCharacter());
+                case ANIMAL_BACKGROUND -> System.out.println(AnsiColor.E_GOLD_ANIMAL_BACKGROUND.getFormattedCharacter());
+                case INSECT_BACKGROUND -> System.out.println(AnsiColor.E_GOLD_INSECT_BACKGROUND.getFormattedCharacter());
+                case FUNGI_BACKGROUND -> System.out.println(AnsiColor.E_GOLD_FUNGI_BACKGROUND.getFormattedCharacter());
             }
         }
     }

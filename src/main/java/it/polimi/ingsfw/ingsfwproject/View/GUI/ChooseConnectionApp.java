@@ -43,31 +43,6 @@ public class ChooseConnectionApp extends Application {
 
         stage.show();
 
-//        stage.setOnCloseRequest(e->{
-//            try {
-//                new LobbyApp().start(new Stage());
-//            } catch (Exception ex) {
-//                throw new RuntimeException(ex);
-//            }
-//        });
-
-//        Button lobbyButton1 = (Button) scene.lookup("#socketButton");
-//        Button lobbyButton2 = (Button) scene.lookup("#rmiButton");
-//
-//        // Aggiungere lo stesso gestore di eventi a entrambi i pulsanti
-//        EventHandler<ActionEvent> goToLobby = event -> {
-//            try {
-//                new LobbyApp().start(new Stage());
-//                stage.close(); // Chiudi la finestra corrente dopo aver avviato la LobbyApp
-//            } catch (Exception ex) {
-//                throw new RuntimeException(ex);
-//            }
-//        };
-//
-//        lobbyButton1.setOnAction(goToLobby);
-//        lobbyButton2.setOnAction(goToLobby);
-
-
 
 
     }

@@ -1,5 +1,6 @@
 package it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient;
 
+import it.polimi.ingsfw.ingsfwproject.Network.Client.Client;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.Message;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.MessageType;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClientMessage;
@@ -35,7 +36,7 @@ public class SendGameListMessage extends ServerToClientMessage implements Serial
     }
 
     @Override
-    public void execute(View view) {
-
+    public void execute(Client client) {
+        client.getView().displayGameList(gameList);
     }
 }

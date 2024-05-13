@@ -1,6 +1,8 @@
 package it.polimi.ingsfw.ingsfwproject.Network.Messages;
 
+import it.polimi.ingsfw.ingsfwproject.Network.Client.Client;
 import it.polimi.ingsfw.ingsfwproject.View.View;
+import it.polimi.ingsfw.ingsfwproject.View.VirtualView;
 
 import java.io.Serializable;
 
@@ -11,7 +13,7 @@ public abstract class ServerToClientMessage extends Message implements Serializa
         this.clientID = clientID;
     }
 
-    public abstract void execute(View view);
+    public abstract void execute(Client client);
 
     public int getClientID(){
         return this.clientID;

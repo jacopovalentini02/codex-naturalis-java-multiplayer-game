@@ -4,6 +4,7 @@ import it.polimi.ingsfw.ingsfwproject.Exceptions.CardNotInHandException;
 import it.polimi.ingsfw.ingsfwproject.Exceptions.DeckEmptyException;
 import it.polimi.ingsfw.ingsfwproject.Exceptions.NotEnoughResourcesException;
 import it.polimi.ingsfw.ingsfwproject.Exceptions.PositionNotAvailableException;
+import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.ExcpetionMessage;
 import it.polimi.ingsfw.ingsfwproject.Network.Server.GameServerInstance;
 
 import java.io.Serializable;
@@ -39,14 +40,19 @@ public class Player implements Serializable {
         this.clientID = clientID;
     }
 
-    public void draw(Deck deck) throws DeckEmptyException {
-        Card drawnCard = deck.draw();
+    public void draw(Deck deck) {
+        Card drawnCard = null;
+        try{
+            drawnCard = deck.draw();
+        }catch (DeckEmptyException e){
+            gameServerInstance.sendUpdateToAll(new ExcpetionMessage(this.clientID,e.getMessage()));
+        }
+
         if (drawnCard != null) {
             handCard.add((PlayableCard) drawnCard);
         } else {
             System.out.println("Deck is empty");
         }
-
         gameServerInstance.sendHandCardsUpdate(gameServerInstance.getClientID(this), this.getHandCard() );
 
     }
@@ -56,14 +62,19 @@ public class Player implements Serializable {
 
     }
 
-    public int playCard(PlayableCard cardPlayed, boolean upwards, Coordinate coord) throws CardNotInHandException, PositionNotAvailableException, NotEnoughResourcesException {
+    public int playCard(PlayableCard cardPlayed, boolean upwards, Coordinate coord){
         int points = 0;
         if (handCard.contains(cardPlayed)) {
-            points = ground.playCard(cardPlayed, upwards, coord);
+            try{
+                points = ground.playCard(cardPlayed, upwards, coord);
+            }catch(PositionNotAvailableException | NotEnoughResourcesException e){
+                gameServerInstance.sendUpdateToAll(new ExcpetionMessage(this.clientID,e.getMessage()));
+            }
+
             // remove card from player's hand
             handCard.remove(cardPlayed);
         } else {
-            throw new CardNotInHandException("The card chosen is not in the player's hand");
+            gameServerInstance.sendUpdateToAll(new ExcpetionMessage(this.clientID,"The card chosen is not in the player's hand"));
         }
 
         int clientID=gameServerInstance.getClientID(this);
@@ -130,5 +141,7 @@ public class Player implements Serializable {
         //TODO: notify clients
     }
 
-
+    public int getClientID() {
+        return clientID;
+    }
 }
