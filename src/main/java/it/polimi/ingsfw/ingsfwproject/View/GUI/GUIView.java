@@ -53,27 +53,18 @@ public class GUIView extends View {
     @FXML
     private Button refreshButton;
 
-
     @FXML
     private ImageView ale;
 
 
-    @FXML
-    private void handleSocketConnection() throws Exception {
-        try {
-            super.client = new SocketClient("localhost", 1337, this);
-            super.client.startConnection();
-            if (super.client.isConnected()) {
-                openLobby();
-            } else {
-                showConnectionError();
-            }
-        } catch (ConnectException e) {
-            showConnectionError();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public GUIView(){
+        super.messages = new LinkedBlockingQueue<>();
+        Thread readerthread = new Thread(super::receiveMessage);
+        readerthread.start();
+        chooseConnection();
     }
+
+   
 
     @FXML
     private void handleRMIConnection() {
@@ -160,6 +151,12 @@ public class GUIView extends View {
 
     @Override
     public void chooseConnection() {
+        ChooseConnectionApp chooseConnectionApp = new ChooseConnectionApp();
+        try {
+            chooseConnectionApp.start(new Stage());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -168,44 +165,32 @@ public class GUIView extends View {
         ServerToClientMessage toProcess = (ServerToClientMessage)message;
         toProcess.execute(client);
     }
-
-    /*
-
-        @Override
-        public void handleMessage(Message message) {
-            switch (message.getType()){
-                case FIRST_MESSSAGE:
-                    this.client.setClientID(message.getClientID());
-                    Platform.runLater(() -> {
-                        // Mostra una finestra di dialogo con il messaggio
-                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                        alert.setTitle("Messaggio");
-                        alert.setHeaderText(null);
-                        alert.setContentText("Connessione stabilita");
-                        alert.setOnCloseRequest(e->{
-                            stage.close();
-                        });
-                        alert.showAndWait();
-                    });
-
-
-            }
-
-        }
-    */
-    @Override
-    public void handleInput(String input) {
-
-    }
+    
 
     @Override
     public void notifyException(String message) {
+        Platform.runLater(() -> {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Game Error");
+            alert.setHeaderText(null);
+            alert.setContentText(message);
+            alert.showAndWait();
+        });
 
     }
 
     @Override
     public void displayFirstMessage(int clientID) {
-
+        Platform.runLater(() -> {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Messaggio");
+            alert.setHeaderText(null);
+            alert.setContentText("Connessione stabilita");
+            alert.setOnCloseRequest(e->{
+                stage.close();
+            });
+            alert.showAndWait();
+        });
     }
 
     @Override
@@ -295,11 +280,6 @@ public class GUIView extends View {
 
     @Override
     public void notifyScores(Map<String, Integer> scores) {
-
-    }
-
-    @Override
-    public void notifyColorChosen(PlayerColor color) {
 
     }
 

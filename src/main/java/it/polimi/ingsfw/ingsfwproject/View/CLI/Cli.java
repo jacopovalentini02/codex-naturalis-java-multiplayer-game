@@ -337,7 +337,7 @@ public class Cli extends View implements Runnable {
 
     }
 
-    @Override
+
     public void handleInput(String input) {
         Message messageToSend;
         String name;
