@@ -1,8 +1,8 @@
 package it.polimi.ingsfw.ingsfwproject.Network.Client;
 
-import it.polimi.ingsfw.ingsfwproject.Model.GameState;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.*;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.Message;
+import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClientMessage;
 import it.polimi.ingsfw.ingsfwproject.View.VirtualView;
 import it.polimi.ingsfw.ingsfwproject.View.View;
 
@@ -17,6 +17,8 @@ public abstract class Client {
     public VirtualView getVirtualView() {
         return virtualView;
     }
+
+    public View getView(){return view;}
 
     public void setVirtualView(VirtualView virtualView) {
         this.virtualView = virtualView;
@@ -57,76 +59,11 @@ public abstract class Client {
 
     public abstract void disconnect() throws Exception;
 
-
-    public void handleMessage(Message message){
-        switch (message.getType()){
-            case FIRST_MESSSAGE: //set clientID in Client e view
-                FirstMessage firstMsg=(FirstMessage) message;
-                this.clientID=firstMsg.getClientID();
-                break;
-            case GAME_JOINED: //set state and gameId
-                this.virtualView.setState(GameState.WAITING_FOR_PLAYERS);
-                GameJoinedMessage mjoined=(GameJoinedMessage) message;
-                this.virtualView.setGameID(mjoined.getGameId());
-                this.virtualView.setNickname(mjoined.getNickName());
-                break;
-            case NEW_PLAYER_JOINED:
-                PlayersListMessage newPlayerJoinedMsg=(PlayersListMessage) message;
-                this.virtualView.setListOfPlayers(newPlayerJoinedMsg.getNicknames());
-                break;
-            case STARTER_CARD:
-                SendStarterCardMessage starterMsg=(SendStarterCardMessage) message;
-                this.virtualView.getHandCards().add(starterMsg.getStarterCard()); //Add starter card to hand
-                break;
-            case GOLD_DECK:
-                GoldDeckMessage goldMsg=(GoldDeckMessage) message;
-                this.virtualView.setGoldDeck(goldMsg.getGoldDeck());
-                break;
-            case RESOURCE_DECK:
-                ResourceDeckMessage resourceMsg=(ResourceDeckMessage) message;
-                this.virtualView.setGoldDeck(resourceMsg.getResourceDeck());
-                break;
-            case DISPLAYED_PLAYABLE_CARDS:
-                DispayedPlayableCardMessage displayedCardMsg=(DispayedPlayableCardMessage) message;
-                this.virtualView.setDisplayedCards(displayedCardMsg.getDisplayedPlayableCard());
-                break;
-            case CURRENT_PLAYER:
-                CurrentPlayerMessage currentPlayerMsg=(CurrentPlayerMessage) message;
-                this.virtualView.setCurrentPlayer(currentPlayerMsg.getCurrentPlayer());
-                break;
-            case COORDINATES_AVAILABLE:
-                CoordinatesAvailableMessage coordMsg=(CoordinatesAvailableMessage) message;
-                this.virtualView.setAvailablePositions(coordMsg.getCoords());
-                break;
-            case HAND_OBJECTIVE:
-                HandObjectiveMessage handObjectiveMsg=(HandObjectiveMessage) message;
-                this.virtualView.setHandObjectives(handObjectiveMsg.getCards());
-                break;
-            case GAME_STATE:
-                GameStateMessage gameStateMsg=(GameStateMessage) message;
-                this.virtualView.setState(gameStateMsg.getGameState());
-                break;
-            case GRID:
-                GridMessage gridMsg=(GridMessage) message;
-                this.virtualView.setGridForPlayer(gridMsg.getNickName(),gridMsg.getGrid());
-                break;
-            case RESOURCES:
-                ResourcesMessage resourcesMessage=(ResourcesMessage) message;
-                this.virtualView.setResourcesForPlayer(resourcesMessage.getNickname(),resourcesMessage.getResources());
-                break;
-            case WINNER:
-                WinnerMessage winnerMessage=(WinnerMessage) message;
-                this.virtualView.setWinner(winnerMessage.getNickname());
-                break;
-            case HAND_CARDS:
-                this.virtualView.setHandCards(((HandCardsMessage) message).getHandCards());
-                break;
-
-        }
-
-        this.view.addToQueue(message);
-
+    public synchronized void handleMessage(Message message){
+        ServerToClientMessage toProcess = (ServerToClientMessage) message;
+        toProcess.execute(this);
     }
+
 
     public int getClientID(){
         return this.clientID;

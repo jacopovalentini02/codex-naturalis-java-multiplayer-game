@@ -1,6 +1,7 @@
 package it.polimi.ingsfw.ingsfwproject.Network.Client;
 
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.Message;
+import it.polimi.ingsfw.ingsfwproject.Network.Server.GameServerInstance;
 import it.polimi.ingsfw.ingsfwproject.Network.Server.Handler;
 import it.polimi.ingsfw.ingsfwproject.Network.Server.RMIFactory;
 import it.polimi.ingsfw.ingsfwproject.Network.Server.RMIHandlerServer;
@@ -47,9 +48,8 @@ public class RMIClient extends Client{
         //passaggio al server del client handler
         serverFactory.setClientHandler(clientHandler);
         this.setConnected(true);
-
-
     }
+
 
     @Override
     public void sendMessage(Message message) throws IOException {

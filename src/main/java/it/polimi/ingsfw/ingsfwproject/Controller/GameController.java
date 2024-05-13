@@ -210,10 +210,5 @@ public class GameController implements Controller {
            return model.getPlayer(username);
        }
     }
-
-    @Override
-    public void handleMessage(ClientToServerMessage m){
-        m.execute(this);
-    }
 }
 

@@ -1,10 +1,7 @@
 package it.polimi.ingsfw.ingsfwproject.Network.Server;
 
-import it.polimi.ingsfw.ingsfwproject.Controller.Controller;
 import it.polimi.ingsfw.ingsfwproject.Controller.GameController;
-import it.polimi.ingsfw.ingsfwproject.Exceptions.*;
 import it.polimi.ingsfw.ingsfwproject.Model.*;
-import it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServer.*;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServerMessage;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.Message;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.*;
@@ -101,7 +98,7 @@ public class GameServerInstance {
     }
 
     public void sendDisplayedPlayableCardUpdate(List<PlayableCard> displayedPlayableCard) {
-        DispayedPlayableCardMessage dispPlayCardMsg = new DispayedPlayableCardMessage(sendBroadcast, new ArrayList<>(displayedPlayableCard));
+        DisplayedPlayableCardsMessage dispPlayCardMsg = new DisplayedPlayableCardsMessage(sendBroadcast, new ArrayList<>(displayedPlayableCard));
         sendUpdateToAll(dispPlayCardMsg);
     }
 

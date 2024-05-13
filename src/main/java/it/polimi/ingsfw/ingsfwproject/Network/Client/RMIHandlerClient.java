@@ -2,20 +2,32 @@ package it.polimi.ingsfw.ingsfwproject.Network.Client;
 
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.Message;
 import it.polimi.ingsfw.ingsfwproject.Network.Server.AbstractHandler;
+import it.polimi.ingsfw.ingsfwproject.Network.Server.GameServerInstance;
+import it.polimi.ingsfw.ingsfwproject.Network.Server.Handler;
 import it.polimi.ingsfw.ingsfwproject.Network.Server.Server;
 
 import java.rmi.RemoteException;
 
-public class RMIHandlerClient extends AbstractHandler {
+public class RMIHandlerClient implements Handler {
     private final RMIClient client;
+    private final int clientID;
+
+
     protected RMIHandlerClient(RMIClient c, int clientID) throws RemoteException {
-        super(clientID);
+        this.clientID = clientID;
         this.client = c;
     }
 
     @Override
     public void sendMessage(Message message) {
-        System.out.println("Arrivato messaggio dal server di tipo " + message.getType());
+        System.out.println("Arrivato messaggio dal server");
         client.receiveMessage(message);
     }
+
+    @Override
+    public int getClientID() throws RemoteException {
+        return this.clientID;
+    }
+
+
 }

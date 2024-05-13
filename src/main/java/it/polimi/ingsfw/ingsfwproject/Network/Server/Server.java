@@ -12,10 +12,6 @@ import it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServer.GetGameLis
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServer.JoinGameMessage;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServerMessage;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.Message;
-import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.ExceptionMessages.GameFullMessage;
-import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.ExceptionMessages.InvalidNumOfPlayerMessage;
-import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.ExceptionMessages.NickAlreadyTakenMessage;
-import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.ExceptionMessages.NotExistingGameMessage;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.ExcpetionMessage;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.GameJoinedMessage;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.SendGameListMessage;
@@ -36,7 +32,8 @@ import java.util.concurrent.*;
 public class Server {
     private LobbyController lobbyController;
     private BlockingQueue<Message> queue;
-    private HashMap<Integer, AbstractHandler> handlers; //clientID-handler
+    private HashMap<Integer, Handler> handlers;//clientID-handler
+    private HashMap<Integer, AbstractHandler> unistancedHandlers; //temporary list used to give an instance to handlers
     private HashMap<Integer, GameServerInstance> games; //gameID-serverinstance
     private int clientsCounter;
 
@@ -45,8 +42,9 @@ public class Server {
         GameManager manager = new GameManager();
         lobbyController = new LobbyController(manager, this);
         queue = new LinkedBlockingQueue<Message>();
-        handlers = new HashMap<Integer, AbstractHandler>();
+        handlers = new HashMap<Integer, Handler>();
         games = new HashMap<Integer, GameServerInstance>();
+        unistancedHandlers = new HashMap<Integer, AbstractHandler>();
         this.clientsCounter = 0;
         Thread readerThread = new Thread(this::readQueue);
         readerThread.start();
@@ -61,7 +59,7 @@ public class Server {
             try {
                 Message toProcess = queue.take();
                 //processMessage((ClientToServerMessage) toProcess);
-                lobbyController.handleMessage((ClientToServerMessage) toProcess);
+                ((ClientToServerMessage) toProcess).execute(lobbyController);
             } catch (InterruptedException e){
                 System.out.println("Reader thread interrotto");
                 return;
@@ -69,24 +67,10 @@ public class Server {
         }
     }
 
-    public void processMessage(ClientToServerMessage message){
+    /*public void processMessage(ClientToServerMessage message){
     //TODO: cambiare - fatto direttamente in readQueue
 
         lobbyController.handleMessage(message);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
         switch (message.getType()){
@@ -133,12 +117,15 @@ public class Server {
         }
 
     }
-
+*/
     public void setHandlersAndInstance(GameServerInstance gameInstance, int clientID, String nickname) {
-        AbstractHandler requestingClientHandler = handlers.get(clientID);
-        gameInstance.setHandler(clientID, requestingClientHandler);
-        requestingClientHandler.setGameServerInstance(gameInstance);
+        Handler handlerToPutIntoInstance = handlers.get(clientID);
+        gameInstance.setHandler(clientID, handlerToPutIntoInstance);
 
+        AbstractHandler handlerToSetInstanceInto = unistancedHandlers.remove(clientID);
+        handlerToSetInstanceInto.setGameServerInstance(gameInstance);
+
+        //TODO togliere?
         Player addedPlayer = gameInstance.getPlayer(nickname);
 
         if (addedPlayer != null){ //adding the new player to the game server instance
@@ -208,12 +195,17 @@ public class Server {
                 System.out.println("client id: "+id);
                 SocketHandler socketHandler=new SocketHandler(socket,id, this);
                 this.addHandler(id, socketHandler);
+                this.addUnistancedHandler(id, socketHandler);
                 executor.submit(socketHandler);
             } catch(IOException e) {
                 break; // entrerei qui se serverSocket venisse chiuso
             }
         }
         executor.shutdown();
+    }
+
+    public void addUnistancedHandler(int clientID, AbstractHandler h){
+        this.unistancedHandlers.put(clientID, h);
     }
 
 }

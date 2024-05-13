@@ -38,7 +38,7 @@ public class LobbyController implements Controller {
         server.sendResponse(new GameJoinedMessage(clientID, gameID, thisPlayer));
     }
 
-    public int joinExistingGame(String nick, int idGame, int clientID) {
+    public void joinExistingGame(String nick, int idGame, int clientID) {
         synchronized (lobby) {
 
             if (!lobby.getGameIDs().contains(idGame))
@@ -54,8 +54,9 @@ public class LobbyController implements Controller {
                     server.sendResponse(new ExcpetionMessage(clientID, "Nickname " + nick + " is already taken"));
                 }}
             lobby.joinGame(nick, idGame, clientID);
+            server.setHandlersAndInstance(getGameServerInstance(idGame),clientID, nick);
+            server.sendResponse(new GameJoinedMessage(clientID, idGame, nick));
         }
-        return idGame;
     }
 
     public void deleteGame(int idGame, int clientID){
@@ -98,8 +99,4 @@ public class LobbyController implements Controller {
         }
     }
 
-    @Override
-    public void handleMessage(ClientToServerMessage m) {
-        m.execute(this);
-    }
 }

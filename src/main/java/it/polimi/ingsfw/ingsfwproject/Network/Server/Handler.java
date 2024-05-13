@@ -10,4 +10,5 @@ public interface Handler extends Remote {
     public void sendMessage(Message m) throws RemoteException;
 
     public int getClientID() throws RemoteException;
+
 }

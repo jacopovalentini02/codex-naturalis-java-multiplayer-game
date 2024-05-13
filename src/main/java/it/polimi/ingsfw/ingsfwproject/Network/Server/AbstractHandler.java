@@ -8,7 +8,7 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
 abstract public class AbstractHandler extends UnicastRemoteObject implements Handler {
-    private int clientID;
+    private final int clientID;
     private Server server;
     private GameServerInstance gameServerInstance;
 

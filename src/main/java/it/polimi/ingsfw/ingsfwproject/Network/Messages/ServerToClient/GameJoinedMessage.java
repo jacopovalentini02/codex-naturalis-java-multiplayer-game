@@ -1,8 +1,11 @@
 package it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient;
 
+import it.polimi.ingsfw.ingsfwproject.Model.GameState;
+import it.polimi.ingsfw.ingsfwproject.Network.Client.Client;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.Message;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.MessageType;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClientMessage;
+import it.polimi.ingsfw.ingsfwproject.View.CLI.Cli;
 import it.polimi.ingsfw.ingsfwproject.View.View;
 
 import java.io.Serializable;
@@ -30,7 +33,10 @@ public class GameJoinedMessage extends ServerToClientMessage implements Serializ
     }
 
     @Override
-    public void execute(View view) {
-
+    public void execute(Client client) {
+        client.getVirtualView().setState(GameState.WAITING_FOR_PLAYERS);
+        client.getVirtualView().setGameID(gameId);
+        client.getVirtualView().setNickname(nickName);
+        client.getView().notifyGameJoined(gameId);
     }
 }

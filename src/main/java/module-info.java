@@ -2,8 +2,8 @@ module it.polimi.ingsfw.ingsfwproject {
     requires javafx.controls;
     requires javafx.fxml;
     requires org.json;
-    requires java.rmi;
     requires java.desktop;
+    requires java.rmi;
 
 
     exports it.polimi.ingsfw.ingsfwproject.Controller;
