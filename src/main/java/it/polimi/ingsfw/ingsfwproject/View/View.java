@@ -42,8 +42,6 @@ public abstract class View implements Runnable{
 
     public abstract void handleMessage(Message message);
 
-    public abstract void handleInput(String input);
-
     public abstract void notifyException(String message);
 
     public abstract void displayFirstMessage(int clientID);

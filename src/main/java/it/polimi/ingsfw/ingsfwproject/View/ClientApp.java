@@ -28,7 +28,7 @@ public class ClientApp {
             view = new Cli();
             Thread thread = new Thread(view);
             thread.start();
-        }else if(choice == 2) {
+        }else{
             view = new GUIView();
             Thread thread = new Thread(view);
             thread.start();

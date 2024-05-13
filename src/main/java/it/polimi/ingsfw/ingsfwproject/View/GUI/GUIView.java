@@ -1,10 +1,12 @@
 package it.polimi.ingsfw.ingsfwproject.View.GUI;
 
+import it.polimi.ingsfw.ingsfwproject.Model.*;
 import it.polimi.ingsfw.ingsfwproject.Network.Client.Client;
 import it.polimi.ingsfw.ingsfwproject.Network.Client.RMIClient;
 import it.polimi.ingsfw.ingsfwproject.Network.Client.SocketClient;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServer.CreateGameMessage;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.Message;
+import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClientMessage;
 import it.polimi.ingsfw.ingsfwproject.View.GUI.ChooseConnectionApp;
 import it.polimi.ingsfw.ingsfwproject.View.View;
 import javafx.animation.RotateTransition;
@@ -21,7 +23,10 @@ import javafx.util.Duration;
 
 import java.io.IOException;
 import java.net.ConnectException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -48,27 +53,18 @@ public class GUIView extends View {
     @FXML
     private Button refreshButton;
 
-
     @FXML
     private ImageView ale;
 
 
-    @FXML
-    private void handleSocketConnection() throws Exception {
-        try {
-            super.client = new SocketClient("localhost", 1337, this);
-            super.client.startConnection();
-            if (super.client.isConnected()) {
-                openLobby();
-            } else {
-                showConnectionError();
-            }
-        } catch (ConnectException e) {
-            showConnectionError();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public GUIView(){
+        super.messages = new LinkedBlockingQueue<>();
+        Thread readerthread = new Thread(super::receiveMessage);
+        readerthread.start();
+        chooseConnection();
     }
+
+   
 
     @FXML
     private void handleRMIConnection() {
@@ -130,31 +126,15 @@ public class GUIView extends View {
 
     }
 
-    @FXML
-    private void showAle(){
-        ale.setVisible(true);
-        RotateTransition rt = new RotateTransition(Duration.seconds(2), ale);
-        rt.setByAngle(360);
-        rt.setCycleCount(RotateTransition.INDEFINITE);
-        rt.play();
-    }
-
-
-
-
-
-    public GUIView(){
-        super.messages = new LinkedBlockingQueue<>();
-        Thread readerthread = new Thread(super::receiveMessage);
-        readerthread.start();
-    }
-
-
-
-
 
     @Override
     public void chooseConnection() {
+        ChooseConnectionApp chooseConnectionApp = new ChooseConnectionApp();
+        try {
+            chooseConnectionApp.start(new Stage());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -162,28 +142,129 @@ public class GUIView extends View {
 
     @Override
     public void handleMessage(Message message) {
-        switch (message.getType()){
-            case FIRST_MESSSAGE:
-                this.client.setClientID(message.getClientID());
-                Platform.runLater(() -> {
-                    // Mostra una finestra di dialogo con il messaggio
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setTitle("Messaggio");
-                    alert.setHeaderText(null);
-                    alert.setContentText("Connessione stabilita");
-                    alert.setOnCloseRequest(e->{
-                        stage.close();
-                    });
-                    alert.showAndWait();
-                });
+//        switch (message.getType()){
+//            case FIRST_MESSSAGE:
+//
+//
+//
+//        }
+
+    }
 
 
-        }
+    @Override
+    public void notifyException(String message) {
+        Platform.runLater(() -> {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Game Error");
+            alert.setHeaderText(null);
+            alert.setContentText(message);
+            alert.showAndWait();
+        });
 
     }
 
     @Override
-    public void handleInput(String input) {
+    public void displayFirstMessage(int clientID) {
+        Platform.runLater(() -> {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Messaggio");
+            alert.setHeaderText(null);
+            alert.setContentText("Connessione stabilita");
+            alert.setOnCloseRequest(e->{
+                stage.close();
+            });
+            alert.showAndWait();
+        });
+    }
+
+    @Override
+    public void displayGameList(HashMap<Integer, Integer> gameList) {
+
+    }
+
+    @Override
+    public void notifyGameJoined(int idGame) {
+
+    }
+
+    @Override
+    public void notifyNewPlayerJoined(ArrayList<String> nicknames) {
+
+    }
+
+    @Override
+    public void notifyStarterCard() {
+
+    }
+
+    @Override
+    public void notifyColorsAvailable(List<PlayerColor> colors) {
+
+    }
+
+    @Override
+    public void notifyGoldDeckUpdate() {
+
+    }
+
+    @Override
+    public void notifyResourceDeckUpdate() {
+
+    }
+
+    @Override
+    public void notifyDisplayedCardsUpdate(ArrayList<PlayableCard> displayedCards) {
+
+    }
+
+    @Override
+    public void notifyCurrentPlayer(String nickname) {
+
+    }
+
+    @Override
+    public void notifyAvailablePositions(ArrayList<Coordinate> coord) {
+
+    }
+
+    @Override
+    public void notifyHandObjectives(ArrayList<ObjectiveCard> cards) {
+
+    }
+
+    @Override
+    public void notifyGameState(GameState state) {
+
+    }
+
+    @Override
+    public void notifyGridUpdate(String nickname, Map<Coordinate, Face> grid) {
+
+    }
+
+    @Override
+    public void notifyResourcesUpdate(String nickname, HashMap<Content, Integer> resources) {
+
+    }
+
+    @Override
+    public void notifyWinnerUpdate(String nickname) {
+
+    }
+
+    @Override
+    public void notifyHandCardsUpdate(ArrayList<PlayableCard> cards) {
+
+    }
+
+    @Override
+    public void notifyDisplayedObjectives(List<ObjectiveCard> cards) {
+
+    }
+
+    @Override
+    public void notifyScores(Map<String, Integer> scores) {
 
     }
 
