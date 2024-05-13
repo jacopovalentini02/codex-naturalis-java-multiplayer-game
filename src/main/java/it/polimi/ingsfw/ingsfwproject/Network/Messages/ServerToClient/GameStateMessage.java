@@ -15,4 +15,6 @@ public class GameStateMessage extends Message {
     public GameState getGameState() {
         return gameState;
     }
+
+
 }

@@ -62,12 +62,14 @@ public class Cli extends View implements Runnable {
             try {
                 System.out.println("Insert X and Y coordinates:");
                 int x = scanner.nextInt();
-                int y = scanner.nextInt();
-                coord = new Coordinate(x, y);
                 scanner.nextLine();
+                int y = scanner.nextInt();
+                scanner.nextLine();
+                coord = new Coordinate(x, y);
                 if (!availablePositions.contains(coord)) {
                     System.out.println(errorString);
                 }
+                System.out.println("coord inserite");
             } catch (InputMismatchException e) {
                 System.out.println(errorString);
                 scanner.nextLine();
@@ -118,6 +120,7 @@ public class Cli extends View implements Runnable {
                 }
                 System.out.println("Insert the id of the card chosen: ");
                 choice = scanner.nextInt();
+                scanner.nextLine();
                 if (!idCards.contains(choice)){
                     System.out.println(errorString);
                 }
@@ -143,6 +146,7 @@ public class Cli extends View implements Runnable {
                 }
                 System.out.println("Insert the id of the card chosen: ");
                 choice = scanner.nextInt();
+                scanner.nextLine();
                 if (!idCards.contains(choice)){
                     System.out.println(errorString);
                 }

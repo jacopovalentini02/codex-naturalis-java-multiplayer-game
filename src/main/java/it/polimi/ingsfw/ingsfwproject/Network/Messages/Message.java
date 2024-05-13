@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 public abstract class Message implements Serializable {
     int clientID;
-    private MessageType type;
+    private MessageType type; //todo tolgo
 
     public Message(int clientID, MessageType messageType) {
         this.type=messageType;

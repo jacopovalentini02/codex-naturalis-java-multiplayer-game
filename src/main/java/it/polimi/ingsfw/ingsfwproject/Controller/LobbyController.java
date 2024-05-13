@@ -18,10 +18,13 @@ import java.util.Map;
 public class LobbyController {
     private GameManager lobby;
 
+    //todo aggiungo il server
+
     public LobbyController(GameManager lobby){
         this.lobby = lobby;
     }
 
+    //TODO aggiungere clientID
     public int createGame(int numOfPlayers, String thisPlayer) throws NotValidNumOfPlayerException {
         if(numOfPlayers < 2 || numOfPlayers > 4)
             throw new NotValidNumOfPlayerException("the player's number must be between 2 and 4, but you entered: " + numOfPlayers);
