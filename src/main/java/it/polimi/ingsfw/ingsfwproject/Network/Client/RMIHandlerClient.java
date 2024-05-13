@@ -6,9 +6,10 @@ import it.polimi.ingsfw.ingsfwproject.Network.Server.GameServerInstance;
 import it.polimi.ingsfw.ingsfwproject.Network.Server.Handler;
 import it.polimi.ingsfw.ingsfwproject.Network.Server.Server;
 
+import java.io.Serializable;
 import java.rmi.RemoteException;
 
-public class RMIHandlerClient implements Handler {
+public class RMIHandlerClient implements Handler, Serializable {
     private final RMIClient client;
     private final int clientID;
 
@@ -20,8 +21,10 @@ public class RMIHandlerClient implements Handler {
 
     @Override
     public void sendMessage(Message message) {
-        System.out.println("Arrivato messaggio dal server");
-        client.receiveMessage(message);
+        if (message.getClientID() == clientID || message.getClientID() == -10){
+            System.out.println("Arrivato messaggio dal server");
+            client.receiveMessage(message);
+        }
     }
 
     @Override

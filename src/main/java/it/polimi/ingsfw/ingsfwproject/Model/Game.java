@@ -18,7 +18,7 @@ import java.util.*;
 public class Game {
     private int idGame;
     private GameState state;
-    private GameController controller;
+    private final GameController controller;
     private List<Player> listOfPlayers;
 
     public List<PlayerColor> getTokenAvailable() {
@@ -33,7 +33,7 @@ public class Game {
     private Deck goldDeck;
     private Deck objectiveDeck;
     private Deck starterDeck;
-    private List<PlayableCard> displayedPlayableCard;
+    private ArrayList<PlayableCard> displayedPlayableCard;
     private List<ObjectiveCard> displayedObjectiveCard;
     private Player currentPlayer;
     private Player potentialWinner;
@@ -42,7 +42,7 @@ public class Game {
 
     private Player winner;
 
-    private GameManager gameManager;
+    private final GameManager gameManager;
 
     int lastRoundsplayed;
 
@@ -60,8 +60,6 @@ public class Game {
     public void setObjectiveCardsChosen(int objectiveCardsChosen) {
         this.objectiveCardsChosen = objectiveCardsChosen;
     }
-
-
 
     public boolean getifCurrentPlayerhasPlayed() {return currentPlayerhasPlayed;}
     public void setCurrentPlayerhasPlayed(boolean bool){
@@ -123,24 +121,22 @@ public class Game {
 
         //Send new: starterCard, goldDeck, resourceDeck, displayedPlayableCards, currentPlayer
         this.setState(GameState.CHOOSING_STARTER_CARDS);
-        gameServerInstance.sendGameStateUpdate(this.state);
+
         for(Player p: listOfPlayers){
             StarterCard starter = null;
-            int clientID=gameServerInstance.getClientID(p);
             try{
                 starter = (StarterCard) starterDeck.draw();
             }catch (DeckEmptyException ignore){}
-
-            p.getHandCard().add(starter); //Add starter card to player's hand
-            gameServerInstance.sendStarterCardMessage(clientID, starter);
-            gameServerInstance.sendAvaiblePositionUpdate(clientID,  p.getGround().getAvailablePositions());
-
+            p.addToHand(starter);
         }
-        gameServerInstance.sendGoldDeckUpdate(this.goldDeck);
-        gameServerInstance.sendResourceDeckUpdate(this.resourceDeck);
-        gameServerInstance.sendDisplayedPlayableCardUpdate(this.displayedPlayableCard);
-        gameServerInstance.sendCurrentPlayerUpdate(this.currentPlayer.getUsername());
+        ArrayList<Coordinate> initialCoordinates = new ArrayList<Coordinate>(); //sending initial available positions to players
+        initialCoordinates.add(new Coordinate(0,0));
+        gameServerInstance.sendUpdateToAll(new CoordinatesAvailableMessage(-10, initialCoordinates));
 
+        gameServerInstance.sendUpdateToAll(new GoldDeckMessage(-10, this.goldDeck));
+        gameServerInstance.sendUpdateToAll(new ResourceDeckMessage(-10, this.resourceDeck));
+        gameServerInstance.sendUpdateToAll(new DisplayedPlayableCardsMessage(-10, this.displayedPlayableCard));
+        gameServerInstance.sendUpdateToAll(new CurrentPlayerMessage(-10, currentPlayer.getUsername()));
     }
 
     public void chooseColor(Player player, PlayerColor color)  {
@@ -153,8 +149,6 @@ public class Game {
         tokenAvailable.remove(color);
 
         colorChosen++;
-
-        gameServerInstance.sendColorChosen(gameServerInstance.getClientID(player), color);
 
         if (colorChosen == this.numOfPlayers)
             setupHandsAndObjectives();
@@ -170,7 +164,7 @@ public class Game {
 
         ObjectiveCard cardToPutBack = player.getHandObjective().remove(indexToRemove);
 
-        gameServerInstance.sendHandObjectiveUpdate(gameServerInstance.getClientID(player), player.getHandObjective());
+        gameServerInstance.sendUpdateToAll(new HandObjectiveMessage(player.getClientID(), player.getHandObjective()));
 
         this.objectiveDeck.addCard(cardToPutBack);
 
@@ -186,13 +180,12 @@ public class Game {
             scores.put(p, 0);
             //draw 2 resourceCard e 1 goldCard
             try{
-                p.getHandCard().add((PlayableCard) resourceDeck.draw());
-                p.getHandCard().add((PlayableCard) resourceDeck.draw());
-                p.getHandCard().add((PlayableCard) goldDeck.draw());
+                ArrayList<PlayableCard> newHand = new ArrayList<PlayableCard>();
+                newHand.add((PlayableCard) resourceDeck.draw());
+                newHand.add((PlayableCard) resourceDeck.draw());
+                newHand.add((PlayableCard) goldDeck.draw());
+                p.addToHand(newHand);
             }catch (DeckEmptyException ignore){}
-
-            gameServerInstance.sendHandCardsUpdate(gameServerInstance.getClientID(p), p.getHandCard());
-
         }
         //shuffling the objectiveDeck
         objectiveDeck.shuffle();
@@ -202,20 +195,17 @@ public class Game {
             displayedObjectiveCard.add((ObjectiveCard) objectiveDeck.draw());
         }catch (DeckEmptyException ignore){}
 
+        gameServerInstance.sendUpdateToAll(new DisplayedObjectiveMessage(-10, displayedObjectiveCard));
 
         for(Player p : listOfPlayers){
             try{
-                p.getHandObjective().add((ObjectiveCard) objectiveDeck.draw());
-                p.getHandObjective().add((ObjectiveCard) objectiveDeck.draw());
+               ArrayList<ObjectiveCard> objectiveCards = new ArrayList<>();
+               objectiveCards.add((ObjectiveCard)objectiveDeck.draw());
+               objectiveCards.add((ObjectiveCard)objectiveDeck.draw());
+               p.addToHandObjective(objectiveCards);
             }catch (DeckEmptyException ignore){}
-
-            gameServerInstance.sendHandObjectiveUpdate(gameServerInstance.getClientID(p), p.getHandObjective());
         }
         this.setState(GameState.CHOOSING_OBJECTIVES);
-
-        gameServerInstance.sendGameStateUpdate(this.state);
-        gameServerInstance.sendDisplayedObjectiveCardUpdate(displayedObjectiveCard);
-
     }
 
     public void randomizeFirstPlayer(){
@@ -225,8 +215,6 @@ public class Game {
         setFirstPlayer(listOfPlayers.get(index));
         setCurrentPlayer(getFirstPlayer());
         this.setState(GameState.STARTED);
-
-        gameServerInstance.sendGameStateUpdate(this.state);
     }
 
 
@@ -287,7 +275,7 @@ public class Game {
         for (Player player : listOfPlayers) {
             nicknames.add(player.getUsername());
         }
-        gameServerInstance.sendPlayersListUpdate(nicknames);
+        gameServerInstance.sendUpdateToAll(new PlayersListMessage(-10, nicknames));
 
     }
 
@@ -302,7 +290,6 @@ public class Game {
         int newIndex = (listOfPlayers.indexOf(currentPlayer) + 1) % listOfPlayers.size();
         this.setCurrentPlayer(listOfPlayers.get(newIndex));
 
-        gameServerInstance.sendCurrentPlayerUpdate(this.currentPlayer.getUsername());
 
         currentPlayerhasPlayed = false;
 
@@ -317,7 +304,7 @@ public class Game {
             playerScoresMap.put(entry.getKey().getUsername(), entry.getValue());
         }
 
-        gameServerInstance.sendScoreUpdate(playerScoresMap);
+       gameServerInstance.sendUpdateToAll(new ScoreMessage(-10, playerScoresMap));
 
         if (scores.get(player) >= 20) {
             potentialWinner=currentPlayer;
@@ -348,7 +335,7 @@ public class Game {
                 return;            }
         }
 
-        gameServerInstance.sendDisplayedPlayableCardUpdate(this.displayedPlayableCard);
+        gameServerInstance.sendUpdateToAll(new DisplayedPlayableCardsMessage(-10, displayedPlayableCard));
 
     }
 
@@ -368,9 +355,9 @@ public class Game {
         }
         //l'update dei points è gia mandato da updatePoints
         winner = Collections.max(scores.entrySet(), Map.Entry.comparingByValue()).getKey();
-        gameServerInstance.sendWinner(winner.getUsername());
+        gameServerInstance.sendUpdateToAll(new WinnerMessage(-10, winner.getUsername()));
         setState(GameState.ENDED);
-        gameServerInstance.sendGameStateUpdate(this.state);
+
 
         this.endGame();
     }
@@ -420,6 +407,7 @@ public class Game {
 
     public void setState(GameState state) {
         this.state = state;
+        gameServerInstance.sendUpdateToAll(new GameStateMessage(-10, state));
     }
 
     public Deck getStarterDeck() {
@@ -516,6 +504,7 @@ public class Game {
 
     public void setCurrentPlayer(Player currentPlayer) {
         this.currentPlayer = currentPlayer;
+        gameServerInstance.sendUpdateToAll(new CurrentPlayerMessage(-10, currentPlayer.getUsername()));
     }
 
     public int getLastRoundsplayed() {

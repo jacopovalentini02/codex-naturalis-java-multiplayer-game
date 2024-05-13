@@ -8,15 +8,16 @@ import it.polimi.ingsfw.ingsfwproject.Network.Server.RMIHandlerServer;
 import it.polimi.ingsfw.ingsfwproject.View.View;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
-public class RMIClient extends Client{
+public class RMIClient extends Client implements Serializable {
 
     private Handler handler;
 
-    public RMIClient(String ip, int port, View view) throws RemoteException {
+    public RMIClient(String ip, int port, View view){
         super(ip, port, view);
     }
 

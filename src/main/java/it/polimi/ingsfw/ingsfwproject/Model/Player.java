@@ -4,7 +4,7 @@ import it.polimi.ingsfw.ingsfwproject.Exceptions.CardNotInHandException;
 import it.polimi.ingsfw.ingsfwproject.Exceptions.DeckEmptyException;
 import it.polimi.ingsfw.ingsfwproject.Exceptions.NotEnoughResourcesException;
 import it.polimi.ingsfw.ingsfwproject.Exceptions.PositionNotAvailableException;
-import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.ExcpetionMessage;
+import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.*;
 import it.polimi.ingsfw.ingsfwproject.Network.Server.GameServerInstance;
 
 import java.io.Serializable;
@@ -49,17 +49,14 @@ public class Player implements Serializable {
         }
 
         if (drawnCard != null) {
-            handCard.add((PlayableCard) drawnCard);
+            addToHand((PlayableCard)drawnCard);
         } else {
             System.out.println("Deck is empty");
         }
-        gameServerInstance.sendHandCardsUpdate(gameServerInstance.getClientID(this), this.getHandCard() );
 
     }
     public void pick(Card card){
-        handCard.add((PlayableCard) card);
-        gameServerInstance.sendHandCardsUpdate(gameServerInstance.getClientID(this), this.getHandCard() );
-
+        addToHand((PlayableCard) card);
     }
 
     public int playCard(PlayableCard cardPlayed, boolean upwards, Coordinate coord){
@@ -77,12 +74,10 @@ public class Player implements Serializable {
             gameServerInstance.sendUpdateToAll(new ExcpetionMessage(this.clientID,"The card chosen is not in the player's hand"));
         }
 
-        int clientID=gameServerInstance.getClientID(this);
-        gameServerInstance.sendAvaiblePositionUpdate(clientID, this.ground.getAvailablePositions());
-        gameServerInstance.sendHandCardsUpdate(clientID, this.getHandCard());
-        gameServerInstance.sendGridUpdate(this.ground.getGrid(), this.getUsername());
-        gameServerInstance.sendResourcesUpdate(generateContentMap(),this.getUsername());
-
+        gameServerInstance.sendUpdateToAll(new CoordinatesAvailableMessage(clientID, this.ground.getAvailablePositions()));
+        gameServerInstance.sendUpdateToAll(new HandCardsMessage(clientID, this.getHandCard()));
+        gameServerInstance.sendUpdateToAll(new GridMessage(-10, this.ground.getGrid(), this.username));
+        gameServerInstance.sendUpdateToAll(new ResourcesMessage(-10, generateContentMap(), username));
         return points;
     }
 
@@ -100,6 +95,7 @@ public class Player implements Serializable {
 
     public void setToken(PlayerColor token) {
         this.token = token;
+        gameServerInstance.sendUpdateToAll(new ColorChosenMessage(clientID, token));
     }
 
     public PlayerGround getGround() {
@@ -139,6 +135,17 @@ public class Player implements Serializable {
     public void addToHand(PlayableCard card){
         this.handCard.add(card);
         //TODO: notify clients
+        gameServerInstance.sendUpdateToAll(new HandCardsMessage(clientID, handCard));
+    }
+
+    public void addToHand(ArrayList<PlayableCard> cards){
+        this.handCard.addAll(cards);
+        gameServerInstance.sendUpdateToAll(new HandCardsMessage(clientID, handCard));
+    }
+
+    public void addToHandObjective(ArrayList<ObjectiveCard> cards){
+        this.handObjective.addAll(cards);
+        gameServerInstance.sendUpdateToAll(new HandObjectiveMessage(clientID, handObjective));
     }
 
     public int getClientID() {

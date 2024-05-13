@@ -126,6 +126,28 @@ public class GUIView extends View {
 
     }
 
+    @FXML
+    private void showAle(){
+        ale.setVisible(true);
+        RotateTransition rt = new RotateTransition(Duration.seconds(2), ale);
+        rt.setByAngle(360);
+        rt.setCycleCount(RotateTransition.INDEFINITE);
+        rt.play();
+    }
+
+
+
+
+
+    public GUIView(){
+        super.messages = new LinkedBlockingQueue<>();
+        Thread readerthread = new Thread(super::receiveMessage);
+        readerthread.start();
+    }
+
+
+
+
 
     @Override
     public void chooseConnection() {
@@ -138,19 +160,12 @@ public class GUIView extends View {
 
     }
 
-
-
     @Override
     public void handleMessage(Message message) {
-//        switch (message.getType()){
-//            case FIRST_MESSSAGE:
-//
-//
-//
-//        }
-
+        ServerToClientMessage toProcess = (ServerToClientMessage)message;
+        toProcess.execute(client);
     }
-
+    
 
     @Override
     public void notifyException(String message) {
