@@ -81,7 +81,7 @@ public class GUIView extends View {
         }
     }
 
-   
+
 
     @FXML
     private void handleRMIConnection() {
@@ -151,6 +151,7 @@ public class GUIView extends View {
         rt.setCycleCount(RotateTransition.INDEFINITE);
         rt.play();
     }
+
 
 
 
