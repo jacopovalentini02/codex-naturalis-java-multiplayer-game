@@ -141,9 +141,10 @@ public class Game {
 
     public void chooseColor(Player player, PlayerColor color)  {
         //todo: la view deve chiedere la lista aggiornata - come gestisco le excpetion? - mando messaggio
-        if(!tokenAvailable.contains(color))
-            gameServerInstance.sendUpdateToAll(new ExcpetionMessage(player.getClientID(),"This color is already taken"));
-
+        if(!tokenAvailable.contains(color)) {
+            gameServerInstance.sendUpdateToAll(new ExcpetionMessage(player.getClientID(), "This color is already taken"));
+            return;
+        }
         player.setToken(color);
 
         tokenAvailable.remove(color);
