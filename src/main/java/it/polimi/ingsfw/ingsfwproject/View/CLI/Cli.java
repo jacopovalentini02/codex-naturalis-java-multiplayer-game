@@ -64,6 +64,7 @@ public class Cli extends View implements Runnable {
                 int x = scanner.nextInt();
                 int y = scanner.nextInt();
                 coord = new Coordinate(x, y);
+                scanner.nextLine();
                 if (!availablePositions.contains(coord)) {
                     System.out.println(errorString);
                 }
@@ -321,7 +322,7 @@ public class Cli extends View implements Runnable {
                     messageToSend = new ObjectiveCardChosenMessage(client.getClientID(), client.getNickname(), objWanted);
                     client.sendMessage(messageToSend);
                 case "playcard" :
-                    int idCard = askForIdCardInput("Among the cards in your hand, which one do you want to play? Here the cards' id:\n", client.getVirtualView().getHandCards());
+                    int idCard = askForIdCardInput("Among the cards in your hand, which one do you want to play? Here the cards' id:", client.getVirtualView().getHandCards());
                     boolean face = askForFaceToPlay();
                     Coordinate coords = askForCoordinateInput(client.getVirtualView().getAvailablePositions());
                     messageToSend = new PlayCardMessage(client.getClientID(),idCard, face,coords, client.getNickname());
@@ -386,10 +387,10 @@ public class Cli extends View implements Runnable {
         //center, if exists
         if(face instanceof NormalBack){
             switch(((NormalBack) face).getCenter()){
-                case FUNGI_KINGDOM -> System.out.println(AnsiColor.FUNGI_TEXT.getFormattedCharacter());
-                case PLANT_KINGDOM -> System.out.println(AnsiColor.PLANT_TEXT.getFormattedCharacter());
-                case INSECT_KINGDOM -> System.out.println(AnsiColor.INSECT_TEXT.getFormattedCharacter());
-                case ANIMAL_KINGDOM -> System.out.println(AnsiColor.ANIMAL_TEXT.getFormattedCharacter());
+                case FUNGI_KINGDOM -> System.out.print(AnsiColor.FUNGI_TEXT.getFormattedCharacter());
+                case PLANT_KINGDOM -> System.out.print(AnsiColor.PLANT_TEXT.getFormattedCharacter());
+                case INSECT_KINGDOM -> System.out.print(AnsiColor.INSECT_TEXT.getFormattedCharacter());
+                case ANIMAL_KINGDOM -> System.out.print(AnsiColor.ANIMAL_TEXT.getFormattedCharacter());
             }
         }
         else{
@@ -416,8 +417,8 @@ public class Cli extends View implements Runnable {
     public void printGoldFrontPoints(GoldFront face, AnsiColor cardType){
         switch(face.getPoints()){
             case 1 -> System.out.print(AnsiColor.POINT_ONE.getFormattedCharacter());
-            case 2 -> System.out.println(AnsiColor.POINT_TWO.getFormattedCharacter());
-            case 3 -> System.out.println(AnsiColor.POINT_THREE.getFormattedCharacter());
+            case 2 -> System.out.print(AnsiColor.POINT_TWO.getFormattedCharacter());
+            case 3 -> System.out.print(AnsiColor.POINT_THREE.getFormattedCharacter());
         }
         if(face.getObjectNeeded() != null){
             printCorner(face.getObjectNeeded(),0, cardType);
@@ -430,18 +431,18 @@ public class Cli extends View implements Runnable {
     public void printGoldBorder(AnsiColor cardType, int bORe){
         if(bORe ==0){
             switch(cardType){
-                case PLANT_BACKGROUND -> System.out.print(AnsiColor.B_GOLD_PLANT_BACKGROUND);
-                case ANIMAL_BACKGROUND -> System.out.print(AnsiColor.B_GOLD_ANIMAL_BACKGROUND);
-                case INSECT_BACKGROUND -> System.out.print(AnsiColor.B_GOLD_INSECT_BACKGROUND);
-                case FUNGI_BACKGROUND -> System.out.print(AnsiColor.B_GOLD_FUNGI_BACKGROUND);
+                case PLANT_BACKGROUND -> System.out.print(AnsiColor.B_GOLD_PLANT_BACKGROUND.getFormattedCharacter());
+                case ANIMAL_BACKGROUND -> System.out.print(AnsiColor.B_GOLD_ANIMAL_BACKGROUND.getFormattedCharacter());
+                case INSECT_BACKGROUND -> System.out.print(AnsiColor.B_GOLD_INSECT_BACKGROUND.getFormattedCharacter());
+                case FUNGI_BACKGROUND -> System.out.print(AnsiColor.B_GOLD_FUNGI_BACKGROUND.getFormattedCharacter());
             }
         }
         if(bORe == 1){
             switch(cardType){
-                case PLANT_BACKGROUND -> System.out.println(AnsiColor.E_GOLD_PLANT_BACKGROUND);
-                case ANIMAL_BACKGROUND -> System.out.println(AnsiColor.E_GOLD_ANIMAL_BACKGROUND);
-                case INSECT_BACKGROUND -> System.out.println(AnsiColor.E_GOLD_INSECT_BACKGROUND);
-                case FUNGI_BACKGROUND -> System.out.println(AnsiColor.E_GOLD_FUNGI_BACKGROUND);
+                case PLANT_BACKGROUND -> System.out.println(AnsiColor.E_GOLD_PLANT_BACKGROUND.getFormattedCharacter());
+                case ANIMAL_BACKGROUND -> System.out.println(AnsiColor.E_GOLD_ANIMAL_BACKGROUND.getFormattedCharacter());
+                case INSECT_BACKGROUND -> System.out.println(AnsiColor.E_GOLD_INSECT_BACKGROUND.getFormattedCharacter());
+                case FUNGI_BACKGROUND -> System.out.println(AnsiColor.E_GOLD_FUNGI_BACKGROUND.getFormattedCharacter());
             }
         }
     }

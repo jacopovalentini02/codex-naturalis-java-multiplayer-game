@@ -45,17 +45,16 @@ class CliTest {
 
     @Test
     void testPrintPlayerHand() throws RemoteException, DeckEmptyException {
-        GameServerInstance gameServerInstance=new GameServerInstance();
-        Player player1=new Player("user1", gameServerInstance);
-        Game game=new Game(gameServerInstance,new GameManager(),1,2,player1);
-        //ClientCallback clientCallback = new ClientCallback();
-        //game.getController().addClient("user1", clientCallback);
+        GameManager gameManager = new GameManager();
+        GameServerInstance gameserver = new GameServerInstance();
+        Player player = new Player("peppo", gameserver);
+        gameserver.addPlayer(player, 0);
+        Game game = new Game(gameserver, gameManager, 0, 2, player);
+        game.setUpCards();
         game.setupField();
+        player.getHandCard().remove(0);
+        game.setupHandsAndObjectives();
         Cli cli = new Cli();
-        player1.getHandCard().remove(0);
-        player1.getHandCard().add((ResourceCard) game.getResourceDeck().draw());
-        player1.getHandCard().add((ResourceCard) game.getResourceDeck().draw());
-        player1.getHandCard().add((ResourceCard) game.getResourceDeck().draw());
-        cli.printPlayerHand(player1);
+        cli.printPlayerHand(player);
     }
 }
