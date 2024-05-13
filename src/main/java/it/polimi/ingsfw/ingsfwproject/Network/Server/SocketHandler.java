@@ -27,7 +27,7 @@ public class SocketHandler extends AbstractHandler implements Runnable{
         this.socket = socket;
         this.in = new ObjectInputStream(socket.getInputStream());
         this.out = new ObjectOutputStream(socket.getOutputStream());
-        FirstMessage firstMessage=new FirstMessage(clientID, MessageType.FIRST_MESSSAGE);
+        FirstMessage firstMessage=new FirstMessage(clientID);
         this.sendMessage(firstMessage);
         System.out.println("Server client handler inizializzato");
     }

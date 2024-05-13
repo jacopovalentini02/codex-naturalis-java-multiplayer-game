@@ -28,6 +28,6 @@ public class RMIFactoryImpl extends UnicastRemoteObject implements RMIFactory {
     public synchronized void setClientHandler(Handler clientHandler) throws RemoteException {
         int clientID = clientHandler.getClientID();
         server.addHandler(clientID, clientHandler);
-        clientHandler.sendMessage(new FirstMessage(clientID, MessageType.FIRST_MESSSAGE));
+        clientHandler.sendMessage(new FirstMessage(clientID));
     }
 }

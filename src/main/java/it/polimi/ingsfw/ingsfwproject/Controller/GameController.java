@@ -7,6 +7,8 @@ import it.polimi.ingsfw.ingsfwproject.Model.*;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServerMessage;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.Message;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.ExcpetionMessage;
+import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.GoldDeckMessage;
+import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.ResourceDeckMessage;
 import it.polimi.ingsfw.ingsfwproject.Network.Server.GameServerInstance;
 import it.polimi.ingsfw.ingsfwproject.Network.Server.Server;
 
@@ -110,7 +112,6 @@ public class GameController implements Controller {
 
             if (model.getCurrentPlayer().equals(model.getPotentialWinner())) {
                 model.setState(GameState.ENDING);
-                model.getGameServerInstance().sendGameStateUpdate(model.getState());
             }
             model.nextTurn();
         }
@@ -128,6 +129,9 @@ public class GameController implements Controller {
                 player = p;
         }
 
+        if (player == null) //null control
+            throw new RuntimeException();
+
         if (resourceDeck){
             deck = model.getResourceDeck();
         } else {
@@ -143,14 +147,13 @@ public class GameController implements Controller {
             player.draw(deck);
 
             if (resourceDeck){
-                model.getGameServerInstance().sendResourceDeckUpdate(deck);
+                serverInstance.sendUpdateToAll(new ResourceDeckMessage(-10, deck));
             } else {
-                model.getGameServerInstance().sendGoldDeckUpdate(deck);
+                serverInstance.sendUpdateToAll(new GoldDeckMessage(-10, deck));
             }
 
             if (model.getCurrentPlayer().equals(model.getPotentialWinner())) {
                 model.setState(GameState.ENDING);
-                model.getGameServerInstance().sendGameStateUpdate(GameState.ENDING);
             }
             model.nextTurn();
         }
@@ -164,6 +167,9 @@ public class GameController implements Controller {
             if (Objects.equals(p.getUsername(), username))
                 player = p;
         }
+
+        if (player == null)
+            throw new RuntimeException();
 
         if (model.getCurrentPlayer() != player)
             serverInstance.sendUpdateToAll(new ExcpetionMessage(player.getClientID(),"Not your turn"));

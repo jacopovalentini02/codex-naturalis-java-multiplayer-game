@@ -56,6 +56,7 @@ public class LobbyController implements Controller {
             lobby.joinGame(nick, idGame, clientID);
             server.setHandlersAndInstance(getGameServerInstance(idGame),clientID, nick);
             server.sendResponse(new GameJoinedMessage(clientID, idGame, nick));
+            checkIfGameNeedsToBeStarted(idGame);
         }
     }
 

@@ -7,6 +7,7 @@ import it.polimi.ingsfw.ingsfwproject.View.VirtualView;
 import it.polimi.ingsfw.ingsfwproject.View.View;
 
 import java.io.IOException;
+import java.io.Serializable;
 
 public abstract class Client {
     private String ip; //Server IP address

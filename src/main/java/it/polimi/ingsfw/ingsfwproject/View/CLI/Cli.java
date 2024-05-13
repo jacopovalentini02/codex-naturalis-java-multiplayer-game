@@ -175,7 +175,7 @@ public class Cli extends View implements Runnable {
         try {
             super.client = choice == 1? new SocketClient(ip,port, this) : new RMIClient(ip,port, this);
             client.startConnection();
-        } catch (Exception e) {
+        } catch (java.lang.Exception e) {
             throw new RuntimeException(e);
         }
 
@@ -318,6 +318,11 @@ public class Cli extends View implements Runnable {
         System.out.println("There's been a change in scores. The new ones are: ");
         for (Map.Entry<String, Integer> e : scores.entrySet())
             System.out.println(e.getKey() + ": " + e.getValue());
+    }
+
+    @Override
+    public void notifyColorChosen(PlayerColor color){
+        System.out.println(color + " successfully set. ");
     }
 
 
