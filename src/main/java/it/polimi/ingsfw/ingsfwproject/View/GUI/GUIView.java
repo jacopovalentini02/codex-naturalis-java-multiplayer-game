@@ -61,7 +61,24 @@ public class GUIView extends View {
         super.messages = new LinkedBlockingQueue<>();
         Thread readerthread = new Thread(super::receiveMessage);
         readerthread.start();
-        chooseConnection();
+        //chooseConnection();
+    }
+
+    @FXML
+    private void handleSocketConnection() throws Exception {
+        try {
+            super.client = new SocketClient("localhost", 1337, this);
+            super.client.startConnection();
+            if (super.client.isConnected()) {
+                openLobby();
+            } else {
+                showConnectionError();
+            }
+        } catch (ConnectException e) {
+            showConnectionError();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
    
@@ -136,14 +153,6 @@ public class GUIView extends View {
     }
 
 
-
-
-
-    public GUIView(){
-        super.messages = new LinkedBlockingQueue<>();
-        Thread readerthread = new Thread(super::receiveMessage);
-        readerthread.start();
-    }
 
 
 
@@ -280,6 +289,11 @@ public class GUIView extends View {
 
     @Override
     public void notifyScores(Map<String, Integer> scores) {
+
+    }
+
+    @Override
+    public void notifyColorChosen(PlayerColor color) {
 
     }
 
