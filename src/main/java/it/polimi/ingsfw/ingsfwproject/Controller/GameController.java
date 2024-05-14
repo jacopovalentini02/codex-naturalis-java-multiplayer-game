@@ -202,15 +202,23 @@ public class GameController implements Controller {
         }
     }
 
-    private void checkIfDrawPossible(Player player){
-        if (model.getState() == GameState.WAITING_FOR_PLAYERS || model.getState() == GameState.CHOOSING_STARTER_CARDS || model.getState() == GameState.CHOOSING_OBJECTIVES || model.getState() == GameState.ENDING || model.getState() == GameState.CHOOSING_COLORS)
-            serverInstance.sendUpdateToAll(new ExcpetionMessage(player.getClientID(),"You can't draw now"));
+    private boolean checkIfDrawPossible(Player player){
+        if (model.getState() == GameState.WAITING_FOR_PLAYERS || model.getState() == GameState.CHOOSING_STARTER_CARDS || model.getState() == GameState.CHOOSING_OBJECTIVES || model.getState() == GameState.ENDING || model.getState() == GameState.CHOOSING_COLORS) {
+            serverInstance.sendUpdateToAll(new ExcpetionMessage(player.getClientID(), "You can't draw now"));
+            return false;
+        }
 
-        if (model.getCurrentPlayer() != player)
+        if (model.getCurrentPlayer() != player){
             serverInstance.sendUpdateToAll(new ExcpetionMessage(player.getClientID(),"It's not your turn"));
+            return false;
+        }
 
-        if (!(model.getifCurrentPlayerhasPlayed()))
-            serverInstance.sendUpdateToAll(new ExcpetionMessage(player.getClientID(),"You should play a card before drawing"));
+        if (!(model.getifCurrentPlayerhasPlayed())) {
+            serverInstance.sendUpdateToAll(new ExcpetionMessage(player.getClientID(), "You should play a card before drawing"));
+            return false;
+        }
+
+        return true;
     }
 
     private void starterCardPlayed() {
