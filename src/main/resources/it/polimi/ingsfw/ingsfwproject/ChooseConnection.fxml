@@ -9,7 +9,7 @@
 
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.StackPane?>
-<AnchorPane minHeight="411.0" minWidth="449.0" prefHeight="411.0" prefWidth="449.0" style="-fx-background-color: #E1D4A4;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsfw.ingsfwproject.View.GUI.GUIView">
+<AnchorPane minHeight="411.0" minWidth="449.0" prefHeight="411.0" prefWidth="449.0" style="-fx-background-color: #E1D4A4;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsfw.ingsfwproject.View.GUI.ChooseConnectionApp">
    <BorderPane prefHeight="211.0" prefWidth="600.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
       <center>
          <ImageView fitHeight="254.0" fitWidth="468.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">

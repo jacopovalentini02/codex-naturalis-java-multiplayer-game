@@ -1,6 +1,7 @@
 package it.polimi.ingsfw.ingsfwproject.View;
 
 import it.polimi.ingsfw.ingsfwproject.View.CLI.Cli;
+import it.polimi.ingsfw.ingsfwproject.View.GUI.ChooseConnectionApp;
 import it.polimi.ingsfw.ingsfwproject.View.GUI.GUIView;
 import javafx.application.Application;
 
@@ -35,6 +36,7 @@ public class ClientApp {
             view = new GUIView();
             Thread thread = new Thread(view);
             thread.start();
+            Application.launch(ChooseConnectionApp.class);
         }
 
 

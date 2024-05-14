@@ -34,29 +34,8 @@ import static javafx.application.Application.launch;
 
 public class GUIView extends View {
 
-    @FXML
-    public TextField nickname_input;
-    @FXML
-    public Spinner num_of_players;
+
     private Stage stage;
-
-    @FXML
-    private Button socketButton;
-
-    @FXML
-    private Button rmiButton;
-
-    @FXML
-    private Button aleButton;
-
-    @FXML
-    private Button createButton;
-
-    @FXML
-    private Button refreshButton;
-
-    @FXML
-    private ImageView ale;
 
 
     public GUIView(){
@@ -67,74 +46,20 @@ public class GUIView extends View {
         //chooseConnection();
     }
 
-    @FXML
-    private void handleSocketConnection() throws Exception {
-        try {
-            super.client = new SocketClient("localhost", 1337, this);
-            super.client.startConnection();
-            if (super.client.isConnected()) {
-                openLobby();
-            } else {
-                showConnectionError();
-            }
-        } catch (ConnectException e) {
-            showConnectionError();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-
-
-    @FXML
-    private void handleRMIConnection() {
-        //todo qua c'è un'eccezione che da errore, l'alert viene comunue visualizzato
-        try {
-            // Codice per la connessione RMI
-            super.client = new RMIClient("localhost", 1099, this);
-            super.client.startConnection();
-            openLobby();
-        } catch (Exception e) {
-            showConnectionError();
-            e.printStackTrace();
-        }
-
-    }
-
-
-    @FXML
-    private void sendCreateGame() throws IOException {
-        String nickname = nickname_input.getText();
-        int numberOfPlayers = (int) num_of_players.getValue();
-        CreateGameMessage createGameMessage=new CreateGameMessage(super.client.getClientID(), numberOfPlayers, nickname);
-        System.out.println(nickname);
-        this.client.sendMessage(createGameMessage);
-    }
-
-
-    private void openLobby() {
+    public void openLobby() {
         Platform.runLater(() -> {
             try {
-                System.out.println(super.client.getClientID());
-                new LobbyApp().start(this.stage);
+                LobbyApp lobbyApp=new LobbyApp();
+                lobbyApp.setGuiView(this);
+                lobbyApp.start(this.stage);
+
             } catch (Exception ex) {
                 throw new RuntimeException(ex);
             }
         });
     }
 
-    @FXML
-    private void openCreateGame(){
-        Platform.runLater(() -> {
-            try {
-                new CreateGameApp().start(this.stage);
-            } catch (Exception ex) {
-                throw new RuntimeException(ex);
-            }
-        });
-    }
-
-    private void showConnectionError() {
+    public void showConnectionError() {
         Platform.runLater(() -> {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Connection Error");
@@ -145,25 +70,18 @@ public class GUIView extends View {
 
     }
 
-    @FXML
-    private void showAle(){
-        ale.setVisible(true);
-        RotateTransition rt = new RotateTransition(Duration.seconds(2), ale);
-        rt.setByAngle(360);
-        rt.setCycleCount(RotateTransition.INDEFINITE);
-        rt.play();
-    }
-
-
-
-
-
-
-
-
     @Override
     public void chooseConnection() {
-        Application.launch(ChooseConnectionApp.class);
+//        ChooseConnectionApp chooseConnectionApp=new ChooseConnectionApp();
+//        Platform.startup(()->{
+//            try {
+//                chooseConnectionApp.start(new Stage());
+//            } catch (Exception e) {
+//                throw new RuntimeException(e);
+//            }
+//        });
+
+
     }
 
     @Override
@@ -308,5 +226,7 @@ public class GUIView extends View {
         this.stage = stage;
     }
 
-
+    public Stage getStage() {
+        return stage;
+    }
 }
