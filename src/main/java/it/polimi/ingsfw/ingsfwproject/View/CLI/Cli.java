@@ -21,6 +21,10 @@ public class Cli extends View implements Runnable {
     String lobbyCommands = "now you can insert one of the following commands:" + "\n\t-> CreateGame" + "\n\t-> JoinGame" + "\n\t-> GetGameList";
     String gameCommands = "now you can do one of the following actions: \n\t-> PlayCard \n\t-> DrawCard \n\t-> PickCard  \n\t-> SkipTurn";
 
+    public static final String RED = "\033[0;31m";
+
+    public static final String RESET = "\033[0m";
+
     public Cli(){
         this.scanner = new Scanner(System.in);
         super.messages = new LinkedBlockingQueue<>();
@@ -326,6 +330,11 @@ public class Cli extends View implements Runnable {
     }
 
 
+    @Override
+    public void notifyChatMessage(ChatMessage message){
+        System.out.println(RED + "New chat message from " + message.getSender() + " : " + message.getMessage() + RESET);
+    }
+
     //TODO: rimuovere
     @Override//TODO: stampare gli obiettivi
     public void handleMessage(Message message) {
@@ -402,6 +411,15 @@ public class Cli extends View implements Runnable {
                 case "skipturn" :
                     messageToSend = new SkipTurnMessage(client.getClientID(), client.getNickname());
                     client.sendMessage(messageToSend);
+                    break;
+                case "chat":
+                    for (ChatMessage m: client.getVirtualView().getGlobalChat()){
+                        System.out.println(RED+m.getSender()+ ": " + m.getMessage()+RESET);
+                    }
+                    break;
+                case "sendmessage":
+                    String chatMessage = askForStringInput("Type your message: ");
+                    client.sendMessage(new sendChatMessage(client.getClientID(), client.getNickname(), "global", chatMessage));
                     break;
             }
         }catch(Exception e) {

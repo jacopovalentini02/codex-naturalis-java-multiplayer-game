@@ -294,7 +294,12 @@ public class GUIView extends View {
 
     }
 
-   @Override
+    @Override
+    public void notifyChatMessage(ChatMessage message) {
+
+    }
+
+    @Override
     public void run() {
          //Application.launch(ChooseConnectionApp.class);
        chooseConnection();

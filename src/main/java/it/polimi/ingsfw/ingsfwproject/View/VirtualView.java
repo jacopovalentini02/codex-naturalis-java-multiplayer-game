@@ -2,10 +2,8 @@ package it.polimi.ingsfw.ingsfwproject.View;
 
 import it.polimi.ingsfw.ingsfwproject.Model.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.concurrent.LinkedBlockingQueue;
 
 public class VirtualView {
     private int gameID;
@@ -31,11 +29,14 @@ public class VirtualView {
     private boolean currentPlayerhasPlayed;
     private String winner;
 
+    private Queue<ChatMessage> globalChat;
+
     public VirtualView() {
         this.listOfPlayers = new ArrayList<String>();
         this.grids = new HashMap<>();
         this.handCards=new ArrayList<>();
         this.resources=new HashMap<>();
+        this.globalChat = new LinkedBlockingQueue<>();
     }
 
     public ArrayList<PlayableCard> getHandCards() {
@@ -163,4 +164,13 @@ public class VirtualView {
     public void setWinner(String winner) {
         this.winner = winner;
     }
+
+    public void addMessageToGlobalChat(ChatMessage message){
+        this.globalChat.add(message);
+    }
+
+    public Queue<ChatMessage> getGlobalChat(){
+        return globalChat;
+    }
+
 }

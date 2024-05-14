@@ -13,6 +13,8 @@ public enum MessageType {
     WANTED_COLOR,
     CHOSEN_OBJECTIVE_CARD,
 
+    CHAT,
+
 
     //Exception
     INVALID_NUM_OF_PLAYERS,

@@ -85,6 +85,8 @@ public abstract class View implements Runnable{
 
     public abstract void notifyColorChosen(PlayerColor color);
 
+    public abstract void notifyChatMessage(ChatMessage message);
+
     public void addToQueue(Message message){
         messages.add(message);
 
