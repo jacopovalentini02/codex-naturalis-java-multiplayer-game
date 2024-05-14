@@ -30,6 +30,8 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
+import static javafx.application.Application.launch;
+
 public class GUIView extends View {
 
     @FXML
@@ -113,6 +115,7 @@ public class GUIView extends View {
     private void openLobby() {
         Platform.runLater(() -> {
             try {
+                System.out.println(super.client.getClientID());
                 new LobbyApp().start(this.stage);
             } catch (Exception ex) {
                 throw new RuntimeException(ex);
@@ -160,14 +163,7 @@ public class GUIView extends View {
 
     @Override
     public void chooseConnection() {
-        this.stage = new Stage();
-        ChooseConnectionApp chooseConnectionApp = new ChooseConnectionApp();
-        try {
-            chooseConnectionApp.start(this.stage);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
+        Application.launch(ChooseConnectionApp.class);
     }
 
     @Override
@@ -298,10 +294,11 @@ public class GUIView extends View {
 
     }
 
-    @Override
+   @Override
     public void run() {
-        Application.launch(ChooseConnectionApp.class);
-    }
+         //Application.launch(ChooseConnectionApp.class);
+       chooseConnection();
+     }
 
     public void setClient(Client c){
         super.client = c;

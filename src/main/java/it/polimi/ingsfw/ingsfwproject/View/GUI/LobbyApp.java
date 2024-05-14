@@ -11,6 +11,8 @@ public class LobbyApp extends Application {
     public void start(Stage stage) throws Exception {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polimi/ingsfw/ingsfwproject/prova-lobby.fxml"));
         Parent root = loader.load();
+        GUIView controller = loader.getController();
+        controller.setStage(stage);
         Scene scene = new Scene(root);
         stage.setTitle("Lobby");
         stage.setScene(scene);
