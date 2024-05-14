@@ -57,6 +57,7 @@ public class GameController implements Controller {
         int pointsMade = 0;
         Player player = null;
         PlayableCard card = null;
+        boolean moveSuccessful = false;
         System.out.println(username);
         for (Player p: model.getListOfPlayers()){
             if (Objects.equals(p.getUsername(), username))
@@ -68,19 +69,29 @@ public class GameController implements Controller {
                 card = pc;
         }
 
-        if (model.getState() == GameState.WAITING_FOR_PLAYERS || model.getState() == GameState.CHOOSING_OBJECTIVES || model.getState() == GameState.ENDED || model.getState() == GameState.CHOOSING_COLORS)
+        if (model.getState() == GameState.WAITING_FOR_PLAYERS || model.getState() == GameState.CHOOSING_OBJECTIVES || model.getState() == GameState.ENDED || model.getState() == GameState.CHOOSING_COLORS) {
             serverInstance.sendUpdateToAll(new ExcpetionMessage(player.getClientID(), "You can't play a card now"));
+            return;
+        }
 
 
-        if (model.getCurrentPlayer() != player)
-            serverInstance.sendUpdateToAll(new ExcpetionMessage(player.getClientID(),"Not your turn"));
+        if (model.getCurrentPlayer() != player) {
+            serverInstance.sendUpdateToAll(new ExcpetionMessage(player.getClientID(), "Not your turn"));
+            return;
+        }
 
-        if(model.getifCurrentPlayerhasPlayed())
-            serverInstance.sendUpdateToAll(new ExcpetionMessage(player.getClientID(),"You have already played, it's time to draw"));
-
+        if(model.getifCurrentPlayerhasPlayed()) {
+            serverInstance.sendUpdateToAll(new ExcpetionMessage(player.getClientID(), "You have already played, it's time to draw"));
+            return;
+        }
         synchronized (model){
             pointsMade = player.playCard(card, upwards, coord);
-            model.updatePoints(pointsMade, player);
+
+            if(pointsMade == -1) {
+                return;
+            } else {
+                model.updatePoints(pointsMade, player);
+            }
 
             if (card instanceof StarterCard)
                 starterCardPlayed();
