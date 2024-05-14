@@ -150,7 +150,7 @@ public class GameController implements Controller {
             deck = model.getGoldDeck();
         }
 
-        checkIfDrawPossible(player);
+        checkIfDrawPossible(player);//
 
         if (deck.equals(model.getObjectiveDeck()))
             serverInstance.sendUpdateToAll(new ExcpetionMessage(player.getClientID(),"You can't draw from objective deck!"));
