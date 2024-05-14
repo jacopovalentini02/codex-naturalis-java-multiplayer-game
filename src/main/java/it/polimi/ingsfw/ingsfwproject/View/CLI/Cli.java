@@ -14,12 +14,19 @@ import java.util.Scanner;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import it.polimi.ingsfw.ingsfwproject.View.View;
+import it.polimi.ingsfw.ingsfwproject.View.VirtualView;
 
 public class Cli extends View implements Runnable {
 
     Scanner scanner;
     String lobbyCommands = "now you can insert one of the following commands:" + "\n\t-> CreateGame" + "\n\t-> JoinGame" + "\n\t-> GetGameList";
-    String gameCommands = "now you can do one of the following actions: \n\t-> PlayCard \n\t-> DrawCard \n\t-> PickCard  \n\t-> SkipTurn";
+    String gameCommands = "now you can do one of the following actions: \n\t-> PlayCard \n\t-> SkipTurn";
+    String drawCommands = "now you can do one of the following actions: \n\t-> DrawCard \n\t-> PickCard";
+    String chooseColorCommands = "now you can do one of the following actions: \n\t-> GetColorAvailable \n\t-> ChooseColor";
+    String notMyTurnCommands = "now you can do one of the following actions: \n\t-> ShowGrid \n\t-> showScores \n\t-> showDisplayed \n\t-> showDecksTop \n\t-> showHand \n\t-> showObjective";
+    String chooseObjectiveCommands = "now you can do one of the following actions: \n\t-> ShowObjective \n\t-> chooseObjective";
+    String chooseStarterCommands = "now you can do one of the following actions: \n\t-> ShowHand \n\t-> PlayCard";
+
 
     public Cli(){
         this.scanner = new Scanner(System.in);
@@ -199,6 +206,8 @@ public class Cli extends View implements Runnable {
     @Override
     public void notifyGameJoined(int idGame){
         System.out.println("You have joined the game " + idGame+ " correctly.");
+        if(client.getVirtualView().getState() == GameState.WAITING_FOR_PLAYERS)
+            System.out.println("Wait for all the players to join the game...");
     }
 
     @Override
@@ -245,8 +254,7 @@ public class Cli extends View implements Runnable {
     @Override
     public void notifyCurrentPlayer(String nickname){
         System.out.println("it' now " + nickname + "'s turn");
-        if (client.getNickname().equals(nickname)) //è il mio turno
-            System.out.println(gameCommands);
+        printAvailableCommands();
     }
 
     @Override
@@ -262,19 +270,13 @@ public class Cli extends View implements Runnable {
 
     @Override
     public void notifyHandObjectives(ArrayList<ObjectiveCard> cards){
-        System.out.println("Now you have to choose between these two objectives. The choice will be your secret objective!\n");
-        //TODO: stampare gli obiettivi
-        for (ObjectiveCard oc: cards)
-            System.out.println(oc.getIdCard());
+        System.out.println("your objective card has been selected correctly!");
     }
 
     @Override
     public void notifyGameState(GameState state){
         System.out.println("Game state updated to: '" + state);
-        //TODO: Se il game è nelle fasi iniziali devo poter stampare i relativi comandi
-        if(client.getVirtualView().getState()==GameState.CHOOSING_STARTER_CARDS){
-            System.out.println("now you can do the following actions: \n\t-> PlayCard");
-        }
+
     }
 
     @Override
@@ -299,10 +301,7 @@ public class Cli extends View implements Runnable {
     @Override
     public void notifyHandCardsUpdate(ArrayList<PlayableCard> cards){
         System.out.println("Your hand has just been updated. Look at what you have: \n");
-        for (PlayableCard pc: cards)
-            System.out.print(pc.getIdCard() + " ");
-        System.out.println("\n");
-        //TODO: stampare le carte
+        printPlayerHand();
     }
 
     @Override
@@ -315,14 +314,38 @@ public class Cli extends View implements Runnable {
 
     @Override
     public void notifyScores(Map<String, Integer> scores){
-        System.out.println("There's been a change in scores. The new ones are: ");
-        for (Map.Entry<String, Integer> e : scores.entrySet())
-            System.out.println(e.getKey() + ": " + e.getValue());
+        printScores();
     }
 
     @Override
     public void notifyColorChosen(PlayerColor color){
         System.out.println(color + " successfully set. ");
+    }
+
+    public void printAvailableCommands(){
+        if(!client.getVirtualView().getCurrentPlayer().equals(client.getNickname())){ //non è il mio turno
+            if(client.getVirtualView().getState() == GameState.STARTED)
+                System.out.println(notMyTurnCommands);
+        }else { // è il mio turno
+            switch (client.getVirtualView().getState()){
+                case GameState.CHOOSING_STARTER_CARDS:
+                    System.out.println(chooseStarterCommands);
+                    break;
+                case GameState.CHOOSING_OBJECTIVES:
+                    System.out.println(chooseObjectiveCommands);
+                    break;
+                case GameState.CHOOSING_COLORS:
+                    System.out.println(chooseColorCommands);
+                    break;
+                case GameState.STARTED:
+                    if(!client.getVirtualView().isCurrentPlayerhasPlayed()){ //se non ho ancora giocato
+                        System.out.println(gameCommands);
+                    }else {
+                        System.out.println(drawCommands);
+                    }
+            }
+
+        }
     }
 
 
@@ -366,11 +389,11 @@ public class Cli extends View implements Runnable {
                     client.sendMessage(messageToSend);
                     break;
                 case "choosecolor" :
-                    PlayerColor colorChoosen = PlayerColor.valueOf(askForStringInput("What color do you want among those?"));
+                    PlayerColor colorChoosen = PlayerColor.valueOf(askForStringInput("What color do you want among those?").toUpperCase());
                     messageToSend = new WantThatColorMessage(client.getClientID(), client.getNickname(), colorChoosen);
                     client.sendMessage(messageToSend);
                     break;
-                case "chooseobjectivecard" :
+                case "chooseobjective" :
                     int objWanted = askForIdObjectiveInput("What objective do you prefer?", (client.getVirtualView().getHandObjectives()));
                     messageToSend = new ObjectiveCardChosenMessage(client.getClientID(), client.getNickname(), objWanted);
                     client.sendMessage(messageToSend);
@@ -402,6 +425,24 @@ public class Cli extends View implements Runnable {
                 case "skipturn" :
                     messageToSend = new SkipTurnMessage(client.getClientID(), client.getNickname());
                     client.sendMessage(messageToSend);
+                    break;
+                case "showgrid" :
+                    //todo: chiedere di chi e stampare la relativa grid
+                    break;
+                case "showscores" :
+                    printScores();
+                    break;
+                case "showdisplayed" :
+                    //todo: stampare le displayed
+                    break;
+                case "showdekstop" :
+                    //todo: stampare il back della carta in alto sui mazzi
+                    break;
+                case "showhand" :
+                    printPlayerHand();
+                    break;
+                case "showobjective" :
+                    printObjectiveCards();
                     break;
             }
         }catch(Exception e) {
@@ -551,9 +592,10 @@ public class Cli extends View implements Runnable {
         };
     }
 
-    public void printPlayerHand(Player player){
+    public void printPlayerHand(){
+
         int i =1;
-        for (PlayableCard c :player.getHandCard()){
+        for (PlayableCard c :client.getVirtualView().getHandCards()){
             System.out.println("Front of card "+ i + ":");
             printFacePlayed(c.getFront());
             if(c.getFront() instanceof GoldFront){
@@ -567,5 +609,17 @@ public class Cli extends View implements Runnable {
             printFacePlayed(c.getBack());
             i++;
         }
+    }
+
+    public void printObjectiveCards(){
+        //TODO: stampare la carta effettiva e non l'ID
+        for (ObjectiveCard oc: client.getVirtualView().getHandObjectives())
+            System.out.println(oc.getIdCard());
+    }
+
+    public void printScores(){
+        System.out.println("There's been a change in scores. The new ones are: ");
+        for (Map.Entry<String, Integer> e : client.getVirtualView().getScores().entrySet())
+            System.out.println(e.getKey() + ": " + e.getValue());
     }
 }

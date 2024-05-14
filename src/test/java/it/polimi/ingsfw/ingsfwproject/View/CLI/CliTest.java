@@ -56,6 +56,6 @@ class CliTest {
         player1.getHandCard().add((ResourceCard) game.getResourceDeck().draw());
         player1.getHandCard().add((ResourceCard) game.getResourceDeck().draw());
         player1.getHandCard().add((ResourceCard) game.getResourceDeck().draw());
-        cli.printPlayerHand(player1);
+        cli.printPlayerHand();
     }
 }
