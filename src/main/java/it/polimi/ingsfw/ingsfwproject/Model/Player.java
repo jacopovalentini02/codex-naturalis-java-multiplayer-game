@@ -66,12 +66,14 @@ public class Player implements Serializable {
                 points = ground.playCard(cardPlayed, upwards, coord);
             }catch(PositionNotAvailableException | NotEnoughResourcesException e){
                 gameServerInstance.sendUpdateToAll(new ExcpetionMessage(this.clientID,e.getMessage()));
+                return -1;
             }
 
             // remove card from player's hand
             handCard.remove(cardPlayed);
         } else {
             gameServerInstance.sendUpdateToAll(new ExcpetionMessage(this.clientID,"The card chosen is not in the player's hand"));
+            return -1;
         }
 
         gameServerInstance.sendUpdateToAll(new CoordinatesAvailableMessage(clientID, this.ground.getAvailablePositions()));
