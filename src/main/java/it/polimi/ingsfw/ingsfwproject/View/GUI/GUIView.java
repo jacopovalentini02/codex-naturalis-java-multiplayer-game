@@ -61,10 +61,27 @@ public class GUIView extends View {
         super.messages = new LinkedBlockingQueue<>();
         Thread readerthread = new Thread(super::receiveMessage);
         readerthread.start();
-        chooseConnection();
+        //chooseConnection();
     }
 
-   
+    @FXML
+    private void handleSocketConnection() throws Exception {
+        try {
+            super.client = new SocketClient("localhost", 1337, this);
+            super.client.startConnection();
+            if (super.client.isConnected()) {
+                openLobby();
+            } else {
+                showConnectionError();
+            }
+        } catch (ConnectException e) {
+            showConnectionError();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
 
     @FXML
     private void handleRMIConnection() {
@@ -134,6 +151,8 @@ public class GUIView extends View {
         rt.setCycleCount(RotateTransition.INDEFINITE);
         rt.play();
     }
+
+
 
 
 

@@ -245,7 +245,7 @@ public class Cli extends View implements Runnable {
     @Override
     public void notifyCurrentPlayer(String nickname){
         System.out.println("it' now " + nickname + "'s turn");
-        if (client.getVirtualView().getNickname().equals(nickname)) //è il mio turno
+        if (client.getNickname().equals(nickname)) //è il mio turno
             System.out.println(gameCommands);
     }
 
@@ -379,6 +379,7 @@ public class Cli extends View implements Runnable {
                     boolean face = askForFaceToPlay();
                     Coordinate coords = askForCoordinateInput(client.getVirtualView().getAvailablePositions());
                     messageToSend = new PlayCardMessage(client.getClientID(),idCard, face,coords, client.getNickname());
+                    System.out.println(client.getNickname());
                     client.sendMessage(messageToSend);
                     break;
                 case "drawcard" :

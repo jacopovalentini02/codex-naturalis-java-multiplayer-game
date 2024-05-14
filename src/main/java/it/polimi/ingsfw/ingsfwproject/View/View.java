@@ -9,8 +9,9 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public abstract class View implements Runnable{
-    protected Client client;
+    public Client client;
     public BlockingQueue<Message> messages;
+
 
 
     public abstract void chooseConnection();

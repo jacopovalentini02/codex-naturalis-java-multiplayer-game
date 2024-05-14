@@ -8,8 +8,9 @@ import it.polimi.ingsfw.ingsfwproject.Network.Server.Server;
 
 import java.io.Serializable;
 import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 
-public class RMIHandlerClient implements Handler, Serializable {
+public class RMIHandlerClient extends UnicastRemoteObject implements Handler {
     private final RMIClient client;
     private final int clientID;
 
@@ -28,7 +29,7 @@ public class RMIHandlerClient implements Handler, Serializable {
     }
 
     @Override
-    public int getClientID() throws RemoteException {
+    public int getClientID() {
         return this.clientID;
     }
 

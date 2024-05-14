@@ -9,7 +9,6 @@ import java.util.Map;
 
 public class VirtualView {
     private int gameID;
-    private String nickname;
     private ArrayList<String> listOfPlayers;
     private HashMap<String, Map<Coordinate, Face>> grids; //tutte le grid, compresa quella di player
     private HashMap<String, HashMap<Content, Integer>> resources;
@@ -36,6 +35,7 @@ public class VirtualView {
         this.listOfPlayers = new ArrayList<String>();
         this.grids = new HashMap<>();
         this.handCards=new ArrayList<>();
+        this.resources=new HashMap<>();
     }
 
     public ArrayList<PlayableCard> getHandCards() {
@@ -120,9 +120,7 @@ public class VirtualView {
         return currentPlayerhasPlayed;
     }
 
-    public String getNickname() {
-        return nickname;
-    }
+
 
     public String getCurrentPlayer() {
         return currentPlayer;
@@ -140,9 +138,6 @@ public class VirtualView {
         this.currentPlayerhasPlayed = currentPlayerhasPlayed;
     }
 
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
-    }
 
     public void setListOfPlayers(ArrayList<String> listOfPlayers) {
         this.listOfPlayers = listOfPlayers;

@@ -36,7 +36,7 @@ public class GameJoinedMessage extends ServerToClientMessage implements Serializ
     public void execute(Client client) {
         client.getVirtualView().setState(GameState.WAITING_FOR_PLAYERS);
         client.getVirtualView().setGameID(gameId);
-        client.getVirtualView().setNickname(nickName);
+        client.setNickname(nickName);
         client.getView().notifyGameJoined(gameId);
     }
 }

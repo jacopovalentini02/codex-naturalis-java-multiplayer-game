@@ -57,6 +57,7 @@ public class GameController implements Controller {
         int pointsMade = 0;
         Player player = null;
         PlayableCard card = null;
+        System.out.println(username);
         for (Player p: model.getListOfPlayers()){
             if (Objects.equals(p.getUsername(), username))
                 player = p;
