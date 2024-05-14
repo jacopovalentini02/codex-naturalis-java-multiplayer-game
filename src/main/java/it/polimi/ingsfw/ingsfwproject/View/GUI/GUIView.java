@@ -61,6 +61,7 @@ public class GUIView extends View {
         super.messages = new LinkedBlockingQueue<>();
         Thread readerthread = new Thread(super::receiveMessage);
         readerthread.start();
+
         //chooseConnection();
     }
 
@@ -112,8 +113,7 @@ public class GUIView extends View {
     private void openLobby() {
         Platform.runLater(() -> {
             try {
-                new LobbyApp().start(new Stage());
-                stage.close();
+                new LobbyApp().start(this.stage);
             } catch (Exception ex) {
                 throw new RuntimeException(ex);
             }
@@ -124,8 +124,7 @@ public class GUIView extends View {
     private void openCreateGame(){
         Platform.runLater(() -> {
             try {
-                new CreateGameApp().start(new Stage());
-                stage.close();
+                new CreateGameApp().start(this.stage);
             } catch (Exception ex) {
                 throw new RuntimeException(ex);
             }
@@ -161,9 +160,10 @@ public class GUIView extends View {
 
     @Override
     public void chooseConnection() {
+        this.stage = new Stage();
         ChooseConnectionApp chooseConnectionApp = new ChooseConnectionApp();
         try {
-            chooseConnectionApp.start(new Stage());
+            chooseConnectionApp.start(this.stage);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -196,9 +196,9 @@ public class GUIView extends View {
             alert.setTitle("Messaggio");
             alert.setHeaderText(null);
             alert.setContentText("Connessione stabilita");
-            alert.setOnCloseRequest(e->{
-                stage.close();
-            });
+//            alert.setOnCloseRequest(e->{
+//                stage.close();
+//            });
             alert.showAndWait();
         });
     }
