@@ -40,18 +40,21 @@ public class Player implements Serializable {
         this.clientID = clientID;
     }
 
-    public void draw(Deck deck) {
+    public boolean draw(Deck deck) {
         Card drawnCard = null;
         try{
             drawnCard = deck.draw();
         }catch (DeckEmptyException e){
             gameServerInstance.sendUpdateToAll(new ExcpetionMessage(this.clientID,e.getMessage()));
+            return false;
         }
 
         if (drawnCard != null) {
             addToHand((PlayableCard)drawnCard);
+            return true;
         } else {
             System.out.println("Deck is empty");
+            return false;
         }
 
     }
