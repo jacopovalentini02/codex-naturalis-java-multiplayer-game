@@ -31,6 +31,8 @@ public class GameController implements Controller {
 
         Player player = null;
         Card card = null;
+        boolean moveSuccesful = false;
+
         for (Player p: model.getListOfPlayers()){
             if (Objects.equals(p.getUsername(), username))
                 player = p;
@@ -42,14 +44,22 @@ public class GameController implements Controller {
                 card = pc;
         }
 
-        if (model.getCurrentPlayer() != player)
-            serverInstance.sendUpdateToAll(new ExcpetionMessage(player.getClientID(),"Not your turn"));
+        if (model.getCurrentPlayer() != player) {
+            serverInstance.sendUpdateToAll(new ExcpetionMessage(player.getClientID(), "Not your turn"));
+            return;
+        }
 
-        if (model.getState() != GameState.CHOOSING_OBJECTIVES)
-            serverInstance.sendUpdateToAll(new ExcpetionMessage(player.getClientID(),"Phase exception"));
+        if (model.getState() != GameState.CHOOSING_OBJECTIVES) {
+            serverInstance.sendUpdateToAll(new ExcpetionMessage(player.getClientID(), "Phase exception"));
+            return;
+        }
 
         synchronized (model){
-            model.chooseObjectiveCard(player, card);
+            moveSuccesful = model.chooseObjectiveCard(player, card);
+
+            if (!moveSuccesful)
+                return;
+
             model.nextTurn();
         }
     }
@@ -108,6 +118,8 @@ public class GameController implements Controller {
 
         Player player = null;
         PlayableCard card = null;
+        boolean moveSuccesful = false;
+
         for (Player p: model.getListOfPlayers()){
             if (Objects.equals(p.getUsername(), username))
                 player = p;
@@ -117,10 +129,15 @@ public class GameController implements Controller {
                 card = pc;
         }
 
-        checkIfDrawPossible(player);
+        moveSuccesful = checkIfDrawPossible(player);
+        if (!moveSuccesful)
+            return;
 
         synchronized (model){
-            model.drawDisplayedPlayableCard(card, player);
+             moveSuccesful = model.drawDisplayedPlayableCard(card, player);
+
+             if (!moveSuccesful)
+                 return;
 
             if (model.getCurrentPlayer().equals(model.getPotentialWinner())) {
                 model.setState(GameState.ENDING);
@@ -148,7 +165,11 @@ public class GameController implements Controller {
             deck = model.getGoldDeck();
         }
 
-        checkIfDrawPossible(player);//
+        moveSuccessfull = checkIfDrawPossible(player);
+
+        if (!moveSuccessfull)
+            return;
+
 
         if (deck.equals(model.getObjectiveDeck())){
             serverInstance.sendUpdateToAll(new ExcpetionMessage(player.getClientID(),"You can't draw from objective deck!"));
@@ -191,7 +212,7 @@ public class GameController implements Controller {
         }
 
         if (model.getState() != GameState.CHOOSING_COLORS){
-            serverInstance.sendUpdateToAll(new ExcpetionMessage(player.getClientID(),"You must choose a color now"));
+            serverInstance.sendUpdateToAll(new ExcpetionMessage(player.getClientID(),"You can't choose a color now"));
             return;
         }
 
