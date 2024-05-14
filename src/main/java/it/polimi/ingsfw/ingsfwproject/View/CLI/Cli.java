@@ -374,6 +374,7 @@ public class Cli extends View implements Runnable {
                     int objWanted = askForIdObjectiveInput("What objective do you prefer?", (client.getVirtualView().getHandObjectives()));
                     messageToSend = new ObjectiveCardChosenMessage(client.getClientID(), client.getNickname(), objWanted);
                     client.sendMessage(messageToSend);
+                    break;
                 case "playcard" :
                     int idCard = askForIdCardInput("Among the cards in your hand, which one do you want to play? Here the cards' id:", client.getVirtualView().getHandCards());
                     boolean face = askForFaceToPlay();
@@ -414,9 +415,39 @@ public class Cli extends View implements Runnable {
     }
 
 
-    public void printGrid(PlayerGround playerGround) {
+    public void printGrid(PlayerGround ground) {
+        int minX = getMinX(ground.getGrid().keySet());
+        int maxY = getMaxY(ground.getGrid().keySet());
+        Iterator<Map.Entry<Coordinate, Face>> iterator = ground.topToBottomIterator();
+        //TODO: ALGORITMO
+    }
+
+
+    public int getMinX(Set<Coordinate> coords){
+        int min = Integer.MAX_VALUE;
+        for (Coordinate coord : coords) {
+            if (coord.getX() < min) {
+                min = coord.getX();
+            }
+        }
+        return min;
+    }
+
+    public int getMaxY(Set<Coordinate> coords){
+        int max = Integer.MIN_VALUE;
+        for (Coordinate coord : coords) {
+            if (coord.getY() > max) {
+                max = coord.getY();
+            }
+        }
+        return max;
+    }
+
+    public void printFaceInGrid(Face face){
 
     }
+
+
     public void printFacePlayed(Face face){
         int i;
         AnsiColor cardType = getCardType(face);
@@ -566,5 +597,6 @@ public class Cli extends View implements Runnable {
             printFacePlayed(c.getBack());
             i++;
         }
+        System.out.println("");
     }
 }

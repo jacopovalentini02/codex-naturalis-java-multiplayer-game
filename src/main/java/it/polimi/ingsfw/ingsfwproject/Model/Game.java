@@ -157,10 +157,13 @@ public class Game {
 
     }
 
-    public void chooseObjectiveCard(Player player, Card card) {
+    public boolean chooseObjectiveCard(Player player, Card card) {
 
-        if (!player.getHandObjective().contains((ObjectiveCard) card))
-            gameServerInstance.sendUpdateToAll(new ExcpetionMessage(player.getClientID(),"You can't choose this card"));
+
+        if (!player.getHandObjective().contains((ObjectiveCard) card)) {
+            gameServerInstance.sendUpdateToAll(new ExcpetionMessage(player.getClientID(), "You can't choose this card"));
+            return false;
+        }
 
         int indexToRemove = player.getHandObjective().getFirst().equals(card) ? 1 : 0;
 
@@ -171,9 +174,12 @@ public class Game {
         this.objectiveDeck.addCard(cardToPutBack);
 
         objectiveCardsChosen++;
+
+
         if(objectiveCardsChosen==listOfPlayers.size()){
             randomizeFirstPlayer();
         }
+        return true;
     }
 
 
@@ -313,10 +319,12 @@ public class Game {
         }
     }
 
-    public void drawDisplayedPlayableCard(PlayableCard card, Player player)  {
+    public boolean drawDisplayedPlayableCard(PlayableCard card, Player player)  {
 
-        if (!(displayedPlayableCard.contains(card)))
+        if (!(displayedPlayableCard.contains(card))){
             gameServerInstance.sendUpdateToAll(new ExcpetionMessage(player.getClientID(),"Card is not within the displayed playable cards"));
+            return false;
+        }
 
         player.pick(card);
 
@@ -327,18 +335,17 @@ public class Game {
                 displayedPlayableCard.add((PlayableCard) goldDeck.draw());
             } catch (DeckEmptyException e) {
                 gameServerInstance.sendUpdateToAll(new ExcpetionMessage(player.getClientID(),e.getMessage()));
-                return;
             }
         } else if (card instanceof ResourceCard) {
             try {
                 displayedPlayableCard.add((PlayableCard) resourceDeck.draw());
             } catch (DeckEmptyException e) {
                 gameServerInstance.sendUpdateToAll(new ExcpetionMessage(player.getClientID(),e.getMessage()));
-                return;            }
+            }
         }
 
         gameServerInstance.sendUpdateToAll(new DisplayedPlayableCardsMessage(-10, displayedPlayableCard));
-
+        return true;
     }
 
     public void finalScoreCheck(){
