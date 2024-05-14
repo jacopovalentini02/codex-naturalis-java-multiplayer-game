@@ -135,12 +135,14 @@ public class GameController implements Controller {
     public void draw(String username,boolean resourceDeck)  {
         Deck deck;
         Player player = null;
-        boolean moveSuccessfull;
 
         for (Player p: model.getListOfPlayers()){
             if (Objects.equals(p.getUsername(), username))
                 player = p;
         }
+
+        if (player == null) //null control
+            throw new RuntimeException();
 
         if (resourceDeck){
             deck = model.getResourceDeck();
@@ -150,34 +152,27 @@ public class GameController implements Controller {
 
         checkIfDrawPossible(player);
 
-        if (deck.equals(model.getObjectiveDeck())){
+        if (deck.equals(model.getObjectiveDeck()))
             serverInstance.sendUpdateToAll(new ExcpetionMessage(player.getClientID(),"You can't draw from objective deck!"));
-            return;
-        }
 
         synchronized (model){
-            moveSuccessfull=player.draw(deck);
+            player.draw(deck);
 
-            if(moveSuccessfull){
-                if (resourceDeck){
-                    serverInstance.sendUpdateToAll(new ResourceDeckMessage(-10, deck));
-                } else {
-                    serverInstance.sendUpdateToAll(new GoldDeckMessage(-10, deck));
-                }
-
-                if (model.getCurrentPlayer().equals(model.getPotentialWinner())) {
-                    model.setState(GameState.ENDING);
-                }
-                model.nextTurn();
+            if (resourceDeck){
+                serverInstance.sendUpdateToAll(new ResourceDeckMessage(-10, deck));
+            } else {
+                serverInstance.sendUpdateToAll(new GoldDeckMessage(-10, deck));
             }
 
-
+            if (model.getCurrentPlayer().equals(model.getPotentialWinner())) {
+                model.setState(GameState.ENDING);
+            }
+            model.nextTurn();
         }
 
     }
 
     public void chooseColor(String username, PlayerColor color) {
-        boolean moveSuccessfull=true;
 
         Player player = null;
         for (Player p: model.getListOfPlayers()){
@@ -185,32 +180,38 @@ public class GameController implements Controller {
                 player = p;
         }
 
-        if (model.getCurrentPlayer() != player){
-            serverInstance.sendUpdateToAll(new ExcpetionMessage(player.getClientID(),"Not your turn"));
-            return;
-        }
+        if (player == null)
+            throw new RuntimeException();
 
-        if (model.getState() != GameState.CHOOSING_COLORS){
+        if (model.getCurrentPlayer() != player)
+            serverInstance.sendUpdateToAll(new ExcpetionMessage(player.getClientID(),"Not your turn"));
+
+        if (model.getState() != GameState.CHOOSING_COLORS)
             serverInstance.sendUpdateToAll(new ExcpetionMessage(player.getClientID(),"You must choose a color now"));
-            return;
-        }
 
         synchronized (model){
-            moveSuccessfull=model.chooseColor(player, color);
-            if(moveSuccessfull)
-                model.nextTurn();
+            model.chooseColor(player, color);
+            model.nextTurn();
         }
     }
 
-    private void checkIfDrawPossible(Player player){
-        if (model.getState() == GameState.WAITING_FOR_PLAYERS || model.getState() == GameState.CHOOSING_STARTER_CARDS || model.getState() == GameState.CHOOSING_OBJECTIVES || model.getState() == GameState.ENDING || model.getState() == GameState.CHOOSING_COLORS)
-            serverInstance.sendUpdateToAll(new ExcpetionMessage(player.getClientID(),"You can't draw now"));
+    private boolean checkIfDrawPossible(Player player){
+        if (model.getState() == GameState.WAITING_FOR_PLAYERS || model.getState() == GameState.CHOOSING_STARTER_CARDS || model.getState() == GameState.CHOOSING_OBJECTIVES || model.getState() == GameState.ENDING || model.getState() == GameState.CHOOSING_COLORS) {
+            serverInstance.sendUpdateToAll(new ExcpetionMessage(player.getClientID(), "You can't draw now"));
+            return false;
+        }
 
-        if (model.getCurrentPlayer() != player)
+        if (model.getCurrentPlayer() != player){
             serverInstance.sendUpdateToAll(new ExcpetionMessage(player.getClientID(),"It's not your turn"));
+            return false;
+        }
 
-        if (!(model.getifCurrentPlayerhasPlayed()))
-            serverInstance.sendUpdateToAll(new ExcpetionMessage(player.getClientID(),"You should play a card before drawing"));
+        if (!(model.getifCurrentPlayerhasPlayed())) {
+            serverInstance.sendUpdateToAll(new ExcpetionMessage(player.getClientID(), "You should play a card before drawing"));
+            return false;
+        }
+
+        return true;
     }
 
     private void starterCardPlayed() {
