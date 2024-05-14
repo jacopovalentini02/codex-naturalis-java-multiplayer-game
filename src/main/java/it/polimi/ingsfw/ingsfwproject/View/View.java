@@ -9,7 +9,7 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public abstract class View implements Runnable{
-    public Client client;
+    public static Client client;
     public BlockingQueue<Message> messages;
 
 

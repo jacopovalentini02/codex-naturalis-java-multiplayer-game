@@ -8,6 +8,7 @@ import it.polimi.ingsfw.ingsfwproject.Exceptions.*;
 import it.polimi.ingsfw.ingsfwproject.Model.*;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServerMessage;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.Message;
+import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.ColorAvailableMessage;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.ExcpetionMessage;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.GoldDeckMessage;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.RecieveChatMessage;
@@ -274,6 +275,10 @@ public class GameController implements Controller {
        synchronized (model){
            return model.getPlayer(username);
        }
+    }
+
+    public void sendTokenAvaialble(int clientID){
+        serverInstance.sendUpdateToAll(new ColorAvailableMessage(clientID, model.getTokenAvailable()));
     }
 }
 
