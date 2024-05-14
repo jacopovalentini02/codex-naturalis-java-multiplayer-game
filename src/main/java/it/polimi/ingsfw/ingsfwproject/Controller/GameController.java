@@ -156,7 +156,7 @@ public class GameController implements Controller {
         }
 
         synchronized (model){
-            moveSuccessfull=player.draw(deck);
+            moveSuccessfull=player.draw(deck);//
 
             if(moveSuccessfull){
                 if (resourceDeck){
