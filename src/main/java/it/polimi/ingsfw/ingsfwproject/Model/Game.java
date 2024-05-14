@@ -40,7 +40,7 @@ public class Game {
 
     private boolean currentPlayerhasPlayed;
 
-    private Player winner;
+    private Player winner; //todo settarlo prima o poi
 
     private final GameManager gameManager;
 
@@ -139,11 +139,10 @@ public class Game {
         gameServerInstance.sendUpdateToAll(new CurrentPlayerMessage(-10, currentPlayer.getUsername()));
     }
 
-    public void chooseColor(Player player, PlayerColor color)  {
-        //todo: la view deve chiedere la lista aggiornata - come gestisco le excpetion? - mando messaggio
+    public boolean chooseColor(Player player, PlayerColor color)  {
         if(!tokenAvailable.contains(color)) {
             gameServerInstance.sendUpdateToAll(new ExcpetionMessage(player.getClientID(), "This color is already taken"));
-            return;
+            return false;
         }
         player.setToken(color);
 
@@ -153,6 +152,8 @@ public class Game {
 
         if (colorChosen == this.numOfPlayers)
             setupHandsAndObjectives();
+
+        return true;
 
     }
 
