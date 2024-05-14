@@ -139,15 +139,6 @@ public class GUIView extends View {
 
 
 
-    public GUIView(){
-        super.messages = new LinkedBlockingQueue<>();
-        Thread readerthread = new Thread(super::receiveMessage);
-        readerthread.start();
-    }
-
-
-
-
 
     @Override
     public void chooseConnection() {
@@ -280,6 +271,11 @@ public class GUIView extends View {
 
     @Override
     public void notifyScores(Map<String, Integer> scores) {
+
+    }
+
+    @Override
+    public void notifyColorChosen(PlayerColor color) {
 
     }
 
