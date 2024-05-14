@@ -9,7 +9,7 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public abstract class View implements Runnable{
-    public Client client;
+    public static Client client;
     public BlockingQueue<Message> messages;
 
 
@@ -84,6 +84,8 @@ public abstract class View implements Runnable{
     public abstract void notifyScores(Map<String, Integer> scores);
 
     public abstract void notifyColorChosen(PlayerColor color);
+
+    public abstract void notifyChatMessage(ChatMessage message);
 
     public void addToQueue(Message message){
         messages.add(message);

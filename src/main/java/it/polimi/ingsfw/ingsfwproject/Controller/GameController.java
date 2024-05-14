@@ -1,13 +1,17 @@
 package it.polimi.ingsfw.ingsfwproject.Controller;
 import java.rmi.RemoteException;
 import java.util.*;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 import it.polimi.ingsfw.ingsfwproject.Exceptions.*;
 import it.polimi.ingsfw.ingsfwproject.Model.*;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServerMessage;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.Message;
+import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.ColorAvailableMessage;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.ExcpetionMessage;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.GoldDeckMessage;
+import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.RecieveChatMessage;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.ResourceDeckMessage;
 import it.polimi.ingsfw.ingsfwproject.Network.Server.GameServerInstance;
 import it.polimi.ingsfw.ingsfwproject.Network.Server.Server;
@@ -15,6 +19,8 @@ import it.polimi.ingsfw.ingsfwproject.Network.Server.Server;
 
 public class GameController implements Controller {
     private final Game model;
+
+    public Queue<ChatMessage> globalChat;
 
     private int starterCardsPlayed;
 
@@ -25,6 +31,7 @@ public class GameController implements Controller {
         this.model = model;
         starterCardsPlayed = 0;
         this.serverInstance = serverInstance;
+        this.globalChat = new LinkedBlockingQueue<>();
     }
 
     public void chooseObjectiveCard(String username, int cardID){
@@ -251,6 +258,11 @@ public class GameController implements Controller {
 
     }
 
+    public void addMessageToGlobalChat(ChatMessage message){
+        this.globalChat.add(message);
+        serverInstance.sendUpdateToAll(new RecieveChatMessage(-10, message.getSender(), message.getRecipient(), message.getMessage()));
+    }
+
 
     public void clientDisconnected(){
         this.model.clientDisconnected();
@@ -263,6 +275,10 @@ public class GameController implements Controller {
        synchronized (model){
            return model.getPlayer(username);
        }
+    }
+
+    public void sendTokenAvaialble(int clientID){
+        serverInstance.sendUpdateToAll(new ColorAvailableMessage(clientID, model.getTokenAvailable()));
     }
 }
 

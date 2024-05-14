@@ -14,7 +14,6 @@ import java.util.Scanner;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import it.polimi.ingsfw.ingsfwproject.View.View;
-import it.polimi.ingsfw.ingsfwproject.View.VirtualView;
 
 public class Cli extends View implements Runnable {
 
@@ -27,6 +26,10 @@ public class Cli extends View implements Runnable {
     String chooseObjectiveCommands = "now you can do one of the following actions: \n\t-> ShowObjective \n\t-> chooseObjective";
     String chooseStarterCommands = "now you can do one of the following actions: \n\t-> ShowHand \n\t-> PlayCard";
 
+
+    public static final String RED = "\033[0;31m";
+
+    public static final String RESET = "\033[0m";
 
     public Cli(){
         this.scanner = new Scanner(System.in);
@@ -349,6 +352,11 @@ public class Cli extends View implements Runnable {
     }
 
 
+    @Override
+    public void notifyChatMessage(ChatMessage message){
+        System.out.println(RED + "New chat message from " + message.getSender() + " : " + message.getMessage() + RESET);
+    }
+
     //TODO: rimuovere
     @Override//TODO: stampare gli obiettivi
     public void handleMessage(Message message) {
@@ -444,6 +452,15 @@ public class Cli extends View implements Runnable {
                 case "showobjective" :
                     printObjectiveCards();
                     break;
+                case "chat":
+                    for (ChatMessage m: client.getVirtualView().getGlobalChat()){
+                        System.out.println(RED+m.getSender()+ ": " + m.getMessage()+RESET);
+                    }
+                    break;
+                case "sendmessage":
+                    String chatMessage = askForStringInput("Type your message: ");
+                    client.sendMessage(new sendChatMessage(client.getClientID(), client.getNickname(), "global", chatMessage));
+                    break;
             }
         }catch(Exception e) {
             e.printStackTrace();
@@ -456,9 +473,39 @@ public class Cli extends View implements Runnable {
     }
 
 
-    public void printGrid(PlayerGround playerGround) {
+    public void printGrid(PlayerGround ground) {
+        int minX = getMinX(ground.getGrid().keySet());
+        int maxY = getMaxY(ground.getGrid().keySet());
+        Iterator<Map.Entry<Coordinate, Face>> iterator = ground.topToBottomIterator();
+        //TODO: ALGORITMO
+    }
+
+
+    public int getMinX(Set<Coordinate> coords){
+        int min = Integer.MAX_VALUE;
+        for (Coordinate coord : coords) {
+            if (coord.getX() < min) {
+                min = coord.getX();
+            }
+        }
+        return min;
+    }
+
+    public int getMaxY(Set<Coordinate> coords){
+        int max = Integer.MIN_VALUE;
+        for (Coordinate coord : coords) {
+            if (coord.getY() > max) {
+                max = coord.getY();
+            }
+        }
+        return max;
+    }
+
+    public void printFaceInGrid(Face face){
 
     }
+
+
     public void printFacePlayed(Face face){
         int i;
         AnsiColor cardType = getCardType(face);
@@ -609,6 +656,7 @@ public class Cli extends View implements Runnable {
             printFacePlayed(c.getBack());
             i++;
         }
+        System.out.println("");
     }
 
     public void printObjectiveCards(){
