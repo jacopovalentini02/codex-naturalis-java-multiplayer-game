@@ -437,7 +437,14 @@ public class Cli extends View implements Runnable {
         int minX = getMinX(ground.getGrid().keySet());
         int maxY = getMaxY(ground.getGrid().keySet());
         Iterator<Map.Entry<Coordinate, Face>> iterator = ground.topToBottomIterator();
-        //TODO: ALGORITMO
+
+        while(iterator.hasNext()){
+            Map.Entry<Coordinate, Face> entry = iterator.next(); // Prendi la prossima entry una volta per iterazione
+            int x = entry.getKey().getX();
+            int y = entry.getKey().getY();
+            int nspace = ((x - minX) * 6 - minX - 1) * 3;
+            printFaceInGrid(entry.getValue(), nspace);
+        }
     }
 
 
@@ -461,8 +468,88 @@ public class Cli extends View implements Runnable {
         return max;
     }
 
-    public void printFaceInGrid(Face face){
-
+    public void printSpace(int space){
+        for(int i=0; i<space+1; i++){
+            System.out.print(" ");
+        }
+    }
+    public void printFaceInGrid(Face face, int space){
+        int i;
+        AnsiColor cardType = getCardType(face);
+        //TODO: PRIMA RIGA!
+        printSpace(space);
+        //upper-left corner
+        if(face.getCoveredCorner()[0]==false) {
+            printCorner(face.getTL(), 0, cardType);
+        }
+        else{
+            System.out.print("");
+        }
+        //space
+        System.out.print(cardType.getFormattedCharacter());
+        if(face instanceof GoldFront){
+            printGoldFrontPoints(((GoldFront) face), cardType);
+        }
+        else{
+            for(i=0; i<2; i++){
+                System.out.print(cardType.getFormattedCharacter());
+            }
+        }
+        //upper-right corner
+        if(face.getCoveredCorner()[1]==false) {
+            printCorner(face.getTR(), 1, cardType);
+        }
+        else{
+            System.out.println("");
+        }
+        //TODO: SECONDA RIGA!
+        printSpace(space);
+        if(face instanceof GoldFront){
+            printGoldBorder(cardType, 0);
+        }
+        else{
+            System.out.print(cardType.getFormattedCharacter());
+        }
+        System.out.print(cardType.getFormattedCharacter());
+        //center, if exists
+        if(face instanceof NormalBack){
+            switch(((NormalBack) face).getCenter()){
+                case FUNGI_KINGDOM -> System.out.print(AnsiColor.FUNGI_TEXT.getFormattedCharacter());
+                case PLANT_KINGDOM -> System.out.print(AnsiColor.PLANT_TEXT.getFormattedCharacter());
+                case INSECT_KINGDOM -> System.out.print(AnsiColor.INSECT_TEXT.getFormattedCharacter());
+                case ANIMAL_KINGDOM -> System.out.print(AnsiColor.ANIMAL_TEXT.getFormattedCharacter());
+            }
+        }
+        else{
+            System.out.print(cardType.getFormattedCharacter());
+        }
+        System.out.print(cardType.getFormattedCharacter());
+        if(face instanceof GoldFront){
+            printGoldBorder(cardType, 1);
+        }
+        else{
+            System.out.println(cardType.getFormattedCharacter());
+        }
+        //TODO : TERZA RIGA
+        printSpace(space);
+        //lower-left corner
+        if(face.getCoveredCorner()[2]==false) {
+            printCorner(face.getBL(), 0, cardType);
+        }
+        else{
+            System.out.print("");
+        }
+        //space
+        for (i=0; i<3; i++){
+            System.out.print(cardType.getFormattedCharacter());
+        }
+        //lower-right corner
+        if(face.getCoveredCorner()[3]==false) {
+            printCorner(face.getBR(), 1, cardType);
+        }
+        else{
+            System.out.println("");
+        }
     }
 
 
