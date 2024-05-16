@@ -15,7 +15,7 @@ class NotStructuredObjectiveCardTest {
     void verifyObjective() throws RemoteException {
         GameServerInstance gameServerInstance=new GameServerInstance();
 
-        Player player1 = new Player("player1", gameServerInstance);
+        Player player1 = new Player("player1", gameServerInstance, 0);
         PlayerGround ground = player1.getGround();
         GameManager manager = new GameManager();
         Game game = new Game(gameServerInstance,manager, 1, 4, player1);

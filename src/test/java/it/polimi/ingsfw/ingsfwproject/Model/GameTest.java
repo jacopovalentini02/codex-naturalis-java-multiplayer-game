@@ -19,7 +19,7 @@ class GameTest {
     //Check the size of each deck
     public void testSetUpCards() throws RemoteException {
         GameServerInstance gameServerInstance=new GameServerInstance();
-        Player player1=new Player("user1", gameServerInstance);
+        Player player1=new Player("user1", gameServerInstance, 0);
         Game game=new Game(gameServerInstance,new GameManager(), 1,2,player1);
         game.setUpCards();
 
@@ -34,7 +34,7 @@ class GameTest {
     //Check resource cards' deck attributes are set up correctly
     public void testSetUpResourceDeck() throws RemoteException {
         GameServerInstance gameServerInstance=new GameServerInstance();
-        Player player1=new Player("user1", gameServerInstance);
+        Player player1=new Player("user1", gameServerInstance, 0);
         Game game=new Game(gameServerInstance,new GameManager(), 1,2,player1);
         game.setUpCards();
 
@@ -53,7 +53,7 @@ class GameTest {
     //Check gold cards' deck attributes are set up correctly
     public void testSetUpGoldDeck() throws RemoteException {
         GameServerInstance gameServerInstance=new GameServerInstance();
-        Player player1=new Player("user1", gameServerInstance);
+        Player player1=new Player("user1", gameServerInstance, 0);
         Game game=new Game(gameServerInstance,new GameManager(), 1,2,player1);
         game.setUpCards();
 
@@ -79,7 +79,7 @@ class GameTest {
     //Check starter's deck attributes are set up correctly
     public void testSetUpStarterDeck() throws RemoteException {
         GameServerInstance gameServerInstance=new GameServerInstance();
-        Player player1=new Player("user1", gameServerInstance);
+        Player player1=new Player("user1", gameServerInstance, 0);
         Game game=new Game(gameServerInstance,new GameManager(), 1,2,player1);
         game.setUpCards();
 
@@ -106,7 +106,7 @@ class GameTest {
     //Check objective cards' deck attributes are set up correctly
     public void testSetUpStructObjectiveDeck() throws RemoteException {
         GameServerInstance gameServerInstance=new GameServerInstance();
-        Player player1=new Player("user1", gameServerInstance);
+        Player player1=new Player("user1", gameServerInstance, 0);
         Game game=new Game(gameServerInstance,new GameManager(), 1,2,player1);
         game.setUpCards();
 
@@ -127,7 +127,7 @@ class GameTest {
     //Check objective cards' deck attributes are set up correctly
     public void  testSetUpNotStructObjectiveDeck() throws RemoteException {
         GameServerInstance gameServerInstance=new GameServerInstance();
-        Player player1=new Player("user1", gameServerInstance);
+        Player player1=new Player("user1", gameServerInstance, 0);
         Game game=new Game(gameServerInstance,new GameManager(), 1,2,player1);
         game.setUpCards();
 
@@ -146,9 +146,9 @@ class GameTest {
     //Check if the next turn function works correctly
     public void testNextTurn() throws RemoteException {
         GameServerInstance gameServerInstance=new GameServerInstance();
-        Player player1=new Player("user1", gameServerInstance);
+        Player player1=new Player("user1", gameServerInstance, 0);
         Game game=new Game(gameServerInstance,new GameManager(), 1,2,player1);
-        Player player2 = new Player("user2", gameServerInstance);
+        Player player2 = new Player("user2", gameServerInstance, 1);
 
 
         game.addPlayer(player2);
@@ -186,11 +186,11 @@ class GameTest {
 
     @Test
     //Check if the player is added correctly and the game state change if the last player join the game
-    public void testAddPlayer() throws RemoteException {
+    public void testAddPlayer() throws RemoteException, DeckEmptyException {
         GameServerInstance gameServerInstance=new GameServerInstance();
-        Player player1 = new Player("user1", gameServerInstance);
-        Player player2 = new Player("user2", gameServerInstance);
-        Player player3 = new Player("user3", gameServerInstance);
+        Player player1 = new Player("user1", gameServerInstance, 0);
+        Player player2 = new Player("user2", gameServerInstance, 1);
+        Player player3 = new Player("user3", gameServerInstance, 2);
 
         Game game=new Game(gameServerInstance,new GameManager(),1,3, player1);
         game.addPlayer(player2);
@@ -204,11 +204,7 @@ class GameTest {
         assertTrue(game.getListOfPlayers().contains(player3));
         assertEquals(GameState.CHOOSING_STARTER_CARDS, game.getState());
 
-        try {
-            game.setupField();
-        } catch (DeckEmptyException e) {
-            fail("Expected DeckEmptyException"); //if an exception is thrown the test fails - deck should not be empty at the beginning
-        }
+        game.setupField();
 
     }
 
@@ -216,9 +212,9 @@ class GameTest {
     //Check the new score is updated and lastTurn is called if the score is >=20
     public void testUpdatePoints() throws RemoteException, DeckEmptyException, PositionNotAvailableException, NotEnoughResourcesException, CardNotInHandException {
         GameServerInstance gameServerInstance=new GameServerInstance();
-        Player player1 = new Player("user1", gameServerInstance);
-        Player player2 = new Player("user2", gameServerInstance);
-        Player player3 = new Player("user3", gameServerInstance);
+        Player player1 = new Player("user1", gameServerInstance, 0);
+        Player player2 = new Player("user2", gameServerInstance,1);
+        Player player3 = new Player("user3", gameServerInstance,2);
 
         Game game=new Game(gameServerInstance,new GameManager(),1,3, player1);
         game.addPlayer(player2);
@@ -241,10 +237,10 @@ class GameTest {
     @Test
     void testSetupField() throws DeckEmptyException, RemoteException {
         GameServerInstance gameServerInstance=new GameServerInstance();
-        Player player1 = new Player("user1", gameServerInstance);
-        Player player2 = new Player("user2", gameServerInstance);
-        Player player3 = new Player("user3", gameServerInstance);
-        Player player4 = new Player("user4", gameServerInstance);
+        Player player1 = new Player("user1", gameServerInstance, 0);
+        Player player2 = new Player("user2", gameServerInstance, 1);
+        Player player3 = new Player("user3", gameServerInstance, 2);
+        Player player4 = new Player("user4", gameServerInstance, 3);
 
 
         Game game=new Game(gameServerInstance,new GameManager(),1,3, player1);
@@ -267,10 +263,10 @@ class GameTest {
     @Test
     void setupHandsAndObjectives() throws RemoteException, DeckEmptyException {
         GameServerInstance gameServerInstance=new GameServerInstance();
-        Player player1 = new Player("user1", gameServerInstance);
-        Player player2 = new Player("user2", gameServerInstance);
-        Player player3 = new Player("user3", gameServerInstance);
-        Player player4 = new Player("user4", gameServerInstance);
+        Player player1 = new Player("user1", gameServerInstance, 0);
+        Player player2 = new Player("user2", gameServerInstance,1);
+        Player player3 = new Player("user3", gameServerInstance,2);
+        Player player4 = new Player("user4", gameServerInstance,3);
 
 
         Game game=new Game(gameServerInstance,new GameManager(),1,3, player1);
@@ -298,11 +294,11 @@ class GameTest {
     @Test
     void randomizeFirstPlayer() throws RemoteException {
         GameServerInstance gameServerInstance=new GameServerInstance();
-        Player player1 = new Player("user1", gameServerInstance);
+        Player player1 = new Player("user1", gameServerInstance, 0);
         Game game = new Game(gameServerInstance,new GameManager(), 1, 4, player1);
-        Player player2 = new Player("user2", gameServerInstance);
-        Player player3 = new Player("user3", gameServerInstance);
-        Player player4 = new Player("user4", gameServerInstance);
+        Player player2 = new Player("user2", gameServerInstance, 1);
+        Player player3 = new Player("user3", gameServerInstance,2);
+        Player player4 = new Player("user4", gameServerInstance,3);
         game.addPlayer(player2);
         game.addPlayer(player3);
         game.addPlayer(player4);
