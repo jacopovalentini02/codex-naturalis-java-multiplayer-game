@@ -34,9 +34,9 @@ public class ClientApp {
             thread.start();
         }else{
             view = new GUIView();
-            Thread thread = new Thread(view);
-            thread.start();
-            Application.launch(ChooseConnectionApp.class);
+//            Thread thread = new Thread(view);
+//            thread.start();
+            //Application.launch(ChooseConnectionApp.class);
         }
 
 

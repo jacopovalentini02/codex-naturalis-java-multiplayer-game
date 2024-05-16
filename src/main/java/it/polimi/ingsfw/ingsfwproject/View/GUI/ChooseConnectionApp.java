@@ -19,16 +19,17 @@ public class ChooseConnectionApp extends Application {
     private Button socketButton;
     @FXML
     private Button rmiButton;
-    public GUIView guiView;
+    public static GUIView guiView;
 
     private static final double MIN_WIDTH = 449.0;
     private static final double MIN_HEIGHT = 441.0;
     @Override
     public void start(Stage stage) throws Exception {
-        this.guiView=new GUIView();
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polimi/ingsfw/ingsfwproject/ChooseConnection.fxml"));
-        Parent root = loader.load();
 
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polimi/ingsfw/ingsfwproject/ChooseConnection.fxml"));
+
+        Parent root = loader.load();
+        loader.setController(this);
         guiView.setStage(stage);
         Scene scene = new Scene(root);
         stage.setTitle("Choose connection");
@@ -90,13 +91,13 @@ public class ChooseConnectionApp extends Application {
     }
 
 
-    public void setGuiView(GUIView guiView) {
-        this.guiView = guiView;
+    public static void setGuiView(GUIView gui) {
+        guiView = gui;
     }
 
 
 
-    public static void main(String [] args){
-        launch(args);
-    }
+//    public static void main(String [] args){
+//        launch(args);
+//    }
 }

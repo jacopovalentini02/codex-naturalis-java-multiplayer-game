@@ -152,7 +152,6 @@ public class Game {
 
         if (colorChosen == this.numOfPlayers)
             setupHandsAndObjectives();
-
         return true;
 
     }

@@ -7,42 +7,49 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.stage.Stage;
 
-public class LobbyApp extends Application {
+public class LobbyApp  {
 
+    @FXML
+    public Button createButtonLobby;
+    public TableView tableView;
+    public TableColumn gameIdColumn;
+    public TableColumn playerCountColumn;
+    public TableColumn joinColumn;
     @FXML
     private Button refreshButton;
-    @FXML
-    private Button createGameLobby;
 
-    GUIView guiView;
-    @Override
+
+    public static GUIView guiView;
+
     public void start(Stage stage) throws Exception {
+        setGuiView(guiView);
+        System.out.println(guiView);
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polimi/ingsfw/ingsfwproject/Lobby.fxml"));
+
         Parent root = loader.load();
+        loader.setController(this);
         guiView.setStage(stage);
         Scene scene = new Scene(root);
         stage.setTitle("Lobby");
         stage.setScene(scene);
+        System.out.println(guiView);
         stage.show();
+        System.out.println(guiView);
 
     }
 
     @FXML
     public void openCreateGame(){
-        Platform.runLater(() -> {
-            try {
-                CreateGameApp createGame=new CreateGameApp();
-                createGame.setGuiView(guiView);
-                createGame.start(guiView.getStage());
-            } catch (Exception ex) {
-                throw new RuntimeException(ex);
-            }
-        });
+        System.out.println(guiView);
+       guiView.openCreateGameWindow();
     }
 
-    public void setGuiView(GUIView guiView) {
-        this.guiView = guiView;
+
+    public static void setGuiView(GUIView view) {
+        guiView = view;
     }
 }

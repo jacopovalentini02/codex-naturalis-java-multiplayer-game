@@ -2,35 +2,19 @@ package it.polimi.ingsfw.ingsfwproject.View.GUI;
 
 import it.polimi.ingsfw.ingsfwproject.Model.*;
 import it.polimi.ingsfw.ingsfwproject.Network.Client.Client;
-import it.polimi.ingsfw.ingsfwproject.Network.Client.RMIClient;
-import it.polimi.ingsfw.ingsfwproject.Network.Client.SocketClient;
-import it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServer.CreateGameMessage;
+
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.Message;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClientMessage;
-import it.polimi.ingsfw.ingsfwproject.View.GUI.ChooseConnectionApp;
 import it.polimi.ingsfw.ingsfwproject.View.View;
-import javafx.animation.RotateTransition;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.Spinner;
-import javafx.scene.control.TextField;
-import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
-import javafx.util.Duration;
-
-import java.io.IOException;
-import java.net.ConnectException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.LinkedBlockingQueue;
 
-import static javafx.application.Application.launch;
 
 public class GUIView extends View {
 
@@ -39,20 +23,33 @@ public class GUIView extends View {
 
 
     public GUIView(){
-        super.messages = new LinkedBlockingQueue<>();
-        Thread readerthread = new Thread(super::receiveMessage);
-        readerthread.start();
+//        super.messages = new LinkedBlockingQueue<>();
+//        Thread readerthread = new Thread(super::receiveMessage);
+//        readerthread.start();
 
-        //chooseConnection();
+        chooseConnection();
     }
 
     public void openLobby() {
         Platform.runLater(() -> {
             try {
                 LobbyApp lobbyApp=new LobbyApp();
-                lobbyApp.setGuiView(this);
+                LobbyApp.setGuiView(this);
+                //lobbyApp.setGuiView(this);
                 lobbyApp.start(this.stage);
 
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+    }
+
+    public void openCreateGameWindow(){
+        Platform.runLater(() -> {
+            try {
+                CreateGameApp createGameApp = new CreateGameApp();
+                createGameApp.setGuiView(this);
+                createGameApp.start(this.stage);
             } catch (Exception ex) {
                 throw new RuntimeException(ex);
             }
@@ -72,14 +69,9 @@ public class GUIView extends View {
 
     @Override
     public void chooseConnection() {
-//        ChooseConnectionApp chooseConnectionApp=new ChooseConnectionApp();
-//        Platform.startup(()->{
-//            try {
-//                chooseConnectionApp.start(new Stage());
-//            } catch (Exception e) {
-//                throw new RuntimeException(e);
-//            }
-//        });
+        ChooseConnectionApp.setGuiView(this);
+        // Lanciare ChooseConnectionApp
+        new Thread(() -> Application.launch(ChooseConnectionApp.class)).start();
 
 
     }
@@ -100,7 +92,6 @@ public class GUIView extends View {
             alert.setContentText(message);
             alert.showAndWait();
         });
-
     }
 
     @Override
@@ -220,7 +211,7 @@ public class GUIView extends View {
     @Override
     public void run() {
          //Application.launch(ChooseConnectionApp.class);
-       chooseConnection();
+       //chooseConnection();
      }
 
     public void setClient(Client c){

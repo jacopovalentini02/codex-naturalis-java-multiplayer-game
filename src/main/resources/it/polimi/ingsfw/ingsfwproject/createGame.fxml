@@ -11,38 +11,42 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-   <AnchorPane prefHeight="542.0" prefWidth="772.0" style="-fx-background-color: #E1D4A4;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsfw.ingsfwproject.View.GUI.CreateGameApp">
+<AnchorPane prefHeight="542.0" prefWidth="772.0" style="-fx-background-color: #E1D4A4;"
+            xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="it.polimi.ingsfw.ingsfwproject.View.GUI.CreateGameApp">
    <effect>
-      <Blend />
+      <Blend/>
    </effect>
-   <children>
-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#5f3075" height="124.0" stroke="TRANSPARENT" strokeType="INSIDE" width="772.0" />
-      <Button fx:id="createButton" layoutX="337.0" layoutY="364.0" mnemonicParsing="false" onAction="#sendCreateGame" prefHeight="47.0" prefWidth="130.0" style="-fx-background-color: #5F3075;" text="Create Game" textFill="WHITE">
-         <font>
-            <Font size="16.0" />
-         </font>
-      </Button>
-      <ImageView fitHeight="139.0" fitWidth="221.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@Slider-Codex-2-1920x1080.jpg" />
-         </image>
-      </ImageView>
-      <Text fill="#fffefe" layoutX="331.0" layoutY="53.0" strokeType="OUTSIDE" strokeWidth="0.0" text="CODEX NATURALIS" wrappingWidth="228.9316150335626">
-         <font>
-            <Font name="Apple SD Gothic Neo Bold" size="24.0" />
-         </font>
-      </Text>
-      <Text fill="WHITE" layoutX="369.0" layoutY="84.0" strokeType="OUTSIDE" strokeWidth="0.0" text="CREATE GAME">
-         <font>
-            <Font size="20.0" />
-         </font>
-      </Text>
-      <TextField fx:id="nickname_input" layoutX="308.0" layoutY="201.0" prefHeight="43.0" prefWidth="186.0" promptText="NickName">
-         <font>
-            <Font size="15.0" />
-         </font>
-      </TextField>
-      
-      <Spinner fx:id="num_of_players" editable="true" layoutX="308.0" layoutY="274.0" prefHeight="43.0" prefWidth="186.0" min="2" max="4" initialValue="2"/>
-   </children>
+   <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#5f3075" height="124.0" stroke="TRANSPARENT" strokeType="INSIDE"
+              width="772.0"/>
+   <Button fx:id="createButton" layoutX="337.0" layoutY="364.0" mnemonicParsing="false" onAction="#sendCreateGame"
+           prefHeight="47.0" prefWidth="130.0" style="-fx-background-color: #5F3075;" text="Create Game"
+           textFill="WHITE">
+      <font>
+         <Font size="16.0"/>
+      </font>
+   </Button>
+   <ImageView fitHeight="139.0" fitWidth="221.0" pickOnBounds="true" preserveRatio="true">
+      <Image url="@Slider-Codex-2-1920x1080.jpg"/>
+   </ImageView>
+   <Text fill="#fffefe" layoutX="331.0" layoutY="53.0" strokeType="OUTSIDE" strokeWidth="0.0" text="CODEX NATURALIS"
+         wrappingWidth="228.9316150335626">
+      <font>
+         <Font name="Apple SD Gothic Neo Bold" size="24.0"/>
+      </font>
+   </Text>
+   <Text fill="WHITE" layoutX="369.0" layoutY="84.0" strokeType="OUTSIDE" strokeWidth="0.0" text="CREATE GAME">
+      <font>
+         <Font size="20.0"/>
+      </font>
+   </Text>
+   <TextField fx:id="nickname_input" layoutX="308.0" layoutY="201.0" prefHeight="43.0" prefWidth="186.0"
+              promptText="NickName">
+      <font>
+         <Font size="15.0"/>
+      </font>
+   </TextField>
+
+   <Spinner fx:id="num_of_players" editable="true" layoutX="308.0" layoutY="274.0" prefHeight="43.0" prefWidth="186.0"
+            min="2" max="4" initialValue="2"/>
 </AnchorPane>
