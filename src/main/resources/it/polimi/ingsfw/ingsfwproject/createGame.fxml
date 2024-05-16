@@ -13,7 +13,7 @@
 
 <AnchorPane prefHeight="542.0" prefWidth="772.0" style="-fx-background-color: #E1D4A4;"
             xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="it.polimi.ingsfw.ingsfwproject.View.GUI.CreateGameApp">
+            fx:controller="it.polimi.ingsfw.ingsfwproject.View.GUI.CreateGameController">
    <effect>
       <Blend/>
    </effect>

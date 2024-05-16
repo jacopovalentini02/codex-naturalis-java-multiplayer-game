@@ -1,7 +1,5 @@
 package it.polimi.ingsfw.ingsfwproject.View.GUI;
 
-import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -11,7 +9,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.stage.Stage;
 
-public class LobbyApp  {
+public class LobbyGUIController {
 
     @FXML
     public Button createButtonLobby;

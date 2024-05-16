@@ -14,7 +14,7 @@ import java.io.IOException;
 
 import static it.polimi.ingsfw.ingsfwproject.View.View.client;
 
-public class CreateGameApp {
+public class CreateGameController {
     @FXML
     private Button createButton;
     @FXML
@@ -45,6 +45,7 @@ public class CreateGameApp {
         }else{
             CreateGameMessage createGameMessage=new CreateGameMessage(client.getClientID(), numberOfPlayers, nickname);
             client.sendMessage(createGameMessage);
+            guiView.openSetUpGame();
         }
 
     }

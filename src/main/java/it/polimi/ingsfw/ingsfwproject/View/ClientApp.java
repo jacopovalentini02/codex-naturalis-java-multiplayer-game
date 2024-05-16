@@ -1,9 +1,7 @@
 package it.polimi.ingsfw.ingsfwproject.View;
 
 import it.polimi.ingsfw.ingsfwproject.View.CLI.Cli;
-import it.polimi.ingsfw.ingsfwproject.View.GUI.ChooseConnectionApp;
 import it.polimi.ingsfw.ingsfwproject.View.GUI.GUIView;
-import javafx.application.Application;
 
 import java.util.Scanner;
 

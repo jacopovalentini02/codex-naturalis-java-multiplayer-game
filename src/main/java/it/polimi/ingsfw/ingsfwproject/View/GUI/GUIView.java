@@ -21,22 +21,23 @@ public class GUIView extends View {
 
     private Stage stage;
 
+    private SetUpGameController setUpGameController;
+
 
     public GUIView(){
 //        super.messages = new LinkedBlockingQueue<>();
 //        Thread readerthread = new Thread(super::receiveMessage);
 //        readerthread.start();
-
         chooseConnection();
     }
 
     public void openLobby() {
         Platform.runLater(() -> {
             try {
-                LobbyApp lobbyApp=new LobbyApp();
-                LobbyApp.setGuiView(this);
+                LobbyGUIController lobbyGUIController =new LobbyGUIController();
+                LobbyGUIController.setGuiView(this);
                 //lobbyApp.setGuiView(this);
-                lobbyApp.start(this.stage);
+                lobbyGUIController.start(this.stage);
 
             } catch (Exception ex) {
                 throw new RuntimeException(ex);
@@ -47,9 +48,22 @@ public class GUIView extends View {
     public void openCreateGameWindow(){
         Platform.runLater(() -> {
             try {
-                CreateGameApp createGameApp = new CreateGameApp();
-                createGameApp.setGuiView(this);
-                createGameApp.start(this.stage);
+                CreateGameController createGameController = new CreateGameController();
+                createGameController.setGuiView(this);
+                createGameController.start(this.stage);
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+    }
+
+    public void openSetUpGame(){
+        setUpGameController =new SetUpGameController();
+
+        Platform.runLater(() -> {
+            try {
+                SetUpGameController.setGuiView(this);
+                setUpGameController.start(this.stage);
             } catch (Exception ex) {
                 throw new RuntimeException(ex);
             }
@@ -69,9 +83,9 @@ public class GUIView extends View {
 
     @Override
     public void chooseConnection() {
-        ChooseConnectionApp.setGuiView(this);
+        ChooseConnectionController.setGuiView(this);
         // Lanciare ChooseConnectionApp
-        new Thread(() -> Application.launch(ChooseConnectionApp.class)).start();
+        new Thread(() -> Application.launch(ChooseConnectionController.class)).start();
 
 
     }
@@ -120,6 +134,17 @@ public class GUIView extends View {
 
     @Override
     public void notifyNewPlayerJoined(ArrayList<String> nicknames) {
+        System.out.println("notifyNewPlayerJoined chiamato con nicknames: " + nicknames);
+        Platform.runLater(() -> {
+            if (setUpGameController != null && setUpGameController.getNewPlayerJoined() != null) {
+                String lastNickname = nicknames.get(nicknames.size() - 1);
+                System.out.println("Aggiungo nickname: " + lastNickname);
+                setUpGameController.addNickname(lastNickname);
+            } else {
+                System.err.println("Errore: setUpGame o newPlayerJoined TextArea è null");
+            }
+        });
+
 
     }
 
