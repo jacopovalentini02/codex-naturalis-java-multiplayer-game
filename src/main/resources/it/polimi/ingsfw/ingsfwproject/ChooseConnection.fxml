@@ -13,7 +13,7 @@
    <BorderPane prefHeight="211.0" prefWidth="600.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
       <center>
          <ImageView fitHeight="254.0" fitWidth="468.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-            <Image url="@Slider-Codex-2-1920x1080.jpg" />
+            <Image url="@Images/Slider-Codex-2-1920x1080.jpg" />
          </ImageView>
       </center>
       <bottom>

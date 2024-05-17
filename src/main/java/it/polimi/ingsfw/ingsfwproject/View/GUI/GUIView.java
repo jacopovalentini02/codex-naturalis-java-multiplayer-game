@@ -137,7 +137,7 @@ public class GUIView extends View {
         System.out.println("notifyNewPlayerJoined chiamato con nicknames: " + nicknames);
         Platform.runLater(() -> {
             if (setUpGameController != null && setUpGameController.getNewPlayerJoined() != null) {
-                String lastNickname = nicknames.get(nicknames.size() - 1);
+                String lastNickname = nicknames.getLast();
                 System.out.println("Aggiungo nickname: " + lastNickname);
                 setUpGameController.addNickname(lastNickname);
             } else {
@@ -249,5 +249,9 @@ public class GUIView extends View {
 
     public Stage getStage() {
         return stage;
+    }
+
+    public void setSetUpGameController(SetUpGameController setUpGameController) {
+        this.setUpGameController = setUpGameController;
     }
 }

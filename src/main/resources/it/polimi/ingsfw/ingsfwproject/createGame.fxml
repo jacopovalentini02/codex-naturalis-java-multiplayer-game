@@ -27,7 +27,7 @@
       </font>
    </Button>
    <ImageView fitHeight="139.0" fitWidth="221.0" pickOnBounds="true" preserveRatio="true">
-      <Image url="@Slider-Codex-2-1920x1080.jpg"/>
+      <Image url="@Images/Slider-Codex-2-1920x1080.jpg"/>
    </ImageView>
    <Text fill="#fffefe" layoutX="331.0" layoutY="53.0" strokeType="OUTSIDE" strokeWidth="0.0" text="CODEX NATURALIS"
          wrappingWidth="228.9316150335626">
