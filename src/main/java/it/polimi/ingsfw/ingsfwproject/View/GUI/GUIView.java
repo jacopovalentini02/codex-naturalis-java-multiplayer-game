@@ -23,6 +23,8 @@ public class GUIView extends View {
     private ChooseObjectiveController chooseObjectiveController;
     private ChooseStarterController chooseStarterController;
     private LobbyGUIController lobbyGUIController;
+    private ChooseColorController chooseColorController;
+
 
     private GUIController currentController;
 
@@ -117,16 +119,15 @@ public class GUIView extends View {
             alert.setTitle("Messaggio");
             alert.setHeaderText(null);
             alert.setContentText("Connessione stabilita");
-//            alert.setOnCloseRequest(e->{
-//                stage.close();
-//            });
             alert.showAndWait();
         });
     }
 
     @Override
     public void displayGameList(HashMap<Integer, Integer> gameList) {
-
+        Platform.runLater(() -> {
+            lobbyGUIController.showGames(gameList);
+        });
     }
 
     @Override
@@ -157,13 +158,16 @@ public class GUIView extends View {
 
     @Override
     public void notifyStarterCard() {
-
-
+        Platform.runLater(() -> {
+            chooseStarterController.cardChosen();
+        });
     }
 
     @Override
     public void notifyColorsAvailable(List<PlayerColor> colors) {
-
+        Platform.runLater(() -> {
+            chooseColorController.setColors(colors);
+        });
     }
 
     @Override
@@ -187,9 +191,15 @@ public class GUIView extends View {
             Platform.runLater(() -> {
                 chooseStarterController.setTurn();
             });
+        }else if(currentController.equals(chooseColorController)){
+            Platform.runLater(() -> {
+                chooseColorController.setTurn();
+            });
+        }else if(currentController.equals(chooseObjectiveController)){
+            Platform.runLater(() -> {
+                chooseObjectiveController.setTurn();
+            });
         }
-
-
 
     }
 
@@ -200,17 +210,42 @@ public class GUIView extends View {
 
     @Override
     public void notifyHandObjectives(ArrayList<ObjectiveCard> cards) {
-
+        Platform.runLater(() -> {
+            chooseObjectiveController.showObjective(cards);
+        });
     }
 
     @Override
     public void notifyGameState(GameState state) {
         chooseStarterController=new ChooseStarterController();
-        if(state==GameState.CHOOSING_STARTER_CARDS){
+        chooseColorController=new ChooseColorController();
+        chooseObjectiveController=new ChooseObjectiveController();
+
+        if(state==GameState.WAITING_FOR_PLAYERS){
+            openSetUpGame();
+        }else if(state==GameState.CHOOSING_STARTER_CARDS){
             Platform.runLater(() -> {
                 try {
                     ChooseStarterController.setGuiView(this);
                     chooseStarterController.start(this.stage);
+                } catch (Exception ex) {
+                    throw new RuntimeException(ex);
+                }
+            });
+        }else if(state==GameState.CHOOSING_COLORS){
+            Platform.runLater(() -> {
+                try {
+                    ChooseColorController.setGuiView(this);
+                    chooseColorController.start(this.stage);
+                } catch (Exception ex) {
+                    throw new RuntimeException(ex);
+                }
+            });
+        }else if(state==GameState.CHOOSING_OBJECTIVES){
+            Platform.runLater(() -> {
+                try {
+                    ChooseObjectiveController.setGuiView(this);
+                    chooseObjectiveController.start(this.stage);
                 } catch (Exception ex) {
                     throw new RuntimeException(ex);
                 }
@@ -299,4 +334,12 @@ public class GUIView extends View {
     }
 
 
+    public void setChooseColorController(ChooseColorController chooseColorController) {
+        this.chooseColorController = chooseColorController;
+        this.currentController=chooseColorController;
+    }
+
+    public void setLobbyGUIController(LobbyGUIController lobbyGUIController) {
+        this.lobbyGUIController = lobbyGUIController;
+    }
 }

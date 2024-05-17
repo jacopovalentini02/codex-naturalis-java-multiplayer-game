@@ -3,6 +3,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.effect.Blend?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -11,42 +12,35 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="542.0" prefWidth="772.0" style="-fx-background-color: #E1D4A4;"
-            xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="it.polimi.ingsfw.ingsfwproject.View.GUI.LobbyGUIController">
+<AnchorPane prefHeight="542.0" prefWidth="772.0" style="-fx-background-color: #E1D4A4;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsfw.ingsfwproject.View.GUI.LobbyGUIController">
    <effect>
-      <Blend/>
+      <Blend />
    </effect>
-   <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#5f3075" height="124.0" stroke="TRANSPARENT" strokeType="INSIDE"
-              width="772.0"/>
-   <Button fx:id="createButtonLobby" layoutX="431.0" layoutY="461.0" mnemonicParsing="false" onAction="#openCreateGame"
-           prefHeight="37.0" prefWidth="115.0" style="-fx-background-color: #5F3075;" text="Create Game"
-           textFill="WHITE">
+   <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#5f3075" height="124.0" stroke="TRANSPARENT" strokeType="INSIDE" width="772.0" />
+   <Button fx:id="createButtonLobby" layoutX="431.0" layoutY="461.0" mnemonicParsing="false" onAction="#openCreateGame" prefHeight="37.0" prefWidth="115.0" style="-fx-background-color: #5F3075;" text="Create Game" textFill="WHITE">
       <font>
-         <Font size="14.0"/>
+         <Font size="14.0" />
       </font>
    </Button>
-   <Button fx:id="refreshButton" layoutX="273.0" layoutY="461.0" mnemonicParsing="false" prefHeight="37.0"
-           prefWidth="115.0" style="-fx-background-color: #5F3075;" text="Refresh List" textFill="WHITE">
+   <Button fx:id="refreshButton" layoutX="273.0" layoutY="461.0" mnemonicParsing="false" onAction="#refreshGames" prefHeight="37.0" prefWidth="115.0" style="-fx-background-color: #5F3075;" text="Refresh List" textFill="WHITE">
       <font>
-         <Font size="14.0"/>
+         <Font size="14.0" />
       </font>
    </Button>
    <TableView fx:id="tableView" layoutX="273.0" layoutY="148.0" prefHeight="285.0" prefWidth="263.0">
       <columns>
-         <TableColumn fx:id="gameIdColumn" editable="false" maxWidth="1.7976931348623157E308" prefWidth="79.0"
-                      text="ID"/>
-         <TableColumn fx:id="playerCountColumn" prefWidth="106.0" text="Number of Players"/>
-         <TableColumn fx:id="joinColumn" prefWidth="77.00001525878906" text="Join"/>
+         <TableColumn fx:id="gameIdColumn" editable="false" maxWidth="1.7976931348623157E308" prefWidth="79.0" text="ID" />
+         <TableColumn fx:id="playerCountColumn" prefWidth="106.0" text="Number of Players" />
+         <TableColumn fx:id="joinColumn" prefWidth="77.00001525878906" text="Join" />
       </columns>
    </TableView>
    <ImageView fitHeight="139.0" fitWidth="221.0" pickOnBounds="true" preserveRatio="true">
-      <Image url="@Images/Slider-Codex-2-1920x1080.jpg"/>
+      <Image url="@Images/Slider-Codex-2-1920x1080.jpg" />
    </ImageView>
-   <Text fill="#fffefe" layoutX="275.0" layoutY="70.0" strokeType="OUTSIDE" strokeWidth="0.0"
-         text="CODEX NATURALIS LOBBY" wrappingWidth="339.466796875">
+   <Text fill="#fffefe" layoutX="275.0" layoutY="70.0" strokeType="OUTSIDE" strokeWidth="0.0" text="CODEX NATURALIS LOBBY" wrappingWidth="339.466796875">
       <font>
-         <Font name="Apple SD Gothic Neo Bold" size="24.0"/>
+         <Font name="Apple SD Gothic Neo Bold" size="24.0" />
       </font>
    </Text>
+   <TextField fx:id="nickanme" layoutX="53.0" layoutY="173.0" />
 </AnchorPane>

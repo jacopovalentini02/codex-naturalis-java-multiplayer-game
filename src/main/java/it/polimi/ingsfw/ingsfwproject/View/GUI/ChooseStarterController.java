@@ -13,6 +13,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -75,26 +76,30 @@ public class ChooseStarterController extends GUIController implements Initializa
     public void sendFront(MouseEvent mouseEvent) throws IOException {
         PlayCardMessage playCardMessage=new PlayCardMessage(client.getClientID(), client.getVirtualView().getHandCards().getFirst().getIdCard(), true, new Coordinate(0,0), client.getNickname());
         client.sendMessage(playCardMessage);
-        starterFront.setVisible(false);
-        starterBack.setVisible(false);
-        labelInstruction.setText("Waiting for other players choice");
+        cardChosen();
     }
 
     @FXML
     public void sendBack(MouseEvent mouseEvent) throws IOException {
         PlayCardMessage playCardMessage=new PlayCardMessage(client.getClientID(), client.getVirtualView().getHandCards().getFirst().getIdCard(), false, new Coordinate(0,0), client.getNickname());
         client.sendMessage(playCardMessage);
+        cardChosen();
+    }
+
+    public void cardChosen(){
         starterFront.setVisible(false);
         starterBack.setVisible(false);
-        labelInstruction.setText("Waiting for other players choice");
-
+        labelInstruction.setText("Card Chosen.\nWaiting for other players choice");
     }
 
     public void setTurn(){
         if(Objects.equals(client.getNickname(), client.getVirtualView().getCurrentPlayer())){
             turn.setText("It's your turn!");
+            starterFront.setVisible(true);
+            starterBack.setVisible(true);
         }else{
             turn.setText("It's "+client.getVirtualView().getCurrentPlayer()+"'s turn");
-        }//
+
+        }
     }
 }

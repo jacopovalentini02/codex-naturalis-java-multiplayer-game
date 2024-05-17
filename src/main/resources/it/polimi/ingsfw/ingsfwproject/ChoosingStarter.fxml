@@ -23,17 +23,17 @@
             <Font name="Bodoni 72 Oldstyle Bold" size="30.0" />
          </font>
       </Text>
-      <Label fx:id="turn" layoutX="785.0" layoutY="74.0" prefHeight="46.0" prefWidth="375.0">
+      <Label fx:id="turn" layoutX="763.0" layoutY="74.0" prefHeight="46.0" prefWidth="484.0">
          <font>
             <Font name="Bodoni 72 Smallcaps Book" size="37.0" />
          </font>
       </Label>
-      <ImageView fx:id="starterFront" fitHeight="161.0" fitWidth="252.0" layoutX="869.0" layoutY="241.0" pickOnBounds="true" preserveRatio="true" visible="false" onMouseClicked="#sendFront">
+      <ImageView fx:id="starterFront" fitHeight="161.0" fitWidth="252.0" layoutX="869.0" layoutY="241.0" onMouseClicked="#sendFront" pickOnBounds="true" preserveRatio="true" visible="false">
          <image>
             <Image url="@Images/CODEX_cards_gold_front/090.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="starterBack" fitHeight="161.0" fitWidth="278.0" layoutX="869.0" layoutY="433.0" pickOnBounds="true" preserveRatio="true" visible="false" onMouseClicked="#sendBack">
+      <ImageView fx:id="starterBack" fitHeight="161.0" fitWidth="278.0" layoutX="869.0" layoutY="433.0" onMouseClicked="#sendBack" pickOnBounds="true" preserveRatio="true" visible="false">
          <image>
             <Image url="@Images/CODEX_cards_gold_front/091.png" />
          </image>

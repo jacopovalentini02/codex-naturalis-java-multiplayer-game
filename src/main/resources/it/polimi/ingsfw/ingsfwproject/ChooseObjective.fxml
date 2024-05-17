@@ -23,22 +23,14 @@
             <Font name="Bodoni 72 Oldstyle Bold" size="30.0" />
          </font>
       </Text>
-      <Label fx:id="turn" layoutX="949.0" layoutY="74.0" prefHeight="46.0" prefWidth="81.0">
+      <Label fx:id="turn" layoutX="776.0" layoutY="74.0" prefHeight="46.0" prefWidth="431.0">
          <font>
             <Font name="Bodoni 72 Smallcaps Book" size="37.0" />
          </font>
       </Label>
-      <ImageView fx:id="firstCard" disable="true" fitHeight="161.0" fitWidth="252.0" layoutX="869.0" layoutY="241.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@Images/CODEX_cards_gold_front/090.png" />
-         </image>
-      </ImageView>
-      <ImageView fx:id="secondCard" disable="true" fitHeight="161.0" fitWidth="278.0" layoutX="869.0" layoutY="433.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@Images/CODEX_cards_gold_front/091.png" />
-         </image>
-      </ImageView>
-      <Label disable="true" layoutX="825.0" layoutY="175.0" text="Click on the card you want to choose">
+      <ImageView fx:id="firstCard"  fitHeight="161.0" fitWidth="252.0" layoutX="869.0" layoutY="241.0" pickOnBounds="true" preserveRatio="true" onMouseClicked="#firstCardChosen"/>
+      <ImageView fx:id="secondCard"  fitHeight="161.0" fitWidth="278.0" layoutX="869.0" layoutY="433.0" pickOnBounds="true" preserveRatio="true" onMouseClicked="#secondCardChosen" />
+      <Label fx:id="labelInstruction" layoutX="825.0" layoutY="175.0" text="Click on the card you want to choose">
          <font>
             <Font name="Bodoni 72 Smallcaps Book" size="24.0" />
          </font>
