@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.effect.Blend?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane prefHeight="713.0" prefWidth="1283.0" style="-fx-background-color: #e6ddbc;" stylesheets="@Style.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsfw.ingsfwproject.View.GUI.WaitingController">
+   <effect>
+      <Blend />
+   </effect>
+   <ImageView fitHeight="675.0" fitWidth="1052.0" layoutX="-161.0" pickOnBounds="true" preserveRatio="true">
+      <Image url="@Images/logoTagliato.png" />
+   </ImageView>
+   <Text fx:id="stateLabel" layoutX="776.0" layoutY="182.0" strokeType="OUTSIDE" strokeWidth="0.0" text="WAITING FOR OTHER PLAYERS..." wrappingWidth="483.81787109375">
+      <font>
+         <Font name="Bodoni 72 Oldstyle Bold" size="30.0" />
+      </font>
+   </Text>
+   <TextArea fx:id="newPlayerJoined" editable="false" layoutX="776.0" layoutY="212.0" prefHeight="208.0" prefWidth="404.0" style="-fx-background-color: #e6ddbc;" stylesheets="@Style.css">
+      <font>
+         <Font name="Bodoni 72 Oldstyle Book" size="26.0" />
+      </font>
+   </TextArea>
+   <Label fx:id="playerNickname" layoutX="804.0" layoutY="84.0" prefHeight="46.0" prefWidth="395.0">
+      <font>
+         <Font name="Bodoni 72 Smallcaps Book" size="37.0" />
+      </font></Label>
+</AnchorPane>

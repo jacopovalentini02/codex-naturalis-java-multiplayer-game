@@ -14,7 +14,7 @@ import java.io.IOException;
 
 import static it.polimi.ingsfw.ingsfwproject.View.View.client;
 
-public class CreateGameController {
+public class CreateGameController extends GUIController{
     @FXML
     private Button createButton;
     @FXML
@@ -41,7 +41,7 @@ public class CreateGameController {
         String nickname = nickname_input.getText();
         int numberOfPlayers = (int) num_of_players.getValue();
         if(nickname.length()<2){
-            guiView.notifyException("Nickname length should be minimum 2 character");
+            guiView.notifyException("Nickname length should be minimum 2 characters");
         }else{
             CreateGameMessage createGameMessage=new CreateGameMessage(client.getClientID(), numberOfPlayers, nickname);
             client.sendMessage(createGameMessage);

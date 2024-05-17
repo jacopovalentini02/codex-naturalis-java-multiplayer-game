@@ -2,18 +2,19 @@ package it.polimi.ingsfw.ingsfwproject.View.GUI;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-import java.net.URL;
-import java.util.ResourceBundle;
+public class WaitingController extends GUIController{
 
-public class SetUpGameController   {
-
+    @FXML
+    public Text stateLabel;
+    @FXML
+    public Label playerNickname;
     @FXML
     private TextArea newPlayerJoined;
 
@@ -21,13 +22,13 @@ public class SetUpGameController   {
 
     public void start(Stage stage) throws Exception {
         setGuiView(guiView);
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polimi/ingsfw/ingsfwproject/SetupGame.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polimi/ingsfw/ingsfwproject/Waiting.fxml"));
         Parent root = loader.load();
-        SetUpGameController setUpGameController = loader.getController();
-        guiView.setSetUpGameController(setUpGameController);
+        WaitingController waitingController = loader.getController();
+        guiView.setSetUpGameController(waitingController);
         guiView.setStage(stage);
         Scene scene = new Scene(root);
-        stage.setTitle("Set Up Game");
+        stage.setTitle("Waiting");
         stage.setScene(scene);
         stage.show();
     }
@@ -44,6 +45,9 @@ public class SetUpGameController   {
         newPlayerJoined.appendText(nickname + " has joined the game\n");
     }
 
+    public void setPlayerNickname(String playerNickname) {
+        this.playerNickname.setText("Welcome "+playerNickname+"!");
+    }
 }
 
 

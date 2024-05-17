@@ -10,10 +10,8 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.stage.Stage;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+
+import java.util.*;
 
 
 public class GUIView extends View {
@@ -21,20 +19,24 @@ public class GUIView extends View {
 
     private Stage stage;
 
-    private SetUpGameController setUpGameController;
+    private WaitingController waitingController;
+    private ChooseObjectiveController chooseObjectiveController;
+    private ChooseStarterController chooseStarterController;
+    private LobbyGUIController lobbyGUIController;
+
+    private GUIController currentController;
 
 
     public GUIView(){
-//        super.messages = new LinkedBlockingQueue<>();
-//        Thread readerthread = new Thread(super::receiveMessage);
-//        readerthread.start();
         chooseConnection();
     }
 
     public void openLobby() {
         Platform.runLater(() -> {
             try {
-                LobbyGUIController lobbyGUIController =new LobbyGUIController();
+
+                lobbyGUIController =new LobbyGUIController();
+                currentController=lobbyGUIController;
                 LobbyGUIController.setGuiView(this);
                 //lobbyApp.setGuiView(this);
                 lobbyGUIController.start(this.stage);
@@ -58,12 +60,12 @@ public class GUIView extends View {
     }
 
     public void openSetUpGame(){
-        setUpGameController =new SetUpGameController();
+        waitingController =new WaitingController();
 
         Platform.runLater(() -> {
             try {
-                SetUpGameController.setGuiView(this);
-                setUpGameController.start(this.stage);
+                WaitingController.setGuiView(this);
+                waitingController.start(this.stage);
             } catch (Exception ex) {
                 throw new RuntimeException(ex);
             }
@@ -129,17 +131,22 @@ public class GUIView extends View {
 
     @Override
     public void notifyGameJoined(int idGame) {
-
+        Platform.runLater(() -> {
+            if (waitingController != null && waitingController.getNewPlayerJoined() != null) {
+                waitingController.setPlayerNickname(client.getNickname());
+            } else {
+                System.err.println("Errore: setUpGame o newPlayerJoined TextArea è null");
+            }
+        });
     }
 
     @Override
     public void notifyNewPlayerJoined(ArrayList<String> nicknames) {
-        System.out.println("notifyNewPlayerJoined chiamato con nicknames: " + nicknames);
         Platform.runLater(() -> {
-            if (setUpGameController != null && setUpGameController.getNewPlayerJoined() != null) {
+            if (waitingController != null && waitingController.getNewPlayerJoined() != null) {
                 String lastNickname = nicknames.getLast();
-                System.out.println("Aggiungo nickname: " + lastNickname);
-                setUpGameController.addNickname(lastNickname);
+                System.out.println("New player nickname: " + lastNickname);
+                waitingController.addNickname(lastNickname);
             } else {
                 System.err.println("Errore: setUpGame o newPlayerJoined TextArea è null");
             }
@@ -150,6 +157,7 @@ public class GUIView extends View {
 
     @Override
     public void notifyStarterCard() {
+
 
     }
 
@@ -175,6 +183,13 @@ public class GUIView extends View {
 
     @Override
     public void notifyCurrentPlayer(String nickname) {
+        if(currentController.equals(chooseStarterController)){
+            Platform.runLater(() -> {
+                chooseStarterController.setTurn();
+            });
+        }
+
+
 
     }
 
@@ -190,6 +205,17 @@ public class GUIView extends View {
 
     @Override
     public void notifyGameState(GameState state) {
+        chooseStarterController=new ChooseStarterController();
+        if(state==GameState.CHOOSING_STARTER_CARDS){
+            Platform.runLater(() -> {
+                try {
+                    ChooseStarterController.setGuiView(this);
+                    chooseStarterController.start(this.stage);
+                } catch (Exception ex) {
+                    throw new RuntimeException(ex);
+                }
+            });
+        }
 
     }
 
@@ -210,6 +236,12 @@ public class GUIView extends View {
 
     @Override
     public void notifyHandCardsUpdate(ArrayList<PlayableCard> cards) {
+        if(client.getVirtualView().getState()==GameState.CHOOSING_STARTER_CARDS){
+            Platform.runLater(() -> {
+                if(!cards.isEmpty())
+                    chooseStarterController.showStarter(cards.get(0));
+            });
+        }
 
     }
 
@@ -251,7 +283,20 @@ public class GUIView extends View {
         return stage;
     }
 
-    public void setSetUpGameController(SetUpGameController setUpGameController) {
-        this.setUpGameController = setUpGameController;
+    public void setSetUpGameController(WaitingController waitingController) {
+        this.waitingController = waitingController;
+        this.currentController=waitingController;
     }
+
+    public void setChooseObjectiveController(ChooseObjectiveController chooseObjectiveController) {
+        this.chooseObjectiveController = chooseObjectiveController;
+        this.currentController=chooseObjectiveController;
+    }
+
+    public void setChooseStarterController(ChooseStarterController chooseStarterController) {
+        this.chooseStarterController = chooseStarterController;
+        this.currentController=chooseStarterController;
+    }
+
+
 }

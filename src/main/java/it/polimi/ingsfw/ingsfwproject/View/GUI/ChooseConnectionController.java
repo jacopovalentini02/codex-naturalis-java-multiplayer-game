@@ -14,7 +14,7 @@ import static it.polimi.ingsfw.ingsfwproject.View.View.client;
 
 import java.net.ConnectException;
 
-public class ChooseConnectionController extends Application {
+public class ChooseConnectionController extends Application  {
     @FXML
     private Button socketButton;
     @FXML
