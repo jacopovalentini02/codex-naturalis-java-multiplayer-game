@@ -95,6 +95,6 @@ public class ChooseStarterController extends GUIController implements Initializa
             turn.setText("It's your turn!");
         }else{
             turn.setText("It's "+client.getVirtualView().getCurrentPlayer()+"'s turn");
-        }
+        }//
     }
 }
