@@ -735,13 +735,13 @@ public class Cli extends View implements Runnable {
                 for(Content cost : ((GoldFront)c.getFront()).getCost()){
                     System.out.print(cost.toString() +" ");
                 }
-                System.out.println("");
+                System.out.println();
             }
             System.out.println("Back of card "+ i + ":");
             System.out.println(printFacePlayed(c.getBack()));
             i++;
         }
-        System.out.println("");
+        System.out.println();
     }
 
     public void printObjectiveCards(){
