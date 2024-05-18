@@ -49,7 +49,7 @@ class CliTest {
         cli.printPlayerHand(player);
         player.playCard(player.getHandCard().get(0), true, new Coordinate(0,0));
         player.playCard(player.getHandCard().get(0), true, new Coordinate(1,1));
-        player.playCard(player.getHandCard().get(0), true, new Coordinate(-1, 1));
+        player.playCard(player.getHandCard().get(0), true, new Coordinate(1, -1));
         System.out.println("ecco la grid:");
         cli.printGrid(player.getGround());
     }
