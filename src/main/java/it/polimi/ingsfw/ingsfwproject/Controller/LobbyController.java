@@ -41,17 +41,24 @@ public class LobbyController implements Controller {
     public void joinExistingGame(String nick, int idGame, int clientID) {
         synchronized (lobby) {
 
-            if (!lobby.getGameIDs().contains(idGame))
+            if (!lobby.getGameIDs().contains(idGame)){
                 server.sendResponse(new ExcpetionMessage(clientID, "There is no game with ID " + idGame));
+                return;
+            }
+
 
             Game gameToJoin = lobby.getGameList().get(idGame);
 
-            if(gameToJoin.getListOfPlayers().size() == gameToJoin.getNumOfPlayers())
+            if(gameToJoin.getListOfPlayers().size() == gameToJoin.getNumOfPlayers()){
                 server.sendResponse(new ExcpetionMessage(clientID, "Game " + idGame + " is full"));
+                return;
+            }
+
 
             for(Player player : gameToJoin.getListOfPlayers()) {
                 if(player.getUsername().equals(nick)) {
                     server.sendResponse(new ExcpetionMessage(clientID, "Nickname " + nick + " is already taken"));
+                    return;
                 }}
             server.sendResponse(new GameJoinedMessage(clientID, idGame, nick));
             lobby.joinGame(nick, idGame, clientID);

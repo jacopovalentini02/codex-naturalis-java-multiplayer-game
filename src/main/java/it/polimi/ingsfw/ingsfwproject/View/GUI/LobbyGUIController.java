@@ -94,18 +94,23 @@ public class LobbyGUIController extends GUIController implements Initializable {
             };
 
             cell.setOnMouseClicked(event -> {
-                if (!cell.isEmpty()) {
-                    // Ottieni l'ID del gioco associato a questa riga
-                    Map.Entry<Integer, Integer> entry = cell.getTableView().getItems().get(cell.getIndex());
-                    Integer gameId = entry.getKey();
-                    // Stampa l'ID del gioco
-                    System.out.println("Game ID: " + gameId);
-                    try {
-                        sendJoinRequest(gameId);
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
+                if(nickanme.getText()!=null && nickanme.getText().length()>=2){
+                    if (!cell.isEmpty()) {
+                        // Ottieni l'ID del gioco associato a questa riga
+                        Map.Entry<Integer, Integer> entry = cell.getTableView().getItems().get(cell.getIndex());
+                        Integer gameId = entry.getKey();
+                        // Stampa l'ID del gioco
+                        System.out.println("Game ID: " + gameId);
+                        try {
+                            sendJoinRequest(gameId);
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
                     }
+                }else{
+                    guiView.notifyException("You need to enter a valid nickname!");
                 }
+
             });
 
             return cell;
