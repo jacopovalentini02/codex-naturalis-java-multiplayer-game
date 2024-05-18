@@ -74,7 +74,6 @@ public class ChooseObjectiveController extends GUIController implements Initiali
         int card1 = cards.getFirst().getIdCard();
         String id1 = String.format("%03d", card1);
         String id2=String.format("%03d",cards.getLast().getIdCard());
-        System.out.println(id1);
         Image image1 = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/it/polimi/ingsfw/ingsfwproject/Images/CODEX_cards_gold_front/"+id1+".png")));
         Image image2 = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/it/polimi/ingsfw/ingsfwproject/Images/CODEX_cards_gold_front/"+id2+".png")));
         firstCard.setImage(image1);

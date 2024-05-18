@@ -28,8 +28,8 @@
             <Font name="Bodoni 72 Smallcaps Book" size="37.0" />
          </font>
       </Label>
-      <ImageView fx:id="firstCard"  fitHeight="161.0" fitWidth="252.0" layoutX="869.0" layoutY="241.0" pickOnBounds="true" preserveRatio="true" onMouseClicked="#firstCardChosen"/>
-      <ImageView fx:id="secondCard"  fitHeight="161.0" fitWidth="278.0" layoutX="869.0" layoutY="433.0" pickOnBounds="true" preserveRatio="true" onMouseClicked="#secondCardChosen" />
+      <ImageView fx:id="firstCard" visible="false" fitHeight="161.0" fitWidth="252.0" layoutX="869.0" layoutY="241.0" pickOnBounds="true" preserveRatio="true" onMouseClicked="#firstCardChosen"/>
+      <ImageView fx:id="secondCard"  visible="false" fitHeight="161.0" fitWidth="278.0" layoutX="869.0" layoutY="433.0" pickOnBounds="true" preserveRatio="true" onMouseClicked="#secondCardChosen" />
       <Label fx:id="labelInstruction" layoutX="825.0" layoutY="175.0" text="Click on the card you want to choose">
          <font>
             <Font name="Bodoni 72 Smallcaps Book" size="24.0" />

@@ -132,6 +132,7 @@ public class GUIView extends View {
 
     @Override
     public void notifyGameJoined(int idGame) {
+        openSetUpGame();
         Platform.runLater(() -> {
             if (waitingController != null && waitingController.getNewPlayerJoined() != null) {
                 waitingController.setPlayerNickname(client.getNickname());

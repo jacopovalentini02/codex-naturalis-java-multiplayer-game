@@ -53,9 +53,10 @@ public class LobbyController implements Controller {
                 if(player.getUsername().equals(nick)) {
                     server.sendResponse(new ExcpetionMessage(clientID, "Nickname " + nick + " is already taken"));
                 }}
+            server.sendResponse(new GameJoinedMessage(clientID, idGame, nick));
             lobby.joinGame(nick, idGame, clientID);
             server.setHandlersAndInstance(getGameServerInstance(idGame),clientID, nick);
-            server.sendResponse(new GameJoinedMessage(clientID, idGame, nick));
+
             checkIfGameNeedsToBeStarted(idGame);
         }
     }

@@ -54,17 +54,18 @@ public class ChooseColorController extends GUIController implements Initializabl
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        try {
-            client.sendMessage(new GetColorAvailableMessage(client.getClientID()));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+
         setTurn();
     }
 
     public void setTurn(){
         if(Objects.equals(client.getNickname(), client.getVirtualView().getCurrentPlayer())){
             turn.setText("It's your turn!");
+            try {
+                client.sendMessage(new GetColorAvailableMessage(client.getClientID()));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
 
         }else{
             turn.setText("It's "+client.getVirtualView().getCurrentPlayer()+"'s turn");
