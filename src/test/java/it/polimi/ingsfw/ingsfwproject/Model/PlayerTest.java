@@ -21,7 +21,7 @@ class PlayerTest {
         deck.addCard(card1);
 
         GameServerInstance gameServerInstance=new GameServerInstance();
-        Player player=new Player("player1", gameServerInstance);
+        Player player=new Player("player1", gameServerInstance, 0);
         player.draw(deck);
 
         //Check if the card was added to the player's Hand
@@ -34,7 +34,7 @@ class PlayerTest {
     void TestPick() {
         GameServerInstance gameServerInstance=new GameServerInstance();
 
-        Player player=new Player("player1", gameServerInstance);
+        Player player=new Player("player1", gameServerInstance, 0);
         Content[] emptyCorners = {Content.valueOf("EMPTY"),Content.valueOf("EMPTY"),Content.valueOf("EMPTY"),Content.valueOf("EMPTY")};
         Content[] corner = { Content.FUNGI_KINGDOM, Content.EMPTY, Content.FUNGI_KINGDOM, Content.HIDDEN };
         NormalBack backFace=new NormalBack(1, emptyCorners, Content.FUNGI_KINGDOM);
@@ -51,7 +51,7 @@ class PlayerTest {
         Deck deck = new Deck();
         GameServerInstance gameServerInstance=new GameServerInstance();
 
-        Player player=new Player("player1", gameServerInstance);
+        Player player=new Player("player1", gameServerInstance, 0);
 
         Content[] emptyCorners = {Content.valueOf("EMPTY"),Content.valueOf("EMPTY"),Content.valueOf("EMPTY"),Content.valueOf("EMPTY")};
         //Create and add a card to the deck

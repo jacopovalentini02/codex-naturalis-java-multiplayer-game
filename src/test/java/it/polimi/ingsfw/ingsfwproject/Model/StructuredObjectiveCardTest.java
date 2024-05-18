@@ -17,7 +17,7 @@ class StructuredObjectiveCardTest {
     @Test
     void verifyRightDiagonalObjective() throws RemoteException, DeckEmptyException {
         GameServerInstance gameServerInstance=new GameServerInstance();
-        Player player1 = new Player("player1", gameServerInstance);
+        Player player1 = new Player("player1", gameServerInstance, 0);
         PlayerGround ground = player1.getGround();
         Map<Coordinate, Face> grid = ground.getGrid();
         GameManager manager = new GameManager();
@@ -102,7 +102,7 @@ class StructuredObjectiveCardTest {
     @Test
     void verifyLeftDiagonalObjective() throws RemoteException, DeckEmptyException{
         GameServerInstance gameServerInstance=new GameServerInstance();
-        Player player1 = new Player("player1", gameServerInstance);
+        Player player1 = new Player("player1", gameServerInstance, 0);
         PlayerGround ground = player1.getGround();
         Map<Coordinate, Face> grid = ground.getGrid();
         GameManager manager = new GameManager();
@@ -182,7 +182,7 @@ class StructuredObjectiveCardTest {
     @Test
     void verifyDoubleStructureObjective() throws RemoteException, DeckEmptyException{
         GameServerInstance gameServerInstance=new GameServerInstance();
-        Player player1 = new Player("player1", gameServerInstance);
+        Player player1 = new Player("player1", gameServerInstance, 0);
         PlayerGround ground = player1.getGround();
         Map<Coordinate, Face> grid = ground.getGrid();
         GameManager manager = new GameManager();

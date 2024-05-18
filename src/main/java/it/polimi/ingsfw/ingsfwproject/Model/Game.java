@@ -78,8 +78,6 @@ public class Game {
         objectiveDeck=new Deck();
         listOfPlayers = new ArrayList<>();
         listOfPlayers.add(player1);
-        //todo mando lista player
-        //todo mando anche player
         controller = new GameController(this, gameServerInstance);
         displayedPlayableCard = new ArrayList<PlayableCard>();
         displayedObjectiveCard = new ArrayList<>();
@@ -152,7 +150,6 @@ public class Game {
 
         if (colorChosen == this.numOfPlayers)
             setupHandsAndObjectives();
-
         return true;
 
     }
@@ -204,7 +201,7 @@ public class Game {
         }catch (DeckEmptyException ignore){}
 
         gameServerInstance.sendUpdateToAll(new DisplayedObjectiveMessage(-10, displayedObjectiveCard));
-
+        this.setState(GameState.CHOOSING_OBJECTIVES);
         for(Player p : listOfPlayers){
             try{
                ArrayList<ObjectiveCard> objectiveCards = new ArrayList<>();
@@ -213,7 +210,7 @@ public class Game {
                p.addToHandObjective(objectiveCards);
             }catch (DeckEmptyException ignore){}
         }
-        this.setState(GameState.CHOOSING_OBJECTIVES);
+
     }
 
     public void randomizeFirstPlayer(){

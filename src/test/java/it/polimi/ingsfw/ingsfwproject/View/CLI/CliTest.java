@@ -2,7 +2,10 @@ package it.polimi.ingsfw.ingsfwproject.View.CLI;
 
 
 
+import it.polimi.ingsfw.ingsfwproject.Exceptions.CardNotInHandException;
 import it.polimi.ingsfw.ingsfwproject.Exceptions.DeckEmptyException;
+import it.polimi.ingsfw.ingsfwproject.Exceptions.NotEnoughResourcesException;
+import it.polimi.ingsfw.ingsfwproject.Exceptions.PositionNotAvailableException;
 import it.polimi.ingsfw.ingsfwproject.Model.*;
 import it.polimi.ingsfw.ingsfwproject.Model.GameManager;
 import it.polimi.ingsfw.ingsfwproject.Model.Player;
@@ -18,7 +21,7 @@ class CliTest {
     @Test
     void testPrintFacePlayed() throws DeckEmptyException, RemoteException {
         GameServerInstance gameServerInstance=new GameServerInstance();
-        Player player1=new Player("user1", gameServerInstance);
+        Player player1=new Player("user1", gameServerInstance, 0);
         Game game=new Game(gameServerInstance,new GameManager(),1,2,player1);
         //ClientCallback clientCallback = new ClientCallback();
         //game.getController().addClient("user1", clientCallback);
@@ -30,8 +33,25 @@ class CliTest {
     }
 
     @Test
-    void testPrintGrid() throws DeckEmptyException, RemoteException {
-
+    void testPrintGrid() throws DeckEmptyException, RemoteException, PositionNotAvailableException, NotEnoughResourcesException, CardNotInHandException {
+        GameManager gameManager = new GameManager();
+        GameServerInstance gameserver = new GameServerInstance();
+        Player player = new Player("peppo", gameserver, 0);
+        gameserver.addPlayer(player, 0);
+        Game game = new Game(gameserver, gameManager, 0, 2, player);
+        game.setUpCards();
+        game.setupField();
+        player.getHandCard().remove(0);
+        game.setupHandsAndObjectives();
+        player.getHandCard().remove(2);
+        player.draw(game.getResourceDeck());
+        Cli cli = new Cli();
+        cli.printPlayerHand(player);
+        player.playCard(player.getHandCard().get(0), true, new Coordinate(0,0));
+        player.playCard(player.getHandCard().get(0), true, new Coordinate(1,1));
+        player.playCard(player.getHandCard().get(0), true, new Coordinate(1, -1));
+        System.out.println("ecco la grid:");
+        cli.printGrid(player.getGround());
     }
 
 
@@ -45,17 +65,16 @@ class CliTest {
 
     @Test
     void testPrintPlayerHand() throws RemoteException, DeckEmptyException {
-        GameServerInstance gameServerInstance=new GameServerInstance();
-        Player player1=new Player("user1", gameServerInstance);
-        Game game=new Game(gameServerInstance,new GameManager(),1,2,player1);
-        //ClientCallback clientCallback = new ClientCallback();
-        //game.getController().addClient("user1", clientCallback);
+        GameManager gameManager = new GameManager();
+        GameServerInstance gameserver = new GameServerInstance();
+        Player player = new Player("peppo", gameserver, 0);
+        gameserver.addPlayer(player, 0);
+        Game game = new Game(gameserver, gameManager, 0, 2, player);
+        game.setUpCards();
         game.setupField();
+        player.getHandCard().remove(0);
+        game.setupHandsAndObjectives();
         Cli cli = new Cli();
-        player1.getHandCard().remove(0);
-        player1.getHandCard().add((ResourceCard) game.getResourceDeck().draw());
-        player1.getHandCard().add((ResourceCard) game.getResourceDeck().draw());
-        player1.getHandCard().add((ResourceCard) game.getResourceDeck().draw());
-        cli.printPlayerHand();
+        cli.printPlayerHand(player);
     }
 }

@@ -20,7 +20,7 @@
          <children>
             <ImageView fitHeight="55.0" fitWidth="96.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@Slider-Codex-2-1920x1080.jpg" />
+                  <Image url="@Images/Slider-Codex-2-1920x1080.jpg" />
                </image>
                <HBox.margin>
                   <Insets bottom="5.0" left="5.0" top="5.0" />

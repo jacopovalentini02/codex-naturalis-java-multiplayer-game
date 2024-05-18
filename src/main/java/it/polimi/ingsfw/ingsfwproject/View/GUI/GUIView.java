@@ -2,57 +2,72 @@ package it.polimi.ingsfw.ingsfwproject.View.GUI;
 
 import it.polimi.ingsfw.ingsfwproject.Model.*;
 import it.polimi.ingsfw.ingsfwproject.Network.Client.Client;
-import it.polimi.ingsfw.ingsfwproject.Network.Client.RMIClient;
-import it.polimi.ingsfw.ingsfwproject.Network.Client.SocketClient;
-import it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServer.CreateGameMessage;
+
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.Message;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClientMessage;
-import it.polimi.ingsfw.ingsfwproject.View.GUI.ChooseConnectionApp;
 import it.polimi.ingsfw.ingsfwproject.View.View;
-import javafx.animation.RotateTransition;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.Spinner;
-import javafx.scene.control.TextField;
-import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 
-import java.io.IOException;
-import java.net.ConnectException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.LinkedBlockingQueue;
+import java.util.*;
 
-import static javafx.application.Application.launch;
 
 public class GUIView extends View {
 
 
     private Stage stage;
 
+    private WaitingController waitingController;
+    private ChooseObjectiveController chooseObjectiveController;
+    private ChooseStarterController chooseStarterController;
+    private LobbyGUIController lobbyGUIController;
+    private ChooseColorController chooseColorController;
+
+
+    private GUIController currentController;
+
 
     public GUIView(){
-        super.messages = new LinkedBlockingQueue<>();
-        Thread readerthread = new Thread(super::receiveMessage);
-        readerthread.start();
-
-        //chooseConnection();
+        chooseConnection();
     }
 
     public void openLobby() {
         Platform.runLater(() -> {
             try {
-                LobbyApp lobbyApp=new LobbyApp();
-                lobbyApp.setGuiView(this);
-                lobbyApp.start(this.stage);
 
+                lobbyGUIController =new LobbyGUIController();
+                currentController=lobbyGUIController;
+                LobbyGUIController.setGuiView(this);
+                //lobbyApp.setGuiView(this);
+                lobbyGUIController.start(this.stage);
+
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+    }
+
+    public void openCreateGameWindow(){
+        Platform.runLater(() -> {
+            try {
+                CreateGameController createGameController = new CreateGameController();
+                createGameController.setGuiView(this);
+                createGameController.start(this.stage);
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+    }
+
+    public void openSetUpGame(){
+        waitingController =new WaitingController();
+
+        Platform.runLater(() -> {
+            try {
+                WaitingController.setGuiView(this);
+                waitingController.start(this.stage);
             } catch (Exception ex) {
                 throw new RuntimeException(ex);
             }
@@ -72,14 +87,9 @@ public class GUIView extends View {
 
     @Override
     public void chooseConnection() {
-//        ChooseConnectionApp chooseConnectionApp=new ChooseConnectionApp();
-//        Platform.startup(()->{
-//            try {
-//                chooseConnectionApp.start(new Stage());
-//            } catch (Exception e) {
-//                throw new RuntimeException(e);
-//            }
-//        });
+        ChooseConnectionController.setGuiView(this);
+        // Lanciare ChooseConnectionApp
+        new Thread(() -> Application.launch(ChooseConnectionController.class)).start();
 
 
     }
@@ -100,7 +110,6 @@ public class GUIView extends View {
             alert.setContentText(message);
             alert.showAndWait();
         });
-
     }
 
     @Override
@@ -110,36 +119,56 @@ public class GUIView extends View {
             alert.setTitle("Messaggio");
             alert.setHeaderText(null);
             alert.setContentText("Connessione stabilita");
-//            alert.setOnCloseRequest(e->{
-//                stage.close();
-//            });
             alert.showAndWait();
         });
     }
 
     @Override
     public void displayGameList(HashMap<Integer, Integer> gameList) {
-
+        Platform.runLater(() -> {
+            lobbyGUIController.showGames(gameList);
+        });
     }
 
     @Override
     public void notifyGameJoined(int idGame) {
-
+        openSetUpGame();
+        Platform.runLater(() -> {
+            if (waitingController != null && waitingController.getNewPlayerJoined() != null) {
+                waitingController.setPlayerNickname(client.getNickname());
+            } else {
+                System.err.println("Errore: setUpGame o newPlayerJoined TextArea è null");
+            }
+        });
     }
 
     @Override
     public void notifyNewPlayerJoined(ArrayList<String> nicknames) {
+        Platform.runLater(() -> {
+            if (waitingController != null && waitingController.getNewPlayerJoined() != null) {
+                String lastNickname = nicknames.getLast();
+                System.out.println("New player nickname: " + lastNickname);
+                waitingController.addNickname(lastNickname);
+            } else {
+                System.err.println("Errore: setUpGame o newPlayerJoined TextArea è null");
+            }
+        });
+
 
     }
 
     @Override
     public void notifyStarterCard() {
-
+        Platform.runLater(() -> {
+            chooseStarterController.cardChosen();
+        });
     }
 
     @Override
     public void notifyColorsAvailable(List<PlayerColor> colors) {
-
+        Platform.runLater(() -> {
+            chooseColorController.setColors(colors);
+        });
     }
 
     @Override
@@ -159,6 +188,19 @@ public class GUIView extends View {
 
     @Override
     public void notifyCurrentPlayer(String nickname) {
+        if(currentController.equals(chooseStarterController)){
+            Platform.runLater(() -> {
+                chooseStarterController.setTurn();
+            });
+        }else if(currentController.equals(chooseColorController)){
+            Platform.runLater(() -> {
+                chooseColorController.setTurn();
+            });
+        }else if(currentController.equals(chooseObjectiveController)){
+            Platform.runLater(() -> {
+                chooseObjectiveController.setTurn();
+            });
+        }
 
     }
 
@@ -169,11 +211,47 @@ public class GUIView extends View {
 
     @Override
     public void notifyHandObjectives(ArrayList<ObjectiveCard> cards) {
-
+        Platform.runLater(() -> {
+            chooseObjectiveController.showObjective(cards);
+        });
     }
 
     @Override
     public void notifyGameState(GameState state) {
+        chooseStarterController=new ChooseStarterController();
+        chooseColorController=new ChooseColorController();
+        chooseObjectiveController=new ChooseObjectiveController();
+
+        if(state==GameState.WAITING_FOR_PLAYERS){
+            openSetUpGame();
+        }else if(state==GameState.CHOOSING_STARTER_CARDS){
+            Platform.runLater(() -> {
+                try {
+                    ChooseStarterController.setGuiView(this);
+                    chooseStarterController.start(this.stage);
+                } catch (Exception ex) {
+                    throw new RuntimeException(ex);
+                }
+            });
+        }else if(state==GameState.CHOOSING_COLORS){
+            Platform.runLater(() -> {
+                try {
+                    ChooseColorController.setGuiView(this);
+                    chooseColorController.start(this.stage);
+                } catch (Exception ex) {
+                    throw new RuntimeException(ex);
+                }
+            });
+        }else if(state==GameState.CHOOSING_OBJECTIVES){
+            Platform.runLater(() -> {
+                try {
+                    ChooseObjectiveController.setGuiView(this);
+                    chooseObjectiveController.start(this.stage);
+                } catch (Exception ex) {
+                    throw new RuntimeException(ex);
+                }
+            });
+        }
 
     }
 
@@ -194,6 +272,12 @@ public class GUIView extends View {
 
     @Override
     public void notifyHandCardsUpdate(ArrayList<PlayableCard> cards) {
+        if(client.getVirtualView().getState()==GameState.CHOOSING_STARTER_CARDS){
+            Platform.runLater(() -> {
+                if(!cards.isEmpty())
+                    chooseStarterController.showStarter(cards.get(0));
+            });
+        }
 
     }
 
@@ -220,7 +304,7 @@ public class GUIView extends View {
     @Override
     public void run() {
          //Application.launch(ChooseConnectionApp.class);
-       chooseConnection();
+       //chooseConnection();
      }
 
     public void setClient(Client c){
@@ -233,5 +317,30 @@ public class GUIView extends View {
 
     public Stage getStage() {
         return stage;
+    }
+
+    public void setSetUpGameController(WaitingController waitingController) {
+        this.waitingController = waitingController;
+        this.currentController=waitingController;
+    }
+
+    public void setChooseObjectiveController(ChooseObjectiveController chooseObjectiveController) {
+        this.chooseObjectiveController = chooseObjectiveController;
+        this.currentController=chooseObjectiveController;
+    }
+
+    public void setChooseStarterController(ChooseStarterController chooseStarterController) {
+        this.chooseStarterController = chooseStarterController;
+        this.currentController=chooseStarterController;
+    }
+
+
+    public void setChooseColorController(ChooseColorController chooseColorController) {
+        this.chooseColorController = chooseColorController;
+        this.currentController=chooseColorController;
+    }
+
+    public void setLobbyGUIController(LobbyGUIController lobbyGUIController) {
+        this.lobbyGUIController = lobbyGUIController;
     }
 }
