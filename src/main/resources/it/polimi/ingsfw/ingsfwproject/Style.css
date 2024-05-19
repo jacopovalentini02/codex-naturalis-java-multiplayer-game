@@ -1,1 +1,6 @@
 .text-area .content { -fx-background-color:  #e6ddbc; }
+
+.image-style {
+    -fx-width: 170px;
+    -fx-height: 115px;
+}

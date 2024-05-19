@@ -218,8 +218,9 @@ public class Game {
         Random rand = new Random();
         int index = rand.nextInt(listOfPlayers.size());
         setFirstPlayer(listOfPlayers.get(index));
-        setCurrentPlayer(getFirstPlayer());
         this.setState(GameState.STARTED);
+        setCurrentPlayer(getFirstPlayer());
+
     }
 
 
@@ -332,14 +333,19 @@ public class Game {
                 displayedPlayableCard.add((PlayableCard) goldDeck.draw());
             } catch (DeckEmptyException e) {
                 gameServerInstance.sendUpdateToAll(new ExcpetionMessage(player.getClientID(),e.getMessage()));
+                return false;
             }
+            gameServerInstance.sendUpdateToAll(new GoldDeckMessage(-10, goldDeck));
         } else if (card instanceof ResourceCard) {
             try {
                 displayedPlayableCard.add((PlayableCard) resourceDeck.draw());
             } catch (DeckEmptyException e) {
                 gameServerInstance.sendUpdateToAll(new ExcpetionMessage(player.getClientID(),e.getMessage()));
+                return false;
             }
+            gameServerInstance.sendUpdateToAll(new ResourceDeckMessage(-10, resourceDeck));
         }
+
 
         gameServerInstance.sendUpdateToAll(new DisplayedPlayableCardsMessage(-10, displayedPlayableCard));
         return true;

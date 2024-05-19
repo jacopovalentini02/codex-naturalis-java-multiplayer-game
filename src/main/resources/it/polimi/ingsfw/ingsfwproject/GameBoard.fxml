@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.effect.Blend?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="860.0" prefWidth="1606.0" style="-fx-background-color: #e6ddbc;" stylesheets="@Style.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsfw.ingsfwproject.View.GUI.GameBoardController">
+   <effect>
+      <Blend />
+   </effect>
+   <children>
+      <Label fx:id="turn" layoutX="41.0" layoutY="26.0" prefHeight="46.0" prefWidth="484.0" text="turn">
+         <font>
+            <Font name="Bodoni 72 Smallcaps Book" size="37.0" />
+         </font>
+      </Label>
+      <ImageView fx:id="goldDeck" fitHeight="110.0" fitWidth="150.0" layoutX="190.0" layoutY="604.0" onMouseClicked="#drawGold" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="resourceDeck" fitHeight="110.0" fitWidth="150.0" layoutX="190.0" layoutY="714.0" onMouseClicked="#drawResource" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fitHeight="476.0" fitWidth="249.0" layoutX="101.0" layoutY="103.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@Images/plateau.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="resourceDisplayed1" fitHeight="110.0" fitWidth="150.0" layoutX="373.0" layoutY="142.0" onMouseClicked="#pickResource1" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="resourceDisplayed2" fitHeight="110.0" fitWidth="150.0" layoutX="373.0" layoutY="267.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="goldDisplayed1" fitHeight="110.0" fitWidth="150.0" layoutX="556.0" layoutY="143.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="goldDisplayed2" fitHeight="110.0" fitWidth="150.0" layoutX="556.0" layoutY="266.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="objectiveDisplayed1" fitHeight="110.0" fitWidth="150.0" layoutX="375.0" layoutY="400.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="objectiveDisplayed2" fitHeight="110.0" fitWidth="150.0" layoutX="560.0" layoutY="401.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="personalObjective" fitHeight="115.0" fitWidth="170.0" layoutX="482.0" layoutY="743.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="handCard1" fitHeight="115.0" fitWidth="170.0" layoutX="691.0" layoutY="743.0" onMouseClicked="#firstCardChosen" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="handCard2" fitHeight="115.0" fitWidth="170.0" layoutX="878.0" layoutY="743.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="handCard3" fitHeight="115.0" fitWidth="170.0" layoutX="1065.0" layoutY="743.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin1" fitHeight="42.0" fitWidth="41.0" layoutX="113.0" layoutY="523.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@Images/CODEX_pion_rouge.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="pin2" fitHeight="42.0" fitWidth="41.0" layoutX="112.0" layoutY="519.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@Images/CODEX_pion_bleu.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="pin3" fitHeight="42.0" fitWidth="41.0" layoutX="112.0" layoutY="515.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@Images/CODEX_pion_jaune.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="pin4" fitHeight="42.0" fitWidth="41.0" layoutX="112.0" layoutY="511.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@Images/CODEX_pion_vert.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="pin11" fitHeight="42.0" fitWidth="41.0" layoutX="169.0" layoutY="523.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@Images/CODEX_pion_rouge.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="pin21" fitHeight="42.0" fitWidth="41.0" layoutX="168.0" layoutY="519.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@Images/CODEX_pion_bleu.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="pin31" fitHeight="42.0" fitWidth="41.0" layoutX="168.0" layoutY="515.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@Images/CODEX_pion_jaune.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="pin41" fitHeight="42.0" fitWidth="41.0" layoutX="168.0" layoutY="511.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@Images/CODEX_pion_vert.png" />
+         </image>
+      </ImageView>
+      <Label layoutX="42.0" layoutY="648.0" prefHeight="23.0" prefWidth="119.0" text="GOLD DECK">
+         <font>
+            <Font name="Bodoni 72 Smallcaps Book" size="19.0" />
+         </font>
+      </Label>
+      <Label layoutX="22.0" layoutY="735.0" prefHeight="23.0" prefWidth="158.0" text="RESOURCE DECK">
+         <font>
+            <Font name="Bodoni 72 Smallcaps Book" size="19.0" />
+         </font>
+      </Label>
+   </children>
+</AnchorPane>

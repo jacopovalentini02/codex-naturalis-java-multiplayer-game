@@ -24,6 +24,7 @@ public class GUIView extends View {
     private ChooseStarterController chooseStarterController;
     private LobbyGUIController lobbyGUIController;
     private ChooseColorController chooseColorController;
+    private GameBoardController gameBoardController;
 
 
     private GUIController currentController;
@@ -173,16 +174,29 @@ public class GUIView extends View {
 
     @Override
     public void notifyGoldDeckUpdate() {
-
+        if(currentController.equals(gameBoardController)){
+            Platform.runLater(() -> {
+                gameBoardController.updateGoldDeck();
+            });
+        }
     }
 
     @Override
     public void notifyResourceDeckUpdate() {
-
+        if(currentController.equals(gameBoardController)){
+            Platform.runLater(() -> {
+                gameBoardController.updateResourceDeck();
+            });
+        }
     }
 
     @Override
     public void notifyDisplayedCardsUpdate(ArrayList<PlayableCard> displayedCards) {
+        if(currentController.equals(gameBoardController)){
+            Platform.runLater(() -> {
+                gameBoardController.updateDisplayedCard();
+            });
+        }
 
     }
 
@@ -200,6 +214,10 @@ public class GUIView extends View {
             Platform.runLater(() -> {
                 chooseObjectiveController.setTurn();
             });
+        }else if(currentController.equals(gameBoardController)){
+            Platform.runLater(() -> {
+                gameBoardController.setTurn();
+            });
         }
 
     }
@@ -212,7 +230,8 @@ public class GUIView extends View {
     @Override
     public void notifyHandObjectives(ArrayList<ObjectiveCard> cards) {
         Platform.runLater(() -> {
-            chooseObjectiveController.showObjective(cards);
+            if(currentController.equals(chooseObjectiveController))
+                chooseObjectiveController.showObjective(cards);
         });
     }
 
@@ -221,6 +240,7 @@ public class GUIView extends View {
         chooseStarterController=new ChooseStarterController();
         chooseColorController=new ChooseColorController();
         chooseObjectiveController=new ChooseObjectiveController();
+        gameBoardController=new GameBoardController();
 
         if(state==GameState.WAITING_FOR_PLAYERS){
             openSetUpGame();
@@ -251,6 +271,15 @@ public class GUIView extends View {
                     throw new RuntimeException(ex);
                 }
             });
+        }else if(state==GameState.STARTED){
+            Platform.runLater(() -> {
+                try {
+                    GameBoardController.setGuiView(this);
+                    gameBoardController.start(this.stage);
+                } catch (Exception ex) {
+                    throw new RuntimeException(ex);
+                }
+            });
         }
 
     }
@@ -276,6 +305,10 @@ public class GUIView extends View {
             Platform.runLater(() -> {
                 if(!cards.isEmpty())
                     chooseStarterController.showStarter(cards.get(0));
+            });
+        }else if(client.getVirtualView().getState()==GameState.STARTED){
+            Platform.runLater(() -> {
+                gameBoardController.updateHand();
             });
         }
 
@@ -342,5 +375,11 @@ public class GUIView extends View {
 
     public void setLobbyGUIController(LobbyGUIController lobbyGUIController) {
         this.lobbyGUIController = lobbyGUIController;
+        this.currentController=lobbyGUIController;
+    }
+
+    public void setGameBoardController(GameBoardController gameBoardController) {
+        this.gameBoardController = gameBoardController;
+        this.currentController=gameBoardController;
     }
 }
