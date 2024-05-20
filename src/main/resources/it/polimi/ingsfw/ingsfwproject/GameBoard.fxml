@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Spinner?>
 <?import javafx.scene.effect.Blend?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane prefHeight="860.0" prefWidth="1606.0" style="-fx-background-color: #e6ddbc;" stylesheets="@Style.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsfw.ingsfwproject.View.GUI.GameBoardController">
@@ -52,5 +56,18 @@
             <Font name="Bodoni 72 Smallcaps Book" size="19.0" />
          </font>
       </Label>
+      <GridPane fx:id="playerGround" gridLinesVisible="true" layoutX="920.0" layoutY="259.0" prefHeight="345.0" prefWidth="340.0">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="298.0" minWidth="10.0" prefWidth="173.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="399.0" minWidth="10.0" prefWidth="182.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints maxHeight="236.0" minHeight="10.0" prefHeight="103.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="142.0" minHeight="0.0" prefHeight="102.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="151.0" minHeight="10.0" prefHeight="102.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+      </GridPane>
+      <Spinner editable="true" layoutX="395.0" layoutY="37.0" fx:id="x" />
+      <Spinner fx:id="y" editable="true" layoutX="630.0" layoutY="37.0" />
    </children>
 </AnchorPane>

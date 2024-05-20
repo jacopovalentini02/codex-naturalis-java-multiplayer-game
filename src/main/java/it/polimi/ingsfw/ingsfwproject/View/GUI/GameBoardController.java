@@ -1,9 +1,6 @@
 package it.polimi.ingsfw.ingsfwproject.View.GUI;
 
-import it.polimi.ingsfw.ingsfwproject.Model.Coordinate;
-import it.polimi.ingsfw.ingsfwproject.Model.ObjectiveCard;
-import it.polimi.ingsfw.ingsfwproject.Model.PlayableCard;
-import it.polimi.ingsfw.ingsfwproject.Model.PlayerColor;
+import it.polimi.ingsfw.ingsfwproject.Model.*;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServer.DrawMessage;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServer.PickMessage;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServer.PlayCardMessage;
@@ -13,9 +10,11 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.control.Spinner;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -48,6 +47,10 @@ public class GameBoardController extends GUIController implements Initializable 
     @FXML public ImageView pin41;
 
     public static GUIView guiView;
+    @FXML public GridPane playerGround;
+    @FXML public Spinner y;
+    @FXML public Spinner x;
+
 
     private Map<PlayerColor, String> colorImageMap;
 
@@ -87,6 +90,7 @@ public class GameBoardController extends GUIController implements Initializable 
         colorImageMap.put(PlayerColor.GREEN, "/it/polimi/ingsfw/ingsfwproject/Images/CODEX_pion_vert.png");
 
         initializeScore();
+        updateGrid();
     }
 
     public void setTurn(){
@@ -221,7 +225,9 @@ public class GameBoardController extends GUIController implements Initializable 
 
     //todo input coordinate, face
     public void cardToPlayChosen(int cardID) throws IOException {
-        PlayCardMessage playCardMessage=new PlayCardMessage(client.getClientID(),cardID,true, new Coordinate(1,1),client.getNickname());
+        //int xCoor=(int)x.getValue();
+        //int yCoord=(int)y.getValue();
+        PlayCardMessage playCardMessage=new PlayCardMessage(client.getClientID(),cardID,true, new Coordinate(-1,-1),client.getNickname());
         client.sendMessage(playCardMessage);
     }
     @FXML
@@ -250,6 +256,33 @@ public class GameBoardController extends GUIController implements Initializable 
     }
 
 
+    public void updateGrid(){
+        playerGround.getChildren().clear();
 
+        Map<Coordinate, Face> grid = client.getVirtualView().getGrids().get(client.getNickname());
+
+        int centerX = playerGround.getColumnCount() / 2;
+        int centerY = playerGround.getRowCount() / 2;
+
+        // Itera su tutte le voci della mappa e aggiungi le immagini alla griglia
+        for (Map.Entry<Coordinate, Face> entry : grid.entrySet()) {
+            Coordinate coordinate = entry.getKey();
+            Face face = entry.getValue();
+
+            int gridX = centerX + coordinate.getX();
+            int gridY = centerY - coordinate.getY();
+
+            String id = String.format("%03d",face.getIdCard());
+            String imagePath = "/it/polimi/ingsfw/ingsfwproject/Images/CODEX_cards_gold_front/" + id + ".png";
+
+            Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream(imagePath)));
+            ImageView imageView = new ImageView(image);
+
+            imageView.setFitHeight(110);
+            imageView.setFitWidth(150);
+
+            playerGround.add(imageView, gridX, gridY);
+        }
+    }
 
 }

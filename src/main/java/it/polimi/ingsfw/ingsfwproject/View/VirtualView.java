@@ -205,6 +205,10 @@ public class VirtualView {
         return playerColorMap;
     }
 
+    public HashMap<String, Map<Coordinate, Face>> getGrids() {
+        return grids;
+    }
+
     public ArrayList<String> getListOfPlayers(){
         return listOfPlayers;
     }

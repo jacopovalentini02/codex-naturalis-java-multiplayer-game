@@ -73,4 +73,18 @@ abstract public class Face implements Serializable {
     public void setCoveredBR(boolean value){
         this.coveredCorner[3] = value;
     }
+
+
+    public boolean isCoveredTL(){
+        return this.coveredCorner[0];
+    }
+    public boolean isCoveredTR(){
+        return this.coveredCorner[1];
+    }
+    public boolean isCoveredBL(){
+        return this.coveredCorner[2];
+    }
+    public boolean isCoveredBR(){
+        return this.coveredCorner[3];
+    }
 }

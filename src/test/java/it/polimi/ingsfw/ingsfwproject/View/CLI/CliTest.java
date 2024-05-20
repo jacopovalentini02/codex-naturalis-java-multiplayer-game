@@ -55,6 +55,7 @@ class CliTest {
         cli.printGrid(player.getGround());
     }
 
+
     @Test
     void testPrintCorner() {
     }
