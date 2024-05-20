@@ -96,21 +96,24 @@ public class Cli extends View implements Runnable {
         return (iFace == 1)? true : false;
     }
 
-    private int askForIntInput(String stringToPrompt, int lowerBound, int upperBound){
+
+    private int askForIntInput(String stringToPrompt, int lowerBound, int upperBound) {
         int choice = lowerBound;
-        String errorString = "Error: you have to insert a number between " + lowerBound + " and " + upperBound;
+        String errorString = "Error: you have to insert a number between " + lowerBound + " and " + upperBound + "! Retry";
+
         do {
             try {
-                if (choice < lowerBound || choice > upperBound)
-                    System.out.println(errorString);
                 System.out.println(stringToPrompt);
                 choice = scanner.nextInt();
                 scanner.nextLine();
-            }catch (InputMismatchException e){
+                if (choice < lowerBound || choice > upperBound) {
+                    System.out.println(errorString);
+                }
+            } catch (InputMismatchException e) {
                 System.out.println(errorString);
-                choice--;
+                scanner.nextLine(); // Clear the invalid input
             }
-        }while(choice <lowerBound || choice > upperBound);
+        } while (choice < lowerBound || choice > upperBound);
 
         return choice;
     }
@@ -384,7 +387,7 @@ public class Cli extends View implements Runnable {
                     client.sendMessage(messageToSend);
                     break;
                 case "joingame":
-                    int gameID = askForIntInput("insert the game ID", 0, Integer.MAX_VALUE);
+                    int gameID = askForIntInput("insert the game ID", 0, 1000);
                     name = askForStringInput("insert your nickname");
                     messageToSend = new JoinGameMessage(client.getClientID(), name, gameID);
                     client.sendMessage(messageToSend);
