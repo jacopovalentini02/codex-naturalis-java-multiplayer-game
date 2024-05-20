@@ -10,15 +10,21 @@ import java.io.Serializable;
 
 public class ColorChosenMessage extends ServerToClientMessage implements Serializable {
     PlayerColor color;
-    public ColorChosenMessage(int clientID, PlayerColor color) {
+
+    String nickname;
+    public ColorChosenMessage(int clientID, PlayerColor color, String nickname) {
         super(clientID);
         this.color=color;
+        this.nickname=nickname;
     }
 
 
     @Override
     public void execute(Client client) {
-        client.getVirtualView().setColor(color);
+        if(client.getNickname().equals(nickname))
+            client.getVirtualView().setColor(color);
+
+        client.getVirtualView().getPlayerColorMap().put(nickname,color);
         client.getView().notifyColorChosen(color);
     }
 }

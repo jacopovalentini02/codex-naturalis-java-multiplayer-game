@@ -113,10 +113,10 @@ public class GameServerInstance {
 
     }
 
-    public void sendColorChosen(int clientID, PlayerColor color){
-        ColorChosenMessage colorMsg=new ColorChosenMessage(clientID, color);
-        sendUpdateToAll(colorMsg);
-    }
+//    public void sendColorChosen(int clientID, PlayerColor color){
+//        ColorChosenMessage colorMsg=new ColorChosenMessage(clientID, color);
+//        sendUpdateToAll(colorMsg);
+//    }
 
     public void sendHandObjectiveUpdate(int clientID, ArrayList<ObjectiveCard> card){
         HandObjectiveMessage handObjectiveMsg=new HandObjectiveMessage(clientID, card);

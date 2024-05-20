@@ -3,6 +3,7 @@ package it.polimi.ingsfw.ingsfwproject.View.GUI;
 import it.polimi.ingsfw.ingsfwproject.Model.Coordinate;
 import it.polimi.ingsfw.ingsfwproject.Model.ObjectiveCard;
 import it.polimi.ingsfw.ingsfwproject.Model.PlayableCard;
+import it.polimi.ingsfw.ingsfwproject.Model.PlayerColor;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServer.DrawMessage;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServer.PickMessage;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServer.PlayCardMessage;
@@ -19,10 +20,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.ResourceBundle;
+import java.util.*;
 
 import static it.polimi.ingsfw.ingsfwproject.View.View.client;
 
@@ -40,7 +38,18 @@ public class GameBoardController extends GUIController implements Initializable 
     @FXML public ImageView handCard1;
     @FXML public ImageView handCard2;
     @FXML public ImageView handCard3;
+    @FXML public ImageView pin1;
+    @FXML public ImageView pin2;
+    @FXML public ImageView pin3;
+    @FXML public ImageView pin4;
+    @FXML public ImageView pin11;
+    @FXML public ImageView pin21;
+    @FXML public ImageView pin31;
+    @FXML public ImageView pin41;
+
     public static GUIView guiView;
+
+    private Map<PlayerColor, String> colorImageMap;
 
 
     //todo: aggiungere un arraylist con i colori degli altri giocatori
@@ -70,6 +79,14 @@ public class GameBoardController extends GUIController implements Initializable 
         updateResourceDeck();
         updateDisplayedCard();
         setObjectiveDisplayed();
+
+        colorImageMap=new HashMap<>();
+        colorImageMap.put(PlayerColor.BLUE, "/it/polimi/ingsfw/ingsfwproject/Images/CODEX_pion_bleu.png");
+        colorImageMap.put(PlayerColor.RED, "/it/polimi/ingsfw/ingsfwproject/Images/CODEX_pion_rouge.png");
+        colorImageMap.put(PlayerColor.YELLOW, "/it/polimi/ingsfw/ingsfwproject/Images/CODEX_pion_jaune.png");
+        colorImageMap.put(PlayerColor.GREEN, "/it/polimi/ingsfw/ingsfwproject/Images/CODEX_pion_vert.png");
+
+        initializeScore();
     }
 
     public void setTurn(){
@@ -139,6 +156,60 @@ public class GameBoardController extends GUIController implements Initializable 
                 "/it/polimi/ingsfw/ingsfwproject/Images/CODEX_cards_gold_front/" + id + ".png")));
     }
 
+    public void initializeScore(){
+        ImageView[] pinGroups = {pin1, pin2, pin3, pin4};
+        Map<String, PlayerColor> playerColorMap = client.getVirtualView().getPlayerColorMap();
+        int index=0;
+        for (Map.Entry<String, PlayerColor> entry : playerColorMap.entrySet()) {
+            PlayerColor playerColor = entry.getValue();
+
+            if (playerColor != null && index < playerColorMap.size()) {
+                String imagePath = colorImageMap.get(playerColor);
+                if (imagePath != null) {
+                    Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream(imagePath)));
+                    pinGroups[index].setImage(image);
+                    index++;
+                }
+            }
+        }
+    }
+
+    public void setTokenImage(){
+        ImageView[][] pinGroups = {
+                {pin1, pin2, pin3, pin4},
+                {pin11, pin21, pin31, pin41},
+        };
+
+        Map<String, Integer> scores = client.getVirtualView().getScores();
+        Map<String, PlayerColor> playerColorMap = client.getVirtualView().getPlayerColorMap();
+
+        for (ImageView[] pinGroup : pinGroups) {
+            for (ImageView pin : pinGroup) {
+                pin.setImage(null);
+            }
+        }
+
+        for (Map.Entry<String, Integer> entry : scores.entrySet()) {
+            String playerName = entry.getKey();
+            PlayerColor playerColor = playerColorMap.get(playerName);
+            int score=entry.getValue();
+
+            //System.out.println(playerName+"-"+score);
+            String imagePath = colorImageMap.get(playerColor);
+            if (imagePath != null) {
+                Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream(imagePath)));
+                for (ImageView pin : pinGroups[score]) {
+                    if (pin.getImage() == null) {
+                        pin.setImage(image);
+                        break;
+                    }
+                }
+            }
+
+
+
+        }
+    }
 
 
     //Gestione input
@@ -177,6 +248,8 @@ public class GameBoardController extends GUIController implements Initializable 
         DrawMessage messageToSend = new DrawMessage(client.getClientID(), client.getNickname(), deckWanted);
         client.sendMessage(messageToSend);
     }
+
+
 
 
 }

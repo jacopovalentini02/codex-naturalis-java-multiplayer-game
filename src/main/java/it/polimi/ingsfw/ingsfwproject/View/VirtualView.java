@@ -29,6 +29,8 @@ public class VirtualView {
     private boolean currentPlayerhasPlayed;
     private String winner;
 
+    private Map<String, PlayerColor> playerColorMap;
+
     private Queue<ChatMessage> globalChat;
 
     public VirtualView() {
@@ -37,6 +39,7 @@ public class VirtualView {
         this.handCards=new ArrayList<>();
         this.resources=new HashMap<>();
         this.globalChat = new LinkedBlockingQueue<>();
+        this.playerColorMap=new HashMap<>();
     }
 
     public ArrayList<PlayableCard> getHandCards() {
@@ -173,4 +176,12 @@ public class VirtualView {
         return globalChat;
     }
 
+
+    public void setPlayerColorMap(Map<String, PlayerColor> playerColorMap) {
+        this.playerColorMap = playerColorMap;
+    }
+
+    public Map<String, PlayerColor> getPlayerColorMap() {
+        return playerColorMap;
+    }
 }

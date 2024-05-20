@@ -34,46 +34,14 @@
       <ImageView fx:id="handCard1" fitHeight="115.0" fitWidth="170.0" layoutX="691.0" layoutY="743.0" onMouseClicked="#firstCardChosen" pickOnBounds="true" preserveRatio="true" />
       <ImageView fx:id="handCard2" fitHeight="115.0" fitWidth="170.0" layoutX="878.0" layoutY="743.0" pickOnBounds="true" preserveRatio="true" />
       <ImageView fx:id="handCard3" fitHeight="115.0" fitWidth="170.0" layoutX="1065.0" layoutY="743.0" pickOnBounds="true" preserveRatio="true" />
-      <ImageView fx:id="pin1" fitHeight="42.0" fitWidth="41.0" layoutX="113.0" layoutY="523.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@Images/CODEX_pion_rouge.png" />
-         </image>
-      </ImageView>
-      <ImageView fx:id="pin2" fitHeight="42.0" fitWidth="41.0" layoutX="112.0" layoutY="519.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@Images/CODEX_pion_bleu.png" />
-         </image>
-      </ImageView>
-      <ImageView fx:id="pin3" fitHeight="42.0" fitWidth="41.0" layoutX="112.0" layoutY="515.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@Images/CODEX_pion_jaune.png" />
-         </image>
-      </ImageView>
-      <ImageView fx:id="pin4" fitHeight="42.0" fitWidth="41.0" layoutX="112.0" layoutY="511.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@Images/CODEX_pion_vert.png" />
-         </image>
-      </ImageView>
-      <ImageView fx:id="pin11" fitHeight="42.0" fitWidth="41.0" layoutX="169.0" layoutY="523.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@Images/CODEX_pion_rouge.png" />
-         </image>
-      </ImageView>
-      <ImageView fx:id="pin21" fitHeight="42.0" fitWidth="41.0" layoutX="168.0" layoutY="519.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@Images/CODEX_pion_bleu.png" />
-         </image>
-      </ImageView>
-      <ImageView fx:id="pin31" fitHeight="42.0" fitWidth="41.0" layoutX="168.0" layoutY="515.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@Images/CODEX_pion_jaune.png" />
-         </image>
-      </ImageView>
-      <ImageView fx:id="pin41" fitHeight="42.0" fitWidth="41.0" layoutX="168.0" layoutY="511.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@Images/CODEX_pion_vert.png" />
-         </image>
-      </ImageView>
+      <ImageView fx:id="pin1" fitHeight="42.0" fitWidth="41.0" layoutX="142.0" layoutY="520.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin2" fitHeight="42.0" fitWidth="41.0" layoutX="141.0" layoutY="516.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin3" fitHeight="42.0" fitWidth="41.0" layoutX="141.0" layoutY="512.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin4" fitHeight="42.0" fitWidth="41.0" layoutX="141.0" layoutY="508.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin11" fitHeight="42.0" fitWidth="41.0" layoutX="200.0" layoutY="523.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin21" fitHeight="42.0" fitWidth="41.0" layoutX="199.0" layoutY="519.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin31" fitHeight="42.0" fitWidth="41.0" layoutX="199.0" layoutY="515.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin41" fitHeight="42.0" fitWidth="41.0" layoutX="199.0" layoutY="511.0" pickOnBounds="true" preserveRatio="true" />
       <Label layoutX="42.0" layoutY="648.0" prefHeight="23.0" prefWidth="119.0" text="GOLD DECK">
          <font>
             <Font name="Bodoni 72 Smallcaps Book" size="19.0" />

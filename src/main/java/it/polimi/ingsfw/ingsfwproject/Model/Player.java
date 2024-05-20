@@ -100,7 +100,7 @@ public class Player implements Serializable {
 
     public void setToken(PlayerColor token) {
         this.token = token;
-        gameServerInstance.sendUpdateToAll(new ColorChosenMessage(clientID, token));
+        gameServerInstance.sendUpdateToAll(new ColorChosenMessage(-10, token, username));
     }
 
     public PlayerGround getGround() {
