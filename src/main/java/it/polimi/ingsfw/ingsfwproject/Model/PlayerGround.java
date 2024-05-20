@@ -187,4 +187,42 @@ public class PlayerGround implements Serializable {
     public void setAvailablePositions(ArrayList<Coordinate> availablePositions) {
         this.availablePositions = availablePositions;
     }
+
+    public int getMinX(){
+        int x = 0;
+        for (Coordinate coord : this.grid.keySet()) {
+            if (coord.getX() < x)
+                x = coord.getX();
+        }
+        return x;
+    }
+
+    public int getMinY(){
+        int y = 0;
+        for (Coordinate coord : this.grid.keySet()) {
+            if(coord.getY() < y)
+                y = coord.getY();
+        }
+        return y;
+    }
+
+    public int getMaxX(){
+        int x = 0;
+        for (Coordinate coord : this.grid.keySet()) {
+            if(coord.getX() > x)
+                x = coord.getX();
+        }
+        return x;
+    }
+
+    public int getMaxY(){
+        int y = 0;
+        for (Coordinate coord : this.grid.keySet()) {
+            if(coord.getY() > y)
+                y = coord.getY();
+        }
+        return y;
+    }
+
+
 }

@@ -46,7 +46,7 @@ class CliTest {
         player.getHandCard().remove(2);
         player.draw(game.getResourceDeck());
         Cli cli = new Cli();
-        cli.printPlayerHand(player);
+        cli.printPlayerHand();
         player.playCard(player.getHandCard().get(0), true, new Coordinate(0,0));
         player.playCard(player.getHandCard().get(0), true, new Coordinate(1,1));
         player.playCard(player.getHandCard().get(0), true, new Coordinate(1, -1));
@@ -75,6 +75,6 @@ class CliTest {
         player.getHandCard().remove(0);
         game.setupHandsAndObjectives();
         Cli cli = new Cli();
-        cli.printPlayerHand(player);
+        cli.printPlayerHand();
     }
 }

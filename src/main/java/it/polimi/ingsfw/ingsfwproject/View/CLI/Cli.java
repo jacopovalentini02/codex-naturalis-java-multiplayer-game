@@ -489,28 +489,28 @@ public class Cli extends View implements Runnable {
         }
         System.out.print(buffer.toString());
     }*/
-   public void printGrid(PlayerGround ground) {
-       int minX = getMinX(ground.getGrid().keySet());
-       int maxX = getMaxX(ground.getGrid().keySet());
-       int minY = getMinY(ground.getGrid().keySet());
-       int maxY = getMaxY(ground.getGrid().keySet());
+    public void printGrid(PlayerGround ground) {
+        int minX = getMinX(ground.getGrid().keySet());
+        int maxX = getMaxX(ground.getGrid().keySet());
+        int minY = getMinY(ground.getGrid().keySet());
+        int maxY = getMaxY(ground.getGrid().keySet());
 
-       int width = ((maxX - minX) * 5 + 6) * 3;
-       int height = (maxY - minY) * 2 + 3;
+        int width = ((maxX - minX) * 5 + 6) * 3;
+        int height = (maxY - minY) * 2 + 3;
 
-       // Initialize the buffer with empty spaces
-       StringBuilder buffer = new StringBuilder();
-       for (int i = 0; i < height; i++) {
+        // Initialize the buffer with empty spaces
+        StringBuilder buffer = new StringBuilder();
+        for (int i = 0; i < height; i++) {
            for (int j = 0; j < width; j++) {
                buffer.append(" ");
            }
            buffer.append("\n");
-       }
+        }
 
-       System.out.println("Buffer initialized with width: " + width + " and height: " + height);
+        System.out.println("Buffer initialized with width: " + width + " and height: " + height);
 
-       Iterator<Map.Entry<Coordinate, Face>> iterator = ground.topToBottomIterator();
-       while (iterator.hasNext()) {
+        Iterator<Map.Entry<Coordinate, Face>> iterator = ground.topToBottomIterator();
+        while (iterator.hasNext()) {
            Map.Entry<Coordinate, Face> entry = iterator.next();
            int x = entry.getKey().getX();
            int y = entry.getKey().getY();
@@ -518,10 +518,10 @@ public class Cli extends View implements Runnable {
            int yspace = (maxY - y) * 2 + 1;
            System.out.println("Placing face at xspace: " + xspace + ", yspace: " + yspace);
            replaceInBuffer(buffer, entry.getValue(), xspace, yspace, width);
-       }
+        }
 
-       System.out.print(buffer.toString());
-   }
+        System.out.print(buffer.toString());
+    }
 
     // Helper method to replace part of the buffer with the card's face
     private void replaceInBuffer(StringBuilder buffer, Face face, int xspace, int yspace, int width) {
@@ -754,5 +754,258 @@ public class Cli extends View implements Runnable {
         System.out.println("There's been a change in scores. The new ones are: ");
         for (Map.Entry<String, Integer> e : client.getVirtualView().getScores().entrySet())
             System.out.println(e.getKey() + ": " + e.getValue());
+    }
+
+    public void printGridMiche(PlayerGround playerGround){
+        int x = playerGround.getMinX();
+        int y = playerGround.getMaxY();
+        int xmax = playerGround.getMaxX();
+        int ymax = playerGround.getMaxY();
+
+        Map<Coordinate,Face> grid = playerGround.getGrid();
+
+        AnsiColor cardType;
+
+        Object[] returnArray;
+
+        for(int i = x*3; i < xmax*3; i++){
+            for(int j = y*3; j < ymax*3; j++){
+
+                if( ((i+j) % 2 == 0) && ((i+j) % 4) != 0){
+                    //se i+j è pari ma NON è divisibile per 4, significa che è un angolo --> cerco la carta che ha l'angolo NON coperto in quella posizione --> disegno quell'angolo
+                    returnArray = searchCornerAndCardTypeAtPosition(new Coordinate(i,j), grid);
+                    Content corner = (Content) returnArray[0];
+                    cardType = (AnsiColor) returnArray[1];
+
+                    if(corner != null)
+                        printCorner(corner, cardType);
+                    else
+                        System.out.println("    ");
+                } else if(((i+j) % 2 == 0) && ((i+j) % 4) == 0){
+                    //se i+j è pari e divisibile per 4, significa che è un centro --> stampo il centro
+
+                    if(grid.containsKey(new Coordinate(i/2,j/2))) {
+                        printCenter(new Coordinate(i/2,j/2), playerGround);
+                    }else
+                        System.out.println("            ");
+                } else if ( (i+j)%2 != 0 && (j%2) != 0){
+                    //se i+j è dispari e j è dispari, significa che è sopra/sotto il centro --> stampo il sopra/sotto (punti/ objectNeeded/...)
+
+                    returnArray = searchCenterVerticalAndCardTypeAtPosition(new Coordinate(i,j), grid);
+                    cardType = (AnsiColor) returnArray[0];
+
+                    if(cardType != null)
+                        printCenterVertical(cardType, (boolean)returnArray[1], playerGround, new Coordinate(i,j));
+                    else
+                        System.out.println("            ");
+                } else if( (i+j)%2 != 0 && (j%2) == 0){
+                    //se i+j è dispari e j è pari, significa che è a destra/sinistra del centro --> stampo lati
+                    returnArray = searchCenterHorizontalAndCardTypeAtPosition(new Coordinate(i,j), grid);
+                    cardType = (AnsiColor) returnArray[0];
+
+                    if(cardType != null)
+                        printCenterHorizontal(cardType, (boolean)returnArray[1], playerGround, new Coordinate(i,j));
+                    else
+                        System.out.println("    ");
+                }
+            }
+
+            System.out.println();
+        }
+
+
+
+    }
+
+    public Object[] searchCornerAndCardTypeAtPosition(Coordinate coord, Map<Coordinate,Face> grid){
+        Coordinate check;
+        Content content = null;
+        boolean isCovered = true;
+        AnsiColor cardType = null;
+
+        Object[] returnArray = new Object[2];
+
+        for(int i=-1; i<=1; i=i+2) {
+            for (int j = -1; j <= 1; j = j + 2) {
+                check = new Coordinate((coord.getX() + i)/2, (coord.getY() + j)/2);
+                if(grid.containsKey(check)){
+                    if(i==-1 && j==-1) { //bottom left card
+                        content = grid.get(check).getTR();
+                        isCovered = grid.get(check).isCoveredTR();
+                        cardType = getCardType(grid.get(check));
+
+                    }
+                    else if(i==-1 && j==1) { //top left card
+                        content = grid.get(check).getBR();
+                        isCovered = grid.get(check).isCoveredBR();
+                        cardType = getCardType(grid.get(check));
+                    }
+                    else if(i==1 && j==-1) { //bottom right card
+                        content = grid.get(check).getTL();
+                        isCovered = grid.get(check).isCoveredTL();
+                        cardType = getCardType(grid.get(check));
+                    }
+                    else if(i==1 && j==1) { //top right card
+                        content = grid.get(check).getBL();
+                        isCovered = grid.get(check).isCoveredBL();
+                        cardType = getCardType(grid.get(check));
+                    }
+
+                    returnArray[0] = content;
+                    returnArray[1] = cardType;
+
+                    if(!isCovered)
+                        return returnArray;
+                }
+            }
+        }
+        return null;
+    }
+
+    public Object[] searchCenterVerticalAndCardTypeAtPosition(Coordinate coord, Map<Coordinate,Face> grid){
+        Coordinate check;
+
+        AnsiColor cardType = null;
+        boolean isAbove = false;
+
+        Object[] returnArray = new Object[2];
+
+        check = new Coordinate((coord.getX())/2, (coord.getY() + 1)/2);
+        if(grid.containsKey(check)){
+            //the center is above
+            cardType =  getCardType(grid.get(check));
+            isAbove = true;
+        }
+
+        check = new Coordinate((coord.getX())/2, (coord.getY() - 1)/2);
+        if(grid.containsKey(check)){
+            //the center is underneath
+            cardType =  getCardType(grid.get(check));
+            isAbove = false;
+        }
+
+        returnArray[0] = cardType;
+        returnArray[1] = isAbove;
+
+        return returnArray;
+    }
+
+    public Object[] searchCenterHorizontalAndCardTypeAtPosition(Coordinate coord, Map<Coordinate,Face> grid){
+        Coordinate check;
+        AnsiColor cardType = null;
+        boolean isRight = false;
+
+        Object[] returnArray = new Object[2];
+
+        check = new Coordinate((coord.getX() + 1)/2, (coord.getY())/2);
+        if(grid.containsKey(check)){
+            //the center is above
+            cardType =  getCardType(grid.get(check));
+            isRight = true;
+        }
+
+        check = new Coordinate((coord.getX() - 1)/2, (coord.getY())/2);
+        if(grid.containsKey(check)){
+            //the center is underneath
+            cardType =  getCardType(grid.get(check));
+            isRight = false;
+        }
+
+        returnArray[0] = cardType;
+        returnArray[1] = isRight;
+
+        return returnArray;
+    }
+
+
+    public void printCorner(Content content, AnsiColor cardType){
+        String cornerText = "";
+
+        switch (content) {
+            case FUNGI_KINGDOM -> cornerText = AnsiColor.FUNGI_TEXT.getFormattedCharacter();
+            case PLANT_KINGDOM -> cornerText = AnsiColor.PLANT_TEXT.getFormattedCharacter();
+            case INSECT_KINGDOM -> cornerText = AnsiColor.INSECT_TEXT.getFormattedCharacter();
+            case ANIMAL_KINGDOM -> cornerText = AnsiColor.ANIMAL_TEXT.getFormattedCharacter();
+            case EMPTY -> cornerText = AnsiColor.EMPTY_TEXT.getFormattedCharacter();
+            case HIDDEN -> cornerText = cardType.getFormattedCharacter();
+            case QUILL -> cornerText = AnsiColor.QUILL_TEXT.getFormattedCharacter();
+            case MANUSCRIPT -> cornerText = AnsiColor.MANUSCRIPT_TEXT.getFormattedCharacter();
+            case INKWELL -> cornerText = AnsiColor.INKWELL_TEXT.getFormattedCharacter();
+        }
+
+        System.out.print(cornerText);
+    }
+
+    public void printCenter(Coordinate coord, PlayerGround playerGround){
+        AnsiColor cardType = getCardType(playerGround.getGrid().get(coord));
+        Face face = playerGround.getGrid().get(coord);
+        String centerText = cardType.getFormattedCharacter();
+        if (face instanceof NormalBack) {
+            switch (((NormalBack) face).getCenter()) {
+                case FUNGI_KINGDOM -> centerText += (AnsiColor.FUNGI_TEXT.getFormattedCharacter());
+                case PLANT_KINGDOM -> centerText += (AnsiColor.PLANT_TEXT.getFormattedCharacter());
+                case INSECT_KINGDOM -> centerText += (AnsiColor.INSECT_TEXT.getFormattedCharacter());
+                case ANIMAL_KINGDOM -> centerText += (AnsiColor.ANIMAL_TEXT.getFormattedCharacter());
+            }
+        } else {
+            centerText = (cardType.getFormattedCharacter());
+        }
+        centerText +=  (cardType.getFormattedCharacter());
+        System.out.print(centerText);
+    }
+
+    public void printCenterHorizontal(AnsiColor cardType, boolean isRight, PlayerGround playerGround, Coordinate coord){
+        String centerText = "";
+        int i = coord.getX();
+        int j = coord.getY();
+
+        if(isRight){
+            // è a destra del centro --> per prendere la face giocata vado a sinistra
+            Face face = playerGround.getGrid().get(new Coordinate((i-1) / 2, j / 2));
+            if (face instanceof GoldFront) {
+                System.out.print(printGoldBorder(cardType, 1));
+            } else {
+                System.out.print(cardType.getFormattedCharacter());
+            }
+
+        }else {
+            // è a SINISTRA del centro --> per prendere la face giocata vado a destra
+            Face face = playerGround.getGrid().get(new Coordinate((i+1) / 2, j / 2));
+            if (face instanceof GoldFront) {
+                System.out.print(printGoldBorder(cardType, 0));
+            } else {
+                System.out.print(cardType.getFormattedCharacter());
+            }
+        }
+
+    }
+
+    public void printCenterVertical(AnsiColor cardType, boolean isAbove, PlayerGround playerGround, Coordinate coord){
+        String centerText = "";
+        int i = coord.getX();
+        int j = coord.getY();
+
+        if(isAbove) {
+            // è sopra il centro --> per prendere la face giocata vado sotto
+            Face face = playerGround.getGrid().get(new Coordinate(i / 2, (j-1) / 2));
+            centerText += cardType.getFormattedCharacter();
+            if (face instanceof GoldFront) {
+                centerText += printGoldFrontPoints((GoldFront) face, cardType);
+            } else {
+                for (i = 0; i < 2; i++) {
+                    centerText += cardType.getFormattedCharacter();
+                }
+            }
+        }
+
+        else {
+            //bottom
+            for (i = 0; i < 3; i++) {
+                centerText += cardType.getFormattedCharacter();
+            }
+        }
+
+        System.out.print(centerText);
+
     }
 }
