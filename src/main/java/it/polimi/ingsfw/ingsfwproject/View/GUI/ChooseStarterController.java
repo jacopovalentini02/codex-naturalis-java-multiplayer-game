@@ -65,7 +65,6 @@ public class ChooseStarterController extends GUIController implements Initializa
 
     public void showStarter(PlayableCard card){
         String id="0"+card.getIdCard();
-        System.out.println(id);
         Image imageBack = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/it/polimi/ingsfw/ingsfwproject/Images/CODEX_cards_gold_back/"+id+".png")));
         Image imageFront = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/it/polimi/ingsfw/ingsfwproject/Images/CODEX_cards_gold_front/"+id+".png")));
         starterFront.setImage(imageFront);

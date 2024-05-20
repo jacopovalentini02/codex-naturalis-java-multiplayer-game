@@ -22,7 +22,7 @@ public class Cli extends View implements Runnable {
     String gameCommands = "now you can do one of the following actions: \n\t-> PlayCard \n\t-> SkipTurn";
     String drawCommands = "now you can do one of the following actions: \n\t-> DrawCard \n\t-> PickCard";
     String chooseColorCommands = "now you can do one of the following actions: \n\t-> GetColorAvailable \n\t-> ChooseColor";
-    String notMyTurnCommands = "now you can do one of the following actions: \n\t-> ShowGrid \n\t-> showScores \n\t-> showDisplayed \n\t-> showDecksTop \n\t-> showHand \n\t-> showObjective";
+    String notMyTurnCommands = "now you can do one of the following actions: \n\t-> ShowMyGrid \n\t-> ShowGrid \n\t-> showScores \n\t-> showDisplayed \n\t-> showDecksTop \n\t-> showHand \n\t-> showObjective";
     String chooseObjectiveCommands = "now you can do one of the following actions: \n\t-> ShowObjective \n\t-> chooseObjective";
     String chooseStarterCommands = "now you can do one of the following actions: \n\t-> ShowHand \n\t-> PlayCard";
 
@@ -96,21 +96,24 @@ public class Cli extends View implements Runnable {
         return (iFace == 1)? true : false;
     }
 
-    private int askForIntInput(String stringToPrompt, int lowerBound, int upperBound){
+
+    private int askForIntInput(String stringToPrompt, int lowerBound, int upperBound) {
         int choice = lowerBound;
-        String errorString = "Error: you have to insert a number between " + lowerBound + " and " + upperBound;
+        String errorString = "Error: you have to insert a number between " + lowerBound + " and " + upperBound + "! Retry";
+
         do {
             try {
-                if (choice < lowerBound || choice > upperBound)
-                    System.out.println(errorString);
                 System.out.println(stringToPrompt);
                 choice = scanner.nextInt();
                 scanner.nextLine();
-            }catch (InputMismatchException e){
+                if (choice < lowerBound || choice > upperBound) {
+                    System.out.println(errorString);
+                }
+            } catch (InputMismatchException e) {
                 System.out.println(errorString);
-                choice--;
+                scanner.nextLine(); // Clear the invalid input
             }
-        }while(choice <lowerBound || choice > upperBound);
+        } while (choice < lowerBound || choice > upperBound);
 
         return choice;
     }
@@ -384,7 +387,7 @@ public class Cli extends View implements Runnable {
                     client.sendMessage(messageToSend);
                     break;
                 case "joingame":
-                    int gameID = askForIntInput("insert the game ID", 0, Integer.MAX_VALUE);
+                    int gameID = askForIntInput("insert the game ID", 0, 1000);
                     name = askForStringInput("insert your nickname");
                     messageToSend = new JoinGameMessage(client.getClientID(), name, gameID);
                     client.sendMessage(messageToSend);
@@ -397,65 +400,90 @@ public class Cli extends View implements Runnable {
                     messageToSend = new GetColorAvailableMessage(client.getClientID());
                     client.sendMessage(messageToSend);
                     break;
-                case "choosecolor" :
+                case "choosecolor":
                     PlayerColor colorChoosen = PlayerColor.valueOf(askForStringInput("What color do you want among those?").toUpperCase());
                     messageToSend = new WantThatColorMessage(client.getClientID(), client.getNickname(), colorChoosen);
                     client.sendMessage(messageToSend);
                     break;
-                case "chooseobjective" :
+                case "chooseobjective":
                     int objWanted = askForIdObjectiveInput("What objective do you prefer?", (client.getVirtualView().getHandObjectives()));
                     messageToSend = new ObjectiveCardChosenMessage(client.getClientID(), client.getNickname(), objWanted);
                     client.sendMessage(messageToSend);
                     break;
-                case "playcard" :
+                case "playcard":
                     int idCard = askForIdCardInput("Among the cards in your hand, which one do you want to play? Here the cards' id:", client.getVirtualView().getHandCards());
                     boolean face = askForFaceToPlay();
                     Coordinate coords = askForCoordinateInput(client.getVirtualView().getAvailablePositions());
-                    messageToSend = new PlayCardMessage(client.getClientID(),idCard, face,coords, client.getNickname());
+                    messageToSend = new PlayCardMessage(client.getClientID(), idCard, face, coords, client.getNickname());
                     System.out.println(client.getNickname());
                     client.sendMessage(messageToSend);
                     break;
-                case "drawcard" :
+                case "drawcard":
                     //defalt value for deckWanted
                     boolean deckWanted = true;
                     int idDeck = askForIntInput("From which deck you want to draw?\n1)Resource deck\n2)Gold deck", 1, 2);
-                    switch(idDeck){
+                    switch (idDeck) {
                         case 1 -> deckWanted = true;
                         case 2 -> deckWanted = false;
                     }
                     messageToSend = new DrawMessage(client.getClientID(), client.getNickname(), deckWanted);
                     client.sendMessage(messageToSend);
                     break;
-                case "pickcard" :
+                case "pickcard":
                     idCard = askForIdCardInput("Among those, which card do you want?", client.getVirtualView().getDisplayedCards());
                     messageToSend = new PickMessage(client.getClientID(), idCard, client.getNickname());
                     client.sendMessage(messageToSend);
                     break;
-                case "skipturn" :
+                case "skipturn":
                     messageToSend = new SkipTurnMessage(client.getClientID(), client.getNickname());
                     client.sendMessage(messageToSend);
                     break;
-                case "showgrid" :
+                case "showgrid":
                     //todo: chiedere di chi e stampare la relativa grid
+                    Set<String> otherPlayersNick = client.getVirtualView().getScores().keySet();
+                    otherPlayersNick.remove(client.getNickname());
+                    String playerAsked;
+                    System.out.println("Among the fields of the players, which one do you want to look?");
+                    for (String p : otherPlayersNick) {
+                        System.out.print(p + " ");
+                        System.out.println("");
+                    }
+                    do {
+                        playerAsked = scanner.nextLine();
+                        if(!otherPlayersNick.contains(playerAsked)){
+                            System.out.println("The requested player doesn't exist! Retry!");
+                        }
+                    } while (!otherPlayersNick.contains(playerAsked));
+                    //TODO : Inserire qua il metodo di stampa della grid del player
                     break;
-                case "showscores" :
+                case "showmygrid":
+                    //TODO: STAMPARE DIRETTAMENTE GRID DEL PLAYER RICHIEDENTE
+                    break;
+                case "showscores":
                     printScores();
                     break;
-                case "showdisplayed" :
-                    //todo: stampare le displayed
+                case "showdisplayed":
+                    //todo: cambiare il metodo di stampa delle carte -> stampa lines in grid
+                    for (PlayableCard c : client.getVirtualView().getDisplayedCards()) {
+                        System.out.println(printFacePlayed(c.getFront()));
+                    }
                     break;
-                case "showdekstop" :
-                    //todo: stampare il back della carta in alto sui mazzi
+                case "showdekstop":
+                    //todo: cambiare il metodo di stampa delle carte -> stampa lines in grid
+                    System.out.println("The back of the top card of the resource deck is: ");
+                    System.out.println(printFacePlayed(((ResourceCard) client.getVirtualView().getResourceDeck().getCardList().getFirst()).getBack()));
+                    System.out.println("The back of the top card of the gold deck is: ");
+                    System.out.println(printFacePlayed(((GoldCard) client.getVirtualView().getGoldDeck().getCardList().getFirst()).getBack()));
                     break;
-                case "showhand" :
+                case "showhand":
                     printPlayerHand();
                     break;
-                case "showobjective" :
+                case "showobjective":
                     printObjectiveCards();
                     break;
                 case "chat":
-                    for (ChatMessage m: client.getVirtualView().getGlobalChat()){
-                        System.out.println(RED+m.getSender()+ ": " + m.getMessage()+RESET);
+                    for (ChatMessage m : client.getVirtualView().getGlobalChat()) {
+                        System.out.println(RED + m.getSender() + ": " + m.getMessage() + RESET);
                     }
                     break;
                 case "sendmessage":
@@ -592,6 +620,7 @@ public class Cli extends View implements Runnable {
         builder.append(cardType.getFormattedCharacter());
         if (face instanceof GoldFront) {
             builder.append(printGoldFrontPoints((GoldFront) face, cardType));
+            builder.append(printCorner(((GoldFront) face).getObjectNeeded(), 0, cardType));
         } else {
             for (i = 0; i < 2; i++) {
                 builder.append(cardType.getFormattedCharacter());

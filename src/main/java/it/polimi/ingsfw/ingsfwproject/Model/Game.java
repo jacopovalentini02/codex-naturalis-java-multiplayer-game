@@ -211,6 +211,9 @@ public class Game {
             }catch (DeckEmptyException ignore){}
         }
 
+        gameServerInstance.sendUpdateToAll(new GoldDeckMessage(-10, this.goldDeck));
+        gameServerInstance.sendUpdateToAll(new ResourceDeckMessage(-10, this.resourceDeck));
+
     }
 
     public void randomizeFirstPlayer(){

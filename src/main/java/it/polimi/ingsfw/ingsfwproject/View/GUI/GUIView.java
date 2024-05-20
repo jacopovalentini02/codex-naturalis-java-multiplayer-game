@@ -286,6 +286,16 @@ public class GUIView extends View {
 
     @Override
     public void notifyGridUpdate(String nickname, Map<Coordinate, Face> grid) {
+        if(gameBoardController.equals(currentController)){
+            Platform.runLater(() -> {
+                try {
+
+                    gameBoardController.updateGrid();
+                } catch (Exception ex) {
+                    throw new RuntimeException(ex);
+                }
+            });
+        }
 
     }
 
@@ -321,6 +331,16 @@ public class GUIView extends View {
 
     @Override
     public void notifyScores(Map<String, Integer> scores) {
+         if(gameBoardController.equals(currentController)){
+            Platform.runLater(() -> {
+                try {
+
+                    gameBoardController.setTokenImage();
+                } catch (Exception ex) {
+                    throw new RuntimeException(ex);
+                }
+            });
+        }
 
     }
 

@@ -1,5 +1,6 @@
 package it.polimi.ingsfw.ingsfwproject.View.CLI;
-
+import it.polimi.ingsfw.ingsfwproject.Network.Client.*;
+import it.polimi.ingsfw.ingsfwproject.View.*;
 
 
 import it.polimi.ingsfw.ingsfwproject.Exceptions.CardNotInHandException;
@@ -75,6 +76,7 @@ class CliTest {
         player.getHandCard().remove(0);
         game.setupHandsAndObjectives();
         Cli cli = new Cli();
+        Client client = new RMIClient("localhost", 1099, cli);
         cli.printPlayerHand();
     }
 }

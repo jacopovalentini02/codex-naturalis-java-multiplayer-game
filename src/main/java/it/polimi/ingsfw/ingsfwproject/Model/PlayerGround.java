@@ -148,6 +148,8 @@ public class PlayerGround implements Serializable {
                     points = contentCounter.getCounter(((GoldFront) face).getObjectNeeded()) * ((GoldFront) face).getPoints();
                 }
             }
+        }else{
+            points=((NormalFace)face).getPoints();
         }
         return points;
     }
