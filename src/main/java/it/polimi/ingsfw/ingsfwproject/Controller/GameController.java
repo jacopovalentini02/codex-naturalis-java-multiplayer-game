@@ -263,6 +263,15 @@ public class GameController implements Controller {
         serverInstance.sendUpdateToAll(new RecieveChatMessage(-10, message.getSender(), message.getRecipient(), message.getMessage()));
     }
 
+    public void forwardPrivateChatMessage(ChatMessage message){
+        int recipientClientID = serverInstance.getClientIDbyNickname(message.getRecipient());
+        if (recipientClientID == -1) {
+            serverInstance.sendUpdateToAll(new ExcpetionMessage(serverInstance.getClientIDbyNickname(message.getSender()), "There's no player with nick " + message.getRecipient()));
+            return;
+        } else {
+            serverInstance.sendUpdateToAll(new RecieveChatMessage(recipientClientID, message.getSender(), message.getRecipient(), message.getMessage()));
+        }
+    }
 
     public void clientDisconnected(){
         this.model.clientDisconnected();

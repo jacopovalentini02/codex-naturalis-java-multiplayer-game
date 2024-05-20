@@ -481,19 +481,39 @@ public class Cli extends View implements Runnable {
                 case "showobjective":
                     printObjectiveCards();
                     break;
-                case "chat":
+                case "globalchat":
                     for (ChatMessage m : client.getVirtualView().getGlobalChat()) {
                         System.out.println(RED + m.getSender() + ": " + m.getMessage() + RESET);
                     }
                     break;
+                case "chat":
+                    String playerNick = askForStringInput("Which chat you want to show? Type the nick of the other player: " + printOtherPlayers());
+                    if (client.getVirtualView().getPrivateChat(playerNick) != null){
+                        for (ChatMessage m: client.getVirtualView().getPrivateChat(playerNick))
+                            System.out.println(RED + m.getSender() + ": " + m.getMessage() + RESET);
+                    } else {
+                        System.out.println("There's no such player");
+                    }
+                    break;
                 case "sendmessage":
+                    String recipient = askForStringInput("Who do you want to send the message to? Type the nick of the other player, global for globalchat: " + printOtherPlayers());
                     String chatMessage = askForStringInput("Type your message: ");
-                    client.sendMessage(new sendChatMessage(client.getClientID(), client.getNickname(), "global", chatMessage));
+                    client.getVirtualView().sendPrivateMessage(new ChatMessage(client.getNickname(), recipient, chatMessage));
+                    client.sendMessage(new sendChatMessage(client.getClientID(), client.getNickname(), recipient, chatMessage));
                     break;
             }
         }catch(Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private String printOtherPlayers(){
+        String toReturn = "";
+        for (String s : client.getVirtualView().getListOfPlayers()){
+            if (!(s.equals(client.getNickname())))
+               toReturn = toReturn.concat(s + " ");
+        }
+        return toReturn;
     }
 
     @Override

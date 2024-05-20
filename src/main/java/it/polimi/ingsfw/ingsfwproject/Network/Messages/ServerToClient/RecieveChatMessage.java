@@ -25,7 +25,12 @@ public class RecieveChatMessage extends ServerToClientMessage {
     @Override
     public void execute(Client client) {
         ChatMessage message = new ChatMessage(sender, recipient, text);
-        client.getVirtualView().addMessageToGlobalChat(message);
+
+        if (recipient.equals("global")) {
+            client.getVirtualView().addMessageToGlobalChat(message);
+        } else {
+            client.getVirtualView().addMessageToPrivateChat(message);
+        }
         client.getView().notifyChatMessage(message);
     }
 }
