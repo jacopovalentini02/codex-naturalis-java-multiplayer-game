@@ -1,5 +1,6 @@
 package it.polimi.ingsfw.ingsfwproject.View.CLI;
-
+import it.polimi.ingsfw.ingsfwproject.Network.Client.*;
+import it.polimi.ingsfw.ingsfwproject.View.*;
 
 
 import it.polimi.ingsfw.ingsfwproject.Exceptions.CardNotInHandException;
@@ -46,14 +47,13 @@ class CliTest {
         player.getHandCard().remove(2);
         player.draw(game.getResourceDeck());
         Cli cli = new Cli();
-        cli.printPlayerHand(player);
+        cli.printPlayerHand();
         player.playCard(player.getHandCard().get(0), true, new Coordinate(0,0));
         player.playCard(player.getHandCard().get(0), true, new Coordinate(1,1));
         player.playCard(player.getHandCard().get(0), true, new Coordinate(1, -1));
         System.out.println("ecco la grid:");
         cli.printGrid(player.getGround());
     }
-
 
     @Test
     void testPrintCorner() {
@@ -75,6 +75,7 @@ class CliTest {
         player.getHandCard().remove(0);
         game.setupHandsAndObjectives();
         Cli cli = new Cli();
-        cli.printPlayerHand(player);
+        Client client = new RMIClient("localhost", 1099, cli);
+        cli.printPlayerHand();
     }
 }
