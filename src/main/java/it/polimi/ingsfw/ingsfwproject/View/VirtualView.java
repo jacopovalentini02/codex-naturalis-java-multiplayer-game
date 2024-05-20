@@ -184,4 +184,8 @@ public class VirtualView {
     public Map<String, PlayerColor> getPlayerColorMap() {
         return playerColorMap;
     }
+
+    public HashMap<String, Map<Coordinate, Face>> getGrids() {
+        return grids;
+    }
 }
