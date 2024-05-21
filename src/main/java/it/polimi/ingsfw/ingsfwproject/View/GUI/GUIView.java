@@ -348,6 +348,11 @@ public class GUIView extends View {
     }
 
     @Override
+    public void notifyCurrentPlayerHasPlayed(boolean bool){
+        //TODO: DA FARE
+    }
+
+    @Override
     public void run() {
          //Application.launch(ChooseConnectionApp.class);
        //chooseConnection();

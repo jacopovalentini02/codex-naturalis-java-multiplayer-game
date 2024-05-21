@@ -22,11 +22,11 @@ public class ScoreMessage extends ServerToClientMessage implements Serializable 
     @Override
     public void execute(Client client) {
         client.getVirtualView().setScores(scores);
-        for (Map.Entry<String, Integer> entry : scores.entrySet()) {
-            String playerName = entry.getKey();
-            int score = entry.getValue();
-            System.out.println("Player: " + playerName + ", Score: " + score);
-        }
+//        for (Map.Entry<String, Integer> entry : scores.entrySet()) {
+//            String playerName = entry.getKey();
+//            int score = entry.getValue();
+//            System.out.println("Player: " + playerName + ", Score: " + score);
+//        }
         client.getView().notifyScores(scores);
     }
 }

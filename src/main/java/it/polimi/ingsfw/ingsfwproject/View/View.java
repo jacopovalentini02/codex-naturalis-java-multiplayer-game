@@ -60,5 +60,7 @@ public abstract class View implements Runnable{
 
     public abstract void notifyChatMessage(ChatMessage message);
 
+    public abstract void notifyCurrentPlayerHasPlayed(boolean bool);
+
 
 }

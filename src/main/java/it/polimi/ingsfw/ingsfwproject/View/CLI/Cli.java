@@ -211,19 +211,22 @@ public class Cli extends View implements Runnable {
     @Override
     public void notifyGameJoined(int idGame){
         System.out.println("You have joined the game " + idGame+ " correctly.");
-        if(client.getVirtualView().getState() == GameState.WAITING_FOR_PLAYERS)
-            System.out.println("Wait for all the players to join the game...");
+        System.out.println("Wait for all the players to join the game...");
     }
 
     @Override
     public void notifyNewPlayerJoined(ArrayList<String> nicknames){
+        /*
         System.out.println("A new player has joined the game.");
+
         System.out.println("Players in this lobby: ");
 
         for (String s : nicknames) {
             System.out.print(s + " ");
         }
         System.out.println();
+
+         */
     }
 
     @Override
@@ -247,16 +250,17 @@ public class Cli extends View implements Runnable {
 
     @Override
     public void notifyGoldDeckUpdate(){
-        System.out.println("Gold deck updated!");
+        //System.out.println("Gold deck updated!");
     }
 
     @Override
     public void notifyResourceDeckUpdate() {
-        System.out.println("Resourced deck updated!");
+        //System.out.println("Resourced deck updated!");
     }
 
     @Override
     public void notifyDisplayedCardsUpdate(ArrayList<PlayableCard> displayedCards) {
+        /*
         System.out.println("Displayed playable cards updated! Here's how:\n");
         int i =1;
         for(PlayableCard pc : displayedCards){
@@ -264,6 +268,7 @@ public class Cli extends View implements Runnable {
             printFace(pc.getFront());
             i++;
         }
+         */
     }
 
     @Override
@@ -274,6 +279,7 @@ public class Cli extends View implements Runnable {
 
     @Override
     public void notifyAvailablePositions(ArrayList<Coordinate> coord) {
+        /*
         if (coord.isEmpty()){
             System.out.println("You have no more coordinates available!");
             return;
@@ -281,31 +287,41 @@ public class Cli extends View implements Runnable {
         System.out.println("your available positions have changed: now you can play a card in the following coordinates:");
         for(Coordinate c : coord)
             System.out.println(c);
+
+         */
     }
 
     @Override
     public void notifyHandObjectives(ArrayList<ObjectiveCard> cards){
-        System.out.println("your objective card has been selected correctly!");
+        if(cards.size() == 1)
+            System.out.println("your objective card has been selected correctly!");
     }
 
     @Override
     public void notifyGameState(GameState state){
-        System.out.println("Game state updated to: '" + state);
+        if(!state.equals(client.getVirtualView().getState()))
+            System.out.println("Game state updated to: '" + state);
 
     }
 
     @Override
     public void notifyGridUpdate(String nickname, Map<Coordinate,Face> grid){
+        /*
         System.out.println(nickname + "'s grid has been updated. Here's how: ");
         printGrid(client.getVirtualView().getGrids().get(nickname));
+
+         */
     }
 
     @Override
     public void notifyResourcesUpdate(String nickname, HashMap<Content, Integer> resources) {
+        /*
         System.out.println(nickname + "'s resource count has been updated to: ");
         for (Content c : resources.keySet())
             System.out.println(c + ": " + resources.get(c));
         System.out.println("\n");
+
+         */
     }
 
     @Override
@@ -315,16 +331,22 @@ public class Cli extends View implements Runnable {
 
     @Override
     public void notifyHandCardsUpdate(ArrayList<PlayableCard> cards){
+        /*
         System.out.println("Your hand has just been updated. Look at what you have: \n");
         printPlayerHand();
+
+         */
     }
 
     @Override
     public void notifyDisplayedObjectives(List<ObjectiveCard> cards){
+        /*
         System.out.println("Displayed objective cards updated. Here they are: ");
         for (ObjectiveCard o : cards)
             System.out.print(o.getIdCard() + " ");
         System.out.println("\n");
+
+         */
     }
 
     @Override
@@ -335,6 +357,14 @@ public class Cli extends View implements Runnable {
     @Override
     public void notifyColorChosen(PlayerColor color){
         System.out.println(color + " successfully set. ");
+    }
+
+    @Override
+    public void notifyCurrentPlayerHasPlayed(boolean currentPlayerHasPlayed){
+        if(currentPlayerHasPlayed) {
+            System.out.println("Your card has been played!");
+            printAvailableCommands();
+        }
     }
 
     public void printAvailableCommands(){
