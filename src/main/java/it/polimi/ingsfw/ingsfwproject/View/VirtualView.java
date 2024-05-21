@@ -148,7 +148,10 @@ public class VirtualView {
 
     public void setListOfPlayers(ArrayList<String> listOfPlayers) {
         this.listOfPlayers = listOfPlayers;
-        this.privateChats.put(listOfPlayers.getLast(), new LinkedBlockingQueue<>()); //adding new private chat to the map
+
+        for (String nickname : this.listOfPlayers)
+            privateChats.computeIfAbsent(nickname, key -> new LinkedBlockingQueue<>()); //adding private chats to the map
+
     }
 
 
