@@ -10,7 +10,6 @@ import java.util.*;
 
 import java.util.HashMap;
 import java.util.Scanner;
-import java.util.concurrent.LinkedBlockingQueue;
 
 import it.polimi.ingsfw.ingsfwproject.View.View;
 
@@ -298,8 +297,7 @@ public class Cli extends View implements Runnable {
     @Override
     public void notifyGridUpdate(String nickname, Map<Coordinate,Face> grid){
         System.out.println(nickname + "'s grid has been updated. Here's how: ");
-        printGridMiche(client.getVirtualView().getGrids().get(nickname));
-        printGridMiche(grid);
+        printGrid(client.getVirtualView().getGrids().get(nickname));
     }
 
     @Override
@@ -452,11 +450,11 @@ public class Cli extends View implements Runnable {
                             System.out.println("The requested player doesn't exist! Retry!");
                         }
                     } while (!otherPlayersNick.contains(playerAsked));
-                    printGridMiche(client.getVirtualView().getGrids().get(playerAsked));
+                    printGrid(client.getVirtualView().getGrids().get(playerAsked));
                     break;
 
                 case "showmygrid":
-                    printGridMiche(client.getVirtualView().getGrids().get(client.getNickname()));
+                    printGrid(client.getVirtualView().getGrids().get(client.getNickname()));
                     break;
                 case "showscores":
                     printScores();
@@ -630,7 +628,7 @@ public class Cli extends View implements Runnable {
             System.out.println(e.getKey() + ": " + e.getValue());
     }
 
-    public void printGridMiche(Map<Coordinate, Face> grid){
+    public void printGrid(Map<Coordinate, Face> grid){
         int xmin = getMinX(grid.keySet());
         int ymin = getMinY(grid.keySet());
         int xmax = getMaxX(grid.keySet());
@@ -691,7 +689,7 @@ public class Cli extends View implements Runnable {
         HashMap<Coordinate, Face> grid = new HashMap<>();
         grid.put(new Coordinate(0,0), face);
 
-        printGridMiche(grid);
+        printGrid(grid);
     }
 
     public void printPlayerHand() {
