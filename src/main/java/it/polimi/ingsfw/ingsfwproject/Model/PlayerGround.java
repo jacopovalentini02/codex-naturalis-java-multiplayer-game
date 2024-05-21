@@ -227,5 +227,9 @@ public class PlayerGround implements Serializable {
         return y;
     }
 
+    public void setGrid(Map<Coordinate, Face> grid){
+        this.grid = grid;
+    }
+
 
 }
