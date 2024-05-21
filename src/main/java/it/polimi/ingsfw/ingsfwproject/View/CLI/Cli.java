@@ -63,7 +63,7 @@ public class Cli extends View implements Runnable {
     }
 
     private Coordinate askForCoordinateInput(ArrayList<Coordinate> availablePositions) {
-        Coordinate coord = new Coordinate(-9999, -9999);
+        Coordinate coord = new Coordinate(Integer.MIN_VALUE, Integer.MIN_VALUE);
         String errorString = "Invalid coordinates! Please insert valid ones.\n";
         System.out.println("Choose the coordinates where you want to play the card between these:");
         for (Coordinate c : availablePositions) {
@@ -74,13 +74,14 @@ public class Cli extends View implements Runnable {
                 System.out.println("Insert X and Y coordinates:");
                 int x = scanner.nextInt();
                 scanner.nextLine();
+                System.out.println("x registered");
                 int y = scanner.nextInt();
                 scanner.nextLine();
                 coord = new Coordinate(x, y);
                 if (!availablePositions.contains(coord)) {
                     System.out.println(errorString);
                 }
-                System.out.println("coord inserite");
+                System.out.println("coord inserted");
             } catch (InputMismatchException e) {
                 System.out.println(errorString);
                 scanner.nextLine();
@@ -254,7 +255,9 @@ public class Cli extends View implements Runnable {
     public void notifyDisplayedCardsUpdate(ArrayList<PlayableCard> displayedCards) {
         System.out.println("Displayed playable cards updated! Here's how:\n");
         //TODO: stampare le carte
-
+        for(PlayableCard pc : displayedCards){
+            printFace(pc.getFront());
+        }
     }
 
     @Override
@@ -530,76 +533,6 @@ public class Cli extends View implements Runnable {
         System.out.println(message);
     }
 
-
-   /* public void printGrid(PlayerGround ground) {
-        int minX = getMinX(ground.getGrid().keySet());
-        int maxY = getMaxY(ground.getGrid().keySet());
-        Iterator<Map.Entry<Coordinate, Face>> iterator = ground.topToBottomIterator();
-        StringBuffer buffer = new StringBuffer();
-        while (iterator.hasNext()) {
-            Map.Entry<Coordinate, Face> entry = iterator.next(); // Prendi la prossima entry una volta per iterazione
-            int x = entry.getKey().getX();
-            int y = entry.getKey().getY();
-            int xspace = ((x - minX) * 6 - minX-1) * 3;
-            int yspace = (maxY - y) * 2 + 1;
-            buffer.append(faceInGrid(entry.getValue(), printSpace(xspace)));
-        }
-        System.out.print(buffer.toString());
-    }*/
-
-    /*
-    public void printGrid(PlayerGround ground) {
-        int minX = getMinX(ground.getGrid().keySet());
-        int maxX = getMaxX(ground.getGrid().keySet());
-        int minY = getMinY(ground.getGrid().keySet());
-        int maxY = getMaxY(ground.getGrid().keySet());
-
-        int width = ((maxX - minX) * 5 + 6) * 3;
-        int height = (maxY - minY) * 2 + 3;
-
-        // Initialize the buffer with empty spaces
-        StringBuilder buffer = new StringBuilder();
-        for (int i = 0; i < height; i++) {
-           for (int j = 0; j < width; j++) {
-               buffer.append(" ");
-           }
-           buffer.append("\n");
-        }
-
-        System.out.println("Buffer initialized with width: " + width + " and height: " + height);
-
-        Iterator<Map.Entry<Coordinate, Face>> iterator = ground.topToBottomIterator();
-        while (iterator.hasNext()) {
-           Map.Entry<Coordinate, Face> entry = iterator.next();
-           int x = entry.getKey().getX();
-           int y = entry.getKey().getY();
-           int xspace = ((x - minX) * 6 - x) * 3;
-           int yspace = (maxY - y) * 2 + 1;
-           System.out.println("Placing face at xspace: " + xspace + ", yspace: " + yspace);
-           replaceInBuffer(buffer, entry.getValue(), xspace, yspace, width);
-        }
-
-        System.out.print(buffer.toString());
-    }
-
-    // Helper method to replace part of the buffer with the card's face
-    private void replaceInBuffer(StringBuilder buffer, Face face, int xspace, int yspace, int width) {
-       int i;
-        String card = printFacePlayed(face);
-        String[] cardLines = card.split("\n");
-        String[] lines = new String[3];
-        for(i=0; i<cardLines.length; i++){
-            lines[i] = cardLines[i]+"\n";
-        }
-        for(i=0; i<lines.length; i++){
-            int startIndex = (yspace+i)*(width+1)+xspace;
-            for(int j=0; j<lines[i].length(); j++){
-                buffer.setCharAt(startIndex, lines[i].charAt(j));
-                startIndex++;
-            }
-        }
-    }
-    */
     // Helper methods for calculating grid boundaries
     public int getMinX(Set<Coordinate> coords){
         int min = Integer.MAX_VALUE;
@@ -640,62 +573,7 @@ public class Cli extends View implements Runnable {
         }
         return max;
     }
-    /*
-    public String printFacePlayed(Face face) {
-        StringBuilder builder = new StringBuilder();
-        AnsiColor cardType = getCardType(face);
-        int i;
 
-        // First row
-        builder.append(printCorner(face.getTL(), 0, cardType));
-        builder.append(cardType.getFormattedCharacter());
-        if (face instanceof GoldFront) {
-            builder.append(printGoldFrontPoints((GoldFront) face, cardType));
-            builder.append(printCorner(((GoldFront) face).getObjectNeeded(), 0, cardType));
-        } else {
-            for (i = 0; i < 2; i++) {
-                builder.append(cardType.getFormattedCharacter());
-            }
-        }
-        builder.append(printCorner(face.getTR(), 1, cardType));
-        builder.append("\n");
-
-        // Second row
-        if (face instanceof GoldFront) {
-            builder.append(printGoldBorder(cardType, 0));
-        } else {
-            builder.append(cardType.getFormattedCharacter());
-        }
-        builder.append(cardType.getFormattedCharacter());
-        if (face instanceof NormalBack) {
-            switch (((NormalBack) face).getCenter()) {
-                case FUNGI_KINGDOM -> builder.append(AnsiColor.FUNGI_TEXT.getFormattedCharacter());
-                case PLANT_KINGDOM -> builder.append(AnsiColor.PLANT_TEXT.getFormattedCharacter());
-                case INSECT_KINGDOM -> builder.append(AnsiColor.INSECT_TEXT.getFormattedCharacter());
-                case ANIMAL_KINGDOM -> builder.append(AnsiColor.ANIMAL_TEXT.getFormattedCharacter());
-            }
-        } else {
-            builder.append(cardType.getFormattedCharacter());
-        }
-        builder.append(cardType.getFormattedCharacter());
-        if (face instanceof GoldFront) {
-            builder.append(printGoldBorder(cardType, 1));
-        } else {
-            builder.append(cardType.getFormattedCharacter());
-        }
-        builder.append("\n");
-
-        // Third row
-        builder.append(printCorner(face.getBL(), 0, cardType));
-        for (i = 0; i < 3; i++) {
-            builder.append(cardType.getFormattedCharacter());
-        }
-        builder.append(printCorner(face.getBR(), 1, cardType));
-        builder.append("\n");
-
-        return builder.toString();
-    }
-    */
 
     public void printGoldFrontPoints(GoldFront face, AnsiColor cardType) {
         String goldFront = "";
@@ -736,39 +614,6 @@ public class Cli extends View implements Runnable {
 
         System.out.print(border);
     }
-    /*
-    public static String printCorner(Content content, int rOrl, AnsiColor cardType) {
-        StringBuilder result = new StringBuilder();
-
-        if (rOrl == 0) {
-            switch (content) {
-                case FUNGI_KINGDOM -> result.append(AnsiColor.FUNGI_TEXT.getFormattedCharacter());
-                case PLANT_KINGDOM -> result.append(AnsiColor.PLANT_TEXT.getFormattedCharacter());
-                case INSECT_KINGDOM -> result.append(AnsiColor.INSECT_TEXT.getFormattedCharacter());
-                case ANIMAL_KINGDOM -> result.append(AnsiColor.ANIMAL_TEXT.getFormattedCharacter());
-                case EMPTY -> result.append(AnsiColor.EMPTY_TEXT.getFormattedCharacter());
-                case HIDDEN -> result.append(cardType.getFormattedCharacter());
-                case QUILL -> result.append(AnsiColor.QUILL_TEXT.getFormattedCharacter());
-                case MANUSCRIPT -> result.append(AnsiColor.MANUSCRIPT_TEXT.getFormattedCharacter());
-                case INKWELL -> result.append(AnsiColor.INKWELL_TEXT.getFormattedCharacter());
-            }
-        } else {
-            switch (content) {
-                case FUNGI_KINGDOM -> result.append(AnsiColor.FUNGI_TEXT.getFormattedCharacter());
-                case PLANT_KINGDOM -> result.append(AnsiColor.PLANT_TEXT.getFormattedCharacter());
-                case INSECT_KINGDOM -> result.append(AnsiColor.INSECT_TEXT.getFormattedCharacter());
-                case ANIMAL_KINGDOM -> result.append(AnsiColor.ANIMAL_TEXT.getFormattedCharacter());
-                case EMPTY -> result.append(AnsiColor.EMPTY_TEXT.getFormattedCharacter());
-                case HIDDEN -> result.append(cardType.getFormattedCharacter());
-                case QUILL -> result.append(AnsiColor.QUILL_TEXT.getFormattedCharacter());
-                case MANUSCRIPT -> result.append(AnsiColor.MANUSCRIPT_TEXT.getFormattedCharacter());
-                case INKWELL -> result.append(AnsiColor.INKWELL_TEXT.getFormattedCharacter());
-            }
-        }
-
-        return result.toString();
-    }
-     */
 
     public AnsiColor getCardType(Face face){
         Content background = Card.getType(face.getIdCard());
@@ -785,28 +630,6 @@ public class Cli extends View implements Runnable {
             case HIDDEN -> AnsiColor.EMPTY_TEXT;
         };
     }
-
-    /*
-    public void printPlayerHand(){
-
-        int i =1;
-        for (PlayableCard c :client.getVirtualView().getHandCards()){
-            System.out.println("Front of card "+ i + ":");
-            System.out.println(printFacePlayed(c.getFront()));
-            if(c.getFront() instanceof GoldFront){
-                System.out.print("Costs: ");
-                for(Content cost : ((GoldFront)c.getFront()).getCost()){
-                    System.out.print(cost.toString() +" ");
-                }
-                System.out.println();
-            }
-            System.out.println("Back of card "+ i + ":");
-            System.out.println(printFacePlayed(c.getBack()));
-            i++;
-        }
-        System.out.println();
-    }
-     */
 
     public void printObjectiveCards(){
         //TODO: stampare la carta effettiva e non l'ID
