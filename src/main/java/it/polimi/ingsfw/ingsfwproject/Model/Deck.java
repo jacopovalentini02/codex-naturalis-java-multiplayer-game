@@ -46,8 +46,11 @@ public class Deck implements Serializable {
 
         // Crea un oggetto Card e aggiungilo alla lista
         Content[] emptyCorners = {Content.valueOf("EMPTY"),Content.valueOf("EMPTY"),Content.valueOf("EMPTY"),Content.valueOf("EMPTY")};
-        NormalBack backFace=new NormalBack(id, emptyCorners, center);
-        NormalFace front=new NormalFace(id, points, corners);
+        String id1 = String.format("%03d", id);
+        String imageFront="/it/polimi/ingsfw/ingsfwproject/Images/CODEX_cards_gold_front/" + id1 + ".png";
+        String imageBack="/it/polimi/ingsfw/ingsfwproject/Images/CODEX_cards_gold_back/" + id1 + ".png";
+        NormalBack backFace=new NormalBack(id, emptyCorners, center, imageBack);
+        NormalFace front=new NormalFace(id, points, corners, imageFront);
 
         ResourceCard preRes = new ResourceCard(front, backFace, id);
 
@@ -81,8 +84,13 @@ public class Deck implements Serializable {
         Content center = Content.valueOf(centerS);
         //Card creation
         Content[] emptyCorners = {Content.valueOf("EMPTY"),Content.valueOf("EMPTY"),Content.valueOf("EMPTY"),Content.valueOf("EMPTY")};
-        GoldFront front=new GoldFront(id, points, corners, costList, overlapped, objectNeed);
-        NormalBack back=new NormalBack(id, emptyCorners, center);
+
+        String id1 = String.format("%03d", id);
+        String imageFront="/it/polimi/ingsfw/ingsfwproject/Images/CODEX_cards_gold_front/" + id1 + ".png";
+        String imageBack="/it/polimi/ingsfw/ingsfwproject/Images/CODEX_cards_gold_back/" + id1 + ".png";
+
+        GoldFront front=new GoldFront(id, points, corners, costList, overlapped, objectNeed, imageFront);
+        NormalBack back=new NormalBack(id, emptyCorners, center, imageBack);
 
         GoldCard preGold = new GoldCard(back, front, id);
 
@@ -111,9 +119,11 @@ public class Deck implements Serializable {
         for (int j = 0; j < cornerBaArray.length(); j++) {
             cornerBa[j] = Content.valueOf(cornerBaArray.getString(j));
         }
-
-        NormalFace back=new NormalFace(id, 0, cornerBa);
-        StarterFront front=new StarterFront(id, cornerFr, centerList);
+        String id1 = String.format("%03d", id);
+        String imageFront="/it/polimi/ingsfw/ingsfwproject/Images/CODEX_cards_gold_front/" + id1 + ".png";
+        String imageBack="/it/polimi/ingsfw/ingsfwproject/Images/CODEX_cards_gold_back/" + id1 + ".png";
+        NormalFace back=new NormalFace(id, 0, cornerBa, imageBack);
+        StarterFront front=new StarterFront(id, cornerFr, centerList, imageFront);
 
         StarterCard preStart = new StarterCard(id, back, front);
         this.addCard(preStart);

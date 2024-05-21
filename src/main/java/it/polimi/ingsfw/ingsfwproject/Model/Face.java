@@ -14,10 +14,14 @@ abstract public class Face implements Serializable {
     private Content[] cornerList;
     private boolean[] coveredCorner;
 
-    public Face(int id, Content[] corners){
+    private String imagePath;
+
+    public Face(int id, Content[] corners, String imagePath){
         cornerList = new Content[4];
         coveredCorner = new boolean[4];
         idCard=id;
+        this.imagePath=imagePath;
+
         System.arraycopy(corners, 0, cornerList, 0, 4);
     }
 
@@ -86,5 +90,9 @@ abstract public class Face implements Serializable {
     }
     public boolean isCoveredBR(){
         return this.coveredCorner[3];
+    }
+
+    public String getImagePath() {
+        return imagePath;
     }
 }
