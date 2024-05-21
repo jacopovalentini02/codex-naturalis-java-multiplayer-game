@@ -5,13 +5,11 @@ import it.polimi.ingsfw.ingsfwproject.Network.Client.RMIClient;
 import it.polimi.ingsfw.ingsfwproject.Network.Client.SocketClient;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServer.*;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.Message;
-import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.*;
 
 import java.util.*;
 
 import java.util.HashMap;
 import java.util.Scanner;
-import java.util.concurrent.LinkedBlockingQueue;
 
 import it.polimi.ingsfw.ingsfwproject.View.View;
 
@@ -237,7 +235,13 @@ public class Cli extends View implements Runnable {
     public void notifyColorsAvailable(List<PlayerColor> colors){
         System.out.println("The following colors are available :");
         for(PlayerColor color : colors){
-            System.out.println(color.name());
+            System.out.print(color.name() + ": ");
+            switch(color){
+                case RED -> System.out.println(AnsiColor.RED_DOT.getFormattedCharacter());
+                case BLUE -> System.out.println(AnsiColor.BLUE_DOT.getFormattedCharacter());
+                case GREEN -> System.out.println(AnsiColor.GREEN_DOT.getFormattedCharacter());
+                case YELLOW -> System.out.println(AnsiColor.YELLOW_DOT.getFormattedCharacter());
+            }
         }
     }
 
@@ -254,9 +258,11 @@ public class Cli extends View implements Runnable {
     @Override
     public void notifyDisplayedCardsUpdate(ArrayList<PlayableCard> displayedCards) {
         System.out.println("Displayed playable cards updated! Here's how:\n");
-        //TODO: stampare le carte
+        int i =1;
         for(PlayableCard pc : displayedCards){
+            System.out.println("Card in place " + i +"of the displayed cards");
             printFace(pc.getFront());
+            i++;
         }
     }
 
@@ -269,7 +275,7 @@ public class Cli extends View implements Runnable {
     @Override
     public void notifyAvailablePositions(ArrayList<Coordinate> coord) {
         if (coord.isEmpty()){
-            System.out.println("You have no more cooedinates available!");
+            System.out.println("You have no more coordinates available!");
             return;
         }
         System.out.println("your available positions have changed: now you can play a card in the following coordinates:");
@@ -291,8 +297,7 @@ public class Cli extends View implements Runnable {
     @Override
     public void notifyGridUpdate(String nickname, Map<Coordinate,Face> grid){
         System.out.println(nickname + "'s grid has been updated. Here's how: ");
-        printGridMiche(client.getVirtualView().getGrids().get(nickname));
-        //TODO stampare grid
+        printGrid(client.getVirtualView().getGrids().get(nickname));
     }
 
     @Override
@@ -364,7 +369,6 @@ public class Cli extends View implements Runnable {
         System.out.println(RED + "New chat message from " + message.getSender() + " : " + message.getMessage() + RESET);
     }
 
-
     public void handleInput(String input) {
         Message messageToSend;
         String name;
@@ -431,8 +435,6 @@ public class Cli extends View implements Runnable {
                     client.sendMessage(messageToSend);
                     break;
                 case "showgrid":
-                    //todo: chiedere di chi e stampare la relativa grid
-
                     Set<String> otherPlayersNick = client.getVirtualView().getScores().keySet();
                     //TODO: MA COSI NON RIMUOVI IL NOME ANCHE DALL'OGGETTO ORIGINALE IN VIRTUALVIEW??
                     otherPlayersNick.remove(client.getNickname());
@@ -448,13 +450,11 @@ public class Cli extends View implements Runnable {
                             System.out.println("The requested player doesn't exist! Retry!");
                         }
                     } while (!otherPlayersNick.contains(playerAsked));
-                    //TODO : Inserire qua il metodo di stampa della grid del player
-
+                    printGrid(client.getVirtualView().getGrids().get(playerAsked));
                     break;
 
                 case "showmygrid":
-                    //TODO: STAMPARE DIRETTAMENTE GRID DEL PLAYER RICHIEDENTE
-                    printGridMiche(client.getVirtualView().getGrids().get(client.getNickname()));
+                    printGrid(client.getVirtualView().getGrids().get(client.getNickname()));
                     break;
                 case "showscores":
                     printScores();
@@ -462,18 +462,14 @@ public class Cli extends View implements Runnable {
                 case "showdisplayed":
                     //todo: cambiare il metodo di stampa delle carte -> stampa lines in grid
                     for (PlayableCard c : client.getVirtualView().getDisplayedCards()) {
-                        //System.out.println(printFacePlayed(c.getFront()));
                         printFace(c.getFront());
-                        //TODO: DA FAREEEEE
                     }
                     break;
-                case "showdekstop":
-                    //todo: cambiare il metodo di stampa delle carte -> stampa lines in grid
+                case "showdeckstop":
                     System.out.println("The back of the top card of the resource deck is: ");
-                    //System.out.println(printFacePlayed(((ResourceCard) client.getVirtualView().getResourceDeck().getCardList().getFirst()).getBack()));
+                    printFace(((ResourceCard) client.getVirtualView().getResourceDeck().getCardList().getFirst()).getBack());
                     System.out.println("The back of the top card of the gold deck is: ");
-                    //System.out.println(printFacePlayed(((GoldCard) client.getVirtualView().getGoldDeck().getCardList().getFirst()).getBack()));
-                    //TODO: DA FAREEEEE
+                    printFace(((GoldCard) client.getVirtualView().getGoldDeck().getCardList().getFirst()).getBack());
                     break;
                 case "showhand":
                     //printPlayerHand()
@@ -632,7 +628,7 @@ public class Cli extends View implements Runnable {
             System.out.println(e.getKey() + ": " + e.getValue());
     }
 
-    public void printGridMiche(Map<Coordinate, Face> grid){
+    public void printGrid(Map<Coordinate, Face> grid){
         int xmin = getMinX(grid.keySet());
         int ymin = getMinY(grid.keySet());
         int xmax = getMaxX(grid.keySet());
@@ -693,7 +689,7 @@ public class Cli extends View implements Runnable {
         HashMap<Coordinate, Face> grid = new HashMap<>();
         grid.put(new Coordinate(0,0), face);
 
-        printGridMiche(grid);
+        printGrid(grid);
     }
 
     public void printPlayerHand() {

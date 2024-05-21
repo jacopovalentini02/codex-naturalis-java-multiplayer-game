@@ -3,21 +3,14 @@ import it.polimi.ingsfw.ingsfwproject.Network.Client.*;
 import it.polimi.ingsfw.ingsfwproject.View.*;
 
 
-import it.polimi.ingsfw.ingsfwproject.Exceptions.CardNotInHandException;
-import it.polimi.ingsfw.ingsfwproject.Exceptions.DeckEmptyException;
-import it.polimi.ingsfw.ingsfwproject.Exceptions.NotEnoughResourcesException;
-import it.polimi.ingsfw.ingsfwproject.Exceptions.PositionNotAvailableException;
 import it.polimi.ingsfw.ingsfwproject.Model.*;
 import it.polimi.ingsfw.ingsfwproject.Model.GameManager;
 import it.polimi.ingsfw.ingsfwproject.Model.Player;
 import it.polimi.ingsfw.ingsfwproject.Network.Server.GameServerInstance;
 import org.junit.jupiter.api.Test;
 
-import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.Map;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class CliTest {
     /*
@@ -127,6 +120,6 @@ class CliTest {
         grid.put(new Coordinate(1,1), ((GoldCard)card).getFront());
         System.out.println(card.getIdCard());
 
-        cli.printGridMiche(grid);
+        cli.printGrid(grid);
     }
 }
