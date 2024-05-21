@@ -441,7 +441,6 @@ public class Cli extends View implements Runnable {
                     boolean face = askForFaceToPlay();
                     Coordinate coords = askForCoordinateInput(client.getVirtualView().getAvailablePositions());
                     messageToSend = new PlayCardMessage(client.getClientID(), idCard, face, coords, client.getNickname());
-                    System.out.println(client.getNickname());
                     client.sendMessage(messageToSend);
                     break;
                 case "drawcard":
@@ -493,6 +492,7 @@ public class Cli extends View implements Runnable {
                     //todo: cambiare il metodo di stampa delle carte -> stampa lines in grid
                     for (PlayableCard c : client.getVirtualView().getDisplayedCards()) {
                         printFace(c.getFront());
+                        System.out.println();
                     }
                     break;
                 case "showdeckstop":

@@ -23,7 +23,7 @@ public class RMIHandlerClient extends UnicastRemoteObject implements Handler {
     @Override
     public void sendMessage(Message message) {
         if (message.getClientID() == clientID || message.getClientID() == -10){
-            System.out.println("Arrivato messaggio dal server");
+            //System.out.println("Arrivato messaggio dal server");
             client.receiveMessage(message);
         }
     }
