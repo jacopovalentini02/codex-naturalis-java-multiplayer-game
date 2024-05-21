@@ -9,15 +9,19 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Spinner;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.net.URL;
 import java.util.*;
 
@@ -50,14 +54,15 @@ public class GameBoardController extends GUIController implements Initializable 
     @FXML public GridPane playerGround;
     @FXML public Spinner yCoord;
     @FXML public Spinner xCoord;
+    @FXML public Button showGrid;
+    @FXML public AnchorPane pane;
 
     private int offsetX;
     private int offsetY;
+    private boolean[] faceShowed;
 
     private Map<PlayerColor, String> colorImageMap;
 
-
-    //todo: aggiungere un arraylist con i colori degli altri giocatori
     @Override
     public void start(Stage stage) throws Exception {
         setGuiView(guiView);
@@ -69,6 +74,7 @@ public class GameBoardController extends GUIController implements Initializable 
         Scene scene = new Scene(root);
         stage.setTitle("Game");
         stage.setScene(scene);
+        //stage.setMaximized(true);
         stage.show();
         offsetX=0;
         offsetY=0;
@@ -79,6 +85,7 @@ public class GameBoardController extends GUIController implements Initializable 
     }
 
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        faceShowed = new boolean[]{true, true, true}; //
         setTurn();
         updateHand();
         setPersonalObjective();
@@ -94,7 +101,7 @@ public class GameBoardController extends GUIController implements Initializable 
         colorImageMap.put(PlayerColor.GREEN, "/it/polimi/ingsfw/ingsfwproject/Images/CODEX_pion_vert.png");
 
         initializeScore();
-        updateGrid();
+        updatePane();
     }
 
     public void setTurn(){
@@ -222,29 +229,66 @@ public class GameBoardController extends GUIController implements Initializable 
 
     //Gestione input
     @FXML
-    public void firstCardChosen(MouseEvent mouseEvent) throws IOException {
-        int cardID=client.getVirtualView().getHandCards().getFirst().getIdCard();
-        cardToPlayChosen(cardID);
+    public void turnFirstCard(){
+
     }
 
     @FXML
-    public void secondCardChosen(MouseEvent mouseEvent) throws IOException {
-        int cardID=client.getVirtualView().getHandCards().get(1).getIdCard();
-        cardToPlayChosen(cardID);
+    private void clickHandCard1(MouseEvent event) throws IOException {
+        if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) { //click 2 times -> play card, else turn image
+            int cardID=client.getVirtualView().getHandCards().getFirst().getIdCard();
+            cardToPlayChosen(cardID, faceShowed[0]);
+        }else if (event.getButton() == MouseButton.PRIMARY){
+            String id = String.format("%03d",client.getVirtualView().getHandCards().getFirst().getIdCard());
+            if(faceShowed[0]){ //change to back image
+                handCard1.setImage(getImageBack(id));
+                faceShowed[0]=false;
+            }else{
+                handCard1.setImage(getImageFront(id));
+                faceShowed[0]=true;
+            }
+        }
+    }
+    @FXML
+    private void clickHandCard2(MouseEvent event) throws IOException {
+        if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) { //click 2 times -> play card, else turn image
+            int cardID=client.getVirtualView().getHandCards().get(1).getIdCard();
+            cardToPlayChosen(cardID, faceShowed[1]);
+        }else if (event.getButton() == MouseButton.PRIMARY){
+            String id = String.format("%03d",client.getVirtualView().getHandCards().get(1).getIdCard());
+            if(faceShowed[1]){ //change to back image
+                handCard2.setImage(getImageBack(id));
+                faceShowed[1]=false;
+            }else{
+                handCard2.setImage(getImageFront(id));
+                faceShowed[1]=true;
+            }
+        }
     }
 
     @FXML
-    public void thirdCardChosen(MouseEvent mouseEvent) throws IOException {
-        int cardID=client.getVirtualView().getHandCards().getLast().getIdCard();
-        cardToPlayChosen(cardID);
+    private void clickHandCard3(MouseEvent event) throws IOException {
+        if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) { //click 2 times -> play card, else turn image
+            int cardID=client.getVirtualView().getHandCards().getLast().getIdCard();
+            cardToPlayChosen(cardID, faceShowed[2]);
+        }else if (event.getButton() == MouseButton.PRIMARY){
+            String id = String.format("%03d",client.getVirtualView().getHandCards().getLast().getIdCard());
+            if(faceShowed[2]){ //change to back image
+                handCard3.setImage(getImageBack(id));
+                faceShowed[2]=false;
+            }else{
+                handCard3.setImage(getImageFront(id));
+                faceShowed[2]=true;
+            }
+        }
     }
 
     //todo input coordinate, face
-    public void cardToPlayChosen(int cardID) throws IOException {
-        int x=(int)xCoord.getValue();
-        int y=(int)yCoord.getValue();
-        System.out.println("X: "+x+" Y:" +y);
-        PlayCardMessage playCardMessage=new PlayCardMessage(client.getClientID(),cardID,true, new Coordinate(x,y),client.getNickname());
+    public void cardToPlayChosen(int cardID, boolean face) throws IOException {
+        int x= (int) xCoord.getValue();
+        int y=(int) yCoord.getValue();
+        System.out.println(face);
+        PlayCardMessage playCardMessage=new PlayCardMessage(client.getClientID(),cardID,face, new Coordinate(x,y),client.getNickname());
         client.sendMessage(playCardMessage);
     }
     @FXML
@@ -268,11 +312,6 @@ public class GameBoardController extends GUIController implements Initializable 
         int cardID=client.getVirtualView().getDisplayedCards().getLast().getIdCard();
         cardToPick(cardID);
     }
-
-
-
-
-
 
 
     public void cardToPick(int cardID) throws IOException {
@@ -342,6 +381,41 @@ public class GameBoardController extends GUIController implements Initializable 
 
             playerGround.add(imageView, gridX, gridY);
         }
+    }
+
+    public void updatePane(){
+        double centerX=pane.getWidth()/2;
+        double centerY=pane.getHeight()/2;
+
+        Map<Coordinate, Face> grid = client.getVirtualView().getGrids().get(client.getNickname());
+        System.out.println("centro x: "+centerX);
+
+        pane.getChildren().clear();
+
+        for (Map.Entry<Coordinate, Face> entry : grid.entrySet()) {
+
+            Coordinate coordinate = entry.getKey();
+            Face face = entry.getValue();
+
+            String imagePath = face.getImagePath();
+
+            Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream(imagePath)));
+            ImageView imageView = new ImageView(image);
+
+            imageView.setFitHeight(110);
+            imageView.setFitWidth(150);
+
+            double cardPosX=centerX-75+coordinate.getX() * 121 ;
+            double cardPosY=centerY+55- coordinate.getY() * 66;
+
+            imageView.setLayoutX(cardPosX);
+            imageView.setLayoutY(cardPosY);
+
+
+            pane.getChildren().add(imageView);
+        }
+
+
     }
 
 }

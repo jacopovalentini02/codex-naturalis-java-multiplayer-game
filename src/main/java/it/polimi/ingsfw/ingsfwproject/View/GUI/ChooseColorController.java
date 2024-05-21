@@ -44,6 +44,7 @@ public class ChooseColorController extends GUIController implements Initializabl
 
         stage.setTitle("Choosing Color");
         stage.setScene(scene);
+        //stage.setMaximized(true);
         stage.show();
 
     }
