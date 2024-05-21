@@ -13,8 +13,8 @@ public class StarterFront extends Face{
         this.center = center;
     }
 
-    public StarterFront(int id, Content[] corners, ArrayList<Content> center) {
-        super(id, corners);
+    public StarterFront(int id, Content[] corners, ArrayList<Content> center, String imagePath) {
+        super(id, corners, imagePath);
         this.center = center;
     }
 }

@@ -33,6 +33,8 @@ public class VirtualView {
 
     private Queue<ChatMessage> globalChat;
 
+    private HashMap<String, Queue<ChatMessage>> privateChats;
+
     public VirtualView() {
         this.listOfPlayers = new ArrayList<String>();
         this.grids = new HashMap<>();
@@ -40,6 +42,7 @@ public class VirtualView {
         this.resources=new HashMap<>();
         this.globalChat = new LinkedBlockingQueue<>();
         this.playerColorMap=new HashMap<>();
+        this.privateChats = new HashMap<>();
     }
 
     public ArrayList<PlayableCard> getHandCards() {
@@ -145,6 +148,10 @@ public class VirtualView {
 
     public void setListOfPlayers(ArrayList<String> listOfPlayers) {
         this.listOfPlayers = listOfPlayers;
+
+        for (String nickname : this.listOfPlayers)
+            privateChats.computeIfAbsent(nickname, key -> new LinkedBlockingQueue<>()); //adding private chats to the map
+
     }
 
 
@@ -176,6 +183,22 @@ public class VirtualView {
         return globalChat;
     }
 
+    public Queue<ChatMessage> getPrivateChat(String nickname){
+        return privateChats.getOrDefault(nickname, null);
+    }
+
+    public void addMessageToPrivateChat(ChatMessage message){
+        String senderNick = message.getSender();
+        if (privateChats.containsKey(senderNick)){
+            privateChats.get(senderNick).add(message);
+        }
+    }
+
+    public void sendPrivateMessage(ChatMessage message){
+        String recipientNick = message.getRecipient();
+        if (privateChats.containsKey(recipientNick))
+            privateChats.get(recipientNick).add(message);
+    }
 
     public void setPlayerColorMap(Map<String, PlayerColor> playerColorMap) {
         this.playerColorMap = playerColorMap;
@@ -187,5 +210,9 @@ public class VirtualView {
 
     public HashMap<String, Map<Coordinate, Face>> getGrids() {
         return grids;
+    }
+
+    public ArrayList<String> getListOfPlayers(){
+        return listOfPlayers;
     }
 }

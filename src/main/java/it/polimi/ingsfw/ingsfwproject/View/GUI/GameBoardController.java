@@ -48,8 +48,8 @@ public class GameBoardController extends GUIController implements Initializable 
 
     public static GUIView guiView;
     @FXML public GridPane playerGround;
-    @FXML public Spinner y;
-    @FXML public Spinner x;
+    @FXML public Spinner yCoord;
+    @FXML public Spinner xCoord;
 
 
     private Map<PlayerColor, String> colorImageMap;
@@ -225,9 +225,10 @@ public class GameBoardController extends GUIController implements Initializable 
 
     //todo input coordinate, face
     public void cardToPlayChosen(int cardID) throws IOException {
-        //int xCoor=(int)x.getValue();
-        //int yCoord=(int)y.getValue();
-        PlayCardMessage playCardMessage=new PlayCardMessage(client.getClientID(),cardID,true, new Coordinate(-1,-1),client.getNickname());
+        int x=(int)xCoord.getValue();
+        int y=(int)yCoord.getValue();
+        System.out.println("X: "+x+" Y:" +y);
+        PlayCardMessage playCardMessage=new PlayCardMessage(client.getClientID(),cardID,true, new Coordinate(x,y),client.getNickname());
         client.sendMessage(playCardMessage);
     }
     @FXML
@@ -273,7 +274,9 @@ public class GameBoardController extends GUIController implements Initializable 
             int gridY = centerY - coordinate.getY();
 
             String id = String.format("%03d",face.getIdCard());
-            String imagePath = "/it/polimi/ingsfw/ingsfwproject/Images/CODEX_cards_gold_front/" + id + ".png";
+
+
+            String imagePath = face.getImagePath();
 
             Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream(imagePath)));
             ImageView imageView = new ImageView(image);

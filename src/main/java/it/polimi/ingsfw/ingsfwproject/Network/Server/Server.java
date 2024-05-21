@@ -126,13 +126,13 @@ public class Server {
         handlerToSetInstanceInto.setGameServerInstance(gameInstance);
 
         //TODO togliere?
-        Player addedPlayer = gameInstance.getPlayer(nickname);
-
-        if (addedPlayer != null){ //adding the new player to the game server instance
-            gameInstance.addPlayer(addedPlayer, clientID);
-        } else {
-            throw new RuntimeException();
-        }
+//        Player addedPlayer = gameInstance.getPlayer(nickname);
+//
+//        if (addedPlayer != null){ //adding the new player to the game server instance
+//            gameInstance.addPlayer(addedPlayer, clientID);
+//        } else {
+//            throw new RuntimeException();
+//        }
 
     }
 

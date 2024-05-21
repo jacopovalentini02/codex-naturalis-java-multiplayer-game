@@ -7,10 +7,7 @@ import it.polimi.ingsfw.ingsfwproject.Network.Messages.Message;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.*;
 
 import java.rmi.RemoteException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.LinkedBlockingDeque;
 
@@ -181,5 +178,11 @@ public class GameServerInstance {
         this.players.put(player, clientID);
     }
 
+    public int getClientIDbyNickname(String nickname){
+        for (Player p: players.keySet())
+            if (nickname.equals(p.getUsername()))
+                return p.getClientID();
+        return -1;
+    }
 
 }

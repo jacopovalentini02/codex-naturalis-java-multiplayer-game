@@ -24,6 +24,11 @@ public class sendChatMessage extends ClientToServerMessage {
     @Override
     public void execute(Controller controller) {
         GameController gc = (GameController) controller;
-        gc.addMessageToGlobalChat(new ChatMessage(sender, recipient, text));
+        if (this.recipient.equals("global")){
+            gc.addMessageToGlobalChat(new ChatMessage(sender, recipient, text));
+        } else{
+            gc.forwardPrivateChatMessage(new ChatMessage(sender, recipient, text));
+        }
+
     }
 }

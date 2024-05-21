@@ -39,6 +39,14 @@ public class LobbyController implements Controller {
         }
         server.setHandlersAndInstance(getGameServerInstance(gameID), clientID, thisPlayer);
         server.sendResponse(new GameJoinedMessage(clientID, gameID, thisPlayer));
+
+        Player addedPlayer = getGameServerInstance(gameID).getPlayer(thisPlayer);
+
+        if (addedPlayer != null){ //adding the new player to the game server instance
+            getGameServerInstance(gameID).addPlayer(addedPlayer, clientID);
+        } else {
+            throw new RuntimeException();
+        }
     }
 
     public void joinExistingGame(String nick, int idGame, int clientID) {
@@ -64,9 +72,16 @@ public class LobbyController implements Controller {
                     return;
                 }}
             server.sendResponse(new GameJoinedMessage(clientID, idGame, nick));
-            lobby.joinGame(nick, idGame, clientID);
             server.setHandlersAndInstance(getGameServerInstance(idGame),clientID, nick);
+            lobby.joinGame(nick, idGame, clientID);
 
+            Player addedPlayer = getGameServerInstance(idGame).getPlayer(nick);
+
+            if (addedPlayer != null){ //adding the new player to the game server instance
+                getGameServerInstance(idGame).addPlayer(addedPlayer, clientID);
+            } else {
+                throw new RuntimeException();
+            }
             checkIfGameNeedsToBeStarted(idGame);
         }
     }

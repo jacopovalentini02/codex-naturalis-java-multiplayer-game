@@ -67,7 +67,19 @@
           <RowConstraints maxHeight="151.0" minHeight="10.0" prefHeight="102.0" vgrow="SOMETIMES" />
         </rowConstraints>
       </GridPane>
-      <Spinner editable="true" layoutX="395.0" layoutY="37.0" fx:id="x" />
-      <Spinner fx:id="y" editable="true" layoutX="630.0" layoutY="37.0" />
+
+      <Spinner editable="true" initialValue="-1" layoutX="776.0" layoutY="74.0" max="20" min="-5" prefHeight="43.0" prefWidth="186.0" fx:id="xCoord" />
+      <Spinner editable="true" initialValue="-1" layoutX="1074.0" layoutY="74.0" max="20" min="-5" prefHeight="43.0" prefWidth="186.0"  fx:id="yCoord" />
+      <Label layoutX="852.0" layoutY="49.0" text="X">
+         <font>
+            <Font size="22.0" />
+         </font>
+      </Label>
+      <Label layoutX="1161.0" layoutY="50.0" text="Y">
+         <font>
+            <Font size="21.0" />
+         </font>
+      </Label>
+
    </children>
 </AnchorPane>
