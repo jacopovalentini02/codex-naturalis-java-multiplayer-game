@@ -469,9 +469,9 @@ public class Cli extends View implements Runnable {
                     break;
                 case "showdeckstop":
                     System.out.println("The back of the top card of the resource deck is: ");
-                    printFace(((ResourceCard) client.getVirtualView().getResourceDeck().getCardList().getFirst()).getBack()));
+                    printFace(((ResourceCard) client.getVirtualView().getResourceDeck().getCardList().getFirst()).getBack());
                     System.out.println("The back of the top card of the gold deck is: ");
-                    printFace(((GoldCard) client.getVirtualView().getGoldDeck().getCardList().getFirst()).getBack()));
+                    printFace(((GoldCard) client.getVirtualView().getGoldDeck().getCardList().getFirst()).getBack());
                     break;
                 case "showhand":
                     //printPlayerHand()
