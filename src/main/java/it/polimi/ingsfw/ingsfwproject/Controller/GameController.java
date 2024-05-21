@@ -8,11 +8,7 @@ import it.polimi.ingsfw.ingsfwproject.Exceptions.*;
 import it.polimi.ingsfw.ingsfwproject.Model.*;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServerMessage;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.Message;
-import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.ColorAvailableMessage;
-import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.ExcpetionMessage;
-import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.GoldDeckMessage;
-import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.RecieveChatMessage;
-import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.ResourceDeckMessage;
+import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.*;
 import it.polimi.ingsfw.ingsfwproject.Network.Server.GameServerInstance;
 import it.polimi.ingsfw.ingsfwproject.Network.Server.Server;
 
@@ -117,6 +113,7 @@ public class GameController implements Controller {
                 model.nextTurn();
             } else {
                 model.setCurrentPlayerhasPlayed(true);
+                serverInstance.sendUpdateToAll(new CurrentPlayerHasPlayedMessage(player.getClientID(),true));
             }
         }
     }

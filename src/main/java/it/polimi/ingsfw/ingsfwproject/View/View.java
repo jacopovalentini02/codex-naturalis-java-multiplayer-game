@@ -10,38 +10,11 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 public abstract class View implements Runnable{
     public static Client client;
-    public BlockingQueue<Message> messages;
+    //public BlockingQueue<Message> messages;
 
 
 
     public abstract void chooseConnection();
-
-
-    public void receiveMessage() {
-        while(true){
-            if(!messages.isEmpty()){
-                Message message = messages.poll();
-                handleMessage(message);
-            }
-        }
-
-        /*
-        while(true){
-            synchronized(messages){
-                while(messages.isEmpty()){
-                    try {
-                        messages.wait();
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-                handleMessage(messages.poll());
-            }
-        }
-         */
-    }
-
-    public abstract void handleMessage(Message message);
 
     public abstract void notifyException(String message);
 
@@ -87,15 +60,7 @@ public abstract class View implements Runnable{
 
     public abstract void notifyChatMessage(ChatMessage message);
 
-    public void addToQueue(Message message){
-        messages.add(message);
+    public abstract void notifyCurrentPlayerHasPlayed(boolean bool);
 
-        /*
-        synchronized (messages){
-            messages.add(message);
-            messages.notifyAll();
-        }
-         */
-    }
 
 }

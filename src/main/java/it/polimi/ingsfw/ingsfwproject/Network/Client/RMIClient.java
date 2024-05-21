@@ -48,7 +48,6 @@ public class RMIClient extends Client implements Serializable {
 
         //passaggio al server del client handler
         serverFactory.setClientHandler(clientHandler);
-        System.out.println("pippo");
         this.setConnected(true);
     }
 

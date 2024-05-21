@@ -22,7 +22,7 @@ public class GameStateMessage extends ServerToClientMessage implements Serializa
 
     @Override
     public void execute(Client client) {
-        client.getVirtualView().setState(gameState);
         client.getView().notifyGameState(gameState);
+        client.getVirtualView().setState(gameState);
     }
 }

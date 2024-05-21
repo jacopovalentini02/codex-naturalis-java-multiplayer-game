@@ -290,6 +290,9 @@ public class Game {
 
     public void nextTurn() {
 
+        currentPlayerhasPlayed = false;
+        gameServerInstance.sendUpdateToAll(new CurrentPlayerHasPlayedMessage(currentPlayer.getClientID(), false));
+
         if (this.state == GameState.ENDING) //counting the number of rounds played after a player reaches 20 points
             lastRoundsplayed++;
 
@@ -300,7 +303,7 @@ public class Game {
         this.setCurrentPlayer(listOfPlayers.get(newIndex));
 
 
-        currentPlayerhasPlayed = false;
+        //currentPlayerhasPlayed = false;
 
     }
 

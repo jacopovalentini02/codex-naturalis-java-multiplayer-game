@@ -96,13 +96,6 @@ public class GUIView extends View {
     }
 
     @Override
-    public void handleMessage(Message message) {
-        ServerToClientMessage toProcess = (ServerToClientMessage)message;
-        toProcess.execute(client);
-    }
-    
-
-    @Override
     public void notifyException(String message) {
         Platform.runLater(() -> {
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -352,6 +345,11 @@ public class GUIView extends View {
     @Override
     public void notifyChatMessage(ChatMessage message) {
 
+    }
+
+    @Override
+    public void notifyCurrentPlayerHasPlayed(boolean bool){
+        //TODO: DA FARE
     }
 
     @Override
