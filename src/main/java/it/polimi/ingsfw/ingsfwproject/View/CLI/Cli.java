@@ -5,7 +5,6 @@ import it.polimi.ingsfw.ingsfwproject.Network.Client.RMIClient;
 import it.polimi.ingsfw.ingsfwproject.Network.Client.SocketClient;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServer.*;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.Message;
-import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.*;
 
 import java.util.*;
 
@@ -237,7 +236,13 @@ public class Cli extends View implements Runnable {
     public void notifyColorsAvailable(List<PlayerColor> colors){
         System.out.println("The following colors are available :");
         for(PlayerColor color : colors){
-            System.out.println(color.name());
+            System.out.print(color.name() + ": ");
+            switch(color){
+                case RED -> System.out.println(AnsiColor.RED_DOT.getFormattedCharacter());
+                case BLUE -> System.out.println(AnsiColor.BLUE_DOT.getFormattedCharacter());
+                case GREEN -> System.out.println(AnsiColor.GREEN_DOT.getFormattedCharacter());
+                case YELLOW -> System.out.println(AnsiColor.YELLOW_DOT.getFormattedCharacter());
+            }
         }
     }
 
@@ -254,9 +259,11 @@ public class Cli extends View implements Runnable {
     @Override
     public void notifyDisplayedCardsUpdate(ArrayList<PlayableCard> displayedCards) {
         System.out.println("Displayed playable cards updated! Here's how:\n");
-        //TODO: stampare le carte
+        int i =1;
         for(PlayableCard pc : displayedCards){
+            System.out.println("Card in place " + i +"of the displayed cards");
             printFace(pc.getFront());
+            i++;
         }
     }
 
@@ -269,7 +276,7 @@ public class Cli extends View implements Runnable {
     @Override
     public void notifyAvailablePositions(ArrayList<Coordinate> coord) {
         if (coord.isEmpty()){
-            System.out.println("You have no more cooedinates available!");
+            System.out.println("You have no more coordinates available!");
             return;
         }
         System.out.println("your available positions have changed: now you can play a card in the following coordinates:");
@@ -292,7 +299,7 @@ public class Cli extends View implements Runnable {
     public void notifyGridUpdate(String nickname, Map<Coordinate,Face> grid){
         System.out.println(nickname + "'s grid has been updated. Here's how: ");
         printGridMiche(client.getVirtualView().getGrids().get(nickname));
-        //TODO stampare grid
+        printGridMiche(grid);
     }
 
     @Override
@@ -364,18 +371,6 @@ public class Cli extends View implements Runnable {
         System.out.println(RED + "New chat message from " + message.getSender() + " : " + message.getMessage() + RESET);
     }
 
-    //TODO: rimuovere
-    @Override//TODO: stampare gli obiettivi
-    public void handleMessage(Message message) {
-        String lobbyCommands = "now you can insert one of the following commands:" + "\n\t-> CreateGame" + "\n\t-> JoinGame" + "\n\t-> GetGameList";
-        //TODO : Forse conviene gestire questo output in base al game state -> se è in choosing colors mando gli ultimi due,
-        // se è in choose objectives solo il primo
-        String GameStartingCommands = "now you can do one of the following actions: \n\t-> ChooseObjectiveCard \n\t-> getColorAvailable \n\t-> chooseColor";
-        String gameCommands = "now you can do one of the following actions: \n\t-> PlayCard \n\t-> DrawCard \n\t-> PickCard  \n\t-> SkipTurn";
-
-    }
-
-
     public void handleInput(String input) {
         Message messageToSend;
         String name;
@@ -442,8 +437,6 @@ public class Cli extends View implements Runnable {
                     client.sendMessage(messageToSend);
                     break;
                 case "showgrid":
-                    //todo: chiedere di chi e stampare la relativa grid
-
                     Set<String> otherPlayersNick = client.getVirtualView().getScores().keySet();
                     //TODO: MA COSI NON RIMUOVI IL NOME ANCHE DALL'OGGETTO ORIGINALE IN VIRTUALVIEW??
                     otherPlayersNick.remove(client.getNickname());
@@ -459,12 +452,10 @@ public class Cli extends View implements Runnable {
                             System.out.println("The requested player doesn't exist! Retry!");
                         }
                     } while (!otherPlayersNick.contains(playerAsked));
-                    //TODO : Inserire qua il metodo di stampa della grid del player
-
+                    printGridMiche(client.getVirtualView().getGrids().get(playerAsked));
                     break;
 
                 case "showmygrid":
-                    //TODO: STAMPARE DIRETTAMENTE GRID DEL PLAYER RICHIEDENTE
                     printGridMiche(client.getVirtualView().getGrids().get(client.getNickname()));
                     break;
                 case "showscores":
@@ -473,18 +464,14 @@ public class Cli extends View implements Runnable {
                 case "showdisplayed":
                     //todo: cambiare il metodo di stampa delle carte -> stampa lines in grid
                     for (PlayableCard c : client.getVirtualView().getDisplayedCards()) {
-                        //System.out.println(printFacePlayed(c.getFront()));
                         printFace(c.getFront());
-                        //TODO: DA FAREEEEE
                     }
                     break;
-                case "showdekstop":
-                    //todo: cambiare il metodo di stampa delle carte -> stampa lines in grid
+                case "showdeckstop":
                     System.out.println("The back of the top card of the resource deck is: ");
-                    //System.out.println(printFacePlayed(((ResourceCard) client.getVirtualView().getResourceDeck().getCardList().getFirst()).getBack()));
+                    printFace(((ResourceCard) client.getVirtualView().getResourceDeck().getCardList().getFirst()).getBack()));
                     System.out.println("The back of the top card of the gold deck is: ");
-                    //System.out.println(printFacePlayed(((GoldCard) client.getVirtualView().getGoldDeck().getCardList().getFirst()).getBack()));
-                    //TODO: DA FAREEEEE
+                    printFace(((GoldCard) client.getVirtualView().getGoldDeck().getCardList().getFirst()).getBack()));
                     break;
                 case "showhand":
                     //printPlayerHand()

@@ -21,6 +21,5 @@ module it.polimi.ingsfw.ingsfwproject {
     exports it.polimi.ingsfw.ingsfwproject.Network.Client;
 
     opens it.polimi.ingsfw.ingsfwproject.View2 to javafx.fxml;
-    exports it.polimi.ingsfw.ingsfwproject.View;
 
 }
