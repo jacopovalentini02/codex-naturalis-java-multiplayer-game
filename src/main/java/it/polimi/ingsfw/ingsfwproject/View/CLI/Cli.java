@@ -32,7 +32,7 @@ public class Cli extends View implements Runnable {
 
     public Cli(){
         this.scanner = new Scanner(System.in);
-        super.messages = new LinkedBlockingQueue<>();
+        //super.messages = new LinkedBlockingQueue<>();
     }
 
     public void init(){

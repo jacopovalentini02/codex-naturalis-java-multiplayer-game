@@ -96,13 +96,6 @@ public class GUIView extends View {
     }
 
     @Override
-    public void handleMessage(Message message) {
-        ServerToClientMessage toProcess = (ServerToClientMessage)message;
-        toProcess.execute(client);
-    }
-    
-
-    @Override
     public void notifyException(String message) {
         Platform.runLater(() -> {
             Alert alert = new Alert(Alert.AlertType.ERROR);
