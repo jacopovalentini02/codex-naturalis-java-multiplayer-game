@@ -122,6 +122,7 @@ class CliTest {
         Card card = game.getGoldDeck().getCardList().removeFirst();
         grid.put(new Coordinate(0,0), ((GoldCard)card).getFront());
         System.out.println(card.getIdCard());
+
         card = game.getGoldDeck().getCardList().removeFirst();
         grid.put(new Coordinate(1,1), ((GoldCard)card).getFront());
         System.out.println(card.getIdCard());

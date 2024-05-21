@@ -51,6 +51,8 @@ public class GameBoardController extends GUIController implements Initializable 
     @FXML public Spinner yCoord;
     @FXML public Spinner xCoord;
 
+    private int offsetX;
+    private int offsetY;
 
     private Map<PlayerColor, String> colorImageMap;
 
@@ -68,6 +70,8 @@ public class GameBoardController extends GUIController implements Initializable 
         stage.setTitle("Game");
         stage.setScene(scene);
         stage.show();
+        offsetX=0;
+        offsetY=0;
 
     }
     public static void setGuiView(GUIView view) {
@@ -223,6 +227,18 @@ public class GameBoardController extends GUIController implements Initializable 
         cardToPlayChosen(cardID);
     }
 
+    @FXML
+    public void secondCardChosen(MouseEvent mouseEvent) throws IOException {
+        int cardID=client.getVirtualView().getHandCards().get(1).getIdCard();
+        cardToPlayChosen(cardID);
+    }
+
+    @FXML
+    public void thirdCardChosen(MouseEvent mouseEvent) throws IOException {
+        int cardID=client.getVirtualView().getHandCards().getLast().getIdCard();
+        cardToPlayChosen(cardID);
+    }
+
     //todo input coordinate, face
     public void cardToPlayChosen(int cardID) throws IOException {
         int x=(int)xCoord.getValue();
@@ -236,6 +252,28 @@ public class GameBoardController extends GUIController implements Initializable 
         int cardID=client.getVirtualView().getDisplayedCards().getFirst().getIdCard();
         cardToPick(cardID);
     }
+
+    @FXML
+    public void pickResource2(MouseEvent mouseEvent)throws IOException {
+        int cardID=client.getVirtualView().getDisplayedCards().get(1).getIdCard();
+        cardToPick(cardID);
+    }
+    @FXML
+    public void pickGold1(MouseEvent mouseEvent)throws IOException {
+        int cardID=client.getVirtualView().getDisplayedCards().get(2).getIdCard();
+        cardToPick(cardID);
+    }
+    @FXML
+    public void pickGold2(MouseEvent mouseEvent)throws IOException {
+        int cardID=client.getVirtualView().getDisplayedCards().getLast().getIdCard();
+        cardToPick(cardID);
+    }
+
+
+
+
+
+
 
     public void cardToPick(int cardID) throws IOException {
         PickMessage pickMessage=new PickMessage(client.getClientID(), cardID, client.getNickname());
@@ -256,6 +294,19 @@ public class GameBoardController extends GUIController implements Initializable 
         client.sendMessage(messageToSend);
     }
 
+    private int findXmin(){
+        Map<Coordinate, Face> grid = client.getVirtualView().getGrids().get(client.getNickname());
+        Coordinate coord=grid.keySet().stream().min((Comparator.comparingInt(Coordinate::getX))).orElse(null);
+        assert coord != null;
+        return coord.getX();
+    }
+
+    private int findYmin(){
+        Map<Coordinate, Face> grid = client.getVirtualView().getGrids().get(client.getNickname());
+        Coordinate coord=grid.keySet().stream().min((Comparator.comparingInt(Coordinate::getY))).orElse(null);
+        assert coord != null;
+        return coord.getY();
+    }
 
     public void updateGrid(){
         playerGround.getChildren().clear();
@@ -265,16 +316,21 @@ public class GameBoardController extends GUIController implements Initializable 
         int centerX = playerGround.getColumnCount() / 2;
         int centerY = playerGround.getRowCount() / 2;
 
+        offsetX=Math.abs(findXmin());
+        offsetY=Math.abs(findYmin());
+        System.out.println(offsetX);
+        System.out.println(offsetY);
         // Itera su tutte le voci della mappa e aggiungi le immagini alla griglia
         for (Map.Entry<Coordinate, Face> entry : grid.entrySet()) {
+
             Coordinate coordinate = entry.getKey();
             Face face = entry.getValue();
 
-            int gridX = centerX + coordinate.getX();
-            int gridY = centerY - coordinate.getY();
+            int gridX = centerX+offsetX + coordinate.getX();
+            int gridY = centerY+offsetY - coordinate.getY();
 
-            String id = String.format("%03d",face.getIdCard());
-
+            System.out.println("x grid"+gridX);
+            System.out.println(gridY);
 
             String imagePath = face.getImagePath();
 
