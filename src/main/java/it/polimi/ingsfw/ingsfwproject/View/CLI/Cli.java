@@ -33,7 +33,7 @@ public class Cli extends View implements Runnable {
 
     public Cli(){
         this.scanner = new Scanner(System.in);
-        super.messages = new LinkedBlockingQueue<>();
+        //super.messages = new LinkedBlockingQueue<>();
     }
 
     public void init(){
@@ -362,17 +362,6 @@ public class Cli extends View implements Runnable {
     @Override
     public void notifyChatMessage(ChatMessage message){
         System.out.println(RED + "New chat message from " + message.getSender() + " : " + message.getMessage() + RESET);
-    }
-
-    //TODO: rimuovere
-    @Override//TODO: stampare gli obiettivi
-    public void handleMessage(Message message) {
-        String lobbyCommands = "now you can insert one of the following commands:" + "\n\t-> CreateGame" + "\n\t-> JoinGame" + "\n\t-> GetGameList";
-        //TODO : Forse conviene gestire questo output in base al game state -> se è in choosing colors mando gli ultimi due,
-        // se è in choose objectives solo il primo
-        String GameStartingCommands = "now you can do one of the following actions: \n\t-> ChooseObjectiveCard \n\t-> getColorAvailable \n\t-> chooseColor";
-        String gameCommands = "now you can do one of the following actions: \n\t-> PlayCard \n\t-> DrawCard \n\t-> PickCard  \n\t-> SkipTurn";
-
     }
 
 
