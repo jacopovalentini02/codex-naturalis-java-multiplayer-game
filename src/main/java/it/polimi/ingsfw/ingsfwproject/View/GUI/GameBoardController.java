@@ -13,7 +13,6 @@ import javafx.scene.SnapshotParameters;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.control.Spinner;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
@@ -24,8 +23,6 @@ import javafx.scene.transform.Scale;
 import javafx.stage.Stage;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.paint.Color;
-
-import java.awt.*;
 import java.io.IOException;
 import java.net.URL;
 import java.util.*;
@@ -62,6 +59,119 @@ public class GameBoardController extends GUIController implements Initializable 
     @FXML public AnchorPane pane;
     @FXML
     public ScrollPane scrollpane;
+    public ImageView pin12;
+    public ImageView pin13;
+    public ImageView pin14;
+    public ImageView pin22;
+    public ImageView pin23;
+    public ImageView pin24;
+    public ImageView pin32;
+    public ImageView pin33;
+    public ImageView pin34;
+    public ImageView pin42;
+    public ImageView pin43;
+    public ImageView pin44;
+    public ImageView pin51;
+    public ImageView pin52;
+    public ImageView pin53;
+    public ImageView pin54;
+    public ImageView pin61;
+    public ImageView pin62;
+    public ImageView pin63;
+    public ImageView pin64;
+    public ImageView pin71;
+    public ImageView pin72;
+    public ImageView pin73;
+    public ImageView pin74;
+    public ImageView pin81;
+    public ImageView pin82;
+    public ImageView pin83;
+    public ImageView pin84;
+    public ImageView pin91;
+    public ImageView pin92;
+    public ImageView pin93;
+    public ImageView pin94;
+    public ImageView pin101;
+    public ImageView pin102;
+    public ImageView pin103;
+    public ImageView pin104;
+    public ImageView pin111;
+    public ImageView pin112;
+    public ImageView pin113;
+    public ImageView pin114;
+    public ImageView pin121;
+    public ImageView pin122;
+    public ImageView pin123;
+    public ImageView pin124;
+    public ImageView pin131;
+    public ImageView pin132;
+    public ImageView pin133;
+    public ImageView pin134;
+    public ImageView pin141;
+    public ImageView pin142;
+    public ImageView pin143;
+    public ImageView pin144;
+    public ImageView pin151;
+    public ImageView pin152;
+    public ImageView pin153;
+    public ImageView pin154;
+    public ImageView pin161;
+    public ImageView pin162;
+    public ImageView pin163;
+    public ImageView pin164;
+    public ImageView pin171;
+    public ImageView pin172;
+    public ImageView pin173;
+    public ImageView pin174;
+    public ImageView pin181;
+    public ImageView pin182;
+    public ImageView pin183;
+    public ImageView pin184;
+    public ImageView pin191;
+    public ImageView pin192;
+    public ImageView pin193;
+    public ImageView pin194;
+    public ImageView pin201;
+    public ImageView pin202;
+    public ImageView pin203;
+    public ImageView pin204;
+    public ImageView pin211;
+    public ImageView pin212;
+    public ImageView pin213;
+    public ImageView pin214;
+    public ImageView pin221;
+    public ImageView pin222;
+    public ImageView pin223;
+    public ImageView pin224;
+    public ImageView pin231;
+    public ImageView pin232;
+    public ImageView pin233;
+    public ImageView pin234;
+    public ImageView pin241;
+    public ImageView pin242;
+    public ImageView pin243;
+    public ImageView pin244;
+    public ImageView pin251;
+    public ImageView pin252;
+    public ImageView pin253;
+    public ImageView pin254;
+    public ImageView pin261;
+    public ImageView pin262;
+    public ImageView pin263;
+    public ImageView pin264;
+    public ImageView pin271;
+    public ImageView pin272;
+    public ImageView pin273;
+    public ImageView pin274;
+    public ImageView pin281;
+    public ImageView pin282;
+    public ImageView pin283;
+    public ImageView pin284;
+    public ImageView pin291;
+    public ImageView pin294;
+    public ImageView pin293;
+    public ImageView pin292;
+
 
     private int offsetX;
     private int offsetY;
@@ -201,6 +311,34 @@ public class GameBoardController extends GUIController implements Initializable 
         ImageView[][] pinGroups = {
                 {pin1, pin2, pin3, pin4},
                 {pin11, pin21, pin31, pin41},
+                {pin21, pin22, pin23, pin24},
+                {pin31, pin32, pin33, pin34},
+                {pin41, pin42, pin43, pin44},
+                {pin51, pin52, pin53, pin54},
+                {pin61, pin62, pin63, pin64},
+                {pin71, pin72, pin73, pin74},
+                {pin81, pin82, pin83, pin84},
+                {pin91, pin92, pin93, pin94},
+                {pin101, pin102, pin103, pin104},
+                {pin111, pin112, pin113, pin114},
+                {pin121, pin122, pin123, pin124},
+                {pin131, pin132, pin133, pin134},
+                {pin141, pin142, pin143, pin144},
+                {pin151, pin152, pin153, pin154},
+                {pin161, pin162, pin163, pin164},
+                {pin171, pin172, pin173, pin174},
+                {pin181, pin182, pin183, pin184},
+                {pin191, pin192, pin193, pin194},
+                {pin201, pin202, pin203, pin204},
+                {pin211, pin212, pin213, pin214},
+                {pin221, pin222, pin223, pin224},
+                {pin231, pin232, pin233, pin234},
+                {pin241, pin242, pin243, pin244},
+                {pin251, pin252, pin253, pin254},
+                {pin261, pin262, pin263, pin264},
+                {pin271, pin272, pin273, pin274},
+                {pin281, pin282, pin283, pin284},
+                {pin291, pin292, pin293, pin294},
         };
 
         Map<String, Integer> scores = client.getVirtualView().getScores();
@@ -217,7 +355,6 @@ public class GameBoardController extends GUIController implements Initializable 
             PlayerColor playerColor = playerColorMap.get(playerName);
             int score=entry.getValue();
 
-            //System.out.println(playerName+"-"+score);
             String imagePath = colorImageMap.get(playerColor);
             if (imagePath != null) {
                 Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream(imagePath)));
@@ -236,11 +373,6 @@ public class GameBoardController extends GUIController implements Initializable 
 
 
     //Gestione input
-    @FXML
-    public void turnFirstCard(){
-
-    }
-
     @FXML
     private void dragCard1(MouseEvent event){
         Dragboard db = handCard1.startDragAndDrop(TransferMode.MOVE);
