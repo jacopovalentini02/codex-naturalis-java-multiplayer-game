@@ -327,7 +327,6 @@ public class GUIView extends View {
          if(gameBoardController.equals(currentController)){
             Platform.runLater(() -> {
                 try {
-
                     gameBoardController.setTokenImage();
                 } catch (Exception ex) {
                     throw new RuntimeException(ex);

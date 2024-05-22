@@ -3,7 +3,6 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.Spinner?>
 <?import javafx.scene.effect.Blend?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -34,9 +33,9 @@
       <ImageView fx:id="objectiveDisplayed1" fitHeight="110.0" fitWidth="150.0" layoutX="375.0" layoutY="400.0" pickOnBounds="true" preserveRatio="true" />
       <ImageView fx:id="objectiveDisplayed2" fitHeight="110.0" fitWidth="150.0" layoutX="560.0" layoutY="401.0" pickOnBounds="true" preserveRatio="true" />
       <ImageView fx:id="personalObjective" fitHeight="115.0" fitWidth="170.0" layoutX="482.0" layoutY="743.0" pickOnBounds="true" preserveRatio="true" />
-      <ImageView fx:id="handCard1" fitHeight="115.0" fitWidth="170.0" layoutX="691.0" layoutY="743.0" onMouseClicked="#clickHandCard1" pickOnBounds="true" preserveRatio="true" />
-      <ImageView fx:id="handCard2" fitHeight="115.0" fitWidth="170.0" layoutX="878.0" layoutY="743.0" onMouseClicked="#clickHandCard2" pickOnBounds="true" preserveRatio="true" />
-      <ImageView fx:id="handCard3" fitHeight="115.0" fitWidth="170.0" layoutX="1065.0" layoutY="743.0" onMouseClicked="#clickHandCard3" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="handCard1" fitHeight="115.0" fitWidth="170.0" layoutX="691.0" layoutY="743.0" onDragDetected="#dragCard1" onMouseClicked="#clickHandCard1" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="handCard2" fitHeight="115.0" fitWidth="170.0" layoutX="878.0" layoutY="743.0" onDragDetected="#dragCard2" onMouseClicked="#clickHandCard2" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="handCard3" fitHeight="115.0" fitWidth="170.0" layoutX="1065.0" layoutY="743.0" onDragDetected="#dragCard3" onMouseClicked="#clickHandCard3" pickOnBounds="true" preserveRatio="true" />
       <ImageView fx:id="pin1" fitHeight="42.0" fitWidth="41.0" layoutX="142.0" layoutY="520.0" pickOnBounds="true" preserveRatio="true" />
       <ImageView fx:id="pin2" fitHeight="42.0" fitWidth="41.0" layoutX="141.0" layoutY="516.0" pickOnBounds="true" preserveRatio="true" />
       <ImageView fx:id="pin3" fitHeight="42.0" fitWidth="41.0" layoutX="141.0" layoutY="512.0" pickOnBounds="true" preserveRatio="true" />
@@ -55,27 +54,14 @@
             <Font name="Bodoni 72 Smallcaps Book" size="19.0" />
          </font>
       </Label>
-
-      <Spinner editable="true" initialValue="-1" layoutX="776.0" layoutY="74.0" max="20" min="-30" prefHeight="43.0" prefWidth="186.0" fx:id="xCoord" />
-      <Spinner fx:id="yCoord" editable="true" initialValue="-1" layoutX="1074.0" layoutY="74.0" max="20" min="-30" prefHeight="43.0" prefWidth="186.0" />
-      <Label layoutX="852.0" layoutY="49.0" text="X">
-         <font>
-            <Font size="22.0" />
-         </font>
-      </Label>
-      <Label layoutX="1161.0" layoutY="50.0" text="Y">
-         <font>
-            <Font size="21.0" />
-         </font>
-      </Label>
       <Button fx:id="showScore" layoutX="488.0" layoutY="52.0" mnemonicParsing="false" prefHeight="47.0" prefWidth="153.0" style="-fx-background-color: #5F3075;" text="Show Grid" textFill="WHITE">
          <font>
             <Font name="Bodoni 72 Smallcaps Book" size="22.0" />
          </font>
       </Button>
-      <ScrollPane layoutX="781.0" layoutY="141.0" prefHeight="568.0" prefWidth="786.0">
+      <ScrollPane fx:id="scrollpane" layoutX="781.0" layoutY="52.0" prefHeight="657.0" prefWidth="786.0">
         <content>
-          <AnchorPane fx:id="pane" minHeight="0.0" minWidth="0.0" prefHeight="2036.0" prefWidth="2027.0" />
+          <AnchorPane fx:id="pane" minHeight="4072.0" minWidth="4054.0" prefHeight="4072.0" prefWidth="4054.0" />
         </content>
       </ScrollPane>
 

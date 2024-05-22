@@ -9,21 +9,27 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.SnapshotParameters;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Spinner;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.image.WritableImage;
+import javafx.scene.input.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.transform.Scale;
 import javafx.stage.Stage;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.paint.Color;
 
+import java.awt.*;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.net.URL;
 import java.util.*;
+import java.util.List;
 
 import static it.polimi.ingsfw.ingsfwproject.View.View.client;
 
@@ -52,16 +58,17 @@ public class GameBoardController extends GUIController implements Initializable 
 
     public static GUIView guiView;
     @FXML public GridPane playerGround;
-    @FXML public Spinner yCoord;
-    @FXML public Spinner xCoord;
     @FXML public Button showGrid;
     @FXML public AnchorPane pane;
+    @FXML
+    public ScrollPane scrollpane;
 
     private int offsetX;
     private int offsetY;
     private boolean[] faceShowed;
 
     private Map<PlayerColor, String> colorImageMap;
+    private HashMap<Rectangle, Coordinate> rectangleCoordinateHashMap;
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -100,6 +107,7 @@ public class GameBoardController extends GUIController implements Initializable 
         colorImageMap.put(PlayerColor.YELLOW, "/it/polimi/ingsfw/ingsfwproject/Images/CODEX_pion_jaune.png");
         colorImageMap.put(PlayerColor.GREEN, "/it/polimi/ingsfw/ingsfwproject/Images/CODEX_pion_vert.png");
 
+        rectangleCoordinateHashMap = new HashMap<>();
         initializeScore();
         updatePane();
     }
@@ -234,11 +242,56 @@ public class GameBoardController extends GUIController implements Initializable 
     }
 
     @FXML
-    private void clickHandCard1(MouseEvent event) throws IOException {
-        if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) { //click 2 times -> play card, else turn image
-            int cardID=client.getVirtualView().getHandCards().getFirst().getIdCard();
-            cardToPlayChosen(cardID, faceShowed[0]);
-        }else if (event.getButton() == MouseButton.PRIMARY){
+    private void dragCard1(MouseEvent event){
+        Dragboard db = handCard1.startDragAndDrop(TransferMode.MOVE);
+        ClipboardContent content = new ClipboardContent();
+        int cardID = client.getVirtualView().getHandCards().getFirst().getIdCard();
+        String data = cardID + ";" + faceShowed[0];
+        content.putString(data);
+        db.setContent(content);
+        SnapshotParameters parameters = new SnapshotParameters();
+        parameters.setTransform(new Scale(0.7, 0.7));
+        WritableImage snapshot = handCard1.snapshot(parameters, null);
+        db.setDragView(snapshot);
+        System.out.println("Drag rilevato");
+        event.consume();
+    }
+
+    @FXML
+    private void dragCard2(MouseEvent event){
+        Dragboard db = handCard2.startDragAndDrop(TransferMode.MOVE);
+        ClipboardContent content = new ClipboardContent();
+        int cardID = client.getVirtualView().getHandCards().get(1).getIdCard();
+        String data = cardID + ";" + faceShowed[1];
+        content.putString(data);
+        db.setContent(content);
+        SnapshotParameters parameters = new SnapshotParameters();
+        parameters.setTransform(new Scale(0.7, 0.7));
+        WritableImage snapshot = handCard2.snapshot(parameters, null);
+        db.setDragView(snapshot);
+        System.out.println("Drag rilevato");
+        event.consume();
+    }
+
+    @FXML
+    private void dragCard3(MouseEvent event){
+        Dragboard db = handCard3.startDragAndDrop(TransferMode.MOVE);
+        ClipboardContent content = new ClipboardContent();
+        int cardID = client.getVirtualView().getHandCards().getLast().getIdCard();
+        String data = cardID + ";" + faceShowed[2];
+        content.putString(data);
+        db.setContent(content);
+        SnapshotParameters parameters = new SnapshotParameters();
+        parameters.setTransform(new Scale(0.7, 0.7));
+        WritableImage snapshot = handCard3.snapshot(parameters, null);
+        db.setDragView(snapshot);
+        System.out.println("Drag rilevato");
+        event.consume();
+    }
+
+    @FXML
+    private void clickHandCard1(MouseEvent event) {
+        if (event.getButton() == MouseButton.PRIMARY){
             String id = String.format("%03d",client.getVirtualView().getHandCards().getFirst().getIdCard());
             if(faceShowed[0]){ //change to back image
                 handCard1.setImage(getImageBack(id));
@@ -250,11 +303,8 @@ public class GameBoardController extends GUIController implements Initializable 
         }
     }
     @FXML
-    private void clickHandCard2(MouseEvent event) throws IOException {
-        if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) { //click 2 times -> play card, else turn image
-            int cardID=client.getVirtualView().getHandCards().get(1).getIdCard();
-            cardToPlayChosen(cardID, faceShowed[1]);
-        }else if (event.getButton() == MouseButton.PRIMARY){
+    private void clickHandCard2(MouseEvent event){
+        if (event.getButton() == MouseButton.PRIMARY){
             String id = String.format("%03d",client.getVirtualView().getHandCards().get(1).getIdCard());
             if(faceShowed[1]){ //change to back image
                 handCard2.setImage(getImageBack(id));
@@ -267,11 +317,8 @@ public class GameBoardController extends GUIController implements Initializable 
     }
 
     @FXML
-    private void clickHandCard3(MouseEvent event) throws IOException {
-        if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) { //click 2 times -> play card, else turn image
-            int cardID=client.getVirtualView().getHandCards().getLast().getIdCard();
-            cardToPlayChosen(cardID, faceShowed[2]);
-        }else if (event.getButton() == MouseButton.PRIMARY){
+    private void clickHandCard3(MouseEvent event){
+       if (event.getButton() == MouseButton.PRIMARY){
             String id = String.format("%03d",client.getVirtualView().getHandCards().getLast().getIdCard());
             if(faceShowed[2]){ //change to back image
                 handCard3.setImage(getImageBack(id));
@@ -283,14 +330,6 @@ public class GameBoardController extends GUIController implements Initializable 
         }
     }
 
-    //todo input coordinate, face
-    public void cardToPlayChosen(int cardID, boolean face) throws IOException {
-        int x= (int) xCoord.getValue();
-        int y=(int) yCoord.getValue();
-        System.out.println(face);
-        PlayCardMessage playCardMessage=new PlayCardMessage(client.getClientID(),cardID,face, new Coordinate(x,y),client.getNickname());
-        client.sendMessage(playCardMessage);
-    }
     @FXML
     public void pickResource1(MouseEvent mouseEvent)throws IOException {
         int cardID=client.getVirtualView().getDisplayedCards().getFirst().getIdCard();
@@ -384,16 +423,23 @@ public class GameBoardController extends GUIController implements Initializable 
     }
 
     public void updatePane(){
-        double centerX=pane.getWidth()/2;
-        double centerY=pane.getHeight()/2;
+        double centerX=pane.getPrefWidth()/2;
+        double centerY=pane.getPrefHeight()/2;
+
+        double maxX = 0.0;
+        double maxY = 0.0;
+
+        double lastCardPosX = 0.0;
+        double lastCardPosY = 0.0;
 
         Map<Coordinate, Face> grid = client.getVirtualView().getGrids().get(client.getNickname());
+        Iterator<Map.Entry<Coordinate, Face>> iterator = grid.entrySet().iterator();
         System.out.println("centro x: "+centerX);
 
         pane.getChildren().clear();
 
-        for (Map.Entry<Coordinate, Face> entry : grid.entrySet()) {
-
+        while (iterator.hasNext()) {
+            Map.Entry<Coordinate, Face> entry = iterator.next();
             Coordinate coordinate = entry.getKey();
             Face face = entry.getValue();
 
@@ -405,17 +451,78 @@ public class GameBoardController extends GUIController implements Initializable 
             imageView.setFitHeight(110);
             imageView.setFitWidth(150);
 
-            double cardPosX=centerX-75+coordinate.getX() * 121 ;
+            double cardPosX=centerX-75+coordinate.getX() * 121;
             double cardPosY=centerY+55- coordinate.getY() * 66;
+
+            if (cardPosX > maxX)
+                maxX = cardPosX;
+
+            if (cardPosY > maxY)
+                maxY = cardPosY;
+
 
             imageView.setLayoutX(cardPosX);
             imageView.setLayoutY(cardPosY);
 
 
             pane.getChildren().add(imageView);
+
+            if (!iterator.hasNext()){ //printing the last card
+               lastCardPosX = cardPosX;
+               lastCardPosY = cardPosY;
+            }
         }
+        double newWidth = Math.max(pane.getPrefWidth(), maxX + 150);
+        double newHeight = Math.max(pane.getPrefHeight(), maxY + 110);
+        pane.setPrefHeight(newHeight);
+        pane.setPrefWidth(newWidth);
 
+        double hValue = (lastCardPosX - (scrollpane.getWidth() / 2)) / (pane.getPrefWidth() - scrollpane.getWidth());
+        double vValue = (lastCardPosY - (scrollpane.getHeight() / 2)) / (pane.getPrefHeight() - scrollpane.getHeight());
 
+        hValue = Math.max(0, Math.min(hValue, 1));
+        vValue = Math.max(0, Math.min(vValue, 1));
+
+        scrollpane.setPannable(true);
+        scrollpane.setHvalue(hValue);
+        scrollpane.setVvalue(vValue);
+        System.out.println("settati");
+
+        rectangleCoordinateHashMap.clear();
+
+        for (Coordinate c: client.getVirtualView().getAvailablePositions()){
+            double rectangleX = centerX - 75 + c.getX() * 121;
+            double rectangleY = centerY + 55 - c.getY()*66;
+
+            Rectangle rectangle = new Rectangle((int) rectangleX, (int) rectangleY, 150, 110);
+            rectangle.setFill(Color.TRANSPARENT);
+            rectangle.setStroke(Color.web("#5F3075"));
+            rectangle.setStrokeWidth(5);
+
+            rectangle.setOnDragOver(event -> {
+                if (event.getGestureSource() != rectangle && event.getDragboard().hasString() && Objects.equals(client.getNickname(), client.getVirtualView().getCurrentPlayer())){
+                    event.acceptTransferModes(TransferMode.MOVE);
+                }
+                event.consume();
+            });
+
+            rectangle.setOnDragDropped(event ->{
+                Dragboard db = event.getDragboard();
+                boolean success = false;
+                String[] values = db.getString().split(";");
+                int cardID = Integer.parseInt(values[0]);
+                boolean isFront = Boolean.parseBoolean(values[1]);
+                System.out.println("Id carta: " + cardID + "boolean: " + isFront);
+                Coordinate coordinateToPlay = rectangleCoordinateHashMap.get(rectangle);
+                PlayCardMessage pm = new PlayCardMessage(client.getClientID(), cardID, isFront, coordinateToPlay, client.getNickname());
+                try {
+                    client.sendMessage(pm);
+                } catch (IOException ignore){}
+            });
+
+            pane.getChildren().add(rectangle);
+            rectangleCoordinateHashMap.put(rectangle, c);
+        }
     }
 
 }
