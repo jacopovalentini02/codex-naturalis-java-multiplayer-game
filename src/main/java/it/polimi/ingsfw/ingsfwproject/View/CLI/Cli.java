@@ -130,6 +130,8 @@ public class Cli extends View implements Runnable {
                 for(PlayableCard c : cards){
                     System.out.println(c.getIdCard());
                     printFace(c.getFront());
+                    System.out.println();
+                    printFace(c.getBack());
                 }
                 System.out.println("Insert the id of the card chosen: ");
                 choice = scanner.nextInt();
@@ -427,7 +429,7 @@ public class Cli extends View implements Runnable {
                     client.sendMessage(messageToSend);
                     break;
                 case "choosecolor":
-                    PlayerColor colorChoosen = PlayerColor.valueOf(askForStringInput("What color do you want among those?").toUpperCase());
+                    PlayerColor colorChoosen = PlayerColor.valueOf(askForStringInput("What color do you want to choose?").toUpperCase());
                     messageToSend = new WantThatColorMessage(client.getClientID(), client.getNickname(), colorChoosen);
                     client.sendMessage(messageToSend);
                     break;
@@ -502,7 +504,6 @@ public class Cli extends View implements Runnable {
                     printFace(((GoldCard) client.getVirtualView().getGoldDeck().getCardList().getFirst()).getBack());
                     break;
                 case "showhand":
-                    //printPlayerHand()
                     printPlayerHand();
                     break;
                 case "showobjective":
@@ -659,6 +660,7 @@ public class Cli extends View implements Runnable {
     }
 
     public void printGrid(Map<Coordinate, Face> grid){
+        //todo: stampare il centro delle starter
         int xmin = getMinX(grid.keySet());
         int ymin = getMinY(grid.keySet());
         int xmax = getMaxX(grid.keySet());

@@ -283,7 +283,7 @@ public class GameController implements Controller {
        }
     }
 
-    public void sendTokenAvaialble(int clientID){
+    public void sendTokenAvailable(int clientID){
         serverInstance.sendUpdateToAll(new ColorAvailableMessage(clientID, model.getTokenAvailable()));
     }
 }
