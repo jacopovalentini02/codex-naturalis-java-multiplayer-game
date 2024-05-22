@@ -283,7 +283,7 @@ public class GUIView extends View {
             Platform.runLater(() -> {
                 try {
 
-                    gameBoardController.updateGrid();
+                    gameBoardController. updatePane();
                 } catch (Exception ex) {
                     throw new RuntimeException(ex);
                 }

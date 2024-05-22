@@ -49,6 +49,7 @@ public class LobbyGUIController extends GUIController implements Initializable {
         Scene scene = new Scene(root);
         stage.setTitle("Lobby");
         stage.setScene(scene);
+        //stage.setMaximized(true);
         stage.show();
     }
 

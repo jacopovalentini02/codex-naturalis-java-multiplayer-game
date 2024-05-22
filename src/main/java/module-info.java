@@ -22,4 +22,5 @@ module it.polimi.ingsfw.ingsfwproject {
 
     opens it.polimi.ingsfw.ingsfwproject.View2 to javafx.fxml;
 
+
 }

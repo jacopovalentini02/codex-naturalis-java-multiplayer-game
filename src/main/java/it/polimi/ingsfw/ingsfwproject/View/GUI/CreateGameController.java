@@ -33,7 +33,7 @@ public class CreateGameController extends GUIController{
         Scene scene = new Scene(root);
         stage.setTitle("Create Game");
         stage.setScene(scene);
-
+        //stage.setMaximized(true);
         stage.show();
     }
     @FXML
