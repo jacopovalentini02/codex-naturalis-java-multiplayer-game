@@ -143,6 +143,8 @@ public class GUIView extends View {
                 String lastNickname = nicknames.getLast();
                 System.out.println("New player nickname: " + lastNickname);
                 waitingController.addNickname(lastNickname);
+                for (String s: nicknames)
+                    waitingController.addChat(s);
             } else {
                 System.err.println("Errore: setUpGame o newPlayerJoined TextArea è null");
             }
@@ -343,7 +345,15 @@ public class GUIView extends View {
 
     @Override
     public void notifyChatMessage(ChatMessage message) {
-
+        if (currentController.equals(waitingController)){
+            Platform.runLater(()->{
+                try{
+                    waitingController.addMessageToChat(message);
+                } catch (Exception ex) {
+                    throw new RuntimeException(ex);
+                }
+            });
+        }
     }
 
     @Override
