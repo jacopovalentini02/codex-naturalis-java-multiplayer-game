@@ -375,55 +375,61 @@ public class GameBoardController extends GUIController implements Initializable 
     //Gestione input
     @FXML
     private void dragCard1(MouseEvent event){
-        Dragboard db = handCard1.startDragAndDrop(TransferMode.MOVE);
-        ClipboardContent content = new ClipboardContent();
-        int cardID = client.getVirtualView().getHandCards().getFirst().getIdCard();
-        String data = cardID + ";" + faceShowed[0];
-        content.putString(data);
-        db.setContent(content);
-        SnapshotParameters parameters = new SnapshotParameters();
-        parameters.setTransform(new Scale(0.7, 0.7));
-        WritableImage snapshot = handCard1.snapshot(parameters, null);
-        db.setDragView(snapshot);
-        System.out.println("Drag rilevato");
-        event.consume();
+        if (event.getButton() == MouseButton.PRIMARY) {
+            Dragboard db = handCard1.startDragAndDrop(TransferMode.MOVE);
+            ClipboardContent content = new ClipboardContent();
+            int cardID = client.getVirtualView().getHandCards().getFirst().getIdCard();
+            String data = cardID + ";" + faceShowed[0];
+            content.putString(data);
+            db.setContent(content);
+            SnapshotParameters parameters = new SnapshotParameters();
+            parameters.setTransform(new Scale(0.7, 0.7));
+            WritableImage snapshot = handCard1.snapshot(parameters, null);
+            db.setDragView(snapshot);
+            System.out.println("Drag rilevato");
+            event.consume();
+        }
     }
 
     @FXML
     private void dragCard2(MouseEvent event){
-        Dragboard db = handCard2.startDragAndDrop(TransferMode.MOVE);
-        ClipboardContent content = new ClipboardContent();
-        int cardID = client.getVirtualView().getHandCards().get(1).getIdCard();
-        String data = cardID + ";" + faceShowed[1];
-        content.putString(data);
-        db.setContent(content);
-        SnapshotParameters parameters = new SnapshotParameters();
-        parameters.setTransform(new Scale(0.7, 0.7));
-        WritableImage snapshot = handCard2.snapshot(parameters, null);
-        db.setDragView(snapshot);
-        System.out.println("Drag rilevato");
-        event.consume();
+        if (event.getButton() == MouseButton.PRIMARY) {
+            Dragboard db = handCard2.startDragAndDrop(TransferMode.MOVE);
+            ClipboardContent content = new ClipboardContent();
+            int cardID = client.getVirtualView().getHandCards().get(1).getIdCard();
+            String data = cardID + ";" + faceShowed[1];
+            content.putString(data);
+            db.setContent(content);
+            SnapshotParameters parameters = new SnapshotParameters();
+            parameters.setTransform(new Scale(0.7, 0.7));
+            WritableImage snapshot = handCard2.snapshot(parameters, null);
+            db.setDragView(snapshot);
+            System.out.println("Drag rilevato");
+            event.consume();
+        }
     }
 
     @FXML
     private void dragCard3(MouseEvent event){
-        Dragboard db = handCard3.startDragAndDrop(TransferMode.MOVE);
-        ClipboardContent content = new ClipboardContent();
-        int cardID = client.getVirtualView().getHandCards().getLast().getIdCard();
-        String data = cardID + ";" + faceShowed[2];
-        content.putString(data);
-        db.setContent(content);
-        SnapshotParameters parameters = new SnapshotParameters();
-        parameters.setTransform(new Scale(0.7, 0.7));
-        WritableImage snapshot = handCard3.snapshot(parameters, null);
-        db.setDragView(snapshot);
-        System.out.println("Drag rilevato");
-        event.consume();
+        if (event.getButton() == MouseButton.PRIMARY) {
+            Dragboard db = handCard3.startDragAndDrop(TransferMode.MOVE);
+            ClipboardContent content = new ClipboardContent();
+            int cardID = client.getVirtualView().getHandCards().getLast().getIdCard();
+            String data = cardID + ";" + faceShowed[2];
+            content.putString(data);
+            db.setContent(content);
+            SnapshotParameters parameters = new SnapshotParameters();
+            parameters.setTransform(new Scale(0.7, 0.7));
+            WritableImage snapshot = handCard3.snapshot(parameters, null);
+            db.setDragView(snapshot);
+            System.out.println("Drag rilevato");
+            event.consume();
+        }
     }
 
     @FXML
     private void clickHandCard1(MouseEvent event) {
-        if (event.getButton() == MouseButton.PRIMARY){
+        if (event.getButton() == MouseButton.SECONDARY){
             String id = String.format("%03d",client.getVirtualView().getHandCards().getFirst().getIdCard());
             if(faceShowed[0]){ //change to back image
                 handCard1.setImage(getImageBack(id));
@@ -436,7 +442,7 @@ public class GameBoardController extends GUIController implements Initializable 
     }
     @FXML
     private void clickHandCard2(MouseEvent event){
-        if (event.getButton() == MouseButton.PRIMARY){
+        if (event.getButton() == MouseButton.SECONDARY){
             String id = String.format("%03d",client.getVirtualView().getHandCards().get(1).getIdCard());
             if(faceShowed[1]){ //change to back image
                 handCard2.setImage(getImageBack(id));
@@ -450,7 +456,7 @@ public class GameBoardController extends GUIController implements Initializable 
 
     @FXML
     private void clickHandCard3(MouseEvent event){
-       if (event.getButton() == MouseButton.PRIMARY){
+       if (event.getButton() == MouseButton.SECONDARY){
             String id = String.format("%03d",client.getVirtualView().getHandCards().getLast().getIdCard());
             if(faceShowed[2]){ //change to back image
                 handCard3.setImage(getImageBack(id));
