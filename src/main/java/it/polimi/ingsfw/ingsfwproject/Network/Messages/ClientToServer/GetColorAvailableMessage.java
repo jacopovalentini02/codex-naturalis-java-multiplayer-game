@@ -16,7 +16,7 @@ public class GetColorAvailableMessage extends ClientToServerMessage {
     @Override
     public void execute(Controller controller) {
         GameController gameController=(GameController) controller;
-        gameController.sendTokenAvaialble(super.getClientID());
+        gameController.sendTokenAvailable(super.getClientID());
 
     }
 }

@@ -41,9 +41,9 @@
       <ImageView fx:id="pin3" fitHeight="42.0" fitWidth="41.0" layoutX="141.0" layoutY="512.0" pickOnBounds="true" preserveRatio="true" />
       <ImageView fx:id="pin4" fitHeight="42.0" fitWidth="41.0" layoutX="141.0" layoutY="508.0" pickOnBounds="true" preserveRatio="true" />
       <ImageView fx:id="pin11" fitHeight="42.0" fitWidth="41.0" layoutX="200.0" layoutY="523.0" pickOnBounds="true" preserveRatio="true" />
-      <ImageView fx:id="pin21" fitHeight="42.0" fitWidth="41.0" layoutX="199.0" layoutY="519.0" pickOnBounds="true" preserveRatio="true" />
-      <ImageView fx:id="pin31" fitHeight="42.0" fitWidth="41.0" layoutX="199.0" layoutY="515.0" pickOnBounds="true" preserveRatio="true" />
-      <ImageView fx:id="pin41" fitHeight="42.0" fitWidth="41.0" layoutX="199.0" layoutY="511.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin12" fitHeight="42.0" fitWidth="41.0" layoutX="199.0" layoutY="519.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin13" fitHeight="42.0" fitWidth="41.0" layoutX="199.0" layoutY="515.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin14" fitHeight="42.0" fitWidth="41.0" layoutX="199.0" layoutY="511.0" pickOnBounds="true" preserveRatio="true" />
       <Label layoutX="42.0" layoutY="648.0" prefHeight="23.0" prefWidth="119.0" text="GOLD DECK">
          <font>
             <Font name="Bodoni 72 Smallcaps Book" size="19.0" />
@@ -64,6 +64,118 @@
           <AnchorPane fx:id="pane" minHeight="4072.0" minWidth="4054.0" prefHeight="4072.0" prefWidth="4054.0" />
         </content>
       </ScrollPane>
+      <ImageView fx:id="pin21" fitHeight="42.0" fitWidth="41.0" layoutX="255.0" layoutY="523.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin22" fitHeight="42.0" fitWidth="41.0" layoutX="254.0" layoutY="519.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin23" fitHeight="42.0" fitWidth="41.0" layoutX="254.0" layoutY="515.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin24" fitHeight="42.0" fitWidth="41.0" layoutX="254.0" layoutY="511.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin31" fitHeight="42.0" fitWidth="41.0" layoutX="283.0" layoutY="472.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin32" fitHeight="42.0" fitWidth="41.0" layoutX="282.0" layoutY="468.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin33" fitHeight="42.0" fitWidth="41.0" layoutX="282.0" layoutY="464.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin34" fitHeight="42.0" fitWidth="41.0" layoutX="282.0" layoutY="460.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin41" fitHeight="42.0" fitWidth="41.0" layoutX="228.0" layoutY="473.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin42" fitHeight="42.0" fitWidth="41.0" layoutX="227.0" layoutY="469.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin43" fitHeight="42.0" fitWidth="41.0" layoutX="227.0" layoutY="465.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin44" fitHeight="42.0" fitWidth="41.0" layoutX="227.0" layoutY="461.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin51" fitHeight="42.0" fitWidth="41.0" layoutX="171.0" layoutY="474.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin52" fitHeight="42.0" fitWidth="41.0" layoutX="170.0" layoutY="470.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin53" fitHeight="42.0" fitWidth="41.0" layoutX="170.0" layoutY="466.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin54" fitHeight="42.0" fitWidth="41.0" layoutX="170.0" layoutY="462.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin61" fitHeight="42.0" fitWidth="41.0" layoutX="117.0" layoutY="473.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin62" fitHeight="42.0" fitWidth="41.0" layoutX="116.0" layoutY="469.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin63" fitHeight="42.0" fitWidth="41.0" layoutX="116.0" layoutY="465.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin64" fitHeight="42.0" fitWidth="41.0" layoutX="116.0" layoutY="461.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin71" fitHeight="42.0" fitWidth="41.0" layoutX="116.0" layoutY="422.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin72" fitHeight="42.0" fitWidth="41.0" layoutX="115.0" layoutY="418.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin73" fitHeight="42.0" fitWidth="41.0" layoutX="115.0" layoutY="414.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin74" fitHeight="42.0" fitWidth="41.0" layoutX="115.0" layoutY="410.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin81" fitHeight="42.0" fitWidth="41.0" layoutX="171.0" layoutY="423.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin82" fitHeight="42.0" fitWidth="41.0" layoutX="170.0" layoutY="419.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin83" fitHeight="42.0" fitWidth="41.0" layoutX="170.0" layoutY="415.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin84" fitHeight="42.0" fitWidth="41.0" layoutX="170.0" layoutY="411.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin91" fitHeight="42.0" fitWidth="41.0" layoutX="228.0" layoutY="421.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin92" fitHeight="42.0" fitWidth="41.0" layoutX="227.0" layoutY="417.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin93" fitHeight="42.0" fitWidth="41.0" layoutX="227.0" layoutY="413.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin94" fitHeight="42.0" fitWidth="41.0" layoutX="227.0" layoutY="409.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin101" fitHeight="42.0" fitWidth="41.0" layoutX="284.0" layoutY="421.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin102" fitHeight="42.0" fitWidth="41.0" layoutX="283.0" layoutY="417.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin103" fitHeight="42.0" fitWidth="41.0" layoutX="283.0" layoutY="413.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin104" fitHeight="42.0" fitWidth="41.0" layoutX="283.0" layoutY="409.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin111" fitHeight="42.0" fitWidth="41.0" layoutX="284.0" layoutY="369.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin112" fitHeight="42.0" fitWidth="41.0" layoutX="283.0" layoutY="365.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin113" fitHeight="42.0" fitWidth="41.0" layoutX="283.0" layoutY="361.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin114" fitHeight="42.0" fitWidth="41.0" layoutX="283.0" layoutY="357.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin121" fitHeight="42.0" fitWidth="41.0" layoutX="228.0" layoutY="370.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin122" fitHeight="42.0" fitWidth="41.0" layoutX="227.0" layoutY="366.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin123" fitHeight="42.0" fitWidth="41.0" layoutX="227.0" layoutY="362.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin124" fitHeight="42.0" fitWidth="41.0" layoutX="227.0" layoutY="358.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin131" fitHeight="42.0" fitWidth="41.0" layoutX="171.0" layoutY="370.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin132" fitHeight="42.0" fitWidth="41.0" layoutX="170.0" layoutY="366.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin133" fitHeight="42.0" fitWidth="41.0" layoutX="170.0" layoutY="362.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin134" fitHeight="42.0" fitWidth="41.0" layoutX="170.0" layoutY="358.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin141" fitHeight="42.0" fitWidth="41.0" layoutX="115.0" layoutY="369.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin142" fitHeight="42.0" fitWidth="41.0" layoutX="114.0" layoutY="365.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin143" fitHeight="42.0" fitWidth="41.0" layoutX="114.0" layoutY="361.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin144" fitHeight="42.0" fitWidth="41.0" layoutX="114.0" layoutY="357.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin151" fitHeight="42.0" fitWidth="41.0" layoutX="116.0" layoutY="320.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin152" fitHeight="42.0" fitWidth="41.0" layoutX="115.0" layoutY="316.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin153" fitHeight="42.0" fitWidth="41.0" layoutX="115.0" layoutY="312.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin154" fitHeight="42.0" fitWidth="41.0" layoutX="115.0" layoutY="308.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin161" fitHeight="42.0" fitWidth="41.0" layoutX="171.0" layoutY="317.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin162" fitHeight="42.0" fitWidth="41.0" layoutX="170.0" layoutY="313.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin163" fitHeight="42.0" fitWidth="41.0" layoutX="170.0" layoutY="309.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin164" fitHeight="42.0" fitWidth="41.0" layoutX="170.0" layoutY="305.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin171" fitHeight="42.0" fitWidth="41.0" layoutX="228.0" layoutY="317.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin172" fitHeight="42.0" fitWidth="41.0" layoutX="227.0" layoutY="313.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin173" fitHeight="42.0" fitWidth="41.0" layoutX="227.0" layoutY="309.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin174" fitHeight="42.0" fitWidth="41.0" layoutX="227.0" layoutY="305.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin181" fitHeight="42.0" fitWidth="41.0" layoutX="284.0" layoutY="318.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin182" fitHeight="42.0" fitWidth="41.0" layoutX="283.0" layoutY="314.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin183" fitHeight="42.0" fitWidth="41.0" layoutX="283.0" layoutY="310.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin184" fitHeight="42.0" fitWidth="41.0" layoutX="283.0" layoutY="306.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin191" fitHeight="42.0" fitWidth="41.0" layoutX="284.0" layoutY="267.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin192" fitHeight="42.0" fitWidth="41.0" layoutX="283.0" layoutY="263.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin193" fitHeight="42.0" fitWidth="41.0" layoutX="283.0" layoutY="259.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin194" fitHeight="42.0" fitWidth="41.0" layoutX="283.0" layoutY="255.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin201" fitHeight="42.0" fitWidth="41.0" layoutX="200.0" layoutY="241.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin202" fitHeight="42.0" fitWidth="41.0" layoutX="199.0" layoutY="237.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin203" fitHeight="42.0" fitWidth="41.0" layoutX="199.0" layoutY="233.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin204" fitHeight="42.0" fitWidth="41.0" layoutX="199.0" layoutY="229.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin211" fitHeight="42.0" fitWidth="41.0" layoutX="115.0" layoutY="267.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin212" fitHeight="42.0" fitWidth="41.0" layoutX="114.0" layoutY="263.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin213" fitHeight="42.0" fitWidth="41.0" layoutX="114.0" layoutY="259.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin214" fitHeight="42.0" fitWidth="41.0" layoutX="114.0" layoutY="255.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin221" fitHeight="42.0" fitWidth="41.0" layoutX="115.0" layoutY="217.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin222" fitHeight="42.0" fitWidth="41.0" layoutX="114.0" layoutY="213.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin223" fitHeight="42.0" fitWidth="41.0" layoutX="114.0" layoutY="209.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin224" fitHeight="42.0" fitWidth="41.0" layoutX="114.0" layoutY="205.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin231" fitHeight="42.0" fitWidth="41.0" layoutX="115.0" layoutY="166.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin232" fitHeight="42.0" fitWidth="41.0" layoutX="114.0" layoutY="162.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin233" fitHeight="42.0" fitWidth="41.0" layoutX="114.0" layoutY="158.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin234" fitHeight="42.0" fitWidth="41.0" layoutX="114.0" layoutY="154.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin241" fitHeight="42.0" fitWidth="41.0" layoutX="149.0" layoutY="123.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin242" fitHeight="42.0" fitWidth="41.0" layoutX="148.0" layoutY="119.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin243" fitHeight="42.0" fitWidth="41.0" layoutX="148.0" layoutY="115.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin244" fitHeight="42.0" fitWidth="41.0" layoutX="148.0" layoutY="111.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin251" fitHeight="42.0" fitWidth="41.0" layoutX="199.0" layoutY="114.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin252" fitHeight="42.0" fitWidth="41.0" layoutX="198.0" layoutY="110.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin253" fitHeight="42.0" fitWidth="41.0" layoutX="198.0" layoutY="106.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin254" fitHeight="42.0" fitWidth="41.0" layoutX="198.0" layoutY="102.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin261" fitHeight="42.0" fitWidth="41.0" layoutX="252.0" layoutY="123.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin262" fitHeight="42.0" fitWidth="41.0" layoutX="251.0" layoutY="119.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin263" fitHeight="42.0" fitWidth="41.0" layoutX="251.0" layoutY="115.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin264" fitHeight="42.0" fitWidth="41.0" layoutX="251.0" layoutY="111.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin271" fitHeight="42.0" fitWidth="41.0" layoutX="282.0" layoutY="165.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin272" fitHeight="42.0" fitWidth="41.0" layoutX="281.0" layoutY="161.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin273" fitHeight="42.0" fitWidth="41.0" layoutX="281.0" layoutY="157.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin274" fitHeight="42.0" fitWidth="41.0" layoutX="281.0" layoutY="153.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin281" fitHeight="42.0" fitWidth="41.0" layoutX="284.0" layoutY="217.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin282" fitHeight="42.0" fitWidth="41.0" layoutX="283.0" layoutY="213.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin283" fitHeight="42.0" fitWidth="41.0" layoutX="283.0" layoutY="209.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin284" fitHeight="42.0" fitWidth="41.0" layoutX="283.0" layoutY="205.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin291" fitHeight="42.0" fitWidth="41.0" layoutX="199.0" layoutY="175.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin292" fitHeight="42.0" fitWidth="41.0" layoutX="198.0" layoutY="171.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin293" fitHeight="42.0" fitWidth="41.0" layoutX="198.0" layoutY="167.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pin294" fitHeight="42.0" fitWidth="41.0" layoutX="198.0" layoutY="163.0" pickOnBounds="true" preserveRatio="true" />
 
    </children>
 </AnchorPane>
