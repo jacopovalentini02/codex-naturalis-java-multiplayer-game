@@ -7,10 +7,6 @@ abstract public class NormalCard extends PlayableCard{
         return backface;
     }
 
-    public void setBackface(NormalBack backface) {
-        this.backface = backface;
-    }
-
     public NormalCard(int id, NormalBack backface) {
         super(id);
         this.backface = backface;

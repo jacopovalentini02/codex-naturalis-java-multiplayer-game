@@ -9,7 +9,6 @@ import java.util.*;
 
 public class Deck implements Serializable {
 
-
     private ArrayList<Card> cardList;
 
 
@@ -27,10 +26,6 @@ public class Deck implements Serializable {
 
     public ArrayList<Card> getCardList() {
         return cardList;
-    }
-
-    public void setCardList(ArrayList<Card> cardList) {
-        this.cardList = cardList;
     }
 
     public void createResourceCard(JSONObject cardObject, int id){
@@ -176,28 +171,8 @@ public class Deck implements Serializable {
 
         }
     }
-    public void printCardsDeck() {
-        ArrayList<Card> cards = this.getCardList();
-        for (Card card : cards) {
-            if (card instanceof ResourceCard) {
-                ResourceCard resourceCard = (ResourceCard) card;
-                resourceCard.printAll();
-            }else if (card instanceof GoldCard) {
-                GoldCard goldcard = (GoldCard) card;
-                goldcard.printAll();
-            } else if (card instanceof StarterCard) {
-                StarterCard starterCard = (StarterCard) card;
-                starterCard.printAll();
-            } else if (card instanceof StructuredObjectiveCard) {
-                StructuredObjectiveCard structObj = (StructuredObjectiveCard) card;
-                System.out.println(structObj.toString());
-            }else{
-                NotStructuredObjectiveCard notstructObj = (NotStructuredObjectiveCard) card;
-                System.out.println(notstructObj.toString());
-            }
-        }
+
+    public void setCardList(ArrayList<Card> cardList) {
+        this.cardList = cardList;
     }
-
-
-
 }

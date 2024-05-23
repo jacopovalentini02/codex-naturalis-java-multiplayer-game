@@ -41,6 +41,7 @@ public class ChooseObjectiveController extends GUIController implements Initiali
         Parent root = loader.load();
         ChooseObjectiveController chooseObjectiveController = loader.getController();
         guiView.setChooseObjectiveController(chooseObjectiveController);
+        stage.centerOnScreen();
         guiView.setStage(stage);
         Scene scene = new Scene(root);
         stage.setTitle("Choosing Objective Card");

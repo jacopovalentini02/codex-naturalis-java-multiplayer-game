@@ -10,28 +10,28 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="662.0" prefWidth="1114.0" style="-fx-background-color: #e6ddbc;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsfw.ingsfwproject.View.GUI.CreateGameController">
+<AnchorPane prefHeight="752.0" prefWidth="1304.0" style="-fx-background-color: #e6ddbc;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsfw.ingsfwproject.View.GUI.CreateGameController">
    <effect>
       <Blend />
    </effect>
-   <Button fx:id="createButton" layoutX="825.0" layoutY="387.0" mnemonicParsing="false" onAction="#sendCreateGame" prefHeight="47.0" prefWidth="153.0" style="-fx-background-color: #5F3075;" text="Create Game" textFill="WHITE">
+   <Button fx:id="createButton" layoutX="968.0" layoutY="395.0" mnemonicParsing="false" onAction="#sendCreateGame" prefHeight="47.0" prefWidth="153.0" style="-fx-background-color: #5F3075;" text="Create Game" textFill="WHITE">
       <font>
          <Font name="Bodoni 72 Smallcaps Book" size="22.0" />
       </font>
    </Button>
-   <TextField fx:id="nickname_input" layoutX="808.0" layoutY="233.0" prefHeight="43.0" prefWidth="186.0" promptText="NickName">
+   <TextField fx:id="nickname_input" layoutX="951.0" layoutY="241.0" prefHeight="43.0" prefWidth="186.0" promptText="NickName">
       <font>
          <Font size="15.0" />
       </font>
    </TextField>
 
-   <Spinner fx:id="num_of_players" editable="true" initialValue="2" layoutX="808.0" layoutY="306.0" max="4" min="2" prefHeight="43.0" prefWidth="186.0" />
-   <ImageView fitHeight="675.0" fitWidth="1052.0" layoutX="-146.0" layoutY="-27.0" pickOnBounds="true" preserveRatio="true">
+   <Spinner fx:id="num_of_players" editable="true" initialValue="2" layoutX="951.0" layoutY="314.0" max="4" min="2" prefHeight="43.0" prefWidth="186.0" />
+   <ImageView fitHeight="772.0" fitWidth="1070.0" layoutX="-146.0" layoutY="-27.0" pickOnBounds="true" preserveRatio="true">
       <image>
          <Image url="@Images/logoTagliato.png" />
       </image>
    </ImageView>
-   <Text fill="#5f3075" layoutX="790.0" layoutY="199.0" strokeType="OUTSIDE" strokeWidth="0.0" text="GAME CREATION" wrappingWidth="301.81787109375">
+   <Text fill="#5f3075" layoutX="933.0" layoutY="207.0" strokeType="OUTSIDE" strokeWidth="0.0" text="GAME CREATION" wrappingWidth="301.81787109375">
       <font>
          <Font name="Bodoni 72 Oldstyle Bold" size="30.0" />
       </font>

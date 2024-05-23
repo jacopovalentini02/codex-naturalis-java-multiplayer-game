@@ -42,14 +42,4 @@ public class ResourceCard extends NormalCard{
 //
 //    }
 
-    public void printAll(){
-        System.out.println(super.getIdCard());
-        System.out.println(String.valueOf(super.getBackface().getCenter()));
-        System.out.println(this.front.getPoints());
-        System.out.println(Arrays.toString(this.front.getCornerList()));
-        System.out.println(Arrays.toString(this.getBackface().getCornerList()));
-        System.out.println(Arrays.toString(this.getBackface().getCoveredCorner()));
-        System.out.println();
-
-    }
 }

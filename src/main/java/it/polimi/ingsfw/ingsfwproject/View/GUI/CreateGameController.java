@@ -45,7 +45,7 @@ public class CreateGameController extends GUIController{
         }else{
             CreateGameMessage createGameMessage=new CreateGameMessage(client.getClientID(), numberOfPlayers, nickname);
             client.sendMessage(createGameMessage);
-            guiView.openSetUpGame();
+            guiView.openWaiting();
 
         }
 

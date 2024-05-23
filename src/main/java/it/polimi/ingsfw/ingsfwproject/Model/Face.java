@@ -31,26 +31,11 @@ abstract public class Face implements Serializable {
         return cornerList;
     }
 
-    public void setCornerList(Content[] cornerList) {
-        this.cornerList = cornerList;
-
-    }
 
     public int getIdCard() {
         return idCard;
     }
 
-    public void setIdCard(int idCard) {
-        this.idCard = idCard;
-    }
-
-    public boolean[] getCoveredCorner() {
-        return coveredCorner;
-    }
-
-    public void setCoveredCorner(boolean[] coveredCorner) {
-        this.coveredCorner = coveredCorner;
-    }
 
     public Content getTL(){
         return this.cornerList[0];

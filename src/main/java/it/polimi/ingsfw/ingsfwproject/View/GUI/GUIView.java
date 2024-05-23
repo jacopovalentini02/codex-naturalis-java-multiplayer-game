@@ -3,8 +3,6 @@ package it.polimi.ingsfw.ingsfwproject.View.GUI;
 import it.polimi.ingsfw.ingsfwproject.Model.*;
 import it.polimi.ingsfw.ingsfwproject.Network.Client.Client;
 
-import it.polimi.ingsfw.ingsfwproject.Network.Messages.Message;
-import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClientMessage;
 import it.polimi.ingsfw.ingsfwproject.View.View;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -36,12 +34,11 @@ public class GUIView extends View {
 
     public void openLobby() {
         Platform.runLater(() -> {
+            System.out.println("open lobby");
             try {
-
                 lobbyGUIController =new LobbyGUIController();
                 currentController=lobbyGUIController;
                 LobbyGUIController.setGuiView(this);
-                //lobbyApp.setGuiView(this);
                 lobbyGUIController.start(this.stage);
 
             } catch (Exception ex) {
@@ -62,7 +59,7 @@ public class GUIView extends View {
         });
     }
 
-    public void openSetUpGame(){
+    public void openWaiting(){
         waitingController =new WaitingController();
 
         Platform.runLater(() -> {
@@ -126,7 +123,7 @@ public class GUIView extends View {
 
     @Override
     public void notifyGameJoined(int idGame) {
-        openSetUpGame();
+        openWaiting();
         Platform.runLater(() -> {
             if (waitingController != null && waitingController.getNewPlayerJoined() != null) {
                 waitingController.setPlayerNickname(client.getNickname());
@@ -236,7 +233,7 @@ public class GUIView extends View {
         chooseObjectiveController=new ChooseObjectiveController();
 
         if(state==GameState.WAITING_FOR_PLAYERS){
-            openSetUpGame();
+            openWaiting();
 
 
         }else if(state==GameState.CHOOSING_STARTER_CARDS){
@@ -286,6 +283,18 @@ public class GUIView extends View {
                 alert.setContentText("Gamestate ending");
                 alert.showAndWait();
             });
+        }else if(state==GameState.ENDED){
+            System.out.println("game ended");
+            Platform.runLater(()->{
+                try {
+                    System.out.println("qua");
+                    openLobby();
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            });
+
+
         }
 
     }
@@ -312,6 +321,7 @@ public class GUIView extends View {
 
     @Override
     public void notifyWinnerUpdate(String nickname) {
+        System.out.println("Winner: "+nickname);
         Platform.runLater(() -> {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Messaggio");

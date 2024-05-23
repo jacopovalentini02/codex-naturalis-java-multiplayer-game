@@ -102,8 +102,6 @@ public class VirtualView {
 
     public void setState(GameState state) {
         this.state = state;
-        if (state.equals(GameState.ENDED))
-            System.exit(0);
     }
 
     public int getGameID() {
