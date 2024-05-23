@@ -141,7 +141,6 @@ public class GUIView extends View {
         Platform.runLater(() -> {
             if (waitingController != null && waitingController.getNewPlayerJoined() != null) {
                 String lastNickname = nicknames.getLast();
-                System.out.println("New player nickname: " + lastNickname);
                 waitingController.addNickname(lastNickname);
                 for (String s: nicknames)
                     waitingController.addChat(s);
@@ -235,11 +234,13 @@ public class GUIView extends View {
         chooseStarterController=new ChooseStarterController();
         chooseColorController=new ChooseColorController();
         chooseObjectiveController=new ChooseObjectiveController();
-        gameBoardController=new GameBoardController();
 
         if(state==GameState.WAITING_FOR_PLAYERS){
             openSetUpGame();
+
+
         }else if(state==GameState.CHOOSING_STARTER_CARDS){
+            gameBoardController=new GameBoardController();
             Platform.runLater(() -> {
                 try {
                     ChooseStarterController.setGuiView(this);
@@ -249,6 +250,7 @@ public class GUIView extends View {
                 }
             });
         }else if(state==GameState.CHOOSING_COLORS){
+
             Platform.runLater(() -> {
                 try {
                     ChooseColorController.setGuiView(this);
@@ -258,6 +260,7 @@ public class GUIView extends View {
                 }
             });
         }else if(state==GameState.CHOOSING_OBJECTIVES){
+
             Platform.runLater(() -> {
                 try {
                     ChooseObjectiveController.setGuiView(this);
@@ -274,6 +277,14 @@ public class GUIView extends View {
                 } catch (Exception ex) {
                     throw new RuntimeException(ex);
                 }
+            });
+        } else if (state==GameState.ENDING) {
+            Platform.runLater(() -> {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Messaggio");
+                alert.setHeaderText(null);
+                alert.setContentText("Gamestate ending");
+                alert.showAndWait();
             });
         }
 
@@ -301,6 +312,13 @@ public class GUIView extends View {
 
     @Override
     public void notifyWinnerUpdate(String nickname) {
+        Platform.runLater(() -> {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Messaggio");
+            alert.setHeaderText(null);
+            alert.setContentText(nickname+" has won!");
+            alert.showAndWait();
+        });
 
     }
 
