@@ -14,17 +14,6 @@ public class GoldFront extends NormalFace {
         this.objectNeeded = objectNeeded;
     }
 
-    public void setCost(ArrayList<Content> cost) {
-        this.cost = cost;
-    }
-
-    public void setOverlapped(boolean overlapped) {
-        this.overlapped = overlapped;
-    }
-
-    public void setObjectNeeded(Content objectNeeded) {
-        this.objectNeeded = objectNeeded;
-    }
 
     public boolean isOverlapped() {
         return overlapped;

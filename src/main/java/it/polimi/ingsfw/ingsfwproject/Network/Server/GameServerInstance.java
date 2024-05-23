@@ -78,98 +78,6 @@ public class GameServerInstance {
         return players.get(player);
     }
 
-    //METODI PER L'UPDATE AL CLIENT
-    public void sendStarterCardMessage(int clientID, StarterCard starter) {
-        SendStarterCardMessage starterMessage = new SendStarterCardMessage(clientID, starter);
-        sendUpdateToAll(starterMessage);
-    }
-
-    public void sendGoldDeckUpdate(Deck goldDeck) {
-        GoldDeckMessage goldDeckMsg = new GoldDeckMessage(sendBroadcast, goldDeck);
-        sendUpdateToAll(goldDeckMsg);
-    }
-
-    public void sendResourceDeckUpdate(Deck resourceDeck){
-        ResourceDeckMessage resourceDeckMessage=new ResourceDeckMessage(sendBroadcast,resourceDeck);
-        sendUpdateToAll(resourceDeckMessage);
-    }
-
-    public void sendDisplayedPlayableCardUpdate(List<PlayableCard> displayedPlayableCard) {
-        DisplayedPlayableCardsMessage dispPlayCardMsg = new DisplayedPlayableCardsMessage(sendBroadcast, new ArrayList<>(displayedPlayableCard));
-        sendUpdateToAll(dispPlayCardMsg);
-    }
-
-    public void sendCurrentPlayerUpdate(String currentPlayer) {
-        CurrentPlayerMessage currentPlayerMsg = new CurrentPlayerMessage(sendBroadcast, currentPlayer);
-        sendUpdateToAll(currentPlayerMsg);
-    }
-
-    public void sendAvaiblePositionUpdate(int clientID, ArrayList<Coordinate> coords){
-        CoordinatesAvailableMessage coordMsg=new CoordinatesAvailableMessage(clientID, coords);
-        sendUpdateToAll(coordMsg);
-
-    }
-
-//    public void sendColorChosen(int clientID, PlayerColor color){
-//        ColorChosenMessage colorMsg=new ColorChosenMessage(clientID, color);
-//        sendUpdateToAll(colorMsg);
-//    }
-
-    public void sendHandObjectiveUpdate(int clientID, ArrayList<ObjectiveCard> card){
-        HandObjectiveMessage handObjectiveMsg=new HandObjectiveMessage(clientID, card);
-        sendUpdateToAll(handObjectiveMsg);
-    }
-
-    public void sendHandCardsUpdate(int clientID, ArrayList<PlayableCard> handCards){
-        HandCardsMessage handCardsMsg=new HandCardsMessage(clientID, handCards);
-        sendUpdateToAll(handCardsMsg);
-    }
-
-    public void sendGameStateUpdate(GameState gameState){
-        GameStateMessage gameStateMsg=new GameStateMessage(sendBroadcast, gameState);
-        sendUpdateToAll(gameStateMsg);
-    }
-
-    public void sendDisplayedObjectiveCardUpdate(List<ObjectiveCard> displayedObjectiveCard){
-        DisplayedObjectiveMessage displayedObjectiveMsg=new DisplayedObjectiveMessage(sendBroadcast, displayedObjectiveCard);
-        sendUpdateToAll(displayedObjectiveMsg);
-    }
-
-    public void sendScoreUpdate(Map<String, Integer> scores){
-        ScoreMessage scoreMessage=new ScoreMessage(sendBroadcast, scores);
-        sendUpdateToAll(scoreMessage);
-    }
-
-    public void sendResourcesUpdate(HashMap<Content, Integer> resources,String nickname){
-        ResourcesMessage resourcesMessage=new ResourcesMessage(sendBroadcast, resources, nickname);
-        sendUpdateToAll(resourcesMessage);
-    }
-
-    public void sendPlayersListUpdate(ArrayList<String> nicknames){
-        PlayersListMessage playersListMsg=new PlayersListMessage(sendBroadcast, nicknames);
-        sendUpdateToAll(playersListMsg);
-    }
-
-    public void sendGridUpdate(Map<Coordinate, Face> grid, String nickname){
-        GridMessage gridMessage=new GridMessage(sendBroadcast, grid, nickname);
-        sendUpdateToAll(gridMessage);
-    }
-
-    public void sendWinner(String winner){
-        WinnerMessage winnerMsg=new WinnerMessage(sendBroadcast, winner);
-        sendUpdateToAll(winnerMsg);
-    }
-
-    public void sendException(int clientID, String error){
-        ExcpetionMessage excpetionMessage=new ExcpetionMessage(clientID,error);
-        sendUpdateToAll(excpetionMessage);
-    }
-
-    public void sendColorsAvailable(int clientID, List<PlayerColor> tokenAvailable){
-        ColorAvailableMessage colorAvailableMessage=new ColorAvailableMessage(clientID, tokenAvailable);
-        sendUpdateToAll(colorAvailableMessage);
-    }
-
     public Player getPlayer(String nickname){
         return this.gameController.getPlayer(nickname);
     }
@@ -185,4 +93,7 @@ public class GameServerInstance {
         return -1;
     }
 
+    public BlockingDeque<Message> getQueue() {
+        return queue;
+    }
 }

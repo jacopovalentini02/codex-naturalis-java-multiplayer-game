@@ -250,7 +250,6 @@ public class GameController implements Controller {
         starterCardsPlayed++;
         if (starterCardsPlayed == model.getNumOfPlayers()){
             model.setState(GameState.CHOOSING_COLORS);
-            model.getGameServerInstance().sendGameStateUpdate(GameState.CHOOSING_COLORS);
         }
 
     }

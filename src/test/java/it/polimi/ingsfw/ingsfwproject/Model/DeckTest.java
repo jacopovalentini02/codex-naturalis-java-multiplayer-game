@@ -146,42 +146,42 @@ class DeckTest {
 
     }
 
-//    @Test
-//    public void testDraw() throws DeckEmptyException {
-//        Deck deck=new Deck();
-//        Content[] emptyCorners = {Content.valueOf("EMPTY"),Content.valueOf("EMPTY"),Content.valueOf("EMPTY"),Content.valueOf("EMPTY")};
-//        //Creation of the first card
-//        Content[] corner = { Content.FUNGI_KINGDOM, Content.EMPTY, Content.FUNGI_KINGDOM, Content.HIDDEN };
-//        NormalBack backFace=new NormalBack(1, emptyCorners, Content.FUNGI_KINGDOM);
-//        NormalFace front=new NormalFace(1, 0, corner);
-//        ResourceCard preRes = new ResourceCard(front,backFace,1);
-//        deck.addCard(preRes);
-//
-//        //Creation of the second card
-//        corner = new Content[]{Content.FUNGI_KINGDOM, Content.FUNGI_KINGDOM, Content.HIDDEN, Content.EMPTY};
-//        backFace = new NormalBack(2, emptyCorners, Content.FUNGI_KINGDOM);
-//        front=new NormalFace(2, 0, corner);
-//        ResourceCard preRes2 = new ResourceCard(front, backFace, 2);
-//        deck.addCard(preRes2);
-//
-//
-//        //Creation of the third card
-//        corner = new Content[]{Content.PLANT_KINGDOM, Content.PLANT_KINGDOM, Content.HIDDEN, Content.EMPTY};
-//        backFace = new NormalBack(12, emptyCorners, Content.FUNGI_KINGDOM);
-//        front=new NormalFace(12, 0, corner);
-//        ResourceCard preRes3 = new ResourceCard(front, backFace, 12);
-//        deck.addCard(preRes3);
-//
-//        Card drawnCard = deck.draw();
-//
-//        //First card in the deck should be the second added
-//        assertEquals(deck.getCardList().getFirst(), preRes2);
-//        //The drawn card should be not in the deck
-//        assertFalse(deck.getCardList().contains(drawnCard));
-//
-//        //If the deck is empty an exception should be thrown
-//        deck.setCardList(new ArrayList<>());
-//        assertThrows(DeckEmptyException.class, deck::draw);
-//
-//    }
+    @Test
+    public void testDraw() throws DeckEmptyException {
+        Deck deck=new Deck();
+        Content[] emptyCorners = {Content.valueOf("EMPTY"),Content.valueOf("EMPTY"),Content.valueOf("EMPTY"),Content.valueOf("EMPTY")};
+        //Creation of the first card
+        Content[] corner = { Content.FUNGI_KINGDOM, Content.EMPTY, Content.FUNGI_KINGDOM, Content.HIDDEN };
+        NormalBack backFace=new NormalBack(1, emptyCorners, Content.FUNGI_KINGDOM, "");
+        NormalFace front=new NormalFace(1, 0, corner,"");
+        ResourceCard preRes = new ResourceCard(front,backFace,1);
+        deck.addCard(preRes);
+
+        //Creation of the second card
+        corner = new Content[]{Content.FUNGI_KINGDOM, Content.FUNGI_KINGDOM, Content.HIDDEN, Content.EMPTY};
+        backFace = new NormalBack(2, emptyCorners, Content.FUNGI_KINGDOM,"");
+        front=new NormalFace(2, 0, corner,"");
+        ResourceCard preRes2 = new ResourceCard(front, backFace, 2);
+        deck.addCard(preRes2);
+
+
+        //Creation of the third card
+        corner = new Content[]{Content.PLANT_KINGDOM, Content.PLANT_KINGDOM, Content.HIDDEN, Content.EMPTY};
+        backFace = new NormalBack(12, emptyCorners, Content.FUNGI_KINGDOM,"");
+        front=new NormalFace(12, 0, corner,"");
+        ResourceCard preRes3 = new ResourceCard(front, backFace, 12);
+        deck.addCard(preRes3);
+
+        Card drawnCard = deck.draw();
+
+        //First card in the deck should be the second added
+        assertEquals(deck.getCardList().getFirst(), preRes2);
+        //The drawn card should be not in the deck
+        assertFalse(deck.getCardList().contains(drawnCard));
+
+        //If the deck is empty an exception should be thrown
+        deck.setCardList(new ArrayList<>());
+        assertThrows(DeckEmptyException.class, deck::draw);
+
+    }
 }

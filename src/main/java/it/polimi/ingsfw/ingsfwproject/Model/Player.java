@@ -23,12 +23,7 @@ public class Player implements Serializable {
         return handObjective;
     }
 
-    public void setHandObjective(ArrayList<ObjectiveCard> handObjective) {
-        this.handObjective = handObjective;
-    }
-
     private ArrayList<ObjectiveCard> handObjective;
-
 
     public Player(String username, GameServerInstance gameServerInstance, int clientID) {
         this.username = username;
@@ -53,7 +48,6 @@ public class Player implements Serializable {
             addToHand((PlayableCard)drawnCard);
             return true;
         } else {
-            System.out.println("Deck is empty");
             return false;
         }
 
@@ -90,14 +84,6 @@ public class Player implements Serializable {
         return username;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public PlayerColor getToken() {
-        return token;
-    }
-
     public void setToken(PlayerColor token) {
         this.token = token;
         gameServerInstance.sendUpdateToAll(new ColorChosenMessage(-10, token, username));
@@ -107,21 +93,14 @@ public class Player implements Serializable {
         return ground;
     }
 
-    public void setGround(PlayerGround ground) {
-        this.ground = ground;
-    }
-
     public ArrayList<PlayableCard> getHandCard() {
         return handCard;
     }
 
-    public void setHandCard(ArrayList<PlayableCard> handCard) {
-        this.handCard = handCard;
-    }
-    @Override
-    public String toString(){
-        return this.username;
-    }
+//    @Override
+//    public String toString(){
+//        return this.username;
+//    }
 
 
     //todo mettere priavate
