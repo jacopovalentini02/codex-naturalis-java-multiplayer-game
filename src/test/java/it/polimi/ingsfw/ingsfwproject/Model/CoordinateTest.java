@@ -111,7 +111,11 @@ class CoordinateTest {
 
     @Test
     void testNotEquals() {
+        Object o = new Object();;
+
         Coordinate c1 = new Coordinate(1, 2);
+
+        assertNotEquals(c1,o);
         Coordinate c2 = new Coordinate(3, 0);
         assertNotEquals(c1, c2);
 
@@ -238,7 +242,7 @@ class CoordinateTest {
     }
 
     @Test
-    void sum() {
+    void TestSum() {
         Coordinate c1 = new Coordinate(1, 2);
         Coordinate c2 = new Coordinate(3, 4);
         assertEquals(new Coordinate(c1.getX()+c2.getX(), c1.getY() +c2.getY()), c1.sum(c2));
@@ -248,5 +252,16 @@ class CoordinateTest {
         Coordinate c4 = new Coordinate(0, 0);
         assertEquals(new Coordinate(c3.getX()+c4.getX(), c3.getY()+c4.getY()), c3.sum(c4));
         assertEquals(new Coordinate(c3.getX()+c4.getX(), c3.getY()+c4.getY()), c4.sum(c3));
+    }
+
+    @Test
+    void TestToString(){
+        Coordinate c1 = new Coordinate(2,3);
+        assertNotEquals("(3,2)", c1.toString());
+        assertEquals("(2,3)", c1.toString());
+
+        Coordinate c2 = new Coordinate(0,0);
+        assertNotEquals("(2,3)", c2.toString());
+        assertEquals("(0,0)", c2.toString());
     }
 }

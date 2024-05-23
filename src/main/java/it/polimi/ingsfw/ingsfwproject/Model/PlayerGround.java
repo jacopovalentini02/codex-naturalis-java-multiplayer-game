@@ -100,11 +100,11 @@ public class PlayerGround implements Serializable {
                 if(!grid.containsKey(check)){
                     if(i==-1 && j==-1) //bottom left card
                         corner = facePlayed.getBL();
-                    else if(i==-1 && j==1) //top left card
+                    else if(i==-1) //&& j==1 //top left card
                         corner = facePlayed.getTL();
                     else if(i==1 && j==-1) //bottom right card
                         corner = facePlayed.getBR();
-                    else if(i==1 && j==1) //top right card
+                    else //if(i==1 && j==1) //top right card
                         corner = facePlayed.getTR();
 
                     if(checkIfCanBeAvailable(check)) {
@@ -121,7 +121,7 @@ public class PlayerGround implements Serializable {
                         contentCounter.decrementCounter(grid.get(check).getTR());
                         grid.get(check).setCoveredTR(true);
                     }
-                    else if(i==-1 && j==1) { //top left card
+                    else if(i==-1) { // && j==1 //top left card
                         contentCounter.decrementCounter(grid.get(check).getBR());
                         grid.get(check).setCoveredBR(true);
                     }
@@ -129,7 +129,7 @@ public class PlayerGround implements Serializable {
                         contentCounter.decrementCounter(grid.get(check).getTL());
                         grid.get(check).setCoveredTL(true);
                     }
-                    else if(i==1 && j==1) { //top right card
+                    else /*if(i==1 && j==1)*/ { //top right card
                         contentCounter.decrementCounter(grid.get(check).getBL());
                         grid.get(check).setCoveredBL(true);
                     }
@@ -148,11 +148,11 @@ public class PlayerGround implements Serializable {
                 if (grid.containsKey(check)) {
                     if (i == -1 && j == -1) //bottom left card
                         corner = grid.get(check).getTR();
-                    else if (i == -1 && j == 1) //top left card
+                    else if (i == -1 /*&& j == 1*/) //top left card
                         corner = grid.get(check).getBR();
                     else if (i == 1 && j == -1) //bottom right card
                         corner = grid.get(check).getTL();
-                    else if (i == 1 && j == 1) //top right card
+                    else //if (i == 1 && j == 1) //top right card
                         corner = grid.get(check).getBL();
 
                     if (corner == Content.HIDDEN)
@@ -197,27 +197,6 @@ public class PlayerGround implements Serializable {
 
     public void setContentCount(Content content, int newValue) {
         this.contentCounter.setCounter(content, newValue);
-    }
-
-    public ContentCounter getContentCounter(){
-        return contentCounter;
-    }
-
-    public Iterator<Map.Entry<Coordinate, Face>> topToBottomIterator() {
-        List<Map.Entry<Coordinate, Face>> sortedEntries = new ArrayList<>(grid.entrySet());
-        sortedEntries.sort((e1, e2) -> {
-            int yCompare = Integer.compare(e2.getKey().getY(), e1.getKey().getY());
-            if (yCompare == 0) {
-                return Integer.compare(e1.getKey().getX(), e2.getKey().getX());
-            }
-            return yCompare;
-        });
-
-        return sortedEntries.iterator();
-    }
-
-    public void setGrid(Map<Coordinate, Face> grid){
-        this.grid = grid;
     }
 
 
