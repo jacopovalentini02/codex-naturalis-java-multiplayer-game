@@ -20,6 +20,8 @@ public enum AnsiColor {
     ANIMAL_BACKGROUND("\u001B[44m    "),   // blue background
     INSECT_BACKGROUND("\u001B[45m    "), // magenta background
 
+    STARTER_BACKGROUND("\u001B[47m    "),
+
     B_GOLD_PLANT_BACKGROUND("\u001B[43m \u001B[42m   "),  // green background
     B_GOLD_FUNGI_BACKGROUND("\u001B[43m \u001B[41m   "),    // red background
     B_GOLD_ANIMAL_BACKGROUND("\u001B[43m \u001B[44m   "),   // blue background

@@ -638,11 +638,11 @@ public class Cli extends View implements Runnable {
             case PLANT_KINGDOM ->  AnsiColor.PLANT_BACKGROUND;
             case INSECT_KINGDOM -> AnsiColor.INSECT_BACKGROUND;
             case ANIMAL_KINGDOM -> AnsiColor.ANIMAL_BACKGROUND;
-            case QUILL -> AnsiColor.EMPTY_TEXT;
-            case INKWELL -> AnsiColor.EMPTY_TEXT;
-            case MANUSCRIPT -> AnsiColor.EMPTY_TEXT;
-            case EMPTY -> AnsiColor.EMPTY_TEXT;
-            case HIDDEN -> AnsiColor.EMPTY_TEXT;
+            case QUILL -> AnsiColor.STARTER_BACKGROUND;
+            case INKWELL -> AnsiColor.STARTER_BACKGROUND;
+            case MANUSCRIPT -> AnsiColor.STARTER_BACKGROUND;
+            case EMPTY -> AnsiColor.STARTER_BACKGROUND;
+            case HIDDEN -> AnsiColor.STARTER_BACKGROUND;
         };
     }
 
@@ -655,11 +655,11 @@ public class Cli extends View implements Runnable {
            case PLANT_KINGDOM -> ansiBackground = AnsiColor.PLANT_BACKGROUND;
            case INSECT_KINGDOM -> ansiBackground = AnsiColor.INSECT_BACKGROUND;
            case ANIMAL_KINGDOM -> ansiBackground = AnsiColor.ANIMAL_BACKGROUND;
-           case QUILL -> ansiBackground = AnsiColor.EMPTY_TEXT;
-           case INKWELL -> ansiBackground =AnsiColor.EMPTY_TEXT;
-           case MANUSCRIPT -> ansiBackground = AnsiColor.EMPTY_TEXT;
-           case EMPTY -> ansiBackground = AnsiColor.EMPTY_TEXT;
-           case HIDDEN -> ansiBackground = AnsiColor.EMPTY_TEXT;
+           case QUILL -> ansiBackground = AnsiColor.STARTER_BACKGROUND;
+           case INKWELL -> ansiBackground = AnsiColor.STARTER_BACKGROUND;
+           case MANUSCRIPT -> ansiBackground = AnsiColor.STARTER_BACKGROUND;
+           case EMPTY -> ansiBackground = AnsiColor.STARTER_BACKGROUND;
+           case HIDDEN -> ansiBackground = AnsiColor.STARTER_BACKGROUND;
        }
        background = ansiBackground.getFormattedCharacter();
         if(card instanceof StructuredObjectiveCard){
