@@ -639,7 +639,7 @@ class PlayerGroundTest {
                 });
 
 
-        //placing it in (0,-4) DOWNQARDS
+        //placing it in (0,-4) DOWNWARDS
         assertDoesNotThrow(
                 () ->{
                     int score = ground.playCard(gold5, false, new Coordinate(0,-4));
@@ -658,8 +658,45 @@ class PlayerGroundTest {
         assertEquals(1, ground.getContentCount(Content.QUILL));
         assertEquals(1, ground.getContentCount(Content.INKWELL));
         assertEquals(1, ground.getContentCount(Content.MANUSCRIPT));
+    }
+
+    @Test
+    void setContentCount(){
+        ContentCounter contentCounter = new ContentCounter();
+        contentCounter.setCounter(Content.FUNGI_KINGDOM, 3);
+        contentCounter.setCounter(Content.INSECT_KINGDOM, 5);
+        contentCounter.setCounter(Content.PLANT_KINGDOM, 2);
+        contentCounter.setCounter(Content.ANIMAL_KINGDOM, 7);
+        contentCounter.setCounter(Content.QUILL, 1);
+        contentCounter.setCounter(Content.INKWELL, 0);
+        contentCounter.setCounter(Content.MANUSCRIPT, 9);
+
+        assertEquals(3, contentCounter.getCounter(Content.FUNGI_KINGDOM));
+        assertNotEquals(2, contentCounter.getCounter(Content.FUNGI_KINGDOM));
+
+        assertEquals(5, contentCounter.getCounter(Content.INSECT_KINGDOM));
+        assertNotEquals(1, contentCounter.getCounter(Content.INSECT_KINGDOM));
+
+        assertEquals(2, contentCounter.getCounter(Content.PLANT_KINGDOM));
+        assertNotEquals(1, contentCounter.getCounter(Content.PLANT_KINGDOM));
+
+        assertEquals(7, contentCounter.getCounter(Content.ANIMAL_KINGDOM));
+        assertNotEquals(13, contentCounter.getCounter(Content.ANIMAL_KINGDOM));
+
+        assertEquals(1, contentCounter.getCounter(Content.QUILL));
+        assertNotEquals(2, contentCounter.getCounter(Content.QUILL));
+
+        assertEquals(0, contentCounter.getCounter(Content.INKWELL));
+        assertNotEquals(2, contentCounter.getCounter(Content.INKWELL));
+
+        assertEquals(9, contentCounter.getCounter(Content.MANUSCRIPT));
+        assertNotEquals(2, contentCounter.getCounter(Content.MANUSCRIPT));
 
 
+        contentCounter.setCounter(Content.INSECT_KINGDOM, 11);
+
+        assertEquals(11, contentCounter.getCounter(Content.INSECT_KINGDOM));
+        assertNotEquals(5, contentCounter.getCounter(Content.INSECT_KINGDOM));
 
     }
 

@@ -70,13 +70,13 @@ public class ContentCounter implements Serializable {
         return copy;
     }
 
-    public String toString() {
-        String s = "";
-        for(Content c : Content.values()){
-            s += c.toString() + " count: " + getCounter(c) + "\n";
-        }
-        return s;
-    }
+//    public String toString() {
+//        String s = "";
+//        for(Content c : Content.values()){
+//            s += c.toString() + " count: " + getCounter(c) + "\n";
+//        }
+//        return s;
+//    }
 
 
 
