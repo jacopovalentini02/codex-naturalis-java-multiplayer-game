@@ -199,26 +199,5 @@ public class PlayerGround implements Serializable {
         this.contentCounter.setCounter(content, newValue);
     }
 
-    public ContentCounter getContentCounter(){
-        return contentCounter;
-    }
-
-    public Iterator<Map.Entry<Coordinate, Face>> topToBottomIterator() {
-        List<Map.Entry<Coordinate, Face>> sortedEntries = new ArrayList<>(grid.entrySet());
-        sortedEntries.sort((e1, e2) -> {
-            int yCompare = Integer.compare(e2.getKey().getY(), e1.getKey().getY());
-            if (yCompare == 0) {
-                return Integer.compare(e1.getKey().getX(), e2.getKey().getX());
-            }
-            return yCompare;
-        });
-
-        return sortedEntries.iterator();
-    }
-
-    public void setGrid(Map<Coordinate, Face> grid){
-        this.grid = grid;
-    }
-
 
 }
