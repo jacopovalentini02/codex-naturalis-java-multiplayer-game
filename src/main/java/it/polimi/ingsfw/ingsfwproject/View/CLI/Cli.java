@@ -472,7 +472,7 @@ public class Cli extends View implements Runnable {
                     System.out.println("Among the fields of the players, which one do you want to look?");
                     for (String p : otherPlayersNick) {
                         System.out.print(p + " ");
-                        System.out.println("");
+                        System.out.println();
                     }
                     do {
                         playerAsked = scanner.nextLine();
@@ -597,12 +597,13 @@ public class Cli extends View implements Runnable {
             case 1 -> goldFront = AnsiColor.POINT_ONE.getFormattedCharacter();
             case 2 -> goldFront = AnsiColor.POINT_TWO.getFormattedCharacter();
             case 3 -> goldFront = AnsiColor.POINT_THREE.getFormattedCharacter();
+            case 5 -> goldFront = AnsiColor.POINT_FIVE.getFormattedCharacter();
         }
 
         if (face.getObjectNeeded() != null) {
             printCorner(face.getObjectNeeded(), cardType);
         } else {
-            goldFront = cardType.getFormattedCharacter();
+            goldFront += cardType.getFormattedCharacter();
         }
 
         System.out.print(goldFront);
@@ -824,7 +825,6 @@ public class Cli extends View implements Runnable {
 
     public void printObjectivesPoints(ObjectiveCard card){
         switch (card.getPoints()){
-            case 1 -> System.out.print(AnsiColor.POINT_ONE.getFormattedCharacter());
             case 2 -> System.out.print(AnsiColor.POINT_TWO.getFormattedCharacter());
             case 3 -> System.out.print(AnsiColor.POINT_THREE.getFormattedCharacter());
         }
@@ -903,9 +903,8 @@ public class Cli extends View implements Runnable {
 
     public void printPlayerHand() {
 
-        int i = 1;
         for (PlayableCard c : client.getVirtualView().getHandCards()) {
-            System.out.println("Front of card " + i + ":");
+            System.out.println("Front of card " + c.getIdCard() + ":");
             printFace(c.getFront());
             if (c.getFront() instanceof GoldFront) {
                 System.out.print("Costs: ");
@@ -914,9 +913,8 @@ public class Cli extends View implements Runnable {
                 }
                 System.out.println();
             }
-            System.out.println("Back of card " + i + ":");
+            System.out.println("Back of card " + c.getIdCard() + ":");
             printFace(c.getBack());
-            i++;
         }
         System.out.println();
     }
@@ -1026,20 +1024,21 @@ public class Cli extends View implements Runnable {
 
 
     public void printCorner(Content content, AnsiColor cardType){
-        String cornerText = "";
+//        String cornerText = "";
+//
+//        switch (content) {
+//            case FUNGI_KINGDOM -> cornerText = AnsiColor.FUNGI_TEXT.getFormattedCharacter();
+//            case PLANT_KINGDOM -> cornerText = AnsiColor.PLANT_TEXT.getFormattedCharacter();
+//            case INSECT_KINGDOM -> cornerText = AnsiColor.INSECT_TEXT.getFormattedCharacter();
+//            case ANIMAL_KINGDOM -> cornerText = AnsiColor.ANIMAL_TEXT.getFormattedCharacter();
+//            case EMPTY -> cornerText = AnsiColor.EMPTY_TEXT.getFormattedCharacter();
+//            case HIDDEN -> cornerText = cardType.getFormattedCharacter();
+//            case QUILL -> cornerText = AnsiColor.QUILL_TEXT.getFormattedCharacter();
+//            case MANUSCRIPT -> cornerText = AnsiColor.MANUSCRIPT_TEXT.getFormattedCharacter();
+//            case INKWELL -> cornerText = AnsiColor.INKWELL_TEXT.getFormattedCharacter();
+//        }
 
-        switch (content) {
-            case FUNGI_KINGDOM -> cornerText = AnsiColor.FUNGI_TEXT.getFormattedCharacter();
-            case PLANT_KINGDOM -> cornerText = AnsiColor.PLANT_TEXT.getFormattedCharacter();
-            case INSECT_KINGDOM -> cornerText = AnsiColor.INSECT_TEXT.getFormattedCharacter();
-            case ANIMAL_KINGDOM -> cornerText = AnsiColor.ANIMAL_TEXT.getFormattedCharacter();
-            case EMPTY -> cornerText = AnsiColor.EMPTY_TEXT.getFormattedCharacter();
-            case HIDDEN -> cornerText = cardType.getFormattedCharacter();
-            case QUILL -> cornerText = AnsiColor.QUILL_TEXT.getFormattedCharacter();
-            case MANUSCRIPT -> cornerText = AnsiColor.MANUSCRIPT_TEXT.getFormattedCharacter();
-            case INKWELL -> cornerText = AnsiColor.INKWELL_TEXT.getFormattedCharacter();
-        }
-
+        String cornerText = cardType.getFormattedCharacter(content,cardType);
         System.out.print(cornerText);
     }
 
@@ -1048,13 +1047,27 @@ public class Cli extends View implements Runnable {
         Face face = grid.get(coord);
         String centerText = cardType.getFormattedCharacter();
         if (face instanceof NormalBack) {
-            switch (((NormalBack) face).getCenter()) {
-                case FUNGI_KINGDOM -> centerText += AnsiColor.FUNGI_TEXT.getFormattedCharacter();
-                case PLANT_KINGDOM -> centerText += AnsiColor.PLANT_TEXT.getFormattedCharacter();
-                case INSECT_KINGDOM -> centerText += AnsiColor.INSECT_TEXT.getFormattedCharacter();
-                case ANIMAL_KINGDOM -> centerText += AnsiColor.ANIMAL_TEXT.getFormattedCharacter();
+            centerText += cardType.getFormattedCharacter(((NormalBack) face).getCenter(), cardType);
+//            switch (((NormalBack) face).getCenter()) {
+//                case FUNGI_KINGDOM -> centerText += AnsiColor.FUNGI_TEXT.getFormattedCharacter();
+//                case PLANT_KINGDOM -> centerText += AnsiColor.PLANT_TEXT.getFormattedCharacter();
+//                case INSECT_KINGDOM -> centerText += AnsiColor.INSECT_TEXT.getFormattedCharacter();
+//                case ANIMAL_KINGDOM -> centerText += AnsiColor.ANIMAL_TEXT.getFormattedCharacter();
+//            }
+        }else if (face instanceof StarterFront){
+            if(((StarterFront) face).getCenter().size() == 1) {
+                centerText += cardType.getFormattedCharacter(((StarterFront) face).getCenter().getFirst(), cardType);
+//                switch (((NormalBack) face).getCenter()) {
+//                    case FUNGI_KINGDOM -> centerText += AnsiColor.FUNGI_TEXT.getFormattedCharacter();
+//                    case PLANT_KINGDOM -> centerText += AnsiColor.PLANT_TEXT.getFormattedCharacter();
+//                    case INSECT_KINGDOM -> centerText += AnsiColor.INSECT_TEXT.getFormattedCharacter();
+//                    case ANIMAL_KINGDOM -> centerText += AnsiColor.ANIMAL_TEXT.getFormattedCharacter();
+//                }
+            } else {
+                centerText += cardType.getFormattedCharacter(((StarterFront) face).getCenter().get(1), cardType);
             }
-        } else {
+
+        }else {
             centerText += (cardType.getFormattedCharacter());
         }
         centerText +=  (cardType.getFormattedCharacter());
@@ -1092,14 +1105,26 @@ public class Cli extends View implements Runnable {
         int i = coord.getX();
         int j = coord.getY();
 
+
         if(isAbove) {
-            // è sopra il centro --> per prendere la face giocata vado sotto
-            Face face = grid.get(new Coordinate(i / 2, (j-1) / 2));
+            // il centro  è sopra
             centerText += cardType.getFormattedCharacter();
+            Face face = grid.get(new Coordinate(i / 2, (j+1) / 2));
             if (face instanceof GoldFront) {
                 printGoldFrontPoints((GoldFront) face, cardType);
-                centerText += cardType.getFormattedCharacter();
-            } else {
+                //centerText += cardType.getFormattedCharacter();
+            } else if(face instanceof StarterFront){
+                if(((StarterFront) face).getCenter().size() == 3) {
+                    centerText += cardType.getFormattedCharacter(((StarterFront) face).getCenter().get(2), cardType);
+                    centerText += cardType.getFormattedCharacter();
+                }
+                else {
+                    for (i = 0; i < 2; i++) {
+                        centerText += cardType.getFormattedCharacter();
+                    }
+                }
+            }
+            else {
                 for (i = 0; i < 2; i++) {
                     centerText += cardType.getFormattedCharacter();
                 }
@@ -1107,9 +1132,24 @@ public class Cli extends View implements Runnable {
         }
 
         else {
-            //bottom
-            for (i = 0; i < 3; i++) {
-                centerText += cardType.getFormattedCharacter();
+            //il centro è sotto
+            Face face = grid.get(new Coordinate(i / 2, (j-1) / 2));
+            if (face instanceof StarterFront) {
+                if(((StarterFront) face).getCenter().size() != 1) {
+                    centerText += cardType.getFormattedCharacter();
+                    centerText += cardType.getFormattedCharacter(((StarterFront) face).getCenter().getFirst(), cardType);
+                    centerText += cardType.getFormattedCharacter();
+                }
+                else {
+                    for (i = 0; i < 3; i++) {
+                        centerText += cardType.getFormattedCharacter();
+                    }
+                }
+            }
+            else {
+                for (i = 0; i < 3; i++) {
+                    centerText += cardType.getFormattedCharacter();
+                }
             }
         }
 

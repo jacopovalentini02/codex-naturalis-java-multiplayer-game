@@ -119,4 +119,31 @@ class CliTest {
 
         cli.printGrid(grid);
     }
+
+    @Test
+    void printStarter(){
+        GameServerInstance gameServerInstance = new GameServerInstance();
+        Player p1 = new Player("player1", gameServerInstance, 0);
+        PlayerGround ground = p1.getGround();
+        GameManager manager = new GameManager();
+        Game game = new Game(gameServerInstance, manager, 1, 4, p1);
+        game.setUpCards();
+
+        Cli cli =  new Cli();
+        Client client = new SocketClient("localhost", 1337, cli);
+        VirtualView virtualView = new VirtualView();
+        client.setVirtualView(virtualView);
+
+        Map<Coordinate, Face> grid = new HashMap<>();
+
+        for(int i = 0; i<6; i++) {
+            Card card = game.getStarterDeck().getCardList().removeFirst();
+            grid.put(new Coordinate(0, -6*i), ((StarterCard) card).getFront());
+            grid.put(new Coordinate(0, (-6*i)-2), ((StarterCard) card).getBack());
+
+            System.out.println(card.getIdCard());
+        }
+
+        cli.printGrid(grid);
+    }
 }

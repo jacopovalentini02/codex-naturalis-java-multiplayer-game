@@ -1,5 +1,8 @@
 package it.polimi.ingsfw.ingsfwproject.View.CLI;
 
+import it.polimi.ingsfw.ingsfwproject.Model.Content;
+import it.polimi.ingsfw.ingsfwproject.Model.NormalBack;
+
 public enum AnsiColor {
     // text color with background -> busy corner
     FUNGI_TEXT("\u001B[43m \uD83C\uDF44 "),  // red on ocra background
@@ -10,9 +13,12 @@ public enum AnsiColor {
     INKWELL_TEXT("\u001B[43m \uD83E\uDED9 "),// white on ocra background
     MANUSCRIPT_TEXT("\u001B[43m \uD83D\uDCDC "), // white on ocra background
 
-    POINT_ONE("\u001B[43m 1\uFE0F⃣ "),
-    POINT_TWO("\u001B[43m 2\uFE0F⃣ "),
-    POINT_THREE("\u001B[43m 3\uFE0F⃣ "),
+    POINT_ONE("\u001B[33;103m  1\uFE0F⃣ "),
+    POINT_TWO("\u001B[33;103m  2\uFE0F⃣ "),
+    POINT_THREE("\u001B[33;103m  3\uFE0F⃣ "),
+    POINT_FIVE("\u001B[33;103m 5\uFE0F⃣ "),
+
+
 
     // background colors
     PLANT_BACKGROUND("\u001B[42m    "),  // green background
@@ -51,5 +57,21 @@ public enum AnsiColor {
         // Restituisce il carattere con il colore del testo e dello sfondo specificati,
         // seguito dal codice di reset ANSI per assicurare che i colori successivi non siano influenzati
         return colorAndBackground + "\u001B[0m";
+    }
+
+    public String getFormattedCharacter(Content content, AnsiColor cardType){
+        String text = "";
+        switch (content) {
+            case FUNGI_KINGDOM -> text = AnsiColor.FUNGI_TEXT.getFormattedCharacter();
+            case PLANT_KINGDOM -> text = AnsiColor.PLANT_TEXT.getFormattedCharacter();
+            case INSECT_KINGDOM -> text = AnsiColor.INSECT_TEXT.getFormattedCharacter();
+            case ANIMAL_KINGDOM -> text = AnsiColor.ANIMAL_TEXT.getFormattedCharacter();
+            case EMPTY -> text = AnsiColor.EMPTY_TEXT.getFormattedCharacter();
+            case HIDDEN -> text = cardType.getFormattedCharacter();
+            case QUILL -> text = AnsiColor.QUILL_TEXT.getFormattedCharacter();
+            case MANUSCRIPT -> text = AnsiColor.MANUSCRIPT_TEXT.getFormattedCharacter();
+            case INKWELL -> text = AnsiColor.INKWELL_TEXT.getFormattedCharacter();
+        }
+        return text;
     }
 }
