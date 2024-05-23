@@ -41,6 +41,7 @@ public class LobbyGUIController extends GUIController implements Initializable {
 
     public void start(Stage stage) throws Exception {
         setGuiView(guiView);
+        stage.centerOnScreen();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polimi/ingsfw/ingsfwproject/Lobby.fxml"));
         Parent root = loader.load();
         LobbyGUIController lobbyGUIController = loader.getController();

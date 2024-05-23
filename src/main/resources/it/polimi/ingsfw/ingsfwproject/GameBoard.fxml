@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="860.0" prefWidth="1606.0" style="-fx-background-color: #e6ddbc;" stylesheets="@Style.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsfw.ingsfwproject.View.GUI.GameBoardController">
+<AnchorPane prefHeight="847.0" prefWidth="1606.0" style="-fx-background-color: #e6ddbc;" stylesheets="@Style.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsfw.ingsfwproject.View.GUI.GameBoardController">
    <effect>
       <Blend />
    </effect>
@@ -32,10 +32,10 @@
       <ImageView fx:id="goldDisplayed2" fitHeight="110.0" fitWidth="150.0" layoutX="556.0" layoutY="266.0" onMouseClicked="#pickGold2" pickOnBounds="true" preserveRatio="true" />
       <ImageView fx:id="objectiveDisplayed1" fitHeight="110.0" fitWidth="150.0" layoutX="375.0" layoutY="400.0" pickOnBounds="true" preserveRatio="true" />
       <ImageView fx:id="objectiveDisplayed2" fitHeight="110.0" fitWidth="150.0" layoutX="560.0" layoutY="401.0" pickOnBounds="true" preserveRatio="true" />
-      <ImageView fx:id="personalObjective" fitHeight="115.0" fitWidth="170.0" layoutX="482.0" layoutY="743.0" pickOnBounds="true" preserveRatio="true" />
-      <ImageView fx:id="handCard1" fitHeight="115.0" fitWidth="170.0" layoutX="691.0" layoutY="743.0" onDragDetected="#dragCard1" onMouseClicked="#clickHandCard1" pickOnBounds="true" preserveRatio="true" />
-      <ImageView fx:id="handCard2" fitHeight="115.0" fitWidth="170.0" layoutX="878.0" layoutY="743.0" onDragDetected="#dragCard2" onMouseClicked="#clickHandCard2" pickOnBounds="true" preserveRatio="true" />
-      <ImageView fx:id="handCard3" fitHeight="115.0" fitWidth="170.0" layoutX="1065.0" layoutY="743.0" onDragDetected="#dragCard3" onMouseClicked="#clickHandCard3" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="personalObjective" fitHeight="115.0" fitWidth="170.0" layoutX="480.0" layoutY="736.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="handCard1" fitHeight="115.0" fitWidth="170.0" layoutX="691.0" layoutY="736.0" onDragDetected="#dragCard1" onMouseClicked="#clickHandCard1" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="handCard2" fitHeight="115.0" fitWidth="170.0" layoutX="878.0" layoutY="736.0" onDragDetected="#dragCard2" onMouseClicked="#clickHandCard2" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="handCard3" fitHeight="115.0" fitWidth="170.0" layoutX="1065.0" layoutY="736.0" onDragDetected="#dragCard3" onMouseClicked="#clickHandCard3" pickOnBounds="true" preserveRatio="true" />
       <ImageView fx:id="pin1" fitHeight="42.0" fitWidth="41.0" layoutX="142.0" layoutY="520.0" pickOnBounds="true" preserveRatio="true" />
       <ImageView fx:id="pin2" fitHeight="42.0" fitWidth="41.0" layoutX="141.0" layoutY="516.0" pickOnBounds="true" preserveRatio="true" />
       <ImageView fx:id="pin3" fitHeight="42.0" fitWidth="41.0" layoutX="141.0" layoutY="512.0" pickOnBounds="true" preserveRatio="true" />
@@ -54,14 +54,14 @@
             <Font name="Bodoni 72 Smallcaps Book" size="19.0" />
          </font>
       </Label>
-      <Button fx:id="showScore" layoutX="488.0" layoutY="52.0" mnemonicParsing="false" prefHeight="47.0" prefWidth="153.0" style="-fx-background-color: #5F3075;" text="Show Grid" textFill="WHITE">
+      <Button fx:id="showScore" layoutX="449.0" layoutY="50.0" mnemonicParsing="false" prefHeight="47.0" prefWidth="153.0" style="-fx-background-color: #5F3075;" text="Show Chat" textFill="WHITE">
          <font>
             <Font name="Bodoni 72 Smallcaps Book" size="22.0" />
          </font>
       </Button>
-      <ScrollPane fx:id="scrollpane" layoutX="781.0" layoutY="52.0" prefHeight="657.0" prefWidth="786.0">
+      <ScrollPane fx:id="scrollpane" layoutX="776.0" layoutY="73.0" prefHeight="657.0" prefWidth="786.0">
         <content>
-          <AnchorPane fx:id="pane" minHeight="4072.0" minWidth="4054.0" prefHeight="4072.0" prefWidth="4054.0" />
+          <AnchorPane fx:id="pane" minHeight="4048.0" minWidth="4054.0" prefHeight="4048.0" prefWidth="4056.0" />
         </content>
       </ScrollPane>
       <ImageView fx:id="pin21" fitHeight="42.0" fitWidth="41.0" layoutX="255.0" layoutY="523.0" pickOnBounds="true" preserveRatio="true" />
@@ -176,6 +176,26 @@
       <ImageView fx:id="pin292" fitHeight="42.0" fitWidth="41.0" layoutX="198.0" layoutY="171.0" pickOnBounds="true" preserveRatio="true" />
       <ImageView fx:id="pin293" fitHeight="42.0" fitWidth="41.0" layoutX="198.0" layoutY="167.0" pickOnBounds="true" preserveRatio="true" />
       <ImageView fx:id="pin294" fitHeight="42.0" fitWidth="41.0" layoutX="198.0" layoutY="163.0" pickOnBounds="true" preserveRatio="true" />
+      <Button fx:id="showMyGrid" layoutX="813.0" layoutY="26.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="130.0" style="-fx-background-color: #5F3075;" text="My Grid" textFill="WHITE" onMouseClicked="#updatePane">
+         <font>
+            <Font name="Bodoni 72 Smallcaps Book" size="21.0" />
+         </font>
+      </Button>
+      <Button fx:id="showGrid2" layoutX="1020.0" layoutY="26.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="130.0" style="-fx-background-color: #5F3075;" text="Player2" textFill="WHITE" onMouseClicked="#secondPlayerGrid">
+         <font>
+            <Font name="Bodoni 72 Smallcaps Book" size="21.0" />
+         </font>
+      </Button>
+      <Button fx:id="showGrid3" visible="false" layoutX="1228.0" layoutY="26.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="130.0" style="-fx-background-color: #5F3075;" text="Player3" textFill="WHITE" onMouseClicked="#thirdPlayerGrid">
+         <font>
+            <Font name="Bodoni 72 Smallcaps Book" size="21.0" />
+         </font>
+      </Button>
+      <Button fx:id="showGrid4" visible="false" layoutX="1409.0" layoutY="26.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="130.0" style="-fx-background-color: #5F3075;" text="Player4" textFill="WHITE" onMouseClicked="#fourthPlayerGrid">
+         <font>
+            <Font name="Bodoni 72 Smallcaps Book" size="21.0" />
+         </font>
+      </Button>
 
    </children>
 </AnchorPane>

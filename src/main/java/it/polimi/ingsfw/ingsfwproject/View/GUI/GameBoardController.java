@@ -171,6 +171,10 @@ public class GameBoardController extends GUIController implements Initializable 
     public ImageView pin294;
     public ImageView pin293;
     public ImageView pin292;
+    public Button showGrid4;
+    public Button showGrid3;
+    public Button showGrid2;
+    public Button showMyGrid;
 
 
     private int offsetX;
@@ -220,8 +224,34 @@ public class GameBoardController extends GUIController implements Initializable 
         rectangleCoordinateHashMap = new HashMap<>();
         initializeScore();
         updatePane();
+
+        initializeButtons();
     }
 
+    public void initializeButtons(){
+        Button[] gridsButtons = {showMyGrid, showGrid2, showGrid3, showGrid4};
+        Map<String, PlayerColor> playerColorMap = client.getVirtualView().getPlayerColorMap();
+
+        PlayerColor ownColor = playerColorMap.get(client.getNickname());
+        String ownColorStyle = "-fx-background-color: " + ownColor.toString().toLowerCase();
+        int i=0;
+        gridsButtons[i].setStyle(ownColorStyle);
+        gridsButtons[i].setText(client.getNickname());
+        i++;
+        for (String playerName : client.getVirtualView().getListOfPlayers()) {
+            if(!playerName.equals(client.getNickname())){
+                gridsButtons[i].setText(playerName);
+                gridsButtons[i].setVisible(true);
+
+                PlayerColor playerColor = playerColorMap.get(playerName);
+                String colorStyle = "-fx-background-color: " + playerColor.toString().toLowerCase();
+                gridsButtons[i].setStyle(colorStyle);
+
+                i++;
+            }
+
+        }
+    }
     public void setTurn(){
         if(Objects.equals(client.getNickname(), client.getVirtualView().getCurrentPlayer())){
             turn.setText("It's your turn!");
@@ -510,120 +540,11 @@ public class GameBoardController extends GUIController implements Initializable 
         client.sendMessage(messageToSend);
     }
 
-    private int findXmin(){
-        Map<Coordinate, Face> grid = client.getVirtualView().getGrids().get(client.getNickname());
-        Coordinate coord=grid.keySet().stream().min((Comparator.comparingInt(Coordinate::getX))).orElse(null);
-        assert coord != null;
-        return coord.getX();
-    }
-
-    private int findYmin(){
-        Map<Coordinate, Face> grid = client.getVirtualView().getGrids().get(client.getNickname());
-        Coordinate coord=grid.keySet().stream().min((Comparator.comparingInt(Coordinate::getY))).orElse(null);
-        assert coord != null;
-        return coord.getY();
-    }
-
-    public void updateGrid(){
-        playerGround.getChildren().clear();
-
-        Map<Coordinate, Face> grid = client.getVirtualView().getGrids().get(client.getNickname());
-
-        int centerX = playerGround.getColumnCount() / 2;
-        int centerY = playerGround.getRowCount() / 2;
-
-        offsetX=Math.abs(findXmin());
-        offsetY=Math.abs(findYmin());
-        System.out.println(offsetX);
-        System.out.println(offsetY);
-        // Itera su tutte le voci della mappa e aggiungi le immagini alla griglia
-        for (Map.Entry<Coordinate, Face> entry : grid.entrySet()) {
-
-            Coordinate coordinate = entry.getKey();
-            Face face = entry.getValue();
-
-            int gridX = centerX+offsetX + coordinate.getX();
-            int gridY = centerY+offsetY - coordinate.getY();
-
-            System.out.println("x grid"+gridX);
-            System.out.println(gridY);
-
-            String imagePath = face.getImagePath();
-
-            Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream(imagePath)));
-            ImageView imageView = new ImageView(image);
-
-            imageView.setFitHeight(110);
-            imageView.setFitWidth(150);
-
-            playerGround.add(imageView, gridX, gridY);
-        }
-    }
-
     public void updatePane(){
         double centerX=pane.getPrefWidth()/2;
         double centerY=pane.getPrefHeight()/2;
 
-        double maxX = 0.0;
-        double maxY = 0.0;
-
-        double lastCardPosX = 0.0;
-        double lastCardPosY = 0.0;
-
-        Map<Coordinate, Face> grid = client.getVirtualView().getGrids().get(client.getNickname());
-        Iterator<Map.Entry<Coordinate, Face>> iterator = grid.entrySet().iterator();
-        System.out.println("centro x: "+centerX);
-
-        pane.getChildren().clear();
-
-        while (iterator.hasNext()) {
-            Map.Entry<Coordinate, Face> entry = iterator.next();
-            Coordinate coordinate = entry.getKey();
-            Face face = entry.getValue();
-
-            String imagePath = face.getImagePath();
-
-            Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream(imagePath)));
-            ImageView imageView = new ImageView(image);
-
-            imageView.setFitHeight(110);
-            imageView.setFitWidth(150);
-
-            double cardPosX=centerX-75+coordinate.getX() * 121;
-            double cardPosY=centerY+55- coordinate.getY() * 66;
-
-            if (cardPosX > maxX)
-                maxX = cardPosX;
-
-            if (cardPosY > maxY)
-                maxY = cardPosY;
-
-
-            imageView.setLayoutX(cardPosX);
-            imageView.setLayoutY(cardPosY);
-
-
-            pane.getChildren().add(imageView);
-
-            if (!iterator.hasNext()){ //printing the last card
-               lastCardPosX = cardPosX;
-               lastCardPosY = cardPosY;
-            }
-        }
-        double newWidth = Math.max(pane.getPrefWidth(), maxX + 150);
-        double newHeight = Math.max(pane.getPrefHeight(), maxY + 110);
-        pane.setPrefHeight(newHeight);
-        pane.setPrefWidth(newWidth);
-
-        double hValue = (lastCardPosX - (scrollpane.getWidth() / 2)) / (pane.getPrefWidth() - scrollpane.getWidth());
-        double vValue = (lastCardPosY - (scrollpane.getHeight() / 2)) / (pane.getPrefHeight() - scrollpane.getHeight());
-
-        hValue = Math.max(0, Math.min(hValue, 1));
-        vValue = Math.max(0, Math.min(vValue, 1));
-
-        scrollpane.setPannable(true);
-        scrollpane.setHvalue(hValue);
-        scrollpane.setVvalue(vValue);
+        showGrid(client.getNickname());
         System.out.println("settati");
 
         rectangleCoordinateHashMap.clear();
@@ -661,6 +582,90 @@ public class GameBoardController extends GUIController implements Initializable 
             pane.getChildren().add(rectangle);
             rectangleCoordinateHashMap.put(rectangle, c);
         }
+    }
+
+    @FXML
+    public void secondPlayerGrid(){
+        showGrid(showGrid2.getText());
+    }
+
+    @FXML
+    public void thirdPlayerGrid(){
+        showGrid(showGrid3.getText());
+    }
+    @FXML
+    public void fourthPlayerGrid(){
+        showGrid(showGrid4.getText());
+    }
+
+
+
+    public void showGrid(String nickname){
+        double centerX=pane.getPrefWidth()/2;
+        double centerY=pane.getPrefHeight()/2;
+
+        double maxX = 0.0;
+        double maxY = 0.0;
+
+        double lastCardPosX = 0.0;
+        double lastCardPosY = 0.0;
+
+        Map<Coordinate, Face> grid = client.getVirtualView().getGrids().get(nickname);
+        Iterator<Map.Entry<Coordinate, Face>> iterator = grid.entrySet().iterator();
+
+        pane.getChildren().clear();
+
+        while (iterator.hasNext()) {
+            Map.Entry<Coordinate, Face> entry = iterator.next();
+            Coordinate coordinate = entry.getKey();
+            Face face = entry.getValue();
+
+            String imagePath = face.getImagePath();
+
+            Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream(imagePath)));
+            ImageView imageView = new ImageView(image);
+
+            imageView.setFitHeight(110);
+            imageView.setFitWidth(150);
+
+            double cardPosX=centerX-75+coordinate.getX() * 121;
+            double cardPosY=centerY+55- coordinate.getY() * 66;
+
+            if (cardPosX > maxX)
+                maxX = cardPosX;
+
+            if (cardPosY > maxY)
+                maxY = cardPosY;
+
+
+            imageView.setLayoutX(cardPosX);
+            imageView.setLayoutY(cardPosY);
+
+
+            pane.getChildren().add(imageView);
+
+            if (!iterator.hasNext()){ //printing the last card
+                lastCardPosX = cardPosX;
+                lastCardPosY = cardPosY;
+            }
+        }
+        double newWidth = Math.max(pane.getPrefWidth(), maxX + 150);
+        double newHeight = Math.max(pane.getPrefHeight(), maxY + 110);
+        pane.setPrefHeight(newHeight);
+        pane.setPrefWidth(newWidth);
+
+        double hValue = (lastCardPosX - (scrollpane.getWidth() / 2)) / (pane.getPrefWidth() - scrollpane.getWidth());
+        double vValue = (lastCardPosY - (scrollpane.getHeight() / 2)) / (pane.getPrefHeight() - scrollpane.getHeight());
+
+        hValue = Math.max(0, Math.min(hValue, 1));
+        vValue = Math.max(0, Math.min(vValue, 1));
+
+        scrollpane.setPannable(true);
+        scrollpane.setHvalue(hValue);
+        scrollpane.setVvalue(vValue);
+
+
+
     }
 
 }
