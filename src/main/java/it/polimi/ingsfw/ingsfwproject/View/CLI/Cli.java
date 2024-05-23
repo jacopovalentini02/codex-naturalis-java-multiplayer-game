@@ -156,8 +156,7 @@ public class Cli extends View implements Runnable {
         do{
             try{
                 for(Card c : cards){
-                    System.out.println(c.getIdCard());
-                    //TODO: Stampare fronte delle carte date come parametro d'ingresso
+                   printObjectiveCards((ObjectiveCard) c);
                 }
                 System.out.println("Insert the id of the card chosen: ");
                 choice = scanner.nextInt();
@@ -507,7 +506,7 @@ public class Cli extends View implements Runnable {
                     printPlayerHand();
                     break;
                 case "showobjective":
-                    printObjectiveCards();
+                    printObjectiveCards(client.getVirtualView().getHandObjectives().get(0));
                     break;
                 case "globalchat":
                     for (ChatMessage m : client.getVirtualView().getGlobalChat()) {
@@ -647,10 +646,188 @@ public class Cli extends View implements Runnable {
         };
     }
 
-    public void printObjectiveCards(){
-        //TODO: stampare la carta effettiva e non l'ID
-        for (ObjectiveCard oc: client.getVirtualView().getHandObjectives())
-            System.out.println(oc.getIdCard());
+    public void printObjectiveCards(ObjectiveCard card){
+        System.out.println("card id: "+ card.getIdCard());
+       AnsiColor ansiBackground = null;
+       String background;
+       switch(card.getType(card.getIdCard())){
+           case FUNGI_KINGDOM -> ansiBackground = AnsiColor.FUNGI_BACKGROUND;
+           case PLANT_KINGDOM -> ansiBackground = AnsiColor.PLANT_BACKGROUND;
+           case INSECT_KINGDOM -> ansiBackground = AnsiColor.INSECT_BACKGROUND;
+           case ANIMAL_KINGDOM -> ansiBackground = AnsiColor.ANIMAL_BACKGROUND;
+           case QUILL -> ansiBackground = AnsiColor.EMPTY_TEXT;
+           case INKWELL -> ansiBackground =AnsiColor.EMPTY_TEXT;
+           case MANUSCRIPT -> ansiBackground = AnsiColor.EMPTY_TEXT;
+           case EMPTY -> ansiBackground = AnsiColor.EMPTY_TEXT;
+           case HIDDEN -> ansiBackground = AnsiColor.EMPTY_TEXT;
+       }
+       background = ansiBackground.getFormattedCharacter();
+        if(card instanceof StructuredObjectiveCard){
+            switch(((StructuredObjectiveCard) card).getStructureType()){
+                case LEFT_DIAGONAL :
+                    //first row
+                    System.out.print(background);
+                    System.out.print(background);
+                    printObjectivesPoints(card);
+                    System.out.print(background);
+                    printCorner(((StructuredObjectiveCard) card).getResourceRequested().get(0), ansiBackground);
+                    System.out.println("");
+                    //second row
+                    for(int i=0; i<3; i++){
+                        System.out.print(background);
+                    }
+                    printCorner(((StructuredObjectiveCard) card).getResourceRequested().get(1), ansiBackground);
+                    System.out.println(background);
+                    //third row
+                    System.out.print(background);
+                    System.out.print(background);
+                    printCorner(((StructuredObjectiveCard) card).getResourceRequested().get(2), ansiBackground);
+                    System.out.print(background);
+                    System.out.println(background);
+                    break;
+                case DOUBLE_UP_LEFT :
+                    //first row
+                    printCorner(((StructuredObjectiveCard) card).getResourceRequested().get(0), ansiBackground);
+                    System.out.print(background);
+                    printObjectivesPoints(card);
+                    System.out.print(background);
+                    System.out.println(background);
+                    //second row
+                    System.out.print(background);
+                    printCorner(((StructuredObjectiveCard) card).getResourceRequested().get(1), ansiBackground);
+                    System.out.print(background);
+                    System.out.print(background);
+                    System.out.println(background);
+                    //third row
+                    System.out.print(background);
+                    printCorner(((StructuredObjectiveCard) card).getResourceRequested().get(2), ansiBackground);
+                    System.out.print(background);
+                    System.out.print(background);
+                    System.out.println(background);
+                    break;
+                case DOUBLE_UP_RIGHT :
+                    //first row
+                    System.out.print(background);
+                    System.out.print(background);
+                    printObjectivesPoints(card);
+                    System.out.print(background);
+                    printCorner(((StructuredObjectiveCard) card).getResourceRequested().get(0), ansiBackground);
+                    System.out.println("");
+                    //second row
+                    for(int i=0; i<3; i++){
+                        System.out.print(background);
+                    }
+                    printCorner(((StructuredObjectiveCard) card).getResourceRequested().get(1), ansiBackground);
+                    System.out.println(background);
+                    //third row
+                    for(int i=0; i<3; i++){
+                        System.out.print(background);
+                    }
+                    printCorner(((StructuredObjectiveCard) card).getResourceRequested().get(2), ansiBackground);
+                    System.out.println(background);
+                    break;
+                case DOUBLE_DOWN_LEFT :
+                    //first row
+                    System.out.print(background);
+                    printCorner(((StructuredObjectiveCard) card).getResourceRequested().get(0), ansiBackground);
+                    printObjectivesPoints(card);
+                    System.out.print(background);
+                    System.out.println(background);
+                    //second row
+                    System.out.print(background);
+                    printCorner(((StructuredObjectiveCard) card).getResourceRequested().get(1), ansiBackground);
+                    System.out.print(background);
+                    System.out.print(background);
+                    System.out.println(background);
+                    //third row
+                    printCorner(((StructuredObjectiveCard) card).getResourceRequested().get(2), ansiBackground);
+                    System.out.print(background);
+                    System.out.print(background);
+                    System.out.print(background);
+                    System.out.println(background);
+                    break;
+                case DOUBLE_DOWN_RIGHT :
+                    //first row
+                    for(int i=0; i<2; i++){
+                        System.out.print(background);
+                    }
+                    printObjectivesPoints(card);
+                    printCorner(((StructuredObjectiveCard) card).getResourceRequested().get(0), ansiBackground);
+                    System.out.println(background);
+                    //third row
+                    for(int i=0; i<3; i++){
+                        System.out.print(background);
+                    }
+                    printCorner(((StructuredObjectiveCard) card).getResourceRequested().get(1), ansiBackground);
+                    System.out.println(background);
+                    //third row
+                    System.out.print(background);
+                    System.out.print(background);
+                    System.out.print(background);
+                    System.out.print(background);
+                    printCorner(((StructuredObjectiveCard) card).getResourceRequested().get(2), ansiBackground);
+                    System.out.println("");
+                    break;
+                case RIGHT_DIAGONAL :
+                    //first row
+                    printCorner(((StructuredObjectiveCard) card).getResourceRequested().get(0), ansiBackground);
+                    System.out.print(background);
+                    printObjectivesPoints(card);
+                    System.out.print(background);
+                    System.out.println(background);
+                    //second row
+                    System.out.print(background);
+                    printCorner(((StructuredObjectiveCard) card).getResourceRequested().get(1), ansiBackground);
+                    System.out.print(background);
+                    System.out.print(background);
+                    System.out.println(background);
+                    //third row
+                    System.out.print(background);
+                    System.out.print(background);
+                    printCorner(((StructuredObjectiveCard) card).getResourceRequested().get(2), ansiBackground);
+                    System.out.print(background);
+                    System.out.println(background);
+                    break;
+            }
+        }
+        else if(card instanceof NotStructuredObjectiveCard){
+            //first row
+            System.out.print(background);
+            System.out.print(background);
+            printObjectivesPoints(card);
+            System.out.print(background);
+            System.out.println(background);
+            //second row
+            for(int i=0; i<5; i++){
+                System.out.print(background);
+            }
+            System.out.println("");
+            //third row
+            switch(((NotStructuredObjectiveCard) card).getObjectRequested().size()){
+                case 2 :
+                    System.out.print(background);
+                    printCorner(((NotStructuredObjectiveCard) card).getObjectRequested().get(0), ansiBackground);
+                    System.out.print(background);
+                    printCorner(((NotStructuredObjectiveCard) card).getObjectRequested().get(1), ansiBackground);
+                    System.out.println(background);
+                    break;
+                case 3:
+                    System.out.print(background);
+                    printCorner(((NotStructuredObjectiveCard) card).getObjectRequested().get(0), ansiBackground);
+                    printCorner(((NotStructuredObjectiveCard) card).getObjectRequested().get(1), ansiBackground);
+                    printCorner(((NotStructuredObjectiveCard) card).getObjectRequested().get(2), ansiBackground);
+                    System.out.println(background);
+                    break;
+            }
+        }
+    }
+
+    public void printObjectivesPoints(ObjectiveCard card){
+        switch (card.getPoints()){
+            case 1 -> System.out.print(AnsiColor.POINT_ONE.getFormattedCharacter());
+            case 2 -> System.out.print(AnsiColor.POINT_TWO.getFormattedCharacter());
+            case 3 -> System.out.print(AnsiColor.POINT_THREE.getFormattedCharacter());
+        }
     }
 
     public void printScores(){
