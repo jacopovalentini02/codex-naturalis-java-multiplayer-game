@@ -377,7 +377,7 @@ public class Game {
         setState(GameState.ENDED);
 
 
-        this.endGame();
+        //this.endGame();
     }
 
     public Player getPotentialWinner(){

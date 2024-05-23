@@ -310,7 +310,7 @@ public class GameBoardController extends GUIController implements Initializable 
     public void setTokenImage(){
         ImageView[][] pinGroups = {
                 {pin1, pin2, pin3, pin4},
-                {pin11, pin21, pin31, pin41},
+                {pin11, pin12, pin13, pin14},
                 {pin21, pin22, pin23, pin24},
                 {pin31, pin32, pin33, pin34},
                 {pin41, pin42, pin43, pin44},
