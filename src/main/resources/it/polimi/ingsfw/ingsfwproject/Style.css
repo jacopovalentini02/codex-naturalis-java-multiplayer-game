@@ -4,3 +4,29 @@
     -fx-width: 170px;
     -fx-height: 115px;
 }
+
+.combo-box .list-cell {
+    -fx-background-color:#5F3075;
+    -fx-text-fill: white;
+    -fx-font-family: "Bodoni 72 Smallcaps Book";
+    -fx-font-size: 13px;
+}
+
+.combo-box-popup .list-view {
+    -fx-background-color: #5F3075;
+    -fx-text-fill: white ;
+}
+
+.combo-box .text {
+    -fx-fill: white;
+    -fx-background-color: #5F3075;
+    -fx-font-family: "Bodoni 72 Smallcaps Book";
+    -fx-font-size: 13px;
+}
+
+#currentChat .list-cell {
+    -fx-background-color: #e6ddbc;
+    -fx-text-fill: black; /* Colore del testo */
+    -fx-font-family: "Bodoni 72 Smallcaps Book"; /* Font del testo */
+    -fx-font-size: 22px; /* Dimensione del font */
+}

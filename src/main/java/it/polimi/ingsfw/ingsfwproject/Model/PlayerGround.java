@@ -107,8 +107,13 @@ public class PlayerGround implements Serializable {
                     else if(i==1 && j==1) //top right card
                         corner = facePlayed.getTR();
 
-                    if(corner != Content.HIDDEN)
-                        availablePositions.add(check);
+                    if(checkIfCanBeAvailable(check)) {
+                        if (corner != Content.HIDDEN && !availablePositions.contains(check)) {
+                            availablePositions.add(check);
+                        }
+                    }else{
+                        availablePositions.remove(check);
+                    }
                 }else{
                     counter++;
 
@@ -132,6 +137,30 @@ public class PlayerGround implements Serializable {
             }
         }
         return counter;
+    }
+
+    public boolean checkIfCanBeAvailable(Coordinate coord){
+        Coordinate check;
+        Content corner = null;
+        for(int i=-1; i<=1; i=i+2) {
+            for (int j = -1; j <= 1; j = j + 2) {
+                check = new Coordinate(coord.getX() + i, coord.getY() + j);
+                if (grid.containsKey(check)) {
+                    if (i == -1 && j == -1) //bottom left card
+                        corner = grid.get(check).getTR();
+                    else if (i == -1 && j == 1) //top left card
+                        corner = grid.get(check).getBR();
+                    else if (i == 1 && j == -1) //bottom right card
+                        corner = grid.get(check).getTL();
+                    else if (i == 1 && j == 1) //top right card
+                        corner = grid.get(check).getBL();
+
+                    if (corner == Content.HIDDEN)
+                        return false;
+                }
+            }
+        }
+        return true;
     }
 
     public int calculatePoints(Face face, int coveredCorners) {
@@ -185,46 +214,6 @@ public class PlayerGround implements Serializable {
         });
 
         return sortedEntries.iterator();
-    }
-
-    public void setAvailablePositions(ArrayList<Coordinate> availablePositions) {
-        this.availablePositions = availablePositions;
-    }
-
-    public int getMinX(){
-        int x = 0;
-        for (Coordinate coord : this.grid.keySet()) {
-            if (coord.getX() < x)
-                x = coord.getX();
-        }
-        return x;
-    }
-
-    public int getMinY(){
-        int y = 0;
-        for (Coordinate coord : this.grid.keySet()) {
-            if(coord.getY() < y)
-                y = coord.getY();
-        }
-        return y;
-    }
-
-    public int getMaxX(){
-        int x = 0;
-        for (Coordinate coord : this.grid.keySet()) {
-            if(coord.getX() > x)
-                x = coord.getX();
-        }
-        return x;
-    }
-
-    public int getMaxY(){
-        int y = 0;
-        for (Coordinate coord : this.grid.keySet()) {
-            if(coord.getY() > y)
-                y = coord.getY();
-        }
-        return y;
     }
 
     public void setGrid(Map<Coordinate, Face> grid){
