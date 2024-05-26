@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="847.0" prefWidth="1606.0" style="-fx-background-color: #e6ddbc;" stylesheets="@Style.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsfw.ingsfwproject.View.GUI.GameBoardController">
+<AnchorPane prefHeight="851.0" prefWidth="1588.0" style="-fx-background-color: #e6ddbc;" stylesheets="@Style.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsfw.ingsfwproject.View.GUI.GameBoardController">
    <effect>
       <Blend />
    </effect>
@@ -54,12 +54,12 @@
             <Font name="Bodoni 72 Smallcaps Book" size="19.0" />
          </font>
       </Label>
-      <Button fx:id="showScore" layoutX="449.0" layoutY="50.0" mnemonicParsing="false" prefHeight="47.0" prefWidth="153.0" style="-fx-background-color: #5F3075;" text="Show Chat" textFill="WHITE">
+      <Button fx:id="showScore" layoutX="449.0" layoutY="38.0" mnemonicParsing="false" prefHeight="47.0" prefWidth="153.0" style="-fx-background-color: #5F3075;" text="Show Chat" textFill="WHITE">
          <font>
             <Font name="Bodoni 72 Smallcaps Book" size="22.0" />
          </font>
       </Button>
-      <ScrollPane fx:id="scrollpane" layoutX="776.0" layoutY="73.0" prefHeight="657.0" prefWidth="786.0">
+      <ScrollPane fx:id="scrollpane" layoutX="776.0" layoutY="71.0" prefHeight="657.0" prefWidth="786.0">
         <content>
           <AnchorPane fx:id="pane" minHeight="4048.0" minWidth="4054.0" prefHeight="4048.0" prefWidth="4056.0" />
         </content>
@@ -176,22 +176,22 @@
       <ImageView fx:id="pin292" fitHeight="42.0" fitWidth="41.0" layoutX="198.0" layoutY="171.0" pickOnBounds="true" preserveRatio="true" />
       <ImageView fx:id="pin293" fitHeight="42.0" fitWidth="41.0" layoutX="198.0" layoutY="167.0" pickOnBounds="true" preserveRatio="true" />
       <ImageView fx:id="pin294" fitHeight="42.0" fitWidth="41.0" layoutX="198.0" layoutY="163.0" pickOnBounds="true" preserveRatio="true" />
-      <Button fx:id="showMyGrid" layoutX="813.0" layoutY="26.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="130.0" style="-fx-background-color: #5F3075;" text="My Grid" textFill="WHITE" onMouseClicked="#updatePane">
+      <Button fx:id="showMyGrid" layoutX="806.0" layoutY="20.0" mnemonicParsing="false" onMouseClicked="#updatePane" prefHeight="30.0" prefWidth="130.0" style="-fx-background-color: #5F3075;" text="My Grid" textFill="WHITE">
          <font>
             <Font name="Bodoni 72 Smallcaps Book" size="21.0" />
          </font>
       </Button>
-      <Button fx:id="showGrid2" layoutX="1020.0" layoutY="26.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="130.0" style="-fx-background-color: #5F3075;" text="Player2" textFill="WHITE" onMouseClicked="#secondPlayerGrid">
+      <Button fx:id="showGrid2" layoutX="1013.0" layoutY="20.0" mnemonicParsing="false" onMouseClicked="#secondPlayerGrid" prefHeight="30.0" prefWidth="130.0" style="-fx-background-color: #ed0c00;" text="Player2" textFill="WHITE">
          <font>
             <Font name="Bodoni 72 Smallcaps Book" size="21.0" />
          </font>
       </Button>
-      <Button fx:id="showGrid3" visible="false" layoutX="1228.0" layoutY="26.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="130.0" style="-fx-background-color: #5F3075;" text="Player3" textFill="WHITE" onMouseClicked="#thirdPlayerGrid">
+      <Button fx:id="showGrid3" layoutX="1221.0" layoutY="20.0" mnemonicParsing="false" onMouseClicked="#thirdPlayerGrid" prefHeight="30.0" prefWidth="130.0" style="-fx-background-color: #5F3075;" text="Player3" textFill="WHITE" visible="false">
          <font>
             <Font name="Bodoni 72 Smallcaps Book" size="21.0" />
          </font>
       </Button>
-      <Button fx:id="showGrid4" visible="false" layoutX="1409.0" layoutY="26.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="130.0" style="-fx-background-color: #5F3075;" text="Player4" textFill="WHITE" onMouseClicked="#fourthPlayerGrid">
+      <Button fx:id="showGrid4" layoutX="1402.0" layoutY="20.0" mnemonicParsing="false" onMouseClicked="#fourthPlayerGrid" prefHeight="30.0" prefWidth="130.0" style="-fx-background-color: #5F3075;" text="Player4" textFill="WHITE" visible="false">
          <font>
             <Font name="Bodoni 72 Smallcaps Book" size="21.0" />
          </font>

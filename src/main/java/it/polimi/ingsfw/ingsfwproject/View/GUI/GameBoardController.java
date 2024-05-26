@@ -176,7 +176,7 @@ public class GameBoardController extends GUIController implements Initializable 
     public Button showGrid2;
     public Button showMyGrid;
 
-
+    public Coordinate lastCoord;
     private int offsetX;
     private int offsetY;
     private boolean[] faceShowed;
@@ -233,7 +233,7 @@ public class GameBoardController extends GUIController implements Initializable 
         Map<String, PlayerColor> playerColorMap = client.getVirtualView().getPlayerColorMap();
 
         PlayerColor ownColor = playerColorMap.get(client.getNickname());
-        String ownColorStyle = "-fx-background-color: " + ownColor.toString().toLowerCase();
+        String ownColorStyle = "-fx-background-color: " +colorButtons(ownColor);
         int i=0;
         gridsButtons[i].setStyle(ownColorStyle);
         gridsButtons[i].setText(client.getNickname());
@@ -244,7 +244,7 @@ public class GameBoardController extends GUIController implements Initializable 
                 gridsButtons[i].setVisible(true);
 
                 PlayerColor playerColor = playerColorMap.get(playerName);
-                String colorStyle = "-fx-background-color: " + playerColor.toString().toLowerCase();
+                String colorStyle = "-fx-background-color: " + colorButtons(playerColor);
                 gridsButtons[i].setStyle(colorStyle);
 
                 i++;
@@ -252,6 +252,19 @@ public class GameBoardController extends GUIController implements Initializable 
 
         }
     }
+
+    public String colorButtons(PlayerColor playerColor){
+        if(playerColor.equals(PlayerColor.BLUE))
+            return "#4290f5";
+        if(playerColor.equals(PlayerColor.RED))
+            return "#ed0c00";
+        if(playerColor.equals(PlayerColor.GREEN))
+            return "#6dd160";
+
+        return "#dece3c";
+
+    }
+
     public void setTurn(){
         if(Objects.equals(client.getNickname(), client.getVirtualView().getCurrentPlayer())){
             turn.setText("It's your turn!");
@@ -647,6 +660,8 @@ public class GameBoardController extends GUIController implements Initializable 
             if (!iterator.hasNext()){ //printing the last card
                 lastCardPosX = cardPosX;
                 lastCardPosY = cardPosY;
+                imageView.toFront();
+
             }
         }
         double newWidth = Math.max(pane.getPrefWidth(), maxX + 150);
