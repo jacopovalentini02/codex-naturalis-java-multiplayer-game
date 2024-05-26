@@ -14,7 +14,7 @@ public class PlayerGround implements Serializable {
 
     public PlayerGround(){
         contentCounter = new ContentCounter();
-        grid = new HashMap<>();
+        grid = new LinkedHashMap<>();
         availablePositions = new ArrayList<>();
         availablePositions.add(new Coordinate(0,0));
     }

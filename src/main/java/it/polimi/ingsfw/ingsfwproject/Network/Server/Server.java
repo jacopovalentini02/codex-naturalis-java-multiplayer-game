@@ -122,7 +122,7 @@ public class Server {
         Handler handlerToPutIntoInstance = handlers.get(clientID);
         gameInstance.setHandler(clientID, handlerToPutIntoInstance);
 
-        AbstractHandler handlerToSetInstanceInto = unistancedHandlers.remove(clientID);
+        AbstractHandler handlerToSetInstanceInto = unistancedHandlers.get(clientID);
         handlerToSetInstanceInto.setGameServerInstance(gameInstance);
 
         //TODO togliere?

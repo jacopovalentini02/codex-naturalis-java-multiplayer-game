@@ -8,7 +8,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 public class VirtualView {
     private int gameID;
     private ArrayList<String> listOfPlayers;
-    private HashMap<String, Map<Coordinate, Face>> grids; //tutte le grid, compresa quella di player
+    private LinkedHashMap<String, Map<Coordinate, Face>> grids; //tutte le grid, compresa quella di player
     private HashMap<String, HashMap<Content, Integer>> resources;
 
     public ArrayList<Coordinate> getAvailablePositions() {
@@ -37,7 +37,7 @@ public class VirtualView {
 
     public VirtualView() {
         this.listOfPlayers = new ArrayList<String>();
-        this.grids = new HashMap<>();
+        this.grids = new LinkedHashMap<>();
         this.handCards=new ArrayList<>();
         this.resources=new HashMap<>();
         this.globalChat = new LinkedBlockingQueue<>();
