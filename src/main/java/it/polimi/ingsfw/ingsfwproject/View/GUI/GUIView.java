@@ -7,6 +7,7 @@ import it.polimi.ingsfw.ingsfwproject.View.View;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Label;
 import javafx.stage.Stage;
 
 import java.util.*;
@@ -23,6 +24,7 @@ public class GUIView extends View {
     private LobbyGUIController lobbyGUIController;
     private ChooseColorController chooseColorController;
     private GameBoardController gameBoardController;
+
 
 
     private GUIController currentController;
@@ -326,7 +328,17 @@ public class GUIView extends View {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Messaggio");
             alert.setHeaderText(null);
-            alert.setContentText(nickname+" has won!");
+
+            StringBuilder message = new StringBuilder(nickname + "has won! \n" +
+                            "Final scores: \n");
+
+            for (Map.Entry<String, Integer> entry: client.getVirtualView().getScores().entrySet())
+                message.append(entry.getKey()).append(": ").append(entry.getValue()).append("\n");
+
+            Label label = new Label(message.toString());
+            label.setWrapText(true);
+
+            alert.getDialogPane().setContent(label);
             alert.showAndWait();
         });
 
@@ -339,8 +351,9 @@ public class GUIView extends View {
                 if(!cards.isEmpty())
                     chooseStarterController.showStarter(cards.get(0));
             });
-        }else if(client.getVirtualView().getState()==GameState.STARTED){
+        }else if(client.getVirtualView().getState()==GameState.STARTED || client.getVirtualView().getState()==GameState.ENDING){
             Platform.runLater(() -> {
+                System.out.println(cards.getFirst().getIdCard() + cards.get(1).getIdCard() + cards.getLast().getIdCard());
                 gameBoardController.updateHand();
             });
         }

@@ -176,6 +176,8 @@ public class GameBoardController extends GUIController implements Initializable 
     public Button showGrid2;
     public Button showMyGrid;
 
+    private boolean dragging;
+
     public Coordinate lastCoord;
     private int offsetX;
     private int offsetY;
@@ -226,6 +228,7 @@ public class GameBoardController extends GUIController implements Initializable 
         updatePane();
 
         initializeButtons();
+        dragging = false;
     }
 
     public void initializeButtons(){
@@ -278,7 +281,12 @@ public class GameBoardController extends GUIController implements Initializable 
 
         for (int i = 0; i < client.getVirtualView().getHandCards().size() && i < cardViews.size(); i++) {
             String id = String.format("%03d", client.getVirtualView().getHandCards().get(i).getIdCard());
-            cardViews.get(i).setImage(getImageFront(id));
+            if (faceShowed[i]){
+                cardViews.get(i).setImage(getImageFront(id));
+            } else {
+                cardViews.get(i).setImage(getImageBack(id));
+            }
+
             cardViews.get(i).setVisible(true);
         }
 
@@ -419,6 +427,7 @@ public class GameBoardController extends GUIController implements Initializable 
     @FXML
     private void dragCard1(MouseEvent event){
         if (event.getButton() == MouseButton.PRIMARY) {
+            dragging = true;
             Dragboard db = handCard1.startDragAndDrop(TransferMode.MOVE);
             ClipboardContent content = new ClipboardContent();
             int cardID = client.getVirtualView().getHandCards().getFirst().getIdCard();
@@ -430,13 +439,16 @@ public class GameBoardController extends GUIController implements Initializable 
             WritableImage snapshot = handCard1.snapshot(parameters, null);
             db.setDragView(snapshot);
             System.out.println("Drag rilevato");
+            handCard1.setOnDragDone(e -> dragging = false);
             event.consume();
         }
     }
 
+
     @FXML
     private void dragCard2(MouseEvent event){
         if (event.getButton() == MouseButton.PRIMARY) {
+            dragging = true;
             Dragboard db = handCard2.startDragAndDrop(TransferMode.MOVE);
             ClipboardContent content = new ClipboardContent();
             int cardID = client.getVirtualView().getHandCards().get(1).getIdCard();
@@ -448,6 +460,7 @@ public class GameBoardController extends GUIController implements Initializable 
             WritableImage snapshot = handCard2.snapshot(parameters, null);
             db.setDragView(snapshot);
             System.out.println("Drag rilevato");
+            handCard2.setOnDragDone(e->dragging = false);
             event.consume();
         }
     }
@@ -455,6 +468,7 @@ public class GameBoardController extends GUIController implements Initializable 
     @FXML
     private void dragCard3(MouseEvent event){
         if (event.getButton() == MouseButton.PRIMARY) {
+            dragging = true;
             Dragboard db = handCard3.startDragAndDrop(TransferMode.MOVE);
             ClipboardContent content = new ClipboardContent();
             int cardID = client.getVirtualView().getHandCards().getLast().getIdCard();
@@ -466,13 +480,14 @@ public class GameBoardController extends GUIController implements Initializable 
             WritableImage snapshot = handCard3.snapshot(parameters, null);
             db.setDragView(snapshot);
             System.out.println("Drag rilevato");
+            handCard3.setOnDragDone(e->dragging = false);
             event.consume();
         }
     }
 
     @FXML
     private void clickHandCard1(MouseEvent event) {
-        if (event.getButton() == MouseButton.SECONDARY){
+        if (event.getButton() == MouseButton.SECONDARY && !dragging){
             String id = String.format("%03d",client.getVirtualView().getHandCards().getFirst().getIdCard());
             if(faceShowed[0]){ //change to back image
                 handCard1.setImage(getImageBack(id));
@@ -485,7 +500,7 @@ public class GameBoardController extends GUIController implements Initializable 
     }
     @FXML
     private void clickHandCard2(MouseEvent event){
-        if (event.getButton() == MouseButton.SECONDARY){
+        if (event.getButton() == MouseButton.SECONDARY && !dragging){
             String id = String.format("%03d",client.getVirtualView().getHandCards().get(1).getIdCard());
             if(faceShowed[1]){ //change to back image
                 handCard2.setImage(getImageBack(id));
@@ -499,7 +514,7 @@ public class GameBoardController extends GUIController implements Initializable 
 
     @FXML
     private void clickHandCard3(MouseEvent event){
-       if (event.getButton() == MouseButton.SECONDARY){
+       if (event.getButton() == MouseButton.SECONDARY && !dragging){
             String id = String.format("%03d",client.getVirtualView().getHandCards().getLast().getIdCard());
             if(faceShowed[2]){ //change to back image
                 handCard3.setImage(getImageBack(id));
