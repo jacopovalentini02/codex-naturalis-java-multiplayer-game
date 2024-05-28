@@ -18,6 +18,8 @@ public enum AnsiColor {
     POINT_THREE("\u001B[33;103m 3\uFE0F⃣ "),
     POINT_FIVE("\u001B[33;103m 5\uFE0F⃣ "),
 
+    OVERLAPPED("\u001B[43m ov "),
+
 
 
     // background colors
