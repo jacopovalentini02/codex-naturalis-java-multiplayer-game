@@ -13,9 +13,9 @@ public enum AnsiColor {
     INKWELL_TEXT("\u001B[43m \uD83E\uDED9 "),// white on ocra background
     MANUSCRIPT_TEXT("\u001B[43m \uD83D\uDCDC "), // white on ocra background
 
-    POINT_ONE("\u001B[33;103m  1\uFE0F⃣ "),
-    POINT_TWO("\u001B[33;103m  2\uFE0F⃣ "),
-    POINT_THREE("\u001B[33;103m  3\uFE0F⃣ "),
+    POINT_ONE("\u001B[33;103m 1\uFE0F⃣ "),
+    POINT_TWO("\u001B[33;103m 2\uFE0F⃣ "),
+    POINT_THREE("\u001B[33;103m 3\uFE0F⃣ "),
     POINT_FIVE("\u001B[33;103m 5\uFE0F⃣ "),
 
 
@@ -27,6 +27,8 @@ public enum AnsiColor {
     INSECT_BACKGROUND("\u001B[45m    "), // magenta background
 
     STARTER_BACKGROUND("\u001B[47m    "),
+    AVAILABLE_BACKGROUND("\u001B[47;2;200;200;200m    "), // gray background for available
+
 
     B_GOLD_PLANT_BACKGROUND("\u001B[43m \u001B[42m   "),  // green background
     B_GOLD_FUNGI_BACKGROUND("\u001B[43m \u001B[41m   "),    // red background

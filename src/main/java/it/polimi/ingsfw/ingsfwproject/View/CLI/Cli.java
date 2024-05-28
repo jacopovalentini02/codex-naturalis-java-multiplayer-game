@@ -49,9 +49,6 @@ public class Cli extends View implements Runnable {
         Thread readUserInputThread = new Thread(this::readInputUser);
         readUserInputThread.start();
 
-        //Thread readMessageThread = new Thread(super::receiveMessage);
-        //readMessageThread.start();
-
     }
 
     private void readInputUser(){
@@ -130,6 +127,12 @@ public class Cli extends View implements Runnable {
                 for(PlayableCard c : cards){
                     System.out.println(c.getIdCard());
                     printFace(c.getFront());
+                    if(c.getFront() instanceof GoldFront){
+                        System.out.print("Costs: ");
+                       for( Content cont : ((GoldFront) c.getFront()).getCost()){
+                           System.out.print(cont + " ");
+                       }
+                    }
                     System.out.println();
                     printFace(c.getBack());
                 }
@@ -493,6 +496,12 @@ public class Cli extends View implements Runnable {
                     //todo: cambiare il metodo di stampa delle carte -> stampa lines in grid
                     for (PlayableCard c : client.getVirtualView().getDisplayedCards()) {
                         printFace(c.getFront());
+                        if(c.getFront() instanceof GoldFront){
+                            System.out.print("Costs: ");
+                            for( Content cont : ((GoldFront) c.getFront()).getCost()){
+                                System.out.print(cont + " ");
+                            }
+                        }
                         System.out.println();
                     }
                     break;
@@ -507,6 +516,9 @@ public class Cli extends View implements Runnable {
                     break;
                 case "showobjective":
                     printObjectiveCards(client.getVirtualView().getHandObjectives().get(0));
+                    if(client.getVirtualView().getHandObjectives().size() == 2){
+                        printObjectiveCards(client.getVirtualView().getHandObjectives().get(1));
+                    }
                     break;
                 case "globalchat":
                     for (ChatMessage m : client.getVirtualView().getGlobalChat()) {
@@ -594,19 +606,20 @@ public class Cli extends View implements Runnable {
         String goldFront = "";
 
         switch (face.getPoints()) {
-            case 1 -> goldFront = AnsiColor.POINT_ONE.getFormattedCharacter();
-            case 2 -> goldFront = AnsiColor.POINT_TWO.getFormattedCharacter();
-            case 3 -> goldFront = AnsiColor.POINT_THREE.getFormattedCharacter();
-            case 5 -> goldFront = AnsiColor.POINT_FIVE.getFormattedCharacter();
+            case 1 -> goldFront += AnsiColor.POINT_ONE.getFormattedCharacter();
+            case 2 -> goldFront += AnsiColor.POINT_TWO.getFormattedCharacter();
+            case 3 -> goldFront += AnsiColor.POINT_THREE.getFormattedCharacter();
+            case 5 -> goldFront += AnsiColor.POINT_FIVE.getFormattedCharacter();
         }
+
+        System.out.print(goldFront);
 
         if (face.getObjectNeeded() != null) {
             printCorner(face.getObjectNeeded(), cardType);
         } else {
-            goldFront += cardType.getFormattedCharacter();
+            System.out.print(cardType.getFormattedCharacter());
         }
 
-        System.out.print(goldFront);
     }
 
     public void printGoldBorder(AnsiColor cardType, int bORe) {
@@ -649,9 +662,9 @@ public class Cli extends View implements Runnable {
 
     public void printObjectiveCards(ObjectiveCard card){
         System.out.println("card id: "+ card.getIdCard());
-       AnsiColor ansiBackground = null;
-       String background;
-       switch(card.getType(card.getIdCard())){
+        AnsiColor ansiBackground = null;
+        String background;
+        switch(card.getType(card.getIdCard())){
            case FUNGI_KINGDOM -> ansiBackground = AnsiColor.FUNGI_BACKGROUND;
            case PLANT_KINGDOM -> ansiBackground = AnsiColor.PLANT_BACKGROUND;
            case INSECT_KINGDOM -> ansiBackground = AnsiColor.INSECT_BACKGROUND;
@@ -661,8 +674,8 @@ public class Cli extends View implements Runnable {
            case MANUSCRIPT -> ansiBackground = AnsiColor.STARTER_BACKGROUND;
            case EMPTY -> ansiBackground = AnsiColor.STARTER_BACKGROUND;
            case HIDDEN -> ansiBackground = AnsiColor.STARTER_BACKGROUND;
-       }
-       background = ansiBackground.getFormattedCharacter();
+        }
+        background = ansiBackground.getFormattedCharacter();
         if(card instanceof StructuredObjectiveCard){
             switch(((StructuredObjectiveCard) card).getStructureType()){
                 case LEFT_DIAGONAL :
@@ -672,7 +685,7 @@ public class Cli extends View implements Runnable {
                     printObjectivesPoints(card);
                     System.out.print(background);
                     printCorner(((StructuredObjectiveCard) card).getResourceRequested().get(0), ansiBackground);
-                    System.out.println("");
+                    System.out.println();
                     //second row
                     for(int i=0; i<3; i++){
                         System.out.print(background);
@@ -713,7 +726,7 @@ public class Cli extends View implements Runnable {
                     printObjectivesPoints(card);
                     System.out.print(background);
                     printCorner(((StructuredObjectiveCard) card).getResourceRequested().get(0), ansiBackground);
-                    System.out.println("");
+                    System.out.println();
                     //second row
                     for(int i=0; i<3; i++){
                         System.out.print(background);
@@ -767,7 +780,7 @@ public class Cli extends View implements Runnable {
                     System.out.print(background);
                     System.out.print(background);
                     printCorner(((StructuredObjectiveCard) card).getResourceRequested().get(2), ansiBackground);
-                    System.out.println("");
+                    System.out.println();
                     break;
                 case RIGHT_DIAGONAL :
                     //first row
@@ -802,7 +815,7 @@ public class Cli extends View implements Runnable {
             for(int i=0; i<5; i++){
                 System.out.print(background);
             }
-            System.out.println("");
+            System.out.println();
             //third row
             switch(((NotStructuredObjectiveCard) card).getObjectRequested().size()){
                 case 2 :
@@ -959,6 +972,9 @@ public class Cli extends View implements Runnable {
                     if(!isCovered)
                         return returnArray;
                 }
+//                else if(client.getVirtualView().getAvailablePositions().contains(check)){
+//                    cardType = AnsiColor.AVAILABLE_BACKGROUND;
+//                }
             }
         }
 
@@ -1110,10 +1126,7 @@ public class Cli extends View implements Runnable {
             // il centro  è sopra
             centerText += cardType.getFormattedCharacter();
             Face face = grid.get(new Coordinate(i / 2, (j+1) / 2));
-            if (face instanceof GoldFront) {
-                printGoldFrontPoints((GoldFront) face, cardType);
-                //centerText += cardType.getFormattedCharacter();
-            } else if(face instanceof StarterFront){
+            if(face instanceof StarterFront){
                 if(((StarterFront) face).getCenter().size() == 3) {
                     centerText += cardType.getFormattedCharacter(((StarterFront) face).getCenter().get(2), cardType);
                     centerText += cardType.getFormattedCharacter();
@@ -1134,7 +1147,10 @@ public class Cli extends View implements Runnable {
         else {
             //il centro è sotto
             Face face = grid.get(new Coordinate(i / 2, (j-1) / 2));
-            if (face instanceof StarterFront) {
+            if (face instanceof GoldFront) {
+                centerText += cardType.getFormattedCharacter();
+                printGoldFrontPoints((GoldFront) face, cardType);
+            } else if (face instanceof StarterFront) {
                 if(((StarterFront) face).getCenter().size() != 1) {
                     centerText += cardType.getFormattedCharacter();
                     centerText += cardType.getFormattedCharacter(((StarterFront) face).getCenter().getFirst(), cardType);
