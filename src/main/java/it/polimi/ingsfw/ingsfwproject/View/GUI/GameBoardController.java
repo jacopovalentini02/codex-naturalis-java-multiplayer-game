@@ -4,15 +4,15 @@ import it.polimi.ingsfw.ingsfwproject.Model.*;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServer.DrawMessage;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServer.PickMessage;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServer.PlayCardMessage;
+import it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServer.sendChatMessage;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.SnapshotParameters;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
@@ -186,6 +186,21 @@ public class GameBoardController extends GUIController implements Initializable 
     private Map<PlayerColor, String> colorImageMap;
     private HashMap<Rectangle, Coordinate> rectangleCoordinateHashMap;
 
+    @FXML
+    public ComboBox<String> chatSelector;
+    @FXML
+    public TextField chatTextField;
+    @FXML
+    public Button sendButton;
+    @FXML
+    private ListView<ChatMessage> currentChat;
+
+    @FXML
+    private Button showChat;
+
+    @FXML
+    private AnchorPane chatPane;
+
     @Override
     public void start(Stage stage) throws Exception {
         setGuiView(guiView);
@@ -229,6 +244,25 @@ public class GameBoardController extends GUIController implements Initializable 
 
         initializeButtons();
         dragging = false;
+
+        chatSelector.setItems(guiView.getChatOptions());
+        chatSelector.getSelectionModel().select("global");
+        chatSelector.setOnAction(this::changeChat);
+
+
+        currentChat.setCellFactory(param -> new ListCell<ChatMessage>() {
+            @Override
+            protected void updateItem(ChatMessage item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    setText(item.toString());
+                }
+            }
+        });
+
+        updateCurrentChat();
     }
 
     public void initializeButtons(){
@@ -281,13 +315,11 @@ public class GameBoardController extends GUIController implements Initializable 
 
         for (int i = 0; i < client.getVirtualView().getHandCards().size() && i < cardViews.size(); i++) {
             String id = String.format("%03d", client.getVirtualView().getHandCards().get(i).getIdCard());
-            if (faceShowed[i]){
-                cardViews.get(i).setImage(getImageFront(id));
-            } else {
-                cardViews.get(i).setImage(getImageBack(id));
-            }
+            cardViews.get(i).setImage(getImageFront(id));
 
             cardViews.get(i).setVisible(true);
+
+            faceShowed[i]=true;
         }
 
         if(client.getVirtualView().getHandCards().size()==2)
@@ -697,5 +729,63 @@ public class GameBoardController extends GUIController implements Initializable 
 
 
     }
+
+
+    @FXML
+    private void changeChat(ActionEvent event){
+        updateCurrentChat();
+    }
+
+    private void updateCurrentChat() {
+        String selectedChat = chatSelector.getSelectionModel().getSelectedItem();
+        if (selectedChat != null && guiView.getChats().containsKey(selectedChat)) {
+            currentChat.setItems(guiView.getChats().get(selectedChat));
+        }
+    }
+
+    public void addMessageToChat(ChatMessage message){
+        String sender = message.getSender();
+        String key;
+
+        if (sender.equals(client.getNickname()) || message.getRecipient().equals("global")){
+            key = message.getRecipient();
+        } else {
+            key = message.getSender();
+        }
+
+        if (guiView.getChats().containsKey(key)){
+            guiView.getChats().get(key).add(message);
+            if (chatSelector.getSelectionModel().getSelectedItem().equals(key)){
+                updateCurrentChat();
+            }
+        }
+    }
+
+    @FXML
+    public void sendMessage(ActionEvent event) throws IOException {
+        String messageText = chatTextField.getText();
+        if (messageText != null && !messageText.trim().isEmpty()){
+            String selectedChat = chatSelector.getSelectionModel().getSelectedItem();
+            String author = client.getNickname();
+            ChatMessage message = new ChatMessage(author, selectedChat, messageText);
+            if (message.getRecipient() != "global"){
+                addMessageToChat(message);
+            }
+            client.sendMessage(new sendChatMessage(client.getClientID(),author, selectedChat, messageText));
+            chatTextField.clear();
+        }
+    }
+
+    @FXML
+    public void toggleChatMenu(ActionEvent actionEvent) {
+        if (chatPane.isVisible()){
+            chatPane.setVisible(false);
+            showChat.setText("Show Chat");
+        } else {
+            chatPane.setVisible(true);
+            showChat.setText("Hide chat");
+        }
+    }
+
 
 }

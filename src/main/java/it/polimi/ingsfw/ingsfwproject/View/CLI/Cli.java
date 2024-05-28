@@ -67,9 +67,17 @@ public class Cli extends View implements Runnable {
         do {
             try {
                 System.out.println("Insert X and Y coordinates:");
+                while (!scanner.hasNextInt()) {
+                    System.out.println("That's not a number!");
+                    scanner.next(); // this is important!
+                }
                 int x = scanner.nextInt();
                 scanner.nextLine();
                 System.out.println("x registered");
+                while (!scanner.hasNextInt()) {
+                    System.out.println("That's not a number!");
+                    scanner.next(); // this is important!
+                }
                 int y = scanner.nextInt();
                 scanner.nextLine();
                 coord = new Coordinate(x, y);
@@ -100,6 +108,10 @@ public class Cli extends View implements Runnable {
         do {
             try {
                 System.out.println(stringToPrompt);
+                while (!scanner.hasNextInt()) {
+                    System.out.println("That's not a number!");
+                    scanner.next(); // this is important!
+                }
                 choice = scanner.nextInt();
                 scanner.nextLine();
                 if (choice < lowerBound || choice > upperBound) {
@@ -109,7 +121,7 @@ public class Cli extends View implements Runnable {
                 System.out.println(errorString);
                 scanner.nextLine(); // Clear the invalid input
             }
-        } while (choice < lowerBound || choice > upperBound);
+        } while(choice < lowerBound || choice > upperBound);
 
         return choice;
     }
@@ -137,6 +149,10 @@ public class Cli extends View implements Runnable {
                     printFace(c.getBack());
                 }
                 System.out.println("Insert the id of the card chosen: ");
+                while (!scanner.hasNextInt()) {
+                    System.out.println("That's not a number!");
+                    scanner.next(); // this is important!
+                }
                 choice = scanner.nextInt();
                 scanner.nextLine();
                 if (!idCards.contains(choice)){
@@ -162,6 +178,10 @@ public class Cli extends View implements Runnable {
                    printObjectiveCards((ObjectiveCard) c);
                 }
                 System.out.println("Insert the id of the card chosen: ");
+                while (!scanner.hasNextInt()) {
+                    System.out.println("That's not a number!");
+                    scanner.next(); // this is important!
+                }
                 choice = scanner.nextInt();
                 scanner.nextLine();
                 if (!idCards.contains(choice)){
@@ -431,8 +451,15 @@ public class Cli extends View implements Runnable {
                     client.sendMessage(messageToSend);
                     break;
                 case "choosecolor":
-                    PlayerColor colorChoosen = PlayerColor.valueOf(askForStringInput("What color do you want to choose?").toUpperCase());
-                    messageToSend = new WantThatColorMessage(client.getClientID(), client.getNickname(), colorChoosen);
+                    String colorChoosen = null;
+                    do {
+                        colorChoosen = askForStringInput("What color do you want to choose?").toUpperCase();
+                        if(!colorChoosen.equals("BLUE") && !colorChoosen.equals("YELLOW") && !colorChoosen.equals("RED") && !colorChoosen.equals("GREEN")){
+                            System.out.println("Color invalid, retry!");
+                        }
+                    }while(!colorChoosen.equals("BLUE") && !colorChoosen.equals("YELLOW") && !colorChoosen.equals("RED") && !colorChoosen.equals("GREEN"));
+                    PlayerColor color = PlayerColor.valueOf(colorChoosen);
+                    messageToSend = new WantThatColorMessage(client.getClientID(), client.getNickname(), color);
                     client.sendMessage(messageToSend);
                     break;
                 case "chooseobjective":
