@@ -35,8 +35,6 @@ public class WaitingController extends GUIController{
     public Button sendButton;
     @FXML
     private ListView<ChatMessage> currentChat;
-    @FXML
-    private TextArea newPlayerJoined;
 
     @FXML
     private Button showChat;
@@ -44,11 +42,12 @@ public class WaitingController extends GUIController{
     @FXML
     private AnchorPane chatPane;
 
+    @FXML
+    private TextArea newPlayerJoined;
+
+
     public static GUIView guiView;
 
-    private ObservableList<String> chatOptions;
-
-    private Map<String, ObservableList<ChatMessage>> chats;
 
     public void start(Stage stage) throws Exception {
         setGuiView(guiView);
@@ -65,11 +64,7 @@ public class WaitingController extends GUIController{
     }
     @FXML
     private void initialize(){
-        chatOptions = FXCollections.observableArrayList();
-        chatSelector.setItems(chatOptions);
-        chatOptions.add("global");
-        chats = new HashMap<>();
-        chats.put("global", FXCollections.observableArrayList());
+        chatSelector.setItems(guiView.getChatOptions());
         chatSelector.getSelectionModel().select("global");
         chatSelector.setOnAction(this::changeChat);
 
@@ -112,8 +107,8 @@ public class WaitingController extends GUIController{
 
     private void updateCurrentChat() {
         String selectedChat = chatSelector.getSelectionModel().getSelectedItem();
-        if (selectedChat != null && chats.containsKey(selectedChat)) {
-            currentChat.setItems(chats.get(selectedChat));
+        if (selectedChat != null && guiView.getChats().containsKey(selectedChat)) {
+            currentChat.setItems(guiView.getChats().get(selectedChat));
         }
     }
 
@@ -127,8 +122,8 @@ public class WaitingController extends GUIController{
              key = message.getSender();
         }
 
-        if (chats.containsKey(key)){
-            chats.get(key).add(message);
+        if (guiView.getChats().containsKey(key)){
+            guiView.getChats().get(key).add(message);
             if (chatSelector.getSelectionModel().getSelectedItem().equals(key)){
                 updateCurrentChat();
             }
@@ -158,13 +153,6 @@ public class WaitingController extends GUIController{
         } else {
             chatPane.setVisible(true);
             showChat.setText("Hide chat");
-        }
-    }
-
-    public void addChat(String nickname){
-        if (!Objects.equals(nickname, client.getNickname()) && !(chats.containsKey(nickname))){
-            chatOptions.add(nickname);
-            chats.put(nickname, FXCollections.observableArrayList());
         }
     }
 

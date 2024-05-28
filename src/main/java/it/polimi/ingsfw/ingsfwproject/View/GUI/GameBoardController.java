@@ -281,13 +281,11 @@ public class GameBoardController extends GUIController implements Initializable 
 
         for (int i = 0; i < client.getVirtualView().getHandCards().size() && i < cardViews.size(); i++) {
             String id = String.format("%03d", client.getVirtualView().getHandCards().get(i).getIdCard());
-            if (faceShowed[i]){
-                cardViews.get(i).setImage(getImageFront(id));
-            } else {
-                cardViews.get(i).setImage(getImageBack(id));
-            }
+            cardViews.get(i).setImage(getImageFront(id));
 
             cardViews.get(i).setVisible(true);
+
+            faceShowed[i]=true;
         }
 
         if(client.getVirtualView().getHandCards().size()==2)
