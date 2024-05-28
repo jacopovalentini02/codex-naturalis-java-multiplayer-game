@@ -451,8 +451,15 @@ public class Cli extends View implements Runnable {
                     client.sendMessage(messageToSend);
                     break;
                 case "choosecolor":
-                    PlayerColor colorChoosen = PlayerColor.valueOf(askForStringInput("What color do you want to choose?").toUpperCase());
-                    messageToSend = new WantThatColorMessage(client.getClientID(), client.getNickname(), colorChoosen);
+                    String colorChoosen = null;
+                    do {
+                        colorChoosen = askForStringInput("What color do you want to choose?").toUpperCase();
+                        if(!colorChoosen.equals("BLUE") && !colorChoosen.equals("YELLOW") && !colorChoosen.equals("RED") && !colorChoosen.equals("GREEN")){
+                            System.out.println("Color invalid, retry!");
+                        }
+                    }while(!colorChoosen.equals("BLUE") && !colorChoosen.equals("YELLOW") && !colorChoosen.equals("RED") && !colorChoosen.equals("GREEN"));
+                    PlayerColor color = PlayerColor.valueOf(colorChoosen);
+                    messageToSend = new WantThatColorMessage(client.getClientID(), client.getNickname(), color);
                     client.sendMessage(messageToSend);
                     break;
                 case "chooseobjective":
