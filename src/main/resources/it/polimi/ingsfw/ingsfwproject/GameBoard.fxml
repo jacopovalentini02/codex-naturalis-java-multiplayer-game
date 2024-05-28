@@ -1,12 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.effect.Blend?>
+<?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane prefHeight="851.0" prefWidth="1455.0" style="-fx-background-color: #e6ddbc;" stylesheets="@Style.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsfw.ingsfwproject.View.GUI.GameBoardController">
@@ -19,8 +26,14 @@
             <Font name="Bodoni 72 Smallcaps Book" size="37.0" />
          </font>
       </Label>
-      <ImageView fx:id="goldDeck" fitHeight="110.0" fitWidth="150.0" layoutX="190.0" layoutY="604.0" onMouseClicked="#drawGold" pickOnBounds="true" preserveRatio="true" />
-      <ImageView fx:id="resourceDeck" fitHeight="110.0" fitWidth="150.0" layoutX="190.0" layoutY="714.0" onMouseClicked="#drawResource" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="goldDeck" fitHeight="110.0" fitWidth="150.0" layoutX="65.0" layoutY="708.0" onMouseClicked="#drawGold" pickOnBounds="true" preserveRatio="true">
+         <effect>
+            <DropShadow />
+         </effect></ImageView>
+      <ImageView fx:id="resourceDeck" fitHeight="110.0" fitWidth="150.0" layoutX="250.0" layoutY="708.0" onMouseClicked="#drawResource" pickOnBounds="true" preserveRatio="true">
+         <effect>
+            <DropShadow />
+         </effect></ImageView>
       <ImageView fitHeight="476.0" fitWidth="249.0" layoutX="101.0" layoutY="103.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@Images/plateau.png" />
@@ -30,8 +43,8 @@
       <ImageView fx:id="resourceDisplayed2" fitHeight="110.0" fitWidth="150.0" layoutX="354.0" layoutY="267.0" onMouseClicked="#pickResource2" pickOnBounds="true" preserveRatio="true" />
       <ImageView fx:id="goldDisplayed1" fitHeight="110.0" fitWidth="150.0" layoutX="537.0" layoutY="143.0" onMouseClicked="#pickGold1" pickOnBounds="true" preserveRatio="true" />
       <ImageView fx:id="goldDisplayed2" fitHeight="110.0" fitWidth="150.0" layoutX="537.0" layoutY="266.0" onMouseClicked="#pickGold2" pickOnBounds="true" preserveRatio="true" />
-      <ImageView fx:id="objectiveDisplayed1" fitHeight="110.0" fitWidth="150.0" layoutX="375.0" layoutY="400.0" pickOnBounds="true" preserveRatio="true" />
-      <ImageView fx:id="objectiveDisplayed2" fitHeight="110.0" fitWidth="150.0" layoutX="560.0" layoutY="401.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="objectiveDisplayed1" fitHeight="110.0" fitWidth="150.0" layoutX="354.0" layoutY="400.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="objectiveDisplayed2" fitHeight="110.0" fitWidth="150.0" layoutX="537.0" layoutY="401.0" pickOnBounds="true" preserveRatio="true" />
       <ImageView fx:id="personalObjective" fitHeight="115.0" fitWidth="170.0" layoutX="480.0" layoutY="736.0" pickOnBounds="true" preserveRatio="true" />
       <ImageView fx:id="handCard1" fitHeight="115.0" fitWidth="170.0" layoutX="691.0" layoutY="736.0" onDragDetected="#dragCard1" onMouseClicked="#clickHandCard1" pickOnBounds="true" preserveRatio="true" />
       <ImageView fx:id="handCard2" fitHeight="115.0" fitWidth="170.0" layoutX="878.0" layoutY="736.0" onDragDetected="#dragCard2" onMouseClicked="#clickHandCard2" pickOnBounds="true" preserveRatio="true" />
@@ -44,17 +57,7 @@
       <ImageView fx:id="pin12" fitHeight="42.0" fitWidth="41.0" layoutX="199.0" layoutY="519.0" pickOnBounds="true" preserveRatio="true" />
       <ImageView fx:id="pin13" fitHeight="42.0" fitWidth="41.0" layoutX="199.0" layoutY="515.0" pickOnBounds="true" preserveRatio="true" />
       <ImageView fx:id="pin14" fitHeight="42.0" fitWidth="41.0" layoutX="199.0" layoutY="511.0" pickOnBounds="true" preserveRatio="true" />
-      <Label layoutX="42.0" layoutY="648.0" prefHeight="23.0" prefWidth="119.0" text="GOLD DECK">
-         <font>
-            <Font name="Bodoni 72 Smallcaps Book" size="19.0" />
-         </font>
-      </Label>
-      <Label layoutX="22.0" layoutY="735.0" prefHeight="23.0" prefWidth="158.0" text="RESOURCE DECK">
-         <font>
-            <Font name="Bodoni 72 Smallcaps Book" size="19.0" />
-         </font>
-      </Label>
-      <Button fx:id="showScore" layoutX="436.0" layoutY="36.0" mnemonicParsing="false" prefHeight="47.0" prefWidth="153.0" style="-fx-background-color: #5F3075;" text="Show Chat" textFill="WHITE">
+      <Button fx:id="showChat" layoutX="430.0" layoutY="11.0" mnemonicParsing="false" onAction="#toggleChatMenu" prefHeight="29.0" prefWidth="130.0" style="-fx-background-color: #5F3075;" text="Show Chat" textFill="WHITE">
          <font>
             <Font name="Bodoni 72 Smallcaps Book" size="22.0" />
          </font>
@@ -196,6 +199,48 @@
             <Font name="Bodoni 72 Smallcaps Book" size="21.0" />
          </font>
       </Button>
+      <AnchorPane fx:id="chatPane" layoutX="8.0" layoutY="89.0" prefHeight="588.0" prefWidth="469.0" style="-fx-background-color: none;" visible="false">
+         <children>
+            <BorderPane layoutX="-8.0" prefHeight="590.0" prefWidth="517.0" style="-fx-border-color: #5F3075; -fx-border-width: 3 3 3 3; -fx-background-color: white;">
+               <top>
+                  <Pane prefHeight="54.0" prefWidth="453.0" style="-fx-background-color: #e6ddbc; -fx-border-width: 100px;" BorderPane.alignment="CENTER">
+                     <children>
+                        <Label layoutX="233.0" layoutY="13.0" text="Chat">
+                           <font>
+                              <Font name="Bodoni 72 Smallcaps Book" size="22.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </Pane>
+               </top>
+               <left>
+                  <Pane prefHeight="662.0" prefWidth="18.0" style="-fx-background-color: #e6ddbc;" BorderPane.alignment="CENTER" />
+               </left>
+               <right>
+                  <Pane prefHeight="662.0" prefWidth="18.0" style="-fx-background-color: #e6ddbc;" BorderPane.alignment="CENTER" />
+               </right>
+               <bottom>
+                  <Pane prefHeight="54.0" prefWidth="474.0" style="-fx-background-color: #e6ddbc;" BorderPane.alignment="BOTTOM_CENTER">
+                     <BorderPane.margin>
+                        <Insets />
+                     </BorderPane.margin>
+                     <children>
+                        <ComboBox fx:id="chatSelector" layoutX="23.0" layoutY="14.0" prefHeight="26.0" prefWidth="103.0" style="-fx-background-color: #5F3075;" styleClass="text-area" />
+                        <TextField fx:id="chatTextField" layoutX="137.0" layoutY="14.0" prefHeight="26.0" prefWidth="279.0" style="-fx-background-color: cfc6a9;" />
+                        <Button fx:id="sendButton" layoutX="425.0" layoutY="14.0" mnemonicParsing="false" onAction="#sendMessage" prefHeight="26.0" prefWidth="64.0" style="-fx-background-color: #5F3075;" text="Send" textFill="WHITE">
+                           <font>
+                              <Font name="Bodoni 72 Smallcaps Book" size="13.0" />
+                           </font>
+                        </Button>
+                     </children>
+                  </Pane>
+               </bottom>
+               <center>
+                  <ListView fx:id="currentChat" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: cfc6a9; -fx-border-color: #5F3075;" BorderPane.alignment="CENTER" />
+               </center>
+            </BorderPane>
+         </children>
+      </AnchorPane>
 
    </children>
 </AnchorPane>

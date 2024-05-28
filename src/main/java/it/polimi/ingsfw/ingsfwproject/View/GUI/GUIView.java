@@ -427,7 +427,7 @@ public class GUIView extends View {
             });
         }else if(currentController.equals(gameBoardController)){
             Platform.runLater(() -> {
-                //gameBoardController.add();
+                gameBoardController.addMessageToChat(message);
             });
         }
     }
