@@ -6,6 +6,8 @@ import it.polimi.ingsfw.ingsfwproject.Network.Client.Client;
 import it.polimi.ingsfw.ingsfwproject.View.View;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
@@ -29,9 +31,26 @@ public class GUIView extends View {
 
     private GUIController currentController;
 
+    private ObservableList<String> chatOptions;
+
+    private Map<String, ObservableList<ChatMessage>> chats;
+
 
     public GUIView(){
         chooseConnection();
+        chatOptions = FXCollections.observableArrayList();
+        chatOptions.add("global");
+        chats = new HashMap<>();
+        chats.put("global", FXCollections.observableArrayList());
+
+    }
+
+    public ObservableList<String> getChatOptions(){
+        return this.chatOptions;
+    }
+
+    public Map<String, ObservableList<ChatMessage>> getChats(){
+        return this.chats;
     }
 
     public void openLobby() {
@@ -142,13 +161,20 @@ public class GUIView extends View {
                 String lastNickname = nicknames.getLast();
                 waitingController.addNickname(lastNickname);
                 for (String s: nicknames)
-                    waitingController.addChat(s);
+                    addChat(s);
             } else {
                 System.err.println("Errore: setUpGame o newPlayerJoined TextArea è null");
             }
         });
 
 
+    }
+
+    public void addChat(String nickname){
+        if (!Objects.equals(nickname, client.getNickname()) && !(chats.containsKey(nickname))){
+            chatOptions.add(nickname);
+            chats.put(nickname, FXCollections.observableArrayList());
+        }
     }
 
     @Override
@@ -386,13 +412,22 @@ public class GUIView extends View {
 
     @Override
     public void notifyChatMessage(ChatMessage message) {
-        if (currentController.equals(waitingController)){
-            Platform.runLater(()->{
-                try{
-                    waitingController.addMessageToChat(message);
-                } catch (Exception ex) {
-                    throw new RuntimeException(ex);
-                }
+
+        if(currentController.equals(chooseStarterController)){
+            Platform.runLater(() -> {
+                chooseStarterController.addMessageToChat(message);
+            });
+        }else if(currentController.equals(chooseColorController)){
+            Platform.runLater(() -> {
+                chooseColorController.addMessageToChat(message);
+            });
+        }else if(currentController.equals(chooseObjectiveController)){
+            Platform.runLater(() -> {
+                chooseObjectiveController.addMessageToChat(message);
+            });
+        }else if(currentController.equals(gameBoardController)){
+            Platform.runLater(() -> {
+                //gameBoardController.add();
             });
         }
     }

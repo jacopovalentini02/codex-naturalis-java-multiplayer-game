@@ -42,7 +42,7 @@
          <Font name="Bodoni 72 Smallcaps Book" size="22.0" />
       </font>
    </Button>
-   <AnchorPane fx:id="chatPane" layoutX="-2.0" layoutY="-2.0" prefHeight="717.0" prefWidth="450.0" style="-fx-background-color: none;">
+   <AnchorPane fx:id="chatPane" visible="false" layoutX="-2.0" layoutY="-2.0" prefHeight="717.0" prefWidth="450.0" style="-fx-background-color: none;">
       <children>
          <BorderPane prefHeight="716.0" prefWidth="469.0" style="-fx-border-color: #5F3075; -fx-border-width: 0 3 3 0; -fx-background-color: white;">
             <top>
