@@ -127,6 +127,12 @@ public class Cli extends View implements Runnable {
                 for(PlayableCard c : cards){
                     System.out.println(c.getIdCard());
                     printFace(c.getFront());
+                    if(c.getFront() instanceof GoldFront){
+                        System.out.print("Costs: ");
+                       for( Content cont : ((GoldFront) c.getFront()).getCost()){
+                           System.out.print(cont + " ");
+                       }
+                    }
                     System.out.println();
                     printFace(c.getBack());
                 }
@@ -490,6 +496,12 @@ public class Cli extends View implements Runnable {
                     //todo: cambiare il metodo di stampa delle carte -> stampa lines in grid
                     for (PlayableCard c : client.getVirtualView().getDisplayedCards()) {
                         printFace(c.getFront());
+                        if(c.getFront() instanceof GoldFront){
+                            System.out.print("Costs: ");
+                            for( Content cont : ((GoldFront) c.getFront()).getCost()){
+                                System.out.print(cont + " ");
+                            }
+                        }
                         System.out.println();
                     }
                     break;
@@ -504,6 +516,9 @@ public class Cli extends View implements Runnable {
                     break;
                 case "showobjective":
                     printObjectiveCards(client.getVirtualView().getHandObjectives().get(0));
+                    if(client.getVirtualView().getHandObjectives().size() == 2){
+                        printObjectiveCards(client.getVirtualView().getHandObjectives().get(1));
+                    }
                     break;
                 case "globalchat":
                     for (ChatMessage m : client.getVirtualView().getGlobalChat()) {
