@@ -60,7 +60,7 @@ public class ChooseConnectionController extends Application  {
     }
 
     @FXML
-    private void handleSocketConnection() throws Exception {
+    private void handleSocketConnection(){
         try {
             client = new SocketClient("localhost", 1337, guiView);
             client.startConnection();

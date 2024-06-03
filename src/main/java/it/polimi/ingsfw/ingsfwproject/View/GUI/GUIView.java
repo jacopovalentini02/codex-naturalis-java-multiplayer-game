@@ -248,9 +248,12 @@ public class GUIView extends View {
 
     @Override
     public void notifyHandObjectives(ArrayList<ObjectiveCard> cards) {
+
         Platform.runLater(() -> {
-            if(currentController.equals(chooseObjectiveController))
+            if(currentController.equals(chooseObjectiveController)){
                 chooseObjectiveController.showObjective(cards);
+            }
+
         });
     }
 

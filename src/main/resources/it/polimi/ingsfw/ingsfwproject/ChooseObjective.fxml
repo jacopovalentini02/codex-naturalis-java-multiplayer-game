@@ -35,7 +35,10 @@
             <Font name="Bodoni 72 Smallcaps Book" size="37.0" />
          </font>
       </Label>
-      <ImageView fx:id="firstCard" fitHeight="161.0" fitWidth="252.0" layoutX="869.0" layoutY="241.0" onMouseClicked="#firstCardChosen" pickOnBounds="true" preserveRatio="true" visible="false" />
+      <ImageView fx:id="firstCard" fitHeight="161.0" fitWidth="252.0" layoutX="869.0" layoutY="241.0" onMouseClicked="#firstCardChosen" pickOnBounds="true" preserveRatio="true" visible="false">
+         <image>
+            <Image url="@Images/CODEX_cards_gold_back/005.png" />
+         </image></ImageView>
       <ImageView fx:id="secondCard" fitHeight="161.0" fitWidth="278.0" layoutX="869.0" layoutY="433.0" onMouseClicked="#secondCardChosen" pickOnBounds="true" preserveRatio="true" visible="false" />
       <Label fx:id="labelInstruction" layoutX="825.0" layoutY="175.0" text="Click on the card you want to choose">
          <font>

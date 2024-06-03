@@ -19,6 +19,7 @@ public class GameController implements Controller {
     public Queue<ChatMessage> globalChat;
 
     private int starterCardsPlayed;
+    private int colorChosen;
 
     private final GameServerInstance serverInstance;
 
@@ -26,6 +27,7 @@ public class GameController implements Controller {
     public GameController(Game model, GameServerInstance serverInstance){
         this.model = model;
         starterCardsPlayed = 0;
+        colorChosen=0;
         this.serverInstance = serverInstance;
         this.globalChat = new LinkedBlockingQueue<>();
     }
@@ -222,8 +224,13 @@ public class GameController implements Controller {
 
         synchronized (model){
             moveSuccessfull=model.chooseColor(player, color);
-            if(moveSuccessfull)
+            if(moveSuccessfull){
+                colorChosenCounter();
                 model.nextTurn();
+                if(colorChosen== getModel().getNumOfPlayers())
+                    model.setupHandsAndObjectives();
+            }
+
         }
     }
 
@@ -250,6 +257,15 @@ public class GameController implements Controller {
         starterCardsPlayed++;
         if (starterCardsPlayed == model.getNumOfPlayers()){
             model.setState(GameState.CHOOSING_COLORS);
+        }
+
+    }
+
+    private void colorChosenCounter() {
+        colorChosen++;
+        if (colorChosen == model.getNumOfPlayers()){
+            model.setState(GameState.CHOOSING_OBJECTIVES);
+
         }
 
     }

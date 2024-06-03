@@ -73,11 +73,11 @@ public class ChooseObjectiveController extends GUIController implements Initiali
     }
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        if(Objects.equals(client.getNickname(), client.getVirtualView().getCurrentPlayer())){
-            firstCard.setVisible(true);
-            secondCard.setVisible(true);
-        }
-        setTurn();
+//        if(Objects.equals(client.getNickname(), client.getVirtualView().getCurrentPlayer())){
+//            firstCard.setVisible(true);
+//            secondCard.setVisible(true);
+//        }
+
 
         chatSelector.setItems(guiView.getChatOptions());
         chatSelector.getSelectionModel().select("global");
@@ -97,6 +97,7 @@ public class ChooseObjectiveController extends GUIController implements Initiali
         });
 
         updateCurrentChat();
+        setTurn();
     }
 
     public void setTurn(){
@@ -117,6 +118,8 @@ public class ChooseObjectiveController extends GUIController implements Initiali
         Image image2 = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/it/polimi/ingsfw/ingsfwproject/Images/CODEX_cards_gold_front/"+id2+".png")));
         firstCard.setImage(image1);
         secondCard.setImage(image2);
+
+
     }
 
     public void cardChosen(int cardID) throws IOException {

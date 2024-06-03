@@ -146,10 +146,10 @@ public class Game {
 
         tokenAvailable.remove(color);
 
-        colorChosen++;
+        //colorChosen++;
 
-        if (colorChosen == this.numOfPlayers)
-            setupHandsAndObjectives();
+        //if (colorChosen == this.numOfPlayers)
+          //  setupHandsAndObjectives();
         return true;
 
     }
@@ -201,7 +201,7 @@ public class Game {
         }catch (DeckEmptyException ignore){}
 
         gameServerInstance.sendUpdateToAll(new DisplayedObjectiveMessage(-10, displayedObjectiveCard));
-        this.setState(GameState.CHOOSING_OBJECTIVES);
+        //this.setState(GameState.CHOOSING_OBJECTIVES);
         for(Player p : listOfPlayers){
             try{
                ArrayList<ObjectiveCard> objectiveCards = new ArrayList<>();
