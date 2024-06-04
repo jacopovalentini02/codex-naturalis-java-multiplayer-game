@@ -372,7 +372,7 @@ public class Cli extends View implements Runnable {
     @Override
     public void notifyWinnerUpdate(String nick){
         printWithNicksColorNewLine("The winner is " + nick + "! Congrats!", nick);
-        //System.out.println("The winner is " + nick + "! Congrats!");
+        printAvailableCommands();
     }
 
     @Override
@@ -434,6 +434,10 @@ public class Cli extends View implements Runnable {
                     }else {
                         System.out.println(drawCommands);
                     }
+                    break;
+                case GameState.ENDED:
+                    System.out.println(lobbyCommands);
+                    break;
             }
 
         }
