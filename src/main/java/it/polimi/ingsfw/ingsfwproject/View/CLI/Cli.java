@@ -300,6 +300,7 @@ public class Cli extends View implements Runnable {
     public void notifyCurrentPlayer(String nickname){
         //clear cli
         //TODO: QUESTO FUNZIONA SOLO NEL TERMINALE, NON NELL'IDE! A JAR CREATO CONTROLLARE CHE FUNZIONI
+        /*
         try
         {
             final String os = System.getProperty("os.name");
@@ -317,6 +318,7 @@ public class Cli extends View implements Runnable {
         {
             e.printStackTrace();
         }
+         */
 
         printWithNicksColorNewLine("it' now " + nickname + "'s turn", nickname);
         printAvailableCommands();
@@ -346,7 +348,9 @@ public class Cli extends View implements Runnable {
     public void notifyGameState(GameState state){
         if(!state.equals(client.getVirtualView().getState()))
             System.out.println("Game state updated to: '" + state);
-
+        if(state.equals(GameState.ENDING)){
+            System.out.println("it's your last turn!");
+        }
     }
 
     @Override
@@ -397,6 +401,9 @@ public class Cli extends View implements Runnable {
 
     @Override
     public void notifyScores(Map<String, Integer> scores){
+        if(client.getVirtualView().getState()!=GameState.ENDING)
+            return;
+
         printScores();
     }
 
@@ -429,6 +436,13 @@ public class Cli extends View implements Runnable {
                     System.out.println(chooseColorCommands);
                     break;
                 case GameState.STARTED:
+                    if(!client.getVirtualView().isCurrentPlayerhasPlayed()){ //se non ho ancora giocato
+                        System.out.println(gameCommands);
+                    }else {
+                        System.out.println(drawCommands);
+                    }
+                    break;
+                case GameState.ENDING:
                     if(!client.getVirtualView().isCurrentPlayerhasPlayed()){ //se non ho ancora giocato
                         System.out.println(gameCommands);
                     }else {
