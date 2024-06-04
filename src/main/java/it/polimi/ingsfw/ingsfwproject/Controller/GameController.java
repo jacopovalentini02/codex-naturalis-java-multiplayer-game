@@ -65,7 +65,8 @@ public class GameController implements Controller {
             if (!moveSuccesful)
                 return;
 
-            model.nextTurn();
+            if(model.getObjectiveCardsChosen()!=model.getNumOfPlayers())
+                model.nextTurn();
         }
     }
     public void playCard(String username, int cardID, boolean upwards, Coordinate coord){
