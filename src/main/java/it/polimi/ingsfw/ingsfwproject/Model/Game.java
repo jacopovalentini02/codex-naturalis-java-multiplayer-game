@@ -373,6 +373,7 @@ public class Game {
         }
         //l'update dei points è gia mandato da updatePoints
         winner = Collections.max(scores.entrySet(), Map.Entry.comparingByValue()).getKey();
+        //TODO: INVERTIRE LE DUE RIGHE SUCCESSIVE PER PERMETTERE ALLA CLI DI "RITORNARE" ALLA LOBBY
         gameServerInstance.sendUpdateToAll(new WinnerMessage(-10, winner.getUsername()));
         setState(GameState.ENDED);
 
