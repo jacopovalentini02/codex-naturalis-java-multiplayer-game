@@ -7,5 +7,4 @@ public enum PlayerColor implements Serializable {
     GREEN,
     RED,
     BLUE,
-    BLACK
 }

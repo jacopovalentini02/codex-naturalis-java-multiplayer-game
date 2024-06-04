@@ -16,22 +16,23 @@ import it.polimi.ingsfw.ingsfwproject.View.View;
 public class Cli extends View implements Runnable {
 
     Scanner scanner;
-    String lobbyCommands = "now you can insert one of the following commands:" + "\n\t-> CreateGame" + "\n\t-> JoinGame" + "\n\t-> GetGameList";
-    String gameCommands = "now you can do one of the following actions: \n\t-> PlayCard \n\t-> SkipTurn";
-    String drawCommands = "now you can do one of the following actions: \n\t-> DrawCard \n\t-> PickCard";
-    String chooseColorCommands = "now you can do one of the following actions: \n\t-> GetColorAvailable \n\t-> ChooseColor";
-    String notMyTurnCommands = "now you can do one of the following actions: \n\t-> ShowMyGrid \n\t-> ShowGrid \n\t-> showScores \n\t-> showDisplayed \n\t-> showDecksTop \n\t-> showHand \n\t-> showObjective";
-    String chooseObjectiveCommands = "now you can do one of the following actions: \n\t-> ShowObjective \n\t-> chooseObjective";
+
+    String notMyTurnCommands = "these are the commands that you can perform at any time: \n\t-> ShowMyGrid \n\t-> ShowGrid \n\t-> showScores \n\t-> showDisplayed " +
+            "\n\t-> showDecksTop \n\t-> showHand \n\t-> showObjective \n\t-> showCounters \n\t-> globalChat \n\t-> chat \n\t-> sendMessage";
+    String lobbyCommands = "now you can insert one of the following commands:\n\t-> CreateGame" + "\n\t-> JoinGame" + "\n\t-> GetGameList";
+    String gameCommands = "now you can do one of the following specific actions: \n\t-> PlayCard \nand " + notMyTurnCommands;
+    String drawCommands = "now you can do one of the following actions: \n\t-> DrawCard \n\t-> PickCard \nand " + notMyTurnCommands;
+    String chooseColorCommands = "now you can do one of the following actions: \n\t-> GetColorAvailable \n\t-> ChooseColor \nand " + notMyTurnCommands;
+    String chooseObjectiveCommands = "now you can do one of the following actions: \n\t-> ShowObjective \n\t-> chooseObjective \nand " + notMyTurnCommands;
     String chooseStarterCommands = "now you can do one of the following actions: \n\t-> ShowHand \n\t-> PlayCard";
 
 
-    public static final String RED = "\033[0;31m";
+    public static final String GRAY = "\u001B[37m";
 
     public static final String RESET = "\033[0m";
 
     public Cli(){
         this.scanner = new Scanner(System.in);
-        //super.messages = new LinkedBlockingQueue<>();
     }
 
     public void init(){
@@ -297,7 +298,27 @@ public class Cli extends View implements Runnable {
 
     @Override
     public void notifyCurrentPlayer(String nickname){
-        System.out.println("it' now " + nickname + "'s turn");
+        //clear cli
+        //TODO: QUESTO FUNZIONA SOLO NEL TERMINALE, NON NELL'IDE! A JAR CREATO CONTROLLARE CHE FUNZIONI
+        try
+        {
+            final String os = System.getProperty("os.name");
+
+            if (os.contains("Windows"))
+            {
+                Runtime.getRuntime().exec("cls");
+            }
+            else
+            {
+                Runtime.getRuntime().exec("clear");
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        printWithNicksColorNewLine("it' now " + nickname + "'s turn", nickname);
         printAvailableCommands();
     }
 
@@ -350,7 +371,8 @@ public class Cli extends View implements Runnable {
 
     @Override
     public void notifyWinnerUpdate(String nick){
-        System.out.println("The winner is " + nick + "! Congrats!");
+        printWithNicksColorNewLine("The winner is " + nick + "! Congrats!", nick);
+        //System.out.println("The winner is " + nick + "! Congrats!");
     }
 
     @Override
@@ -420,7 +442,7 @@ public class Cli extends View implements Runnable {
 
     @Override
     public void notifyChatMessage(ChatMessage message){
-        System.out.println(RED + "New chat message from " + message.getSender() + " : " + message.getMessage() + RESET);
+        System.out.println(GRAY + "New chat message from " + getColoredNick(message.getSender()) + " : " + message.getMessage() + RESET);
     }
 
     public void handleInput(String input) {
@@ -428,29 +450,53 @@ public class Cli extends View implements Runnable {
         String name;
         input = input.toLowerCase();
 
+        String errorString = "you can't use this command now";
+
         try {
             switch (input) {
                 case "creategame":
+                    if(client.getVirtualView().getState() != null && client.getVirtualView().getState() != GameState.ENDED){
+                        System.out.println(errorString);
+                        break;
+                    }
                     int numOfPlayers = askForIntInput("insert the number of players between 2 and 4", 2, 4);
                     name = askForStringInput("insert your nickname");
                     messageToSend = new CreateGameMessage(client.getClientID(), numOfPlayers, name);
                     client.sendMessage(messageToSend);
                     break;
                 case "joingame":
+                    if(client.getVirtualView().getState() != null && client.getVirtualView().getState() != GameState.ENDED){
+                        System.out.println(errorString);
+                        break;
+                    }
                     int gameID = askForIntInput("insert the game ID", 0, 1000);
                     name = askForStringInput("insert your nickname");
                     messageToSend = new JoinGameMessage(client.getClientID(), name, gameID);
                     client.sendMessage(messageToSend);
                     break;
                 case "getgamelist":
+                    if(client.getVirtualView().getState() != null && client.getVirtualView().getState() != GameState.ENDED){
+                        System.out.println(errorString);
+                        break;
+                    }
                     messageToSend = new GetGameListMessage(client.getClientID());
                     client.sendMessage(messageToSend);
                     break;
                 case "getcoloravailable":
+                    if(client.getVirtualView().getState() == null || client.getVirtualView().getState() != GameState.CHOOSING_COLORS){
+                        System.out.println(errorString);
+                        break;
+                    }
+
                     messageToSend = new GetColorAvailableMessage(client.getClientID());
                     client.sendMessage(messageToSend);
                     break;
                 case "choosecolor":
+                    if(client.getVirtualView().getState() == null || client.getVirtualView().getState() != GameState.CHOOSING_COLORS){
+                        System.out.println(errorString);
+                        break;
+                    }
+
                     String colorChoosen = null;
                     do {
                         colorChoosen = askForStringInput("What color do you want to choose?").toUpperCase();
@@ -463,11 +509,23 @@ public class Cli extends View implements Runnable {
                     client.sendMessage(messageToSend);
                     break;
                 case "chooseobjective":
+                    if(client.getVirtualView().getState() == null || client.getVirtualView().getState() != GameState.CHOOSING_OBJECTIVES){
+                        System.out.println(errorString);
+                        break;
+                    }
+
                     int objWanted = askForIdObjectiveInput("What objective do you prefer?", (client.getVirtualView().getHandObjectives()));
                     messageToSend = new ObjectiveCardChosenMessage(client.getClientID(), client.getNickname(), objWanted);
                     client.sendMessage(messageToSend);
                     break;
                 case "playcard":
+                    if(client.getVirtualView().getState() == null || client.getVirtualView().getState() == GameState.WAITING_FOR_PLAYERS || client.getVirtualView().getState() == GameState.ENDED){
+                        System.out.println(errorString);
+                        break;
+                    }
+                    if(client.getVirtualView().getGrids().get(client.getNickname()) != null && !client.getVirtualView().getGrids().get(client.getNickname()).isEmpty())
+                        printGrid(client.getVirtualView().getGrids().get(client.getNickname()));
+
                     int idCard = askForIdCardInput("Among the cards in your hand, which one do you want to play? Here the cards' id:", client.getVirtualView().getHandCards());
                     boolean face = askForFaceToPlay();
                     Coordinate coords = askForCoordinateInput(client.getVirtualView().getAvailablePositions());
@@ -475,6 +533,10 @@ public class Cli extends View implements Runnable {
                     client.sendMessage(messageToSend);
                     break;
                 case "drawcard":
+                    if(client.getVirtualView().getState() == null || client.getVirtualView().getState() == GameState.WAITING_FOR_PLAYERS || client.getVirtualView().getState() == GameState.ENDED){
+                        System.out.println(errorString);
+                        break;
+                    }
                     //defalt value for deckWanted
                     boolean deckWanted = true;
                     int idDeck = askForIntInput("From which deck you want to draw?\n1)Resource deck\n2)Gold deck", 1, 2);
@@ -486,23 +548,25 @@ public class Cli extends View implements Runnable {
                     client.sendMessage(messageToSend);
                     break;
                 case "pickcard":
+                    if(client.getVirtualView().getState() == null || client.getVirtualView().getState() == GameState.WAITING_FOR_PLAYERS || client.getVirtualView().getState() == GameState.ENDED){
+                        System.out.println(errorString);
+                        break;
+                    }
                     idCard = askForIdCardInput("Among those, which card do you want?", client.getVirtualView().getDisplayedCards());
                     messageToSend = new PickMessage(client.getClientID(), idCard, client.getNickname());
                     client.sendMessage(messageToSend);
                     break;
-                case "skipturn":
-                    messageToSend = new SkipTurnMessage(client.getClientID(), client.getNickname());
-                    client.sendMessage(messageToSend);
-                    break;
                 case "showgrid":
+                    if(client.getVirtualView().getState() == null || client.getVirtualView().getState() == GameState.WAITING_FOR_PLAYERS || client.getVirtualView().getScores() == null){
+                        System.out.println(errorString);
+                        break;
+                    }
                     Set<String> otherPlayersNick = client.getVirtualView().getScores().keySet();
-                    //TODO: MA COSI NON RIMUOVI IL NOME ANCHE DALL'OGGETTO ORIGINALE IN VIRTUALVIEW??
                     otherPlayersNick.remove(client.getNickname());
                     String playerAsked;
                     System.out.println("Among the fields of the players, which one do you want to look?");
                     for (String p : otherPlayersNick) {
-                        System.out.print(p + " ");
-                        System.out.println();
+                        printWithNicksColor(p + " ", p);
                     }
                     do {
                         playerAsked = scanner.nextLine();
@@ -514,12 +578,24 @@ public class Cli extends View implements Runnable {
                     break;
 
                 case "showmygrid":
+                    if(client.getVirtualView().getState() == null || client.getVirtualView().getState() == GameState.WAITING_FOR_PLAYERS || client.getVirtualView().getGrids().get(client.getNickname()) == null){
+                        System.out.println(errorString);
+                        break;
+                    }
                     printGrid(client.getVirtualView().getGrids().get(client.getNickname()));
                     break;
                 case "showscores":
+                    if(client.getVirtualView().getState() == null || client.getVirtualView().getState() == GameState.WAITING_FOR_PLAYERS){
+                        System.out.println(errorString);
+                        break;
+                    }
                     printScores();
                     break;
                 case "showdisplayed":
+                    if(client.getVirtualView().getState() == null || client.getVirtualView().getState() == GameState.WAITING_FOR_PLAYERS){
+                        System.out.println(errorString);
+                        break;
+                    }
                     //todo: cambiare il metodo di stampa delle carte -> stampa lines in grid
                     for (PlayableCard c : client.getVirtualView().getDisplayedCards()) {
                         printFace(c.getFront());
@@ -533,35 +609,65 @@ public class Cli extends View implements Runnable {
                     }
                     break;
                 case "showdeckstop":
+                    if(client.getVirtualView().getState() == null || client.getVirtualView().getState() == GameState.WAITING_FOR_PLAYERS){
+                        System.out.println(errorString);
+                        break;
+                    }
                     System.out.println("The back of the top card of the resource deck is: ");
                     printFace(((ResourceCard) client.getVirtualView().getResourceDeck().getCardList().getFirst()).getBack());
                     System.out.println("The back of the top card of the gold deck is: ");
                     printFace(((GoldCard) client.getVirtualView().getGoldDeck().getCardList().getFirst()).getBack());
                     break;
                 case "showhand":
+                    if(client.getVirtualView().getState() == null || client.getVirtualView().getState() == GameState.WAITING_FOR_PLAYERS){
+                        System.out.println(errorString);
+                        break;
+                    }
                     printPlayerHand();
                     break;
                 case "showobjective":
+                    if(client.getVirtualView().getState() == null || client.getVirtualView().getState() == GameState.WAITING_FOR_PLAYERS){
+                        System.out.println(errorString);
+                        break;
+                    }
+                    if(client.getVirtualView().getDisplayedObjectiveCards() != null && !client.getVirtualView().getDisplayedObjectiveCards().isEmpty()){
+                        System.out.println("COMMON OBJECTIVE CARDS: ");
+                        printObjectiveCards(client.getVirtualView().getDisplayedObjectiveCards().get(0));
+                        printObjectiveCards(client.getVirtualView().getDisplayedObjectiveCards().get(1));
+                    }
+                    System.out.println("YOUR OBJECTIVE CARD(s): ");
                     printObjectiveCards(client.getVirtualView().getHandObjectives().get(0));
                     if(client.getVirtualView().getHandObjectives().size() == 2){
                         printObjectiveCards(client.getVirtualView().getHandObjectives().get(1));
                     }
                     break;
                 case "globalchat":
+                    if(client.getVirtualView().getState() == null){
+                        System.out.println(errorString);
+                        break;
+                    }
                     for (ChatMessage m : client.getVirtualView().getGlobalChat()) {
-                        System.out.println(RED + m.getSender() + ": " + m.getMessage() + RESET);
+                        System.out.println(getColoredNick(m.getSender()) + GRAY + ": " + m.getMessage() + RESET);
                     }
                     break;
                 case "chat":
+                    if(client.getVirtualView().getState() == null){
+                        System.out.println(errorString);
+                        break;
+                    }
                     String playerNick = askForStringInput("Which chat you want to show? Type the nick of the other player: " + printOtherPlayers());
                     if (client.getVirtualView().getPrivateChat(playerNick) != null){
                         for (ChatMessage m: client.getVirtualView().getPrivateChat(playerNick))
-                            System.out.println(RED + m.getSender() + ": " + m.getMessage() + RESET);
+                            System.out.println(getColoredNick(m.getSender()) + GRAY + ": " + m.getMessage() + RESET);
                     } else {
                         System.out.println("There's no such player");
                     }
                     break;
                 case "sendmessage":
+                    if(client.getVirtualView().getState() == null){
+                        System.out.println(errorString);
+                        break;
+                    }
                     String recipient = askForStringInput("Who do you want to send the message to? Type the nick of the other player, global for globalchat: " + printOtherPlayers());
                     String chatMessage = askForStringInput("Type your message: ");
                     client.getVirtualView().sendPrivateMessage(new ChatMessage(client.getNickname(), recipient, chatMessage));
@@ -577,7 +683,7 @@ public class Cli extends View implements Runnable {
         String toReturn = "";
         for (String s : client.getVirtualView().getListOfPlayers()){
             if (!(s.equals(client.getNickname())))
-               toReturn = toReturn.concat(s + " ");
+               toReturn = toReturn.concat(getColoredNick(s) + " ");
         }
         return toReturn;
     }
@@ -946,6 +1052,7 @@ public class Cli extends View implements Runnable {
         for(int i = xmin; i <= xmax; i++){
             System.out.print("\t\t"+i+"\t\t");
         }
+        System.out.println();
 
     }
 
@@ -1185,5 +1292,49 @@ public class Cli extends View implements Runnable {
 
         System.out.print(centerText);
 
+    }
+
+
+    public void printWithNicksColor(String stringToPrompt, String nickname){
+        String colorString = getColor(nickname);
+        String white = getWhite();
+
+        System.out.print(colorString + stringToPrompt + white);
+    }
+
+    public void printWithNicksColorNewLine(String stringToPrompt, String nickname){
+        printWithNicksColor(stringToPrompt + "\n", nickname);
+    }
+
+    public String getColoredNick(String nickname){
+        return getColor(nickname)+ nickname + getWhite();
+    }
+
+    public String getColor(String nickname){
+        String blue = "\u001B[34m";
+        String red = "\u001B[31m";
+        String green = "\u001B[32m";
+        String yellow = "\u001B[33m";
+        String white = "\u001B[0m";
+
+        PlayerColor color = client.getVirtualView().getPlayerColorMap().get(nickname);
+        if(color == null)
+            return white;
+
+        String colorString;
+
+        switch (color){
+            case BLUE -> colorString = blue;
+            case RED -> colorString = red;
+            case GREEN -> colorString = green;
+            case YELLOW -> colorString = yellow;
+            default -> colorString = white;
+        }
+
+        return colorString;
+    }
+
+    public String getWhite(){
+        return "\u001B[0m";
     }
 }
