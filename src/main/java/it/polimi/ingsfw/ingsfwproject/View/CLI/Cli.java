@@ -502,12 +502,12 @@ public class Cli extends View implements Runnable {
                     }
 
                     String colorChoosen = null;
-                    do {
-                        colorChoosen = askForStringInput("What color do you want to choose?").toUpperCase();
-                        if(!colorChoosen.equals("BLUE") && !colorChoosen.equals("YELLOW") && !colorChoosen.equals("RED") && !colorChoosen.equals("GREEN")){
-                            System.out.println("Color invalid, retry!");
-                        }
-                    }while(!colorChoosen.equals("BLUE") && !colorChoosen.equals("YELLOW") && !colorChoosen.equals("RED") && !colorChoosen.equals("GREEN"));
+                    colorChoosen = askForStringInput("What color do you want to choose?").toUpperCase();
+                    if(!colorChoosen.equals("BLUE") && !colorChoosen.equals("YELLOW") && !colorChoosen.equals("RED") && !colorChoosen.equals("GREEN")){
+                        System.out.println("Color invalid! Use the command \"getColorAvailable\" to know which color you can choose" );
+                        printAvailableCommands();
+                        break;
+                    }
                     PlayerColor color = PlayerColor.valueOf(colorChoosen);
                     messageToSend = new WantThatColorMessage(client.getClientID(), client.getNickname(), color);
                     client.sendMessage(messageToSend);
