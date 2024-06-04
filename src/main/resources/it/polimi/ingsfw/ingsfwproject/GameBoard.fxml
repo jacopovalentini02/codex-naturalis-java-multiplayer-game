@@ -14,13 +14,32 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="851.0" prefWidth="1455.0" style="-fx-background-color: #e6ddbc;" stylesheets="@Style.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsfw.ingsfwproject.View.GUI.GameBoardController">
+<AnchorPane prefHeight="855.0" prefWidth="1444.0" style="-fx-background-color: #e6ddbc;" stylesheets="@Style.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsfw.ingsfwproject.View.GUI.GameBoardController">
    <effect>
       <Blend />
    </effect>
    <children>
+      <ImageView fitHeight="695.0" fitWidth="706.0" layoutX="756.0" layoutY="44.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@Images/02.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="123.0" fitWidth="626.0" layoutX="790.0" layoutY="724.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@Images/prova.png" />
+         </image>
+      </ImageView>
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#b9b298" height="172.0" layoutX="376.0" layoutY="409.0" stroke="BLACK" strokeType="INSIDE" width="361.0" />
+      <Label layoutX="485.0" layoutY="416.0" prefHeight="22.0" prefWidth="206.0" text="COMMON  OBJECTIVES">
+         <font>
+            <Font name="Bodoni 72 Bold" size="17.0" />
+         </font>
+      </Label>
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#b9b298" height="156.0" layoutX="33.0" layoutY="668.0" stroke="BLACK" strokeType="INSIDE" width="387.0" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#b9b298" height="271.0" layoutX="376.0" layoutY="102.0" stroke="BLACK" strokeType="INSIDE" width="361.0" />
       <Label fx:id="turn" layoutX="41.0" layoutY="26.0" prefHeight="46.0" prefWidth="484.0" text="turn">
          <font>
             <Font name="Bodoni 72 Smallcaps Book" size="37.0" />
@@ -29,26 +48,62 @@
       <ImageView fx:id="goldDeck" fitHeight="110.0" fitWidth="150.0" layoutX="65.0" layoutY="708.0" onMouseClicked="#drawGold" pickOnBounds="true" preserveRatio="true">
          <effect>
             <DropShadow />
-         </effect></ImageView>
+         </effect>
+         <image>
+            <Image url="@Images/CODEX_cards_gold_back/036.png" />
+         </image></ImageView>
       <ImageView fx:id="resourceDeck" fitHeight="110.0" fitWidth="150.0" layoutX="250.0" layoutY="708.0" onMouseClicked="#drawResource" pickOnBounds="true" preserveRatio="true">
          <effect>
             <DropShadow />
-         </effect></ImageView>
+         </effect>
+         <image>
+            <Image url="@Images/CODEX_cards_gold_back/036.png" />
+         </image></ImageView>
       <ImageView fitHeight="476.0" fitWidth="249.0" layoutX="101.0" layoutY="103.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@Images/plateau.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="resourceDisplayed1" fitHeight="110.0" fitWidth="150.0" layoutX="354.0" layoutY="142.0" onMouseClicked="#pickResource1" pickOnBounds="true" preserveRatio="true" />
-      <ImageView fx:id="resourceDisplayed2" fitHeight="110.0" fitWidth="150.0" layoutX="354.0" layoutY="267.0" onMouseClicked="#pickResource2" pickOnBounds="true" preserveRatio="true" />
-      <ImageView fx:id="goldDisplayed1" fitHeight="110.0" fitWidth="150.0" layoutX="537.0" layoutY="143.0" onMouseClicked="#pickGold1" pickOnBounds="true" preserveRatio="true" />
-      <ImageView fx:id="goldDisplayed2" fitHeight="110.0" fitWidth="150.0" layoutX="537.0" layoutY="266.0" onMouseClicked="#pickGold2" pickOnBounds="true" preserveRatio="true" />
-      <ImageView fx:id="objectiveDisplayed1" fitHeight="110.0" fitWidth="150.0" layoutX="354.0" layoutY="400.0" pickOnBounds="true" preserveRatio="true" />
-      <ImageView fx:id="objectiveDisplayed2" fitHeight="110.0" fitWidth="150.0" layoutX="537.0" layoutY="401.0" pickOnBounds="true" preserveRatio="true" />
-      <ImageView fx:id="personalObjective" fitHeight="115.0" fitWidth="170.0" layoutX="480.0" layoutY="736.0" pickOnBounds="true" preserveRatio="true" />
-      <ImageView fx:id="handCard1" fitHeight="115.0" fitWidth="170.0" layoutX="691.0" layoutY="736.0" onDragDetected="#dragCard1" onMouseClicked="#clickHandCard1" pickOnBounds="true" preserveRatio="true" />
-      <ImageView fx:id="handCard2" fitHeight="115.0" fitWidth="170.0" layoutX="878.0" layoutY="736.0" onDragDetected="#dragCard2" onMouseClicked="#clickHandCard2" pickOnBounds="true" preserveRatio="true" />
-      <ImageView fx:id="handCard3" fitHeight="115.0" fitWidth="170.0" layoutX="1065.0" layoutY="736.0" onDragDetected="#dragCard3" onMouseClicked="#clickHandCard3" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="resourceDisplayed1" fitHeight="110.0" fitWidth="150.0" layoutX="388.0" layoutY="141.0" onMouseClicked="#pickResource1" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@Images/CODEX_cards_gold_back/036.png" />
+         </image></ImageView>
+      <ImageView fx:id="resourceDisplayed2" fitHeight="110.0" fitWidth="150.0" layoutX="388.0" layoutY="257.0" onMouseClicked="#pickResource2" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@Images/CODEX_cards_gold_front/026.png" />
+         </image></ImageView>
+      <ImageView fx:id="goldDisplayed1" fitHeight="110.0" fitWidth="150.0" layoutX="571.0" layoutY="142.0" onMouseClicked="#pickGold1" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@Images/CODEX_cards_gold_front/007.png" />
+         </image></ImageView>
+      <ImageView fx:id="goldDisplayed2" fitHeight="110.0" fitWidth="150.0" layoutX="571.0" layoutY="256.0" onMouseClicked="#pickGold2" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@Images/CODEX_cards_gold_front/012.png" />
+         </image></ImageView>
+      <ImageView fx:id="objectiveDisplayed1" fitHeight="110.0" fitWidth="150.0" layoutX="388.0" layoutY="453.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@Images/CODEX_cards_gold_back/036.png" />
+         </image></ImageView>
+      <ImageView fx:id="objectiveDisplayed2" fitHeight="110.0" fitWidth="150.0" layoutX="571.0" layoutY="454.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@Images/CODEX_cards_gold_back/036.png" />
+         </image></ImageView>
+      <ImageView fx:id="personalObjective" fitHeight="115.0" fitWidth="170.0" layoutX="603.0" layoutY="734.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@Images/CODEX_cards_gold_back/006.png" />
+         </image></ImageView>
+      <ImageView fx:id="handCard1" fitHeight="115.0" fitWidth="162.0" layoutX="825.0" layoutY="733.0" onDragDetected="#dragCard1" onMouseClicked="#clickHandCard1" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@Images/CODEX_cards_gold_back/006.png" />
+         </image></ImageView>
+      <ImageView fx:id="handCard2" fitHeight="115.0" fitWidth="162.0" layoutX="1012.0" layoutY="733.0" onDragDetected="#dragCard2" onMouseClicked="#clickHandCard2" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@Images/CODEX_cards_gold_back/006.png" />
+         </image></ImageView>
+      <ImageView fx:id="handCard3" fitHeight="115.0" fitWidth="162.0" layoutX="1199.0" layoutY="733.0" onDragDetected="#dragCard3" onMouseClicked="#clickHandCard3" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@Images/CODEX_cards_gold_back/006.png" />
+         </image></ImageView>
       <ImageView fx:id="pin1" fitHeight="42.0" fitWidth="41.0" layoutX="142.0" layoutY="520.0" pickOnBounds="true" preserveRatio="true" />
       <ImageView fx:id="pin2" fitHeight="42.0" fitWidth="41.0" layoutX="141.0" layoutY="516.0" pickOnBounds="true" preserveRatio="true" />
       <ImageView fx:id="pin3" fitHeight="42.0" fitWidth="41.0" layoutX="141.0" layoutY="512.0" pickOnBounds="true" preserveRatio="true" />
@@ -57,14 +112,14 @@
       <ImageView fx:id="pin12" fitHeight="42.0" fitWidth="41.0" layoutX="199.0" layoutY="519.0" pickOnBounds="true" preserveRatio="true" />
       <ImageView fx:id="pin13" fitHeight="42.0" fitWidth="41.0" layoutX="199.0" layoutY="515.0" pickOnBounds="true" preserveRatio="true" />
       <ImageView fx:id="pin14" fitHeight="42.0" fitWidth="41.0" layoutX="199.0" layoutY="511.0" pickOnBounds="true" preserveRatio="true" />
-      <Button fx:id="showChat" layoutX="430.0" layoutY="11.0" mnemonicParsing="false" onAction="#toggleChatMenu" prefHeight="29.0" prefWidth="130.0" style="-fx-background-color: #5F3075;" text="Show Chat" textFill="WHITE">
+      <Button fx:id="showChat" layoutX="473.0" layoutY="12.0" mnemonicParsing="false" onAction="#toggleChatMenu" prefHeight="29.0" prefWidth="130.0" style="-fx-background-color: #5F3075;" text="Show Chat" textFill="WHITE">
          <font>
             <Font name="Bodoni 72 Smallcaps Book" size="22.0" />
          </font>
       </Button>
-      <ScrollPane fx:id="scrollpane" layoutX="731.0" layoutY="62.0" prefHeight="657.0" prefWidth="702.0">
+      <ScrollPane fx:id="scrollpane" layoutX="796.0" layoutY="86.0" prefHeight="611.0" prefWidth="615.0">
         <content>
-          <AnchorPane fx:id="pane" minHeight="4048.0" minWidth="4054.0" prefHeight="4048.0" prefWidth="4056.0" />
+          <AnchorPane fx:id="pane" minHeight="4012.0" minWidth="4021.0" prefHeight="4012.0" prefWidth="4021.0" />
         </content>
       </ScrollPane>
       <ImageView fx:id="pin21" fitHeight="42.0" fitWidth="41.0" layoutX="255.0" layoutY="523.0" pickOnBounds="true" preserveRatio="true" />
@@ -241,6 +296,16 @@
             </BorderPane>
          </children>
       </AnchorPane>
+      <Label layoutX="496.0" layoutY="112.0" prefHeight="22.0" prefWidth="150.0" text="PICKABLE CARDS">
+         <font>
+            <Font name="Bodoni 72 Bold" size="17.0" />
+         </font>
+      </Label>
+      <Label layoutX="205.0" layoutY="679.0" prefHeight="22.0" prefWidth="68.0" text="DECKS">
+         <font>
+            <Font name="Bodoni 72 Bold" size="17.0" />
+         </font>
+      </Label>
 
    </children>
 </AnchorPane>
