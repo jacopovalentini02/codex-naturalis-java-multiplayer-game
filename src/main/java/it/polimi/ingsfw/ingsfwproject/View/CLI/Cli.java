@@ -351,6 +351,8 @@ public class Cli extends View implements Runnable {
         if(state.equals(GameState.ENDING)){
             System.out.println("it's your last turn!");
         }
+        if(state.equals(GameState.ENDED))
+            printAvailableCommands();
     }
 
     @Override
@@ -376,7 +378,6 @@ public class Cli extends View implements Runnable {
     @Override
     public void notifyWinnerUpdate(String nick){
         printWithNicksColorNewLine("The winner is " + nick + "! Congrats!", nick);
-        printAvailableCommands();
     }
 
     @Override
@@ -435,14 +436,7 @@ public class Cli extends View implements Runnable {
                 case GameState.CHOOSING_COLORS:
                     System.out.println(chooseColorCommands);
                     break;
-                case GameState.STARTED:
-                    if(!client.getVirtualView().isCurrentPlayerhasPlayed()){ //se non ho ancora giocato
-                        System.out.println(gameCommands);
-                    }else {
-                        System.out.println(drawCommands);
-                    }
-                    break;
-                case GameState.ENDING:
+                case GameState.STARTED, GameState.ENDING:
                     if(!client.getVirtualView().isCurrentPlayerhasPlayed()){ //se non ho ancora giocato
                         System.out.println(gameCommands);
                     }else {
