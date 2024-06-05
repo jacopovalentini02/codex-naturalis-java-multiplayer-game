@@ -85,12 +85,10 @@ public class Cli extends View implements Runnable {
         return coord;
     }
 
-
     private boolean askForFaceToPlay(){
         int iFace = askForIntInput("Which side?\n1)Front\n2)Back", 1, 2);
         return (iFace == 1)? true : false;
     }
-
 
     private int askForIntInput(String stringToPrompt, int lowerBound, int upperBound) {
         int choice = lowerBound;
@@ -144,6 +142,7 @@ public class Cli extends View implements Runnable {
         }while(!idCards.contains(choice));
         return choice;
     }
+
     private int askForIdObjectiveInput(String stringToPrompt, ArrayList<ObjectiveCard> cards){
         int choice = -1;
         Set<Integer> idCards = new HashSet<>();
@@ -179,7 +178,6 @@ public class Cli extends View implements Runnable {
         return scanner.nextLine();
     };
 
-
     @Override
     public void chooseConnection() {
         int choice = askForIntInput("Choose a connection method\n1. Socket\n2. RMI", 1, 2);
@@ -196,6 +194,32 @@ public class Cli extends View implements Runnable {
         }
 
     }
+
+    @Override
+    public void notifyNewPlayerJoined(ArrayList<String> nicknames){}
+
+    @Override
+    public void notifyGoldDeckUpdate(){}
+
+    @Override
+    public void notifyResourceDeckUpdate() {}
+
+    @Override
+    public void notifyDisplayedCardsUpdate(ArrayList<PlayableCard> displayedCards) {}
+
+    @Override
+    public void notifyAvailablePositions(ArrayList<Coordinate> coord) {}
+    @Override
+    public void notifyGridUpdate(String nickname, Map<Coordinate,Face> grid){}
+
+    @Override
+    public void notifyResourcesUpdate(String nickname, HashMap<Content, Integer> resources) {}
+
+    @Override
+    public void notifyHandCardsUpdate(ArrayList<PlayableCard> cards){}
+
+    @Override
+    public void notifyDisplayedObjectives(List<ObjectiveCard> cards){}
 
     @Override
     public void displayFirstMessage(int clientID){
@@ -223,20 +247,6 @@ public class Cli extends View implements Runnable {
         System.out.println("Wait for all the players to join the game...");
     }
 
-    @Override
-    public void notifyNewPlayerJoined(ArrayList<String> nicknames){
-        /*
-        System.out.println("A new player has joined the game.");
-
-        System.out.println("Players in this lobby: ");
-
-        for (String s : nicknames) {
-            System.out.print(s + " ");
-        }
-        System.out.println();
-
-         */
-    }
 
     @Override
     public void notifyStarterCard(){
@@ -257,28 +267,6 @@ public class Cli extends View implements Runnable {
         }
     }
 
-    @Override
-    public void notifyGoldDeckUpdate(){
-        //System.out.println("Gold deck updated!");
-    }
-
-    @Override
-    public void notifyResourceDeckUpdate() {
-        //System.out.println("Resourced deck updated!");
-    }
-
-    @Override
-    public void notifyDisplayedCardsUpdate(ArrayList<PlayableCard> displayedCards) {
-        /*
-        System.out.println("Displayed playable cards updated! Here's how:\n");
-        int i =1;
-        for(PlayableCard pc : displayedCards){
-            System.out.println("Card in place " + i +"of the displayed cards");
-            printFace(pc.getFront());
-            i++;
-        }
-         */
-    }
 
     @Override
     public void notifyCurrentPlayer(String nickname){
@@ -294,19 +282,6 @@ public class Cli extends View implements Runnable {
         printAvailableCommands();
     }
 
-    @Override
-    public void notifyAvailablePositions(ArrayList<Coordinate> coord) {
-        /*
-        if (coord.isEmpty()){
-            System.out.println("You have no more coordinates available!");
-            return;
-        }
-        System.out.println("your available positions have changed: now you can play a card in the following coordinates:");
-        for(Coordinate c : coord)
-            System.out.println(c);
-
-         */
-    }
 
     @Override
     public void notifyHandObjectives(ArrayList<ObjectiveCard> cards){
@@ -326,49 +301,10 @@ public class Cli extends View implements Runnable {
     }
 
     @Override
-    public void notifyGridUpdate(String nickname, Map<Coordinate,Face> grid){
-        /*
-        System.out.println(nickname + "'s grid has been updated. Here's how: ");
-        printGrid(client.getVirtualView().getGrids().get(nickname));
-
-         */
-    }
-
-    @Override
-    public void notifyResourcesUpdate(String nickname, HashMap<Content, Integer> resources) {
-        /*
-        System.out.println(nickname + "'s resource count has been updated to: ");
-        for (Content c : resources.keySet())
-            System.out.println(c + ": " + resources.get(c));
-        System.out.println("\n");
-
-         */
-    }
-
-    @Override
     public void notifyWinnerUpdate(String nick){
         printWithNicksColorNewLine("The winner is " + nick + "! Congrats!", nick);
     }
 
-    @Override
-    public void notifyHandCardsUpdate(ArrayList<PlayableCard> cards){
-        /*
-        System.out.println("Your hand has just been updated. Look at what you have: \n");
-        printPlayerHand();
-
-         */
-    }
-
-    @Override
-    public void notifyDisplayedObjectives(List<ObjectiveCard> cards){
-        /*
-        System.out.println("Displayed objective cards updated. Here they are: ");
-        for (ObjectiveCard o : cards)
-            System.out.print(o.getIdCard() + " ");
-        System.out.println("\n");
-
-         */
-    }
 
     @Override
     public void notifyScores(Map<String, Integer> scores){
@@ -391,6 +327,16 @@ public class Cli extends View implements Runnable {
         }
     }
 
+    @Override
+    public void notifyChatMessage(ChatMessage message){
+        System.out.println(GRAY + "New chat message from " + getColoredNick(message.getSender()) + " : " + message.getMessage() + RESET);
+    }
+
+    @Override
+    public void notifyException(String message) {
+        System.out.println(message);
+    }
+
     public void printAvailableCommands(){
         String startingString = "now you can insert one of the following commands:";
         String separatorString = "\nand";
@@ -404,19 +350,19 @@ public class Cli extends View implements Runnable {
         String showObjectiveCommands = "\n\t-> ShowObjective";
         String chatCommands = "\n\t-> globalChat \n\t-> chat \n\t-> sendMessage";
 
-        //String helpCommand = "\n\t-> ?";
+        String helpCommand = "\n\t-> ? ";
 
-        String notMyTurnCommands = showCommands + separatorString + chatCommands;
+        String notMyTurnCommands = showCommands + separatorString + chatCommands + helpCommand;
 
         GameState currentState = client.getVirtualView().getState();
 
         if(currentState == null) { //not connected yet
-            System.out.println(startingString + lobbyCommands);
+            System.out.println(startingString + lobbyCommands + helpCommand);
             return;
         }
 
         if(currentState.equals(GameState.WAITING_FOR_PLAYERS)){
-            System.out.println(startingString + chatCommands);
+            System.out.println(startingString + chatCommands + helpCommand);
             return;
         }
 
@@ -425,48 +371,43 @@ public class Cli extends View implements Runnable {
         switch(currentState){
             case GameState.CHOOSING_STARTER_CARDS :
                 if(isMyTurn)
-                    System.out.println(startingString + gameCommands + separatorString + notMyTurnCommands);
+                    System.out.println(startingString + gameCommands + separatorString + notMyTurnCommands + helpCommand);
                 else
-                    System.out.println(startingString + notMyTurnCommands);
+                    System.out.println(startingString + notMyTurnCommands + helpCommand);
                 break;
             case GameState.CHOOSING_COLORS :
                 if(isMyTurn)
-                    System.out.println(startingString + chooseColorCommands + separatorString + notMyTurnCommands);
+                    System.out.println(startingString + chooseColorCommands + separatorString + notMyTurnCommands + helpCommand);
                 else
-                    System.out.println(startingString + notMyTurnCommands);
+                    System.out.println(startingString + notMyTurnCommands + helpCommand);
                 break;
             case GameState.CHOOSING_OBJECTIVES :
                 if(isMyTurn)
-                    System.out.println(startingString + showObjectiveCommands + chooseObjectiveCommands+ separatorString + notMyTurnCommands);
+                    System.out.println(startingString + showObjectiveCommands + chooseObjectiveCommands+ separatorString + notMyTurnCommands + helpCommand);
                 else
-                    System.out.println(startingString + showObjectiveCommands + notMyTurnCommands);
+                    System.out.println(startingString + showObjectiveCommands + notMyTurnCommands + helpCommand);
                 break;
             case GameState.STARTED:
                 if(isMyTurn){
                     if(!client.getVirtualView().isCurrentPlayerhasPlayed())
-                        System.out.println(startingString + gameCommands + separatorString + showObjectiveCommands + notMyTurnCommands);
+                        System.out.println(startingString + gameCommands + separatorString + showObjectiveCommands + notMyTurnCommands + helpCommand);
                     else
-                        System.out.println(startingString + drawCommands + separatorString + showObjectiveCommands + notMyTurnCommands);
+                        System.out.println(startingString + drawCommands + separatorString + showObjectiveCommands + notMyTurnCommands + helpCommand);
                 }
                 else
-                    System.out.println(startingString + showObjectiveCommands + notMyTurnCommands);
+                    System.out.println(startingString + showObjectiveCommands + notMyTurnCommands + helpCommand);
                 break;
             case GameState.ENDING:
                 if(isMyTurn)
-                    System.out.println(startingString + gameCommands + separatorString + showObjectiveCommands + notMyTurnCommands);
+                    System.out.println(startingString + gameCommands + separatorString + showObjectiveCommands + notMyTurnCommands + helpCommand);
                 else
-                    System.out.println(startingString + showObjectiveCommands + notMyTurnCommands);
+                    System.out.println(startingString + showObjectiveCommands + notMyTurnCommands + helpCommand);
                 break;
             case GameState.ENDED:
-                System.out.println(startingString + lobbyCommands + separatorString + showObjectiveCommands + notMyTurnCommands);
+                System.out.println(startingString + lobbyCommands + separatorString + showObjectiveCommands + notMyTurnCommands + helpCommand);
+                break;
 
         }
-    }
-
-
-    @Override
-    public void notifyChatMessage(ChatMessage message){
-        System.out.println(GRAY + "New chat message from " + getColoredNick(message.getSender()) + " : " + message.getMessage() + RESET);
     }
 
     public void handleInput(String input) {
@@ -726,6 +667,9 @@ public class Cli extends View implements Runnable {
                     client.getVirtualView().sendPrivateMessage(new ChatMessage(client.getNickname(), recipient, chatMessage));
                     client.sendMessage(new sendChatMessage(client.getClientID(), client.getNickname(), recipient, chatMessage));
                     break;
+                case "?":
+                    printAvailableCommands();
+                    break;
             }
         }catch(Exception e) {
             e.printStackTrace();
@@ -739,11 +683,6 @@ public class Cli extends View implements Runnable {
                toReturn = toReturn.concat(getColoredNick(s) + " ");
         }
         return toReturn;
-    }
-
-    @Override
-    public void notifyException(String message) {
-        System.out.println(message);
     }
 
     // Helper methods for calculating grid boundaries
@@ -786,7 +725,6 @@ public class Cli extends View implements Runnable {
         }
         return max;
     }
-
 
     public void printFrontPoints(Face face, AnsiColor cardType) {
         String frontPoints = "";
@@ -1294,7 +1232,6 @@ public class Cli extends View implements Runnable {
         return returnArray;
     }
 
-
     public void printCorner(Content content, AnsiColor cardType){
 
         String cornerText = cardType.getFormattedCharacter(content,cardType);
@@ -1405,7 +1342,6 @@ public class Cli extends View implements Runnable {
         System.out.print(centerText);
 
     }
-
 
     public void printWithNicksColor(String stringToPrompt, String nickname){
         String colorString = getColor(nickname);
