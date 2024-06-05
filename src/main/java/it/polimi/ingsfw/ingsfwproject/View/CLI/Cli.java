@@ -461,35 +461,6 @@ public class Cli extends View implements Runnable {
                 System.out.println(startingString + lobbyCommands + separatorString + showObjectiveCommands + notMyTurnCommands);
 
         }
-
-
-//        if(!client.getVirtualView().getCurrentPlayer().equals(client.getNickname())){ //non è il mio turno
-//            if(client.getVirtualView().getState() == GameState.STARTED)
-//                System.out.println(notMyTurnCommands);
-//        }else { // è il mio turno
-//            switch (client.getVirtualView().getState()){
-//                case GameState.CHOOSING_STARTER_CARDS:
-//                    System.out.println(chooseStarterCommands);
-//                    break;
-//                case GameState.CHOOSING_OBJECTIVES:
-//                    System.out.println(chooseObjectiveCommands);
-//                    break;
-//                case GameState.CHOOSING_COLORS:
-//                    System.out.println(chooseColorCommands);
-//                    break;
-//                case GameState.STARTED, GameState.ENDING:
-//                    if(!client.getVirtualView().isCurrentPlayerhasPlayed()){ //se non ho ancora giocato
-//                        System.out.println(gameCommands);
-//                    }else {
-//                        System.out.println(drawCommands);
-//                    }
-//                    break;
-//                case GameState.ENDED:
-//                    System.out.println(lobbyCommands);
-//                    break;
-//            }
-//
-//        }
     }
 
 
@@ -579,7 +550,7 @@ public class Cli extends View implements Runnable {
                         break;
                     }
                     if(client.getVirtualView().getGrids().get(client.getNickname()) != null && !client.getVirtualView().getGrids().get(client.getNickname()).isEmpty())
-                        printGrid(client.getVirtualView().getGrids().get(client.getNickname()));
+                        printGrid(client.getVirtualView().getGrids().get(client.getNickname()),false);
 
                     int idCard = askForIdCardInput("Among the cards in your hand, which one do you want to play? Here the cards' id:", client.getVirtualView().getHandCards());
                     boolean face = askForFaceToPlay();
@@ -639,7 +610,7 @@ public class Cli extends View implements Runnable {
                         }
                     } while (!otherPlayersNick.contains(playerAsked));
                     if(client.getVirtualView().getGrids().get(playerAsked) != null)
-                        printGrid(client.getVirtualView().getGrids().get(playerAsked));
+                        printGrid(client.getVirtualView().getGrids().get(playerAsked),true);
                     else
                         System.out.println("The player has not played yet");
                     break;
@@ -652,7 +623,7 @@ public class Cli extends View implements Runnable {
                         System.out.println("your grid is empty");
                         break;
                     }
-                    printGrid(client.getVirtualView().getGrids().get(client.getNickname()));
+                    printGrid(client.getVirtualView().getGrids().get(client.getNickname()),true);
                     break;
                 case "showcounters":
                     if(currentState == null || currentState == GameState.WAITING_FOR_PLAYERS){
@@ -1077,7 +1048,7 @@ public class Cli extends View implements Runnable {
             System.out.println(e.getKey() + ": " + e.getValue());
     }
 
-    public void printGrid(Map<Coordinate, Face> grid){
+    public void printGrid(Map<Coordinate, Face> grid, boolean printCoordinate){
         //todo: stampare il centro delle starter
         int xmin = getMinX(grid.keySet());
         int ymin = getMinY(grid.keySet());
@@ -1088,7 +1059,9 @@ public class Cli extends View implements Runnable {
 
         Object[] returnArray;
 
-        System.out.print("\t");
+        if(printCoordinate)
+            System.out.print("\t");
+
         for(int j = (ymax*2)+1; j >= (ymin*2)-1; j--){
             for(int i = (xmin*2)-1; i <= (xmax*2)+1; i++){
 
@@ -1133,17 +1106,18 @@ public class Cli extends View implements Runnable {
             }
 
             System.out.println();
-
-            if(j%2 != 0 && (j-1)/2 != ymin-1){
-                System.out.print((j-1)/2 + "\t");
+            if(printCoordinate) {
+                if (j % 2 != 0 && (j - 1) / 2 != ymin - 1) {
+                    System.out.print((j - 1) / 2 + "\t");
+                } else
+                    System.out.print("\t");
             }
-            else
-                System.out.print("\t");
-
         }
-        System.out.print("\t");
-        for(int i = xmin; i <= xmax; i++){
-            System.out.print("\t\t"+i+"\t\t");
+        if(printCoordinate){
+            System.out.print("\t");
+            for(int i = xmin; i <= xmax; i++){
+                System.out.print("\t\t"+i+"\t\t");
+            }
         }
         System.out.println();
 
@@ -1153,7 +1127,7 @@ public class Cli extends View implements Runnable {
         HashMap<Coordinate, Face> grid = new HashMap<>();
         grid.put(new Coordinate(0,0), face);
 
-        printGrid(grid);
+        printGrid(grid,false);
     }
 
     public void printListOfCards(ArrayList<PlayableCard> cards, boolean printId, boolean printCost, boolean printFront, boolean printBack){
@@ -1162,7 +1136,6 @@ public class Cli extends View implements Runnable {
 
         //print the id's
         if(printId) {
-            System.out.print("\t");
             for (PlayableCard c : cards) {
                 System.out.print("id card: " + c.getIdCard() + "\t\t\t\t\t\t");
             }
@@ -1171,7 +1144,6 @@ public class Cli extends View implements Runnable {
         //print the needed resources
 
         if(printCost) {
-            System.out.print("\t");
             for (PlayableCard c : cards) {
                 if (c.getFront() instanceof GoldFront) {
                     System.out.print("cost:\t");
@@ -1207,7 +1179,7 @@ public class Cli extends View implements Runnable {
         }
 
 
-        printGrid(grid);
+        printGrid(grid,false);
     }
 
     public void printPlayerHand() {
