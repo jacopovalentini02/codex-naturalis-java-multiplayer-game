@@ -113,11 +113,11 @@ class CliTest {
         Map<Coordinate, Face> grid = new HashMap<>();
         for(int i = 0; i<15; i++) {
             Card card = game.getGoldDeck().getCardList().removeFirst();
-            grid.put(new Coordinate(i, i), ((GoldCard) card).getFront());
+            grid.put(new Coordinate(2*i, 0), ((GoldCard) card).getFront());
             System.out.println(card.getIdCard());
         }
 
-        cli.printGrid(grid);
+        cli.printGrid(grid,true);
     }
 
     @Test
@@ -144,6 +144,6 @@ class CliTest {
             System.out.println(card.getIdCard());
         }
 
-        cli.printGrid(grid);
+        cli.printGrid(grid,false);
     }
 }

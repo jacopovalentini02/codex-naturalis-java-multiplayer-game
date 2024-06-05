@@ -1074,7 +1074,7 @@ public class Cli extends View implements Runnable {
                     if(corner != null)
                         printCorner(corner, cardType);
                     else
-                        System.out.print("    ");
+                        System.out.print("\t");
                 } else if(i%2 == 0 && j%2 == 0){
                     //se i è pari e j è pari, significa che è un centro --> stampo il centro
                     Coordinate coord = new Coordinate(i/2,j/2);
@@ -1082,7 +1082,7 @@ public class Cli extends View implements Runnable {
                     if(grid.containsKey(coord)) {
                         printCenter(coord, grid);
                     }else
-                        System.out.print("            ");
+                        System.out.print("\t\t\t");
                 } else if ( i%2 == 0 && j%2 != 0){
                     //se i è pari e j è dispari, significa che è sopra/sotto il centro --> stampo il sopra/sotto (punti/ objectNeeded/...)
 
@@ -1092,7 +1092,7 @@ public class Cli extends View implements Runnable {
                     if(cardType != null)
                         printCenterVertical(cardType, (boolean)returnArray[1], grid, new Coordinate(i,j));
                     else
-                        System.out.print("            ");
+                        System.out.print("\t\t\t");
                 } else if( i%2 != 0 && j%2 == 0){
                     //se i è dispari e j è pari, significa che è a destra/sinistra del centro --> stampo lati
                     returnArray = searchCenterHorizontalAndCardTypeAtPosition(new Coordinate(i,j), grid);
@@ -1101,7 +1101,7 @@ public class Cli extends View implements Runnable {
                     if(cardType != null)
                         printCenterHorizontal(cardType, (boolean)returnArray[1], grid, new Coordinate(i,j));
                     else
-                        System.out.print("    ");
+                        System.out.print("\t");
                 }
             }
 
@@ -1114,9 +1114,8 @@ public class Cli extends View implements Runnable {
             }
         }
         if(printCoordinate){
-            System.out.print("\t");
             for(int i = xmin; i <= xmax; i++){
-                System.out.print("\t\t"+i+"\t\t");
+                System.out.print("\t\t "+i+"\t\t");
             }
         }
         System.out.println();
