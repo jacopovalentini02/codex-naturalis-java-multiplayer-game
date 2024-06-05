@@ -27,7 +27,7 @@ public class SocketClient extends Client{
         this.socket.connect(new InetSocketAddress(getIp(), getPort()));
 
         if (socket.isConnected()) {
-            System.out.println("Connessione al server riuscita");
+            System.out.println("Successfully connected to server");
             this.readExecutionQueue = Executors.newSingleThreadExecutor();
 
             // Inizializzazione dell'ObjectOutputStream e dell'ObjectInputStream

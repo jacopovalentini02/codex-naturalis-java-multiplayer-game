@@ -168,6 +168,9 @@ public class VirtualView {
     public void setResourcesForPlayer(String nickname, HashMap<Content, Integer> playerResources) {
         resources.put(nickname, playerResources);
     }
+    public HashMap<Content, Integer> getResources(String nickname){
+        return resources.get(nickname);
+    }
 
     public void setWinner(String winner) {
         this.winner = winner;

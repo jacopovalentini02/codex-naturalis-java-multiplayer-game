@@ -17,16 +17,6 @@ public class Cli extends View implements Runnable {
 
     Scanner scanner;
 
-    String notMyTurnCommands = "these are the commands that you can perform at any time: \n\t-> ShowMyGrid \n\t-> ShowGrid \n\t-> showScores \n\t-> showDisplayed " +
-            "\n\t-> showDecksTop \n\t-> showHand \n\t-> showObjective \n\t-> showCounters \n\t-> globalChat \n\t-> chat \n\t-> sendMessage";
-    String lobbyCommands = "now you can insert one of the following commands:\n\t-> CreateGame" + "\n\t-> JoinGame" + "\n\t-> GetGameList";
-    String gameCommands = "now you can do one of the following specific actions: \n\t-> PlayCard \nand " + notMyTurnCommands;
-    String drawCommands = "now you can do one of the following actions: \n\t-> DrawCard \n\t-> PickCard \nand " + notMyTurnCommands;
-    String chooseColorCommands = "now you can do one of the following actions: \n\t-> GetColorAvailable \n\t-> ChooseColor \nand " + notMyTurnCommands;
-    String chooseObjectiveCommands = "now you can do one of the following actions: \n\t-> ShowObjective \n\t-> chooseObjective \nand " + notMyTurnCommands;
-    String chooseStarterCommands = "now you can do one of the following actions: \n\t-> ShowHand \n\t-> PlayCard";
-
-
     public static final String GRAY = "\u001B[37m";
 
     public static final String RESET = "\033[0m";
@@ -137,18 +127,7 @@ public class Cli extends View implements Runnable {
         String errorString = "Error: you have to insert a card id among the displayed cards!\n";
         do{
             try{
-                for(PlayableCard c : cards){
-                    System.out.println(c.getIdCard());
-                    printFace(c.getFront());
-                    if(c.getFront() instanceof GoldFront){
-                        System.out.print("Costs: ");
-                       for( Content cont : ((GoldFront) c.getFront()).getCost()){
-                           System.out.print(cont + " ");
-                       }
-                    }
-                    System.out.println();
-                    printFace(c.getBack());
-                }
+                printListOfCards(cards,true,true,true,true);
                 System.out.println("Insert the id of the card chosen: ");
                 while (!scanner.hasNextInt()) {
                     System.out.println("That's not a number!");
@@ -221,16 +200,21 @@ public class Cli extends View implements Runnable {
     @Override
     public void displayFirstMessage(int clientID){
         System.out.println("the connection was successfully established, your ClientID is: " + clientID);
-        System.out.println(lobbyCommands);
+        printAvailableCommands();
     }
 
     @Override
     public void displayGameList(HashMap<Integer, Integer> gameList){
+        if(gameList.isEmpty()){
+            System.out.println("There are no game available!");
+            printAvailableCommands();
+            return;
+        }
         System.out.println("the currently available games are:");
         System.out.println("ID\tNumberOfPlayers");
         for(Integer gameID : gameList.keySet())
             System.out.println(gameID + "\t" + gameList.get(gameID));
-        System.out.println(lobbyCommands);
+        printAvailableCommands();
     }
 
     @Override
@@ -298,29 +282,15 @@ public class Cli extends View implements Runnable {
 
     @Override
     public void notifyCurrentPlayer(String nickname){
-        //clear cli
         //TODO: QUESTO FUNZIONA SOLO NEL TERMINALE, NON NELL'IDE! A JAR CREATO CONTROLLARE CHE FUNZIONI
-        /*
-        try
-        {
-            final String os = System.getProperty("os.name");
+        String clearcli = "\033[H\033[2J";
+        System.out.println(clearcli);
+        System.out.flush();
 
-            if (os.contains("Windows"))
-            {
-                Runtime.getRuntime().exec("cls");
-            }
-            else
-            {
-                Runtime.getRuntime().exec("clear");
-            }
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-         */
-
-        printWithNicksColorNewLine("it' now " + nickname + "'s turn", nickname);
+        if(!nickname.equals(client.getNickname()))
+            printWithNicksColorNewLine("it' now " + nickname + "'s turn", nickname);
+        else
+            printWithNicksColorNewLine("it' now your turn", nickname);
         printAvailableCommands();
     }
 
@@ -422,33 +392,104 @@ public class Cli extends View implements Runnable {
     }
 
     public void printAvailableCommands(){
-        if(!client.getVirtualView().getCurrentPlayer().equals(client.getNickname())){ //non è il mio turno
-            if(client.getVirtualView().getState() == GameState.STARTED)
-                System.out.println(notMyTurnCommands);
-        }else { // è il mio turno
-            switch (client.getVirtualView().getState()){
-                case GameState.CHOOSING_STARTER_CARDS:
-                    System.out.println(chooseStarterCommands);
-                    break;
-                case GameState.CHOOSING_OBJECTIVES:
-                    System.out.println(chooseObjectiveCommands);
-                    break;
-                case GameState.CHOOSING_COLORS:
-                    System.out.println(chooseColorCommands);
-                    break;
-                case GameState.STARTED, GameState.ENDING:
-                    if(!client.getVirtualView().isCurrentPlayerhasPlayed()){ //se non ho ancora giocato
-                        System.out.println(gameCommands);
-                    }else {
-                        System.out.println(drawCommands);
-                    }
-                    break;
-                case GameState.ENDED:
-                    System.out.println(lobbyCommands);
-                    break;
-            }
+        String startingString = "now you can insert one of the following commands:";
+        String separatorString = "\nand";
+
+        String lobbyCommands = "\n\t-> CreateGame" + "\n\t-> JoinGame" + "\n\t-> GetGameList";
+        String chooseColorCommands = "\n\t-> GetColorAvailable \n\t-> ChooseColor";
+        String chooseObjectiveCommands = "\n\t-> chooseObjective";
+        String gameCommands = "\n\t-> PlayCard";
+        String drawCommands = "\n\t-> DrawCard \n\t-> PickCard";
+        String showCommands = "\n\t-> ShowGrid \n\t-> ShowMyGrid \n\t-> showCounters \n\t-> showDisplayed \n\t-> showDecksTop \n\t-> showHand \n\t-> showScores";
+        String showObjectiveCommands = "\n\t-> ShowObjective";
+        String chatCommands = "\n\t-> globalChat \n\t-> chat \n\t-> sendMessage";
+
+        //String helpCommand = "\n\t-> ?";
+
+        String notMyTurnCommands = showCommands + separatorString + chatCommands;
+
+        GameState currentState = client.getVirtualView().getState();
+
+        if(currentState == null) { //not connected yet
+            System.out.println(startingString + lobbyCommands);
+            return;
+        }
+
+        if(currentState.equals(GameState.WAITING_FOR_PLAYERS)){
+            System.out.println(startingString + chatCommands);
+            return;
+        }
+
+        boolean isMyTurn = client.getVirtualView().getCurrentPlayer().equals(client.getNickname());
+
+        switch(currentState){
+            case GameState.CHOOSING_STARTER_CARDS :
+                if(isMyTurn)
+                    System.out.println(startingString + gameCommands + separatorString + notMyTurnCommands);
+                else
+                    System.out.println(startingString + notMyTurnCommands);
+                break;
+            case GameState.CHOOSING_COLORS :
+                if(isMyTurn)
+                    System.out.println(startingString + chooseColorCommands + separatorString + notMyTurnCommands);
+                else
+                    System.out.println(startingString + notMyTurnCommands);
+                break;
+            case GameState.CHOOSING_OBJECTIVES :
+                if(isMyTurn)
+                    System.out.println(startingString + showObjectiveCommands + chooseObjectiveCommands+ separatorString + notMyTurnCommands);
+                else
+                    System.out.println(startingString + showObjectiveCommands + notMyTurnCommands);
+                break;
+            case GameState.STARTED:
+                if(isMyTurn){
+                    if(!client.getVirtualView().isCurrentPlayerhasPlayed())
+                        System.out.println(startingString + gameCommands + separatorString + showObjectiveCommands + notMyTurnCommands);
+                    else
+                        System.out.println(startingString + drawCommands + separatorString + showObjectiveCommands + notMyTurnCommands);
+                }
+                else
+                    System.out.println(startingString + showObjectiveCommands + notMyTurnCommands);
+                break;
+            case GameState.ENDING:
+                if(isMyTurn)
+                    System.out.println(startingString + gameCommands + separatorString + showObjectiveCommands + notMyTurnCommands);
+                else
+                    System.out.println(startingString + showObjectiveCommands + notMyTurnCommands);
+                break;
+            case GameState.ENDED:
+                System.out.println(startingString + lobbyCommands + separatorString + showObjectiveCommands + notMyTurnCommands);
 
         }
+
+
+//        if(!client.getVirtualView().getCurrentPlayer().equals(client.getNickname())){ //non è il mio turno
+//            if(client.getVirtualView().getState() == GameState.STARTED)
+//                System.out.println(notMyTurnCommands);
+//        }else { // è il mio turno
+//            switch (client.getVirtualView().getState()){
+//                case GameState.CHOOSING_STARTER_CARDS:
+//                    System.out.println(chooseStarterCommands);
+//                    break;
+//                case GameState.CHOOSING_OBJECTIVES:
+//                    System.out.println(chooseObjectiveCommands);
+//                    break;
+//                case GameState.CHOOSING_COLORS:
+//                    System.out.println(chooseColorCommands);
+//                    break;
+//                case GameState.STARTED, GameState.ENDING:
+//                    if(!client.getVirtualView().isCurrentPlayerhasPlayed()){ //se non ho ancora giocato
+//                        System.out.println(gameCommands);
+//                    }else {
+//                        System.out.println(drawCommands);
+//                    }
+//                    break;
+//                case GameState.ENDED:
+//                    System.out.println(lobbyCommands);
+//                    break;
+//            }
+//
+//        }
     }
 
 
@@ -464,10 +505,12 @@ public class Cli extends View implements Runnable {
 
         String errorString = "you can't use this command now";
 
+        GameState currentState = client.getVirtualView().getState();
+
         try {
             switch (input) {
                 case "creategame":
-                    if(client.getVirtualView().getState() != null && client.getVirtualView().getState() != GameState.ENDED){
+                    if(currentState != null && currentState != GameState.ENDED){
                         System.out.println(errorString);
                         break;
                     }
@@ -477,7 +520,7 @@ public class Cli extends View implements Runnable {
                     client.sendMessage(messageToSend);
                     break;
                 case "joingame":
-                    if(client.getVirtualView().getState() != null && client.getVirtualView().getState() != GameState.ENDED){
+                    if(currentState != null && currentState != GameState.ENDED){
                         System.out.println(errorString);
                         break;
                     }
@@ -487,7 +530,7 @@ public class Cli extends View implements Runnable {
                     client.sendMessage(messageToSend);
                     break;
                 case "getgamelist":
-                    if(client.getVirtualView().getState() != null && client.getVirtualView().getState() != GameState.ENDED){
+                    if(currentState != null && currentState != GameState.ENDED){
                         System.out.println(errorString);
                         break;
                     }
@@ -495,7 +538,7 @@ public class Cli extends View implements Runnable {
                     client.sendMessage(messageToSend);
                     break;
                 case "getcoloravailable":
-                    if(client.getVirtualView().getState() == null || client.getVirtualView().getState() != GameState.CHOOSING_COLORS){
+                    if(currentState != GameState.CHOOSING_COLORS){
                         System.out.println(errorString);
                         break;
                     }
@@ -504,7 +547,7 @@ public class Cli extends View implements Runnable {
                     client.sendMessage(messageToSend);
                     break;
                 case "choosecolor":
-                    if(client.getVirtualView().getState() == null || client.getVirtualView().getState() != GameState.CHOOSING_COLORS){
+                    if(currentState != GameState.CHOOSING_COLORS){
                         System.out.println(errorString);
                         break;
                     }
@@ -521,7 +564,7 @@ public class Cli extends View implements Runnable {
                     client.sendMessage(messageToSend);
                     break;
                 case "chooseobjective":
-                    if(client.getVirtualView().getState() == null || client.getVirtualView().getState() != GameState.CHOOSING_OBJECTIVES){
+                    if(currentState != GameState.CHOOSING_OBJECTIVES){
                         System.out.println(errorString);
                         break;
                     }
@@ -531,7 +574,7 @@ public class Cli extends View implements Runnable {
                     client.sendMessage(messageToSend);
                     break;
                 case "playcard":
-                    if(client.getVirtualView().getState() == null || client.getVirtualView().getState() == GameState.WAITING_FOR_PLAYERS || client.getVirtualView().getState() == GameState.ENDED){
+                    if(currentState != GameState.CHOOSING_STARTER_CARDS && currentState != GameState.STARTED && currentState != GameState.ENDING){
                         System.out.println(errorString);
                         break;
                     }
@@ -545,7 +588,7 @@ public class Cli extends View implements Runnable {
                     client.sendMessage(messageToSend);
                     break;
                 case "drawcard":
-                    if(client.getVirtualView().getState() == null || client.getVirtualView().getState() == GameState.WAITING_FOR_PLAYERS || client.getVirtualView().getState() == GameState.ENDED){
+                    if(currentState != GameState.CHOOSING_STARTER_CARDS && currentState != GameState.STARTED){
                         System.out.println(errorString);
                         break;
                     }
@@ -560,7 +603,7 @@ public class Cli extends View implements Runnable {
                     client.sendMessage(messageToSend);
                     break;
                 case "pickcard":
-                    if(client.getVirtualView().getState() == null || client.getVirtualView().getState() == GameState.WAITING_FOR_PLAYERS || client.getVirtualView().getState() == GameState.ENDED){
+                    if(currentState != GameState.CHOOSING_STARTER_CARDS && currentState != GameState.STARTED){
                         System.out.println(errorString);
                         break;
                     }
@@ -569,59 +612,86 @@ public class Cli extends View implements Runnable {
                     client.sendMessage(messageToSend);
                     break;
                 case "showgrid":
-                    if(client.getVirtualView().getState() == null || client.getVirtualView().getState() == GameState.WAITING_FOR_PLAYERS || client.getVirtualView().getScores() == null){
+                    if(currentState == null || currentState == GameState.WAITING_FOR_PLAYERS){
                         System.out.println(errorString);
+                        break;
+                    }
+                    if(client.getVirtualView().getScores() == null){
+                        System.out.println("no one has played a card yet");
                         break;
                     }
                     Set<String> otherPlayersNick = client.getVirtualView().getScores().keySet();
                     otherPlayersNick.remove(client.getNickname());
+                    if(otherPlayersNick.isEmpty()){
+                        System.out.println("no one has played a card yet");
+                        break;
+                    }
                     String playerAsked;
                     System.out.println("Among the fields of the players, which one do you want to look?");
                     for (String p : otherPlayersNick) {
                         printWithNicksColor(p + " ", p);
                     }
+                    System.out.println();
                     do {
                         playerAsked = scanner.nextLine();
                         if(!otherPlayersNick.contains(playerAsked)){
                             System.out.println("The requested player doesn't exist! Retry!");
                         }
                     } while (!otherPlayersNick.contains(playerAsked));
-                    printGrid(client.getVirtualView().getGrids().get(playerAsked));
+                    if(client.getVirtualView().getGrids().get(playerAsked) != null)
+                        printGrid(client.getVirtualView().getGrids().get(playerAsked));
+                    else
+                        System.out.println("The player has not played yet");
                     break;
-
                 case "showmygrid":
-                    if(client.getVirtualView().getState() == null || client.getVirtualView().getState() == GameState.WAITING_FOR_PLAYERS || client.getVirtualView().getGrids().get(client.getNickname()) == null){
+                    if(currentState == null || currentState == GameState.WAITING_FOR_PLAYERS){
                         System.out.println(errorString);
+                        break;
+                    }
+                    if(client.getVirtualView().getGrids().get(client.getNickname()) == null){
+                        System.out.println("your grid is empty");
                         break;
                     }
                     printGrid(client.getVirtualView().getGrids().get(client.getNickname()));
                     break;
-                case "showscores":
-                    if(client.getVirtualView().getState() == null || client.getVirtualView().getState() == GameState.WAITING_FOR_PLAYERS){
+                case "showcounters":
+                    if(currentState == null || currentState == GameState.WAITING_FOR_PLAYERS){
                         System.out.println(errorString);
                         break;
                     }
-                    printScores();
+                    if(client.getVirtualView().getGrids().get(client.getNickname()) == null){
+                        System.out.println("you have no cards in your playerground. All your counters are 0.");
+                        break;
+                    }
+                    for(Content c: client.getVirtualView().getResources(client.getNickname()).keySet()) {
+                        AnsiColor a = AnsiColor.EMPTY_TEXT;
+                        System.out.print(a.getFormattedCharacter(c, a));
+                        System.out.println(" : " + client.getVirtualView().getResources(client.getNickname()).get(c));
+                    }
+                    break;
+                case "showscores":
+                    if(currentState == null || currentState == GameState.WAITING_FOR_PLAYERS){
+                        System.out.println(errorString);
+                        break;
+                    }
+                    if(client.getVirtualView().getScores() != null && !client.getVirtualView().getScores().isEmpty()){
+                        printScores();
+                    }
+                    else{
+                        System.out.println("The game scores are: ");
+                        for (String player : client.getVirtualView().getListOfPlayers())
+                            System.out.println(player + ": " + 0);
+                    }
                     break;
                 case "showdisplayed":
-                    if(client.getVirtualView().getState() == null || client.getVirtualView().getState() == GameState.WAITING_FOR_PLAYERS){
+                    if(currentState == null || currentState == GameState.WAITING_FOR_PLAYERS){
                         System.out.println(errorString);
                         break;
                     }
-                    //todo: cambiare il metodo di stampa delle carte -> stampa lines in grid
-                    for (PlayableCard c : client.getVirtualView().getDisplayedCards()) {
-                        printFace(c.getFront());
-                        if(c.getFront() instanceof GoldFront){
-                            System.out.print("Costs: ");
-                            for( Content cont : ((GoldFront) c.getFront()).getCost()){
-                                System.out.print(cont + " ");
-                            }
-                        }
-                        System.out.println();
-                    }
+                    printListOfCards(client.getVirtualView().getDisplayedCards(), true,true,true,false);
                     break;
                 case "showdeckstop":
-                    if(client.getVirtualView().getState() == null || client.getVirtualView().getState() == GameState.WAITING_FOR_PLAYERS){
+                    if(currentState == null || currentState == GameState.WAITING_FOR_PLAYERS){
                         System.out.println(errorString);
                         break;
                     }
@@ -631,14 +701,14 @@ public class Cli extends View implements Runnable {
                     printFace(((GoldCard) client.getVirtualView().getGoldDeck().getCardList().getFirst()).getBack());
                     break;
                 case "showhand":
-                    if(client.getVirtualView().getState() == null || client.getVirtualView().getState() == GameState.WAITING_FOR_PLAYERS){
+                    if(currentState == null || currentState == GameState.WAITING_FOR_PLAYERS){
                         System.out.println(errorString);
                         break;
                     }
                     printPlayerHand();
                     break;
                 case "showobjective":
-                    if(client.getVirtualView().getState() == null || client.getVirtualView().getState() == GameState.WAITING_FOR_PLAYERS){
+                    if(currentState == null || currentState == GameState.WAITING_FOR_PLAYERS){
                         System.out.println(errorString);
                         break;
                     }
@@ -654,7 +724,7 @@ public class Cli extends View implements Runnable {
                     }
                     break;
                 case "globalchat":
-                    if(client.getVirtualView().getState() == null){
+                    if(currentState == null){
                         System.out.println(errorString);
                         break;
                     }
@@ -663,7 +733,7 @@ public class Cli extends View implements Runnable {
                     }
                     break;
                 case "chat":
-                    if(client.getVirtualView().getState() == null){
+                    if(currentState == null){
                         System.out.println(errorString);
                         break;
                     }
@@ -676,7 +746,7 @@ public class Cli extends View implements Runnable {
                     }
                     break;
                 case "sendmessage":
-                    if(client.getVirtualView().getState() == null){
+                    if(currentState == null){
                         System.out.println(errorString);
                         break;
                     }
@@ -747,21 +817,32 @@ public class Cli extends View implements Runnable {
     }
 
 
-    public void printGoldFrontPoints(GoldFront face, AnsiColor cardType) {
-        String goldFront = "";
+    public void printFrontPoints(Face face, AnsiColor cardType) {
+        String frontPoints = "";
 
-        switch (face.getPoints()) {
-            case 1 -> goldFront += AnsiColor.POINT_ONE.getFormattedCharacter();
-            case 2 -> goldFront += AnsiColor.POINT_TWO.getFormattedCharacter();
-            case 3 -> goldFront += AnsiColor.POINT_THREE.getFormattedCharacter();
-            case 5 -> goldFront += AnsiColor.POINT_FIVE.getFormattedCharacter();
+        int points = 0;
+        if(face instanceof GoldFront)
+            points = ((GoldFront) face).getPoints();
+        else if(face instanceof NormalFace)
+            points = ((NormalFace) face).getPoints();
+
+        switch (points) {
+            case 0 -> frontPoints += cardType.getFormattedCharacter();
+            case 1 -> frontPoints += AnsiColor.POINT_ONE.getFormattedCharacter();
+            case 2 -> frontPoints += AnsiColor.POINT_TWO.getFormattedCharacter();
+            case 3 -> frontPoints += AnsiColor.POINT_THREE.getFormattedCharacter();
+            case 5 -> frontPoints += AnsiColor.POINT_FIVE.getFormattedCharacter();
         }
 
-        System.out.print(goldFront);
+        System.out.print(frontPoints);
 
-        if (face.getObjectNeeded() != null) {
-            printCorner(face.getObjectNeeded(), cardType);
-        }else if (face.isOverlapped()) {
+        if(!(face instanceof GoldFront goldfront)) {
+            System.out.print(cardType.getFormattedCharacter());
+            return;
+        }
+        if (goldfront.getObjectNeeded() != null) {
+            printCorner(goldfront.getObjectNeeded(), cardType);
+        }else if (goldfront.isOverlapped()) {
             System.out.print(AnsiColor.OVERLAPPED.getFormattedCharacter());
         }else {
             System.out.print(cardType.getFormattedCharacter());
@@ -991,7 +1072,7 @@ public class Cli extends View implements Runnable {
     }
 
     public void printScores(){
-        System.out.println("There's been a change in scores. The new ones are: ");
+        System.out.println("The game scores are: ");
         for (Map.Entry<String, Integer> e : client.getVirtualView().getScores().entrySet())
             System.out.println(e.getKey() + ": " + e.getValue());
     }
@@ -1075,22 +1156,68 @@ public class Cli extends View implements Runnable {
         printGrid(grid);
     }
 
-    public void printPlayerHand() {
+    public void printListOfCards(ArrayList<PlayableCard> cards, boolean printId, boolean printCost, boolean printFront, boolean printBack){
 
-        for (PlayableCard c : client.getVirtualView().getHandCards()) {
-            System.out.println("Front of card " + c.getIdCard() + ":");
-            printFace(c.getFront());
-            if (c.getFront() instanceof GoldFront) {
-                System.out.print("Costs: ");
-                for (Content cost : ((GoldFront) c.getFront()).getCost()) {
-                    System.out.print(cost.toString() + " ");
-                }
-                System.out.println();
+        HashMap<Coordinate, Face> grid = new HashMap<>();
+
+        //print the id's
+        if(printId) {
+            System.out.print("\t");
+            for (PlayableCard c : cards) {
+                System.out.print("id card: " + c.getIdCard() + "\t\t\t\t\t\t");
             }
-            System.out.println("Back of card " + c.getIdCard() + ":");
-            printFace(c.getBack());
+            System.out.println();
         }
+        //print the needed resources
+
+        if(printCost) {
+            System.out.print("\t");
+            for (PlayableCard c : cards) {
+                if (c.getFront() instanceof GoldFront) {
+                    System.out.print("cost:\t");
+                    int count = 6;
+                    for (Content content : ((GoldFront) c.getFront()).getCost()) {
+                        AnsiColor ansicolor = AnsiColor.EMPTY_TEXT;
+                        System.out.print(ansicolor.getFormattedCharacter(content, ansicolor));
+                        count--;
+                    }
+                    for(int j = 0; j<count; j++){
+                        System.out.print("\t");
+                    }
+
+                } else {
+                    System.out.print("\t\t\t\t\t\t\t\t");
+                }
+            }
+            System.out.println();
+        }
+
         System.out.println();
+
+        //print the cards
+
+        int i = 0;
+        for (PlayableCard c : cards) {
+            if(printFront)
+                grid.put(new Coordinate(i,0),c.getFront());
+            if(printBack)
+                grid.put(new Coordinate(i,-2),c.getBack());
+
+            i+=2;
+        }
+
+
+        printGrid(grid);
+    }
+
+    public void printPlayerHand() {
+        ArrayList<PlayableCard> cards = client.getVirtualView().getHandCards();
+        if (cards.isEmpty()){
+            System.out.println("you have no cards");
+            return;
+        }
+
+        printListOfCards(cards,true,true,true,true);
     }
 
     public Object[] searchCornerAndCardTypeAtPosition(Coordinate coord, Map<Coordinate,Face> grid){
@@ -1280,9 +1407,11 @@ public class Cli extends View implements Runnable {
         else {
             //il centro è sotto
             Face face = grid.get(new Coordinate(i / 2, (j-1) / 2));
-            if (face instanceof GoldFront) {
+            if (face instanceof NormalFace) { //resource or goldfront
                 centerText += cardType.getFormattedCharacter();
-                printGoldFrontPoints((GoldFront) face, cardType);
+                System.out.print(centerText);
+                printFrontPoints(face, cardType);
+                return;
             } else if (face instanceof StarterFront) {
                 if(((StarterFront) face).getCenter().size() != 1) {
                     centerText += cardType.getFormattedCharacter();
