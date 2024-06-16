@@ -9,6 +9,41 @@ import java.util.Objects;
 import static org.junit.jupiter.api.Assertions.*;
 
 class GameControllerTest {
+    @Test
+    void testChooseObjectiveCard() {
+    }
+
+    @Test
+    void testPlayCard() {
+    }
+
+    @Test
+    void testDrawDisplayedPlayableCard() {
+    }
+
+    @Test
+    void testDraw() {
+    }
+
+    @Test
+    void testChooseColor() {
+    }
+
+    @Test
+    void testAddMessageToGlobalChat() {
+    }
+
+    @Test
+    void testForwardPrivateChatMessage() {
+    }
+
+    @Test
+    void testClientDisconnected() {
+    }
+
+    @Test
+    void testSendTokenAvailable() {
+    }
 /*
     @Test
     public void test() throws TurnException, GamePhaseException, PositionNotAvailableException, NotEnoughResourcesException, CardNotInHandException, DeckEmptyException, ColorNotAvailableException, CardNotPresentException, DeckException {
