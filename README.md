@@ -2,9 +2,11 @@
 # Indice
 - [Codex Naturalis](#CodexNaturalis)
 - [Funzionalità](#Funzionalità)
+- [Client](#Client)
+- [Server](#Server)
 # Implementazione
 ## Codex Naturalis
-//Parlare di cosa consiste il progetto
+Il progetto consiste nell'implementazione software del gioco da tavolo [Codex Naturalis](https://www.craniocreations.it/prodotto/codex-naturalis). Il gioco prevede dalle 2 alle 4 persone, per questi motivi abbiamo sviluppato secondo il pattern MVC un'applicazione distribuita con un server che permette a più client contemporaneamente di giocare la stessa partita. Inoltre, abbiamo deciso di offrire all'utente due modi diversi di interagire con l'applicazione sia dal punto di vista della rete sia dal punto di vista visivo.
 ## Funzionalità
 Attenendoci ai requisiti di progetto abbiamo sviluppato le seguenti funzionalità:
 - **Regole Complete**
