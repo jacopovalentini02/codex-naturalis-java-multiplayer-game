@@ -16,19 +16,19 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="713.0" prefWidth="1283.0" style="-fx-background-color: #e6ddbc;" stylesheets="@Style.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsfw.ingsfwproject.View.GUI.WaitingController">
+<AnchorPane prefHeight="855.0" prefWidth="1444.0" style="-fx-background-color: #e6ddbc;" stylesheets="@Style.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsfw.ingsfwproject.View.GUI.WaitingController">
    <effect>
       <Blend />
    </effect>
-   <ImageView fitHeight="675.0" fitWidth="1052.0" layoutX="-161.0" pickOnBounds="true" preserveRatio="true">
+   <ImageView fitHeight="754.0" fitWidth="1067.0" layoutX="-161.0" pickOnBounds="true" preserveRatio="true">
       <Image url="@Images/logoTagliato.png" />
    </ImageView>
-   <Text fx:id="stateLabel" layoutX="776.0" layoutY="182.0" strokeType="OUTSIDE" strokeWidth="0.0" text="WAITING FOR OTHER PLAYERS..." wrappingWidth="483.81787109375">
+   <Text fx:id="stateLabel" layoutX="861.0" layoutY="188.0" strokeType="OUTSIDE" strokeWidth="0.0" text="WAITING FOR OTHER PLAYERS..." wrappingWidth="483.81787109375">
       <font>
          <Font name="Bodoni 72 Oldstyle Bold" size="30.0" />
       </font>
    </Text>
-   <TextArea fx:id="newPlayerJoined" editable="false" layoutX="776.0" layoutY="212.0" prefHeight="208.0" prefWidth="404.0" style="-fx-background-color: #e6ddbc;" stylesheets="@Style.css">
+   <TextArea fx:id="newPlayerJoined" editable="false" layoutX="901.0" layoutY="220.0" prefHeight="208.0" prefWidth="404.0" style="-fx-background-color: #e6ddbc;" stylesheets="@Style.css">
       <font>
          <Font name="Bodoni 72 Oldstyle Book" size="26.0" />
       </font>
@@ -37,14 +37,14 @@
       <font>
          <Font name="Bodoni 72 Smallcaps Book" size="37.0" />
       </font></Label>
-   <Button fx:id="showChat" layoutX="1084.0" layoutY="31.0" mnemonicParsing="false" onAction="#toggleChatMenu" prefHeight="47.0" prefWidth="153.0" style="-fx-background-color: #5F3075;" text="Show Chat" textFill="WHITE">
+   <Button fx:id="showChat" layoutX="1169.0" layoutY="37.0" mnemonicParsing="false" onAction="#toggleChatMenu" prefHeight="47.0" prefWidth="153.0" style="-fx-background-color: #5F3075;" text="Show Chat" textFill="WHITE">
       <font>
          <Font name="Bodoni 72 Smallcaps Book" size="22.0" />
       </font>
    </Button>
-   <AnchorPane fx:id="chatPane" visible="false" layoutX="-2.0" layoutY="-2.0" prefHeight="717.0" prefWidth="450.0" style="-fx-background-color: none;">
+   <AnchorPane fx:id="chatPane" layoutX="-2.0" layoutY="-2.0" prefHeight="800.0" prefWidth="549.0" style="-fx-background-color: none;" visible="false">
       <children>
-         <BorderPane prefHeight="716.0" prefWidth="469.0" style="-fx-border-color: #5F3075; -fx-border-width: 0 3 3 0; -fx-background-color: white;">
+         <BorderPane prefHeight="800.0" prefWidth="556.0" style="-fx-border-color: #5F3075; -fx-border-width: 0 3 3 0; -fx-background-color: white;">
             <top>
                <Pane prefHeight="54.0" prefWidth="453.0" style="-fx-background-color: #e6ddbc; -fx-border-width: 100px;" BorderPane.alignment="CENTER">
                   <children>
@@ -70,7 +70,7 @@
                   <children>
                      <ComboBox fx:id="chatSelector" layoutX="23.0" layoutY="14.0" prefHeight="26.0" prefWidth="103.0" style="-fx-background-color: #5F3075;" styleClass="text-area" />
                      <TextField fx:id="chatTextField" layoutX="137.0" layoutY="14.0" prefHeight="26.0" prefWidth="243.0" style="-fx-background-color: cfc6a9;" />
-                     <Button fx:id="sendButton" layoutX="388.0" layoutY="14.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="64.0" style="-fx-background-color: #5F3075;" text="Send" textFill="WHITE" onAction="#sendMessage">
+                     <Button fx:id="sendButton" layoutX="388.0" layoutY="14.0" mnemonicParsing="false" onAction="#sendMessage" prefHeight="26.0" prefWidth="64.0" style="-fx-background-color: #5F3075;" text="Send" textFill="WHITE">
                         <font>
                            <Font name="Bodoni 72 Smallcaps Book" size="13.0" />
                         </font>

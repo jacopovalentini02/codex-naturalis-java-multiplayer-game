@@ -64,7 +64,7 @@ public class ChooseObjectiveController extends GUIController implements Initiali
         Scene scene = new Scene(root);
         stage.setTitle("Choosing Objective Card");
         stage.setScene(scene);
-        //stage.setMaximized(true);
+        stage.centerOnScreen();
         stage.show();
     }
 

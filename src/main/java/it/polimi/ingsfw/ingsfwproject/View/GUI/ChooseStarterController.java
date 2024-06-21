@@ -63,7 +63,9 @@ public class ChooseStarterController extends GUIController implements Initializa
 
         stage.setTitle("Choosing Starter Card");
         stage.setScene(scene);
-        //stage.setMaximized(true);
+        stage.centerOnScreen();
+
+
         stage.show();
 
     }

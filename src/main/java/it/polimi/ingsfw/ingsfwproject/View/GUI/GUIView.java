@@ -16,23 +16,15 @@ import java.util.*;
 
 
 public class GUIView extends View {
-
-
     private Stage stage;
-
     private WaitingController waitingController;
     private ChooseObjectiveController chooseObjectiveController;
     private ChooseStarterController chooseStarterController;
     private LobbyGUIController lobbyGUIController;
     private ChooseColorController chooseColorController;
     private GameBoardController gameBoardController;
-
-
-
     private GUIController currentController;
-
     private ObservableList<String> chatOptions;
-
     private Map<String, ObservableList<ChatMessage>> chats;
 
 
@@ -107,10 +99,7 @@ public class GUIView extends View {
     @Override
     public void chooseConnection() {
         ChooseConnectionController.setGuiView(this);
-        // Lanciare ChooseConnectionApp
         new Thread(() -> Application.launch(ChooseConnectionController.class)).start();
-
-
     }
 
     @Override
@@ -148,8 +137,6 @@ public class GUIView extends View {
         Platform.runLater(() -> {
             if (waitingController != null && waitingController.getNewPlayerJoined() != null) {
                 waitingController.setPlayerNickname(client.getNickname());
-            } else {
-                System.err.println("Errore: setUpGame o newPlayerJoined TextArea è null");
             }
         });
     }
@@ -162,8 +149,6 @@ public class GUIView extends View {
                 waitingController.addNickname(lastNickname);
                 for (String s: nicknames)
                     addChat(s);
-            } else {
-                System.err.println("Errore: setUpGame o newPlayerJoined TextArea è null");
             }
         });
 
@@ -265,8 +250,6 @@ public class GUIView extends View {
 
         if(state==GameState.WAITING_FOR_PLAYERS){
             openWaiting();
-
-
         }else if(state==GameState.CHOOSING_STARTER_CARDS){
             gameBoardController=new GameBoardController();
             Platform.runLater(() -> {
@@ -309,16 +292,14 @@ public class GUIView extends View {
         } else if (state==GameState.ENDING) {
             Platform.runLater(() -> {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Messaggio");
+                alert.setTitle("Game Ending");
                 alert.setHeaderText(null);
-                alert.setContentText("Gamestate ending");
+                alert.setContentText("Last turn for each player!");
                 alert.showAndWait();
             });
         }else if(state==GameState.ENDED){
-            System.out.println("game ended");
             Platform.runLater(()->{
                 try {
-                    System.out.println("qua");
                     openLobby();
                 } catch (Exception e) {
                     throw new RuntimeException(e);
@@ -335,7 +316,6 @@ public class GUIView extends View {
         if(gameBoardController.equals(currentController)){
             Platform.runLater(() -> {
                 try {
-
                     gameBoardController. updatePane();
                 } catch (Exception ex) {
                     throw new RuntimeException(ex);

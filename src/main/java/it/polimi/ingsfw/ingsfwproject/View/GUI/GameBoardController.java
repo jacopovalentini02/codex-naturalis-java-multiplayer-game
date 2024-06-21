@@ -212,7 +212,7 @@ public class GameBoardController extends GUIController implements Initializable 
         Scene scene = new Scene(root);
         stage.setTitle("Game");
         stage.setScene(scene);
-        //stage.setMaximized(true);
+        stage.centerOnScreen();
         stage.show();
         offsetX=0;
         offsetY=0;

@@ -298,13 +298,11 @@ public class Game {
 
         if (lastRoundsplayed == listOfPlayers.size() + 1) // if everybody has made its last turn, end the game
             finalScoreCheck();
-
-        int newIndex = (listOfPlayers.indexOf(currentPlayer) + 1) % listOfPlayers.size();
-        this.setCurrentPlayer(listOfPlayers.get(newIndex));
-
-
+        else{
+            int newIndex = (listOfPlayers.indexOf(currentPlayer) + 1) % listOfPlayers.size();
+            this.setCurrentPlayer(listOfPlayers.get(newIndex));
+        }
         //currentPlayerhasPlayed = false;
-
     }
 
     public void updatePoints(int score, Player player){

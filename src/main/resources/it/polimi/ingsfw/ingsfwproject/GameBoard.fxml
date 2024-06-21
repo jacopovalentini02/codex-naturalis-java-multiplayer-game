@@ -17,7 +17,7 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="855.0" prefWidth="1444.0" style="-fx-background-color: #e6ddbc;" stylesheets="@Style.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsfw.ingsfwproject.View.GUI.GameBoardController">
+<AnchorPane prefHeight="855.0" prefWidth="1435.0" style="-fx-background-color: #e6ddbc;" stylesheets="@Style.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsfw.ingsfwproject.View.GUI.GameBoardController">
    <effect>
       <Blend />
    </effect>

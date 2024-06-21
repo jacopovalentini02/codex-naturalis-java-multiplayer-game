@@ -59,7 +59,7 @@ public class WaitingController extends GUIController{
         Scene scene = new Scene(root);
         stage.setTitle("Waiting");
         stage.setScene(scene);
-        //stage.setMaximized(true);
+        stage.centerOnScreen();
         stage.show();
     }
     @FXML

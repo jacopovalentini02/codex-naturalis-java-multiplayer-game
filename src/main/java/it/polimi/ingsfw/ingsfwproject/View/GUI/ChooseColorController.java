@@ -26,6 +26,9 @@ import java.util.ResourceBundle;
 
 import static it.polimi.ingsfw.ingsfwproject.View.View.client;
 
+/**
+ * The controller of the scene where you have to choose the color
+ */
 public class ChooseColorController extends GUIController implements Initializable {
     public static GUIView guiView;
     @FXML public Text stateLabel;
@@ -35,7 +38,6 @@ public class ChooseColorController extends GUIController implements Initializabl
     @FXML public Rectangle greenRectangle;
     @FXML public Rectangle redRectangle;
     @FXML public Rectangle yellowRectangle;
-
     @FXML
     public ComboBox<String> chatSelector;
     @FXML
@@ -44,10 +46,8 @@ public class ChooseColorController extends GUIController implements Initializabl
     public Button sendButton;
     @FXML
     private ListView<ChatMessage> currentChat;
-
     @FXML
     private Button showChat;
-
     @FXML
     private AnchorPane chatPane;
 
@@ -63,25 +63,27 @@ public class ChooseColorController extends GUIController implements Initializabl
 
         stage.setTitle("Choosing Color");
         stage.setScene(scene);
-        //stage.setMaximized(true);
+        stage.centerOnScreen();
         stage.show();
 
     }
 
+    /**
+     * Sets the GUI view instance for the application.
+
+     * @param view the GUI view instance to set
+     */
     public static void setGuiView(GUIView view) {
         guiView = view;
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
         setTurn();
 
         chatSelector.setItems(guiView.getChatOptions());
         chatSelector.getSelectionModel().select("global");
         chatSelector.setOnAction(this::changeChat);
-
-
         currentChat.setCellFactory(param -> new ListCell<ChatMessage>() {
             @Override
             protected void updateItem(ChatMessage item, boolean empty) {
@@ -97,6 +99,10 @@ public class ChooseColorController extends GUIController implements Initializabl
         updateCurrentChat();
     }
 
+    /**
+     * Sets the turn's text based on the current player.
+     *  @throws RuntimeException if an IOException occurs while sending the message to retrieve available colors
+     */
     public void setTurn(){
         if(Objects.equals(client.getNickname(), client.getVirtualView().getCurrentPlayer())){
             turn.setText("It's your turn!");
@@ -110,7 +116,10 @@ public class ChooseColorController extends GUIController implements Initializabl
             turn.setText("It's "+client.getVirtualView().getCurrentPlayer()+"'s turn");
         }
     }
-
+    /**
+     * Set rectangle's visibility to true if the corresponding color is present in colors
+     * @param colors a list of color the player can choose
+     * */
     public void setColors(List<PlayerColor> colors){
         if(colors.contains(PlayerColor.BLUE)){
             blueRectangle.setVisible(true);
