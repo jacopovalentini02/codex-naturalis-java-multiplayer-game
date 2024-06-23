@@ -4,23 +4,25 @@ import it.polimi.ingsfw.ingsfwproject.Controller.GameController;
 import it.polimi.ingsfw.ingsfwproject.Model.*;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServerMessage;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.Message;
-import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.*;
 
 import java.rmi.RemoteException;
 import java.util.*;
 import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.LinkedBlockingDeque;
 
+/**
+ * The GameServerInstance class represents an instance of the game server that manages interactions
+ * with multiple clients (handlers) and processes messages related to the game state.
+ */
 public class GameServerInstance {
     private GameController gameController;
-
-    int sendBroadcast=-10;
-
-    //coda dei messaggi in entrata
     private BlockingDeque<Message> queue;
     private HashMap<Integer, Handler> handlers;
     private HashMap<Player, Integer> players;
 
+    /**
+     * Constructs a GameServerInstance initializing the message queue and starting the message processing thread.
+     */
     public GameServerInstance() {
         this.queue = new LinkedBlockingDeque<>(); // Inizializzazione della coda
         this.handlers = new HashMap<>();
@@ -29,6 +31,9 @@ public class GameServerInstance {
         instanceReaderThread.start();
     }
 
+    /**
+     * Reads messages from the queue and processes them.
+     */
     public void readQueue(){
         try {
             while (true) {
@@ -41,11 +46,21 @@ public class GameServerInstance {
 
     }
 
+    /**
+     * Processes a message received from the queue.
+     *
+     * @param message The Message object to process.
+     */
     private void processMessage(Message message) {
         ClientToServerMessage messToProcess=(ClientToServerMessage) message;
         messToProcess.execute(gameController);
     }
 
+    /**
+     * Adds a message to the queue.
+     *
+     * @param message The Message object to add to the queue.
+     */
     public void addToQueue(Message message){
         try {
             queue.put(message); // Aggiunge il messaggio alla coda
@@ -55,6 +70,11 @@ public class GameServerInstance {
         }
     }
 
+    /**
+     * Sends an update message to all clients.
+     *
+     * @param message The Message object to send to all clients.
+     */
     public void sendUpdateToAll(Message message){
         try {
             for (Handler handler : handlers.values()) {
@@ -65,27 +85,61 @@ public class GameServerInstance {
         }
     }
 
+    /**
+     * Sets the GameController instance for this game server instance.
+     *
+     * @param gc The GameController instance to set.
+     */
     public void setGameController(GameController gc){
         this.gameController = gc;
     }
 
+    /**
+     * Sets the handler for a specific client ID.
+     *
+     * @param clientID The client ID associated with the handler.
+     * @param handler  The Handler instance to set.
+     */
     public void setHandler(int clientID, Handler handler){
         this.handlers.put(clientID, handler);
     }
 
-
+    /**
+     * Retrieves the client ID associated with a given Player.
+     *
+     * @param player The Player object whose client ID is to be retrieved.
+     * @return The client ID associated with the Player.
+     */
     public int getClientID(Player player){
         return players.get(player);
     }
 
+    /**
+     * Retrieves the Player object corresponding to a given nickname.
+     *
+     * @param nickname The nickname of the Player to retrieve.
+     * @return The Player object corresponding to the nickname, or null if not found.
+     */
     public Player getPlayer(String nickname){
         return this.gameController.getPlayer(nickname);
     }
 
+    /**
+     * Adds a Player and its associated client ID to the internal mapping.
+     *
+     * @param player   The Player object to add.
+     * @param clientID The client ID associated with the Player.
+     */
     public void addPlayer(Player player, int clientID){
         this.players.put(player, clientID);
     }
 
+    /**
+     * Retrieves the client ID associated with a Player identified by their nickname.
+     *
+     * @param nickname The nickname of the Player whose client ID is to be retrieved.
+     * @return The client ID associated with the Player, or -1 if not found.
+     */
     public int getClientIDbyNickname(String nickname){
         for (Player p: players.keySet())
             if (nickname.equals(p.getUsername()))
@@ -93,7 +147,4 @@ public class GameServerInstance {
         return -1;
     }
 
-    public BlockingDeque<Message> getQueue() {
-        return queue;
-    }
 }

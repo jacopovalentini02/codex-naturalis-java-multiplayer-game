@@ -29,6 +29,13 @@ public class ChooseConnectionController extends Application  {
 
     private static final double MIN_WIDTH = 449.0;
     private static final double MIN_HEIGHT = 441.0;
+
+    /**
+     * Initializes and displays the primary stage for the connection selection UI.
+     *
+     * @param stage the primary stage for this application
+     * @throws Exception if an error occurs during loading the FXML file or setting the scene
+     */
     @Override
     public void start(Stage stage) throws Exception {
 
@@ -58,10 +65,7 @@ public class ChooseConnectionController extends Application  {
             }
         });
 
-
         stage.show();
-
-
 
     }
 
@@ -144,7 +148,11 @@ public class ChooseConnectionController extends Application  {
         }
     }
 
-
+    /**
+     * Sets the GUI view for the application.
+     *
+     * @param gui the {@link GUIView} instance to be set
+     */
     public static void setGuiView(GUIView gui) {
         guiView = gui;
     }

@@ -30,6 +30,9 @@ import java.util.List;
 
 import static it.polimi.ingsfw.ingsfwproject.View.View.client;
 
+/**
+ * Controller to manage the game GUI.
+ */
 public class GameBoardController extends GUIController implements Initializable {
     @FXML public Label turn;
     @FXML public ImageView goldDeck;
@@ -54,8 +57,7 @@ public class GameBoardController extends GUIController implements Initializable 
     @FXML public ImageView pin41;
 
     public static GUIView guiView;
-    @FXML public GridPane playerGround;
-    @FXML public Button showGrid;
+
     @FXML public AnchorPane pane;
     @FXML
     public ScrollPane scrollpane;
@@ -175,17 +177,10 @@ public class GameBoardController extends GUIController implements Initializable 
     public Button showGrid3;
     public Button showGrid2;
     public Button showMyGrid;
-
     private boolean dragging;
-
-    public Coordinate lastCoord;
-    private int offsetX;
-    private int offsetY;
     private boolean[] faceShowed;
-
     private Map<PlayerColor, String> colorImageMap;
     private HashMap<Rectangle, Coordinate> rectangleCoordinateHashMap;
-
     @FXML
     public ComboBox<String> chatSelector;
     @FXML
@@ -201,6 +196,12 @@ public class GameBoardController extends GUIController implements Initializable 
     @FXML
     private AnchorPane chatPane;
 
+    /**
+     * Initializes the JavaFX application, loads the GameBoard.fxml file, and sets up the main stage.
+     *
+     * @param stage The primary stage of the JavaFX application.
+     * @throws Exception If there is an error during initialization or loading of resources.
+     */
     @Override
     public void start(Stage stage) throws Exception {
         setGuiView(guiView);
@@ -214,14 +215,26 @@ public class GameBoardController extends GUIController implements Initializable 
         stage.setScene(scene);
         stage.centerOnScreen();
         stage.show();
-        offsetX=0;
-        offsetY=0;
 
     }
+
+    /**
+     * Sets the GUI view for the application.
+     *
+     * @param view the {@link GUIView} instance to be set
+     */
     public static void setGuiView(GUIView view) {
         guiView = view;
     }
 
+    /**
+     * Initializes the controller after its root element has been completely processed.
+     * This method is called once all FXML elements have been processed and are ready to use.
+     * It sets initial values, initializes GUI components, and sets up event handlers.
+     *
+     * @param url           The location used to resolve relative paths for the root object, or null if the location is not known.
+     * @param resourceBundle The resources used to localize the root object, or null if the resource is not found.
+     */
     public void initialize(URL url, ResourceBundle resourceBundle) {
         faceShowed = new boolean[]{true, true, true}; //
         setTurn();
@@ -265,6 +278,10 @@ public class GameBoardController extends GUIController implements Initializable 
         updateCurrentChat();
     }
 
+    /**
+     * Initializes the buttons for displaying player grids in the GUI.
+     * Sets up button styles and text based on player colors and nicknames.
+     */
     public void initializeButtons(){
         Button[] gridsButtons = {showMyGrid, showGrid2, showGrid3, showGrid4};
         Map<String, PlayerColor> playerColorMap = client.getVirtualView().getPlayerColorMap();
@@ -290,6 +307,13 @@ public class GameBoardController extends GUIController implements Initializable 
         }
     }
 
+    /**
+     * Determines the color code for styling buttons based on the given player color.
+     * Returns a hexadecimal color code corresponding to the specified player color.
+     *
+     * @param playerColor The color of the player for whom the button style is determined.
+     * @return A string representing the hexadecimal color code for the button style.
+     */
     public String colorButtons(PlayerColor playerColor){
         if(playerColor.equals(PlayerColor.BLUE))
             return "#4290f5";
@@ -302,6 +326,10 @@ public class GameBoardController extends GUIController implements Initializable 
 
     }
 
+    /**
+     * Sets turn's text based on the current player.
+     *  @throws RuntimeException if an IOException occurs while sending the message to retrieve available colors
+     */
     public void setTurn(){
         if(Objects.equals(client.getNickname(), client.getVirtualView().getCurrentPlayer())){
             turn.setText("It's your turn!");
@@ -310,6 +338,11 @@ public class GameBoardController extends GUIController implements Initializable 
         }
     }
 
+    /**
+     * Updates the display of the player's hand cards on the GUI.
+     * Retrieves the current hand cards from the virtual view and updates the corresponding
+     * ImageView components with the front images of the cards.
+     */
     public void updateHand(){
         List<ImageView> cardViews = List.of(handCard1, handCard2, handCard3);
 
@@ -326,21 +359,36 @@ public class GameBoardController extends GUIController implements Initializable 
             cardViews.get(2).setVisible(false);
     }
 
+    /**
+     * Sets the image of the personal objective card based on the first card in the player's hand objectives.
+     * Retrieves the ID of the card, formats it, and sets the corresponding front image to the ImageView component.
+     */
     public void setPersonalObjective(){
         String id = String.format("%03d", client.getVirtualView().getHandObjectives().getFirst().getIdCard());
         personalObjective.setImage(getImageFront(id));
     }
 
+    /**
+     * Updates the image of the gold deck card based on the first card in the gold deck.
+     * Retrieves the ID of the card, formats it, and sets the corresponding back image to the ImageView component.
+     */
     public void updateGoldDeck(){
         String id = String.format("%03d", client.getVirtualView().getGoldDeck().getCardList().getFirst().getIdCard());
         goldDeck.setImage(getImageBack(id));
     }
 
+    /**
+     * Updates the image of the resource deck card based on the first card in the resource deck.
+     * Retrieves the ID of the card, formats it, and sets the corresponding back image to the ImageView component.
+     */
     public void updateResourceDeck(){
         String id = String.format("%03d", client.getVirtualView().getResourceDeck().getCardList().getFirst().getIdCard());
         resourceDeck.setImage(getImageBack(id));
     }
 
+    /**
+     * Updates the displayed resource and gold cards on the board.
+     */
     public void updateDisplayedCard(){
         ArrayList<PlayableCard> displayedCards=client.getVirtualView().getDisplayedCards();
         List<ImageView> cardViews = List.of(resourceDisplayed1, resourceDisplayed2, goldDisplayed1, goldDisplayed2);
@@ -352,6 +400,9 @@ public class GameBoardController extends GUIController implements Initializable 
         }
     }
 
+    /**
+     * Sets the displayed objective cards images.
+     */
     public void setObjectiveDisplayed(){
         List<ObjectiveCard> objectiveCards=client.getVirtualView().getDisplayedObjectiveCards();
         List<ImageView> cardViews = List.of(objectiveDisplayed1,objectiveDisplayed2);
@@ -362,16 +413,33 @@ public class GameBoardController extends GUIController implements Initializable 
         }
     }
 
+    /**
+     * Retrieves the image of the back side of a card with the specified ID.
+     *
+     * @param id The ID of the card for which the back image is requested.
+     * @return The Image object representing the back side of the card.
+     * @throws NullPointerException If the specified resource for the card back image is null.
+     */
     public Image getImageBack(String id){
         return new Image(Objects.requireNonNull(getClass().getResourceAsStream(
                 "/it/polimi/ingsfw/ingsfwproject/Images/CODEX_cards_gold_back/" + id + ".png")));
     }
 
+    /**
+     * Retrieves the image of the front side of a card with the specified ID.
+     *
+     * @param id The ID of the card for which the front image is requested.
+     * @return The Image object representing the front side of the card.
+     * @throws NullPointerException If the specified resource for the card front image is null.
+     */
     public Image getImageFront(String id){
         return new Image(Objects.requireNonNull(getClass().getResourceAsStream(
                 "/it/polimi/ingsfw/ingsfwproject/Images/CODEX_cards_gold_front/" + id + ".png")));
     }
 
+    /**
+     * Initializes the score display by associating player colors with corresponding pin images.
+     */
     public void initializeScore(){
         ImageView[] pinGroups = {pin1, pin2, pin3, pin4};
         Map<String, PlayerColor> playerColorMap = client.getVirtualView().getPlayerColorMap();
@@ -390,6 +458,9 @@ public class GameBoardController extends GUIController implements Initializable 
         }
     }
 
+    /**
+     * Sets token images based on player scores, using predefined pinGroups and colorImageMap.
+     */
     public void setTokenImage(){
         ImageView[][] pinGroups = {
                 {pin1, pin2, pin3, pin4},
@@ -438,175 +509,194 @@ public class GameBoardController extends GUIController implements Initializable 
             PlayerColor playerColor = playerColorMap.get(playerName);
             int score=entry.getValue();
 
-            String imagePath = colorImageMap.get(playerColor);
-            if (imagePath != null) {
-                Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream(imagePath)));
-                for (ImageView pin : pinGroups[score]) {
-                    if (pin.getImage() == null) {
-                        pin.setImage(image);
-                        break;
+            if(score<=29){
+                String imagePath = colorImageMap.get(playerColor);
+                if (imagePath != null) {
+                    Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream(imagePath)));
+                    for (ImageView pin : pinGroups[score]) {
+                        if (pin.getImage() == null) {
+                            pin.setImage(image);
+                            break;
+                        }
                     }
                 }
             }
-
-
-
         }
     }
 
 
     //Gestione input
+    /**
+     * Handles the drag event when a card image is detected with a primary mouse button press.
+     *
+     * @param event The MouseEvent representing the drag event.
+     */
     @FXML
-    private void dragCard1(MouseEvent event){
+    private void dragCardDetected(MouseEvent event) {
         if (event.getButton() == MouseButton.PRIMARY) {
-            dragging = true;
-            Dragboard db = handCard1.startDragAndDrop(TransferMode.MOVE);
+            ImageView cardImage = (ImageView) event.getSource();
+            int cardIndex = Integer.parseInt(cardImage.getId().substring(cardImage.getId().length() - 1)) - 1; // Extract the index from the ID
+            PlayableCard card = client.getVirtualView().getHandCards().get(cardIndex);
+
+            Dragboard db = cardImage.startDragAndDrop(TransferMode.MOVE);
             ClipboardContent content = new ClipboardContent();
-            int cardID = client.getVirtualView().getHandCards().getFirst().getIdCard();
-            String data = cardID + ";" + faceShowed[0];
+            int cardID = card.getIdCard();
+            String data = cardID + ";" + faceShowed[cardIndex];
             content.putString(data);
             db.setContent(content);
             SnapshotParameters parameters = new SnapshotParameters();
             parameters.setTransform(new Scale(0.7, 0.7));
-            WritableImage snapshot = handCard1.snapshot(parameters, null);
+            WritableImage snapshot = cardImage.snapshot(parameters, null);
             db.setDragView(snapshot);
-            System.out.println("Drag rilevato");
-            handCard1.setOnDragDone(e -> dragging = false);
             event.consume();
         }
+
     }
+//    @FXML
+//    private void dragCard1(MouseEvent event){
+//        if (event.getButton() == MouseButton.PRIMARY) {
+//            dragging = true;
+//            Dragboard db = handCard1.startDragAndDrop(TransferMode.MOVE);
+//            ClipboardContent content = new ClipboardContent();
+//            int cardID = client.getVirtualView().getHandCards().getFirst().getIdCard();
+//            String data = cardID + ";" + faceShowed[0];
+//            content.putString(data);
+//            db.setContent(content);
+//            SnapshotParameters parameters = new SnapshotParameters();
+//            parameters.setTransform(new Scale(0.7, 0.7));
+//            WritableImage snapshot = handCard1.snapshot(parameters, null);
+//            db.setDragView(snapshot);
+//            handCard1.setOnDragDone(e -> dragging = false);
+//            event.consume();
+//        }
+//    }
+//
+//
+//    @FXML
+//    private void dragCard2(MouseEvent event){
+//        if (event.getButton() == MouseButton.PRIMARY) {
+//            dragging = true;
+//            Dragboard db = handCard2.startDragAndDrop(TransferMode.MOVE);
+//            ClipboardContent content = new ClipboardContent();
+//            int cardID = client.getVirtualView().getHandCards().get(1).getIdCard();
+//            String data = cardID + ";" + faceShowed[1];
+//            content.putString(data);
+//            db.setContent(content);
+//            SnapshotParameters parameters = new SnapshotParameters();
+//            parameters.setTransform(new Scale(0.7, 0.7));
+//            WritableImage snapshot = handCard2.snapshot(parameters, null);
+//            db.setDragView(snapshot);
+//            handCard2.setOnDragDone(e->dragging = false);
+//            event.consume();
+//        }
+//    }
+//
+//    @FXML
+//    private void dragCard3(MouseEvent event){
+//        if (event.getButton() == MouseButton.PRIMARY) {
+//            dragging = true;
+//            Dragboard db = handCard3.startDragAndDrop(TransferMode.MOVE);
+//            ClipboardContent content = new ClipboardContent();
+//            int cardID = client.getVirtualView().getHandCards().getLast().getIdCard();
+//            String data = cardID + ";" + faceShowed[2];
+//            content.putString(data);
+//            db.setContent(content);
+//            SnapshotParameters parameters = new SnapshotParameters();
+//            parameters.setTransform(new Scale(0.7, 0.7));
+//            WritableImage snapshot = handCard3.snapshot(parameters, null);
+//            db.setDragView(snapshot);
+//            handCard3.setOnDragDone(e->dragging = false);
+//            event.consume();
+//        }
+//    }
 
-
+    /**
+     * Show the other face of the card
+     *
+     * @param event The MouseEvent representing the click event.
+     */
     @FXML
-    private void dragCard2(MouseEvent event){
-        if (event.getButton() == MouseButton.PRIMARY) {
-            dragging = true;
-            Dragboard db = handCard2.startDragAndDrop(TransferMode.MOVE);
-            ClipboardContent content = new ClipboardContent();
-            int cardID = client.getVirtualView().getHandCards().get(1).getIdCard();
-            String data = cardID + ";" + faceShowed[1];
-            content.putString(data);
-            db.setContent(content);
-            SnapshotParameters parameters = new SnapshotParameters();
-            parameters.setTransform(new Scale(0.7, 0.7));
-            WritableImage snapshot = handCard2.snapshot(parameters, null);
-            db.setDragView(snapshot);
-            System.out.println("Drag rilevato");
-            handCard2.setOnDragDone(e->dragging = false);
-            event.consume();
-        }
-    }
+    private void handleHandCardClick(MouseEvent event) {
+        ImageView clickedImageView = (ImageView) event.getSource();
+        int cardIndex = Integer.parseInt(clickedImageView.getUserData().toString());
 
-    @FXML
-    private void dragCard3(MouseEvent event){
-        if (event.getButton() == MouseButton.PRIMARY) {
-            dragging = true;
-            Dragboard db = handCard3.startDragAndDrop(TransferMode.MOVE);
-            ClipboardContent content = new ClipboardContent();
-            int cardID = client.getVirtualView().getHandCards().getLast().getIdCard();
-            String data = cardID + ";" + faceShowed[2];
-            content.putString(data);
-            db.setContent(content);
-            SnapshotParameters parameters = new SnapshotParameters();
-            parameters.setTransform(new Scale(0.7, 0.7));
-            WritableImage snapshot = handCard3.snapshot(parameters, null);
-            db.setDragView(snapshot);
-            System.out.println("Drag rilevato");
-            handCard3.setOnDragDone(e->dragging = false);
-            event.consume();
-        }
-    }
+        if (event.getButton() == MouseButton.SECONDARY && !dragging) {
+            PlayableCard card = client.getVirtualView().getHandCards().get(cardIndex);
+            String id = String.format("%03d", card.getIdCard());
 
-    @FXML
-    private void clickHandCard1(MouseEvent event) {
-        if (event.getButton() == MouseButton.SECONDARY && !dragging){
-            String id = String.format("%03d",client.getVirtualView().getHandCards().getFirst().getIdCard());
-            if(faceShowed[0]){ //change to back image
-                handCard1.setImage(getImageBack(id));
-                faceShowed[0]=false;
-            }else{
-                handCard1.setImage(getImageFront(id));
-                faceShowed[0]=true;
+            if (faceShowed[cardIndex]) {
+                clickedImageView.setImage(getImageBack(id));
+                faceShowed[cardIndex] = false;
+            } else {
+                clickedImageView.setImage(getImageFront(id));
+                faceShowed[cardIndex] = true;
             }
         }
     }
+
+    /**
+     * Handles the event of picking a card from the displayed cards by clicking on its ImageView.
+     * Constructs and sends a PickMessage to the server with information about the picked card.
+     *
+     * @param event The MouseEvent representing the click event on the ImageView.
+     * @throws IOException If there is an error sending the PickMessage.
+     */
     @FXML
-    private void clickHandCard2(MouseEvent event){
-        if (event.getButton() == MouseButton.SECONDARY && !dragging){
-            String id = String.format("%03d",client.getVirtualView().getHandCards().get(1).getIdCard());
-            if(faceShowed[1]){ //change to back image
-                handCard2.setImage(getImageBack(id));
-                faceShowed[1]=false;
-            }else{
-                handCard2.setImage(getImageFront(id));
-                faceShowed[1]=true;
-            }
+    public void pickCard(MouseEvent event) throws IOException {
+        ImageView clickedImage = (ImageView) event.getSource();
+        int index = Integer.parseInt(clickedImage.getUserData().toString());
+
+        if (index >= 0 && index < client.getVirtualView().getDisplayedCards().size()) {
+            int cardID = client.getVirtualView().getDisplayedCards().get(index).getIdCard();
+            PickMessage pickMessage=new PickMessage(client.getClientID(), cardID, client.getNickname());
+            client.sendMessage(pickMessage);
         }
     }
 
-    @FXML
-    private void clickHandCard3(MouseEvent event){
-       if (event.getButton() == MouseButton.SECONDARY && !dragging){
-            String id = String.format("%03d",client.getVirtualView().getHandCards().getLast().getIdCard());
-            if(faceShowed[2]){ //change to back image
-                handCard3.setImage(getImageBack(id));
-                faceShowed[2]=false;
-            }else{
-                handCard3.setImage(getImageFront(id));
-                faceShowed[2]=true;
-            }
-        }
-    }
-
-    @FXML
-    public void pickResource1(MouseEvent mouseEvent)throws IOException {
-        int cardID=client.getVirtualView().getDisplayedCards().getFirst().getIdCard();
-        cardToPick(cardID);
-    }
-
-    @FXML
-    public void pickResource2(MouseEvent mouseEvent)throws IOException {
-        int cardID=client.getVirtualView().getDisplayedCards().get(1).getIdCard();
-        cardToPick(cardID);
-    }
-    @FXML
-    public void pickGold1(MouseEvent mouseEvent)throws IOException {
-        int cardID=client.getVirtualView().getDisplayedCards().get(2).getIdCard();
-        cardToPick(cardID);
-    }
-    @FXML
-    public void pickGold2(MouseEvent mouseEvent)throws IOException {
-        int cardID=client.getVirtualView().getDisplayedCards().getLast().getIdCard();
-        cardToPick(cardID);
-    }
-
-
-    public void cardToPick(int cardID) throws IOException {
-        PickMessage pickMessage=new PickMessage(client.getClientID(), cardID, client.getNickname());
-        client.sendMessage(pickMessage);
-    }
-
+    /**
+     * Handles the event of drawing a resource card by calling the drawCard method with the deckWanted parameter set to true.
+     *
+     * @param mouseEvent The MouseEvent representing the mouse click event triggering the draw action.
+     * @throws IOException If there is an error sending the DrawMessage.
+     */
     @FXML
     public void drawResource(MouseEvent mouseEvent) throws IOException {
         drawCard(true);
     }
+
+    /**
+     * Handles the event of drawing a gold card by calling the drawCard method with the deckWanted parameter set to false.
+     *
+     * @param mouseEvent The MouseEvent representing the mouse click event triggering the draw action.
+     * @throws IOException If there is an error sending the DrawMessage.
+     */
     @FXML
     public void drawGold(MouseEvent mouseEvent) throws IOException {
         drawCard(false);
     }
 
+    /**
+     * Constructs and sends a DrawMessage to the server based on the specified deckWanted parameter.
+     *
+     * @param deckWanted A boolean indicating whether the resource deck (true) or gold deck (false) is to be drawn from.
+     * @throws IOException If there is an error sending the DrawMessage.
+     */
     public void drawCard(Boolean deckWanted) throws IOException {
         DrawMessage messageToSend = new DrawMessage(client.getClientID(), client.getNickname(), deckWanted);
         client.sendMessage(messageToSend);
     }
 
+    /**
+     * Updates the game board with rectangles representing available positions for card placement.
+     * Rectangles are centered on the pane and styled. Handles drag-and-drop events for card placement.
+     * Clears and updates rectangleCoordinateHashMap with current coordinates.
+     *
+     */
     public void updatePane(){
         double centerX=pane.getPrefWidth()/2;
         double centerY=pane.getPrefHeight()/2;
 
         showGrid(client.getNickname());
-        System.out.println("settati");
-
         rectangleCoordinateHashMap.clear();
 
         for (Coordinate c: client.getVirtualView().getAvailablePositions()){
@@ -631,7 +721,6 @@ public class GameBoardController extends GUIController implements Initializable 
                 String[] values = db.getString().split(";");
                 int cardID = Integer.parseInt(values[0]);
                 boolean isFront = Boolean.parseBoolean(values[1]);
-                System.out.println("Id carta: " + cardID + "boolean: " + isFront);
                 Coordinate coordinateToPlay = rectangleCoordinateHashMap.get(rectangle);
                 PlayCardMessage pm = new PlayCardMessage(client.getClientID(), cardID, isFront, coordinateToPlay, client.getNickname());
                 try {
@@ -644,22 +733,38 @@ public class GameBoardController extends GUIController implements Initializable 
         }
     }
 
+    /**
+     * Displays the grid for the second player.
+     */
     @FXML
     public void secondPlayerGrid(){
         showGrid(showGrid2.getText());
     }
 
+    /**
+     * Displays the grid for the third player.
+     */
     @FXML
     public void thirdPlayerGrid(){
         showGrid(showGrid3.getText());
     }
+
+    /**
+     * Displays the grid for the fourth player.
+     */
     @FXML
     public void fourthPlayerGrid(){
         showGrid(showGrid4.getText());
     }
 
 
-
+    /**
+     * Displays the grid for a specified player.
+     * The grid consists of images representing cards placed at specific coordinates.
+     * Adjusts the scroll pane to focus on the last card placed.
+     *
+     * @param nickname The nickname of the player whose grid is to be displayed.
+     */
     public void showGrid(String nickname){
         double centerX=pane.getPrefWidth()/2;
         double centerY=pane.getPrefHeight()/2;
@@ -731,11 +836,19 @@ public class GameBoardController extends GUIController implements Initializable 
     }
 
 
+    /**
+     * Updates the current chat display when triggered by an action event.
+     *
+     * @param event the ActionEvent triggered by the user's interaction
+     */
     @FXML
     private void changeChat(ActionEvent event){
         updateCurrentChat();
     }
 
+    /**
+     * Updates the current chat display based on the selected chat from the chat selector.
+     */
     private void updateCurrentChat() {
         String selectedChat = chatSelector.getSelectionModel().getSelectedItem();
         if (selectedChat != null && guiView.getChats().containsKey(selectedChat)) {
@@ -743,6 +856,11 @@ public class GameBoardController extends GUIController implements Initializable 
         }
     }
 
+    /**
+     * Adds a message to the appropriate chat and updates the current chat display if necessary.
+     *
+     * @param message the {@link ChatMessage} to be added to the chat
+     */
     public void addMessageToChat(ChatMessage message){
         String sender = message.getSender();
         String key;
@@ -761,6 +879,12 @@ public class GameBoardController extends GUIController implements Initializable 
         }
     }
 
+    /**
+     * Sends a chat message based on the user's input and updates the chat.
+     *
+     * @param event the {@link ActionEvent} triggered by the user action
+     * @throws IOException if an I/O error occurs while sending the message
+     */
     @FXML
     public void sendMessage(ActionEvent event) throws IOException {
         String messageText = chatTextField.getText();
@@ -776,6 +900,11 @@ public class GameBoardController extends GUIController implements Initializable 
         }
     }
 
+    /**
+     * Toggles the visibility of the chat pane and updates the button text accordingly.
+     *
+     * @param actionEvent the {@link ActionEvent} triggered by the user action
+     */
     @FXML
     public void toggleChatMenu(ActionEvent actionEvent) {
         if (chatPane.isVisible()){

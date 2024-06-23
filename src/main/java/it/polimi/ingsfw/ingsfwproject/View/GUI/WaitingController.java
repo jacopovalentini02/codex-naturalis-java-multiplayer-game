@@ -2,8 +2,6 @@ package it.polimi.ingsfw.ingsfwproject.View.GUI;
 
 import it.polimi.ingsfw.ingsfwproject.Model.ChatMessage;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServer.sendChatMessage;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -13,14 +11,14 @@ import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+
 
 import static it.polimi.ingsfw.ingsfwproject.View.View.client;
 
+/**
+ * The controller of the scene where players wait for the game to start
+ */
 public class WaitingController extends GUIController{
 
     @FXML
@@ -48,7 +46,12 @@ public class WaitingController extends GUIController{
 
     public static GUIView guiView;
 
-
+    /**
+     * Initializes and displays the "Waiting" screen.
+     *
+     * @param stage the primary stage for this application
+     * @throws Exception if an error occurs during initialization or scene setting
+     */
     public void start(Stage stage) throws Exception {
         setGuiView(guiView);
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polimi/ingsfw/ingsfwproject/Waiting.fxml"));
@@ -62,12 +65,12 @@ public class WaitingController extends GUIController{
         stage.centerOnScreen();
         stage.show();
     }
+
     @FXML
     private void initialize(){
         chatSelector.setItems(guiView.getChatOptions());
         chatSelector.getSelectionModel().select("global");
         chatSelector.setOnAction(this::changeChat);
-
 
         currentChat.setCellFactory(param -> new ListCell<ChatMessage>() {
             @Override
@@ -84,27 +87,55 @@ public class WaitingController extends GUIController{
         updateCurrentChat();
     }
 
+    /**
+     * Sets the GUI view for the application.
+     *
+     * @param view the {@link GUIView} instance to be set
+     */
     public static void setGuiView(GUIView view) {
         guiView = view;
     }
 
+    /**
+     * Returns the TextArea used for displaying new player join messages.
+     *
+     * @return the TextArea for new player join messages
+     */
     public TextArea getNewPlayerJoined() {
         return newPlayerJoined;
     }
 
+    /**
+     * Appends a new player's nickname to the TextArea for displaying join messages.
+     *
+     * @param nickname the nickname of the player who joined the game
+     */
     public void addNickname(String nickname){
         newPlayerJoined.appendText(nickname + " has joined the game\n");
     }
 
+    /**
+     * Sets the player's nickname in a text field.
+     *
+     * @param playerNickname the nickname of the player to display
+     */
     public void setPlayerNickname(String playerNickname) {
         this.playerNickname.setText("Welcome "+playerNickname+"!");
     }
 
+    /**
+     * Updates the current chat display when triggered by an action event.
+     *
+     * @param event the ActionEvent triggered by the user's interaction
+     */
     @FXML
     private void changeChat(ActionEvent event){
         updateCurrentChat();
     }
 
+    /**
+     * Updates the current chat display based on the selected chat from the chat selector.
+     */
     private void updateCurrentChat() {
         String selectedChat = chatSelector.getSelectionModel().getSelectedItem();
         if (selectedChat != null && guiView.getChats().containsKey(selectedChat)) {
@@ -112,6 +143,11 @@ public class WaitingController extends GUIController{
         }
     }
 
+    /**
+     * Adds a message to the appropriate chat and updates the current chat display if necessary.
+     *
+     * @param message the {@link ChatMessage} to be added to the chat
+     */
     public void addMessageToChat(ChatMessage message){
         String sender = message.getSender();
         String key;
@@ -130,6 +166,12 @@ public class WaitingController extends GUIController{
         }
     }
 
+    /**
+     * Sends a chat message based on the user's input and updates the chat.
+     *
+     * @param event the {@link ActionEvent} triggered by the user action
+     * @throws IOException if an I/O error occurs while sending the message
+     */
     @FXML
     public void sendMessage(ActionEvent event) throws IOException {
         String messageText = chatTextField.getText();
@@ -145,6 +187,11 @@ public class WaitingController extends GUIController{
         }
     }
 
+    /**
+     * Toggles the visibility of the chat pane and updates the button text accordingly.
+     *
+     * @param actionEvent the {@link ActionEvent} triggered by the user action
+     */
     @FXML
     public void toggleChatMenu(ActionEvent actionEvent) {
         if (chatPane.isVisible()){

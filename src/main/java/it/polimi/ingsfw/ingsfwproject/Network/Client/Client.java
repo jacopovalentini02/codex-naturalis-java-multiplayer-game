@@ -1,13 +1,11 @@
 package it.polimi.ingsfw.ingsfwproject.Network.Client;
 
-import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.*;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.Message;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClientMessage;
 import it.polimi.ingsfw.ingsfwproject.View.VirtualView;
 import it.polimi.ingsfw.ingsfwproject.View.View;
 
 import java.io.IOException;
-import java.io.Serializable;
 
 public abstract class Client {
     private String ip; //Server IP address
