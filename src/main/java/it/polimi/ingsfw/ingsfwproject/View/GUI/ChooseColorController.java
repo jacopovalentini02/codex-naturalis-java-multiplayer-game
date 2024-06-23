@@ -6,6 +6,7 @@ import it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServer.GetColorAv
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServer.WantThatColorMessage;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServer.sendChatMessage;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.ColorAvailableMessage;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -65,7 +66,10 @@ public class ChooseColorController extends GUIController implements Initializabl
         stage.setScene(scene);
         //stage.setMaximized(true);
         stage.show();
-
+        stage.setOnCloseRequest((event->{
+            Platform.exit();
+            System.exit(0);
+        }));
     }
 
     public static void setGuiView(GUIView view) {

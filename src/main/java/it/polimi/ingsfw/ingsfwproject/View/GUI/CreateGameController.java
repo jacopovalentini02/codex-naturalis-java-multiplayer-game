@@ -1,6 +1,7 @@
 package it.polimi.ingsfw.ingsfwproject.View.GUI;
 
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServer.CreateGameMessage;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -35,6 +36,10 @@ public class CreateGameController extends GUIController{
         stage.setScene(scene);
         //stage.setMaximized(true);
         stage.show();
+        stage.setOnCloseRequest((event->{
+            Platform.exit();
+            System.exit(0);
+        }));
     }
     @FXML
     private void sendCreateGame() throws IOException {

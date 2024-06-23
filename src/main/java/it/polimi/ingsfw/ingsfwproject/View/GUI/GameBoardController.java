@@ -5,6 +5,7 @@ import it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServer.DrawMessag
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServer.PickMessage;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServer.PlayCardMessage;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServer.sendChatMessage;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -216,7 +217,10 @@ public class GameBoardController extends GUIController implements Initializable 
         stage.show();
         offsetX=0;
         offsetY=0;
-
+        stage.setOnCloseRequest((event->{
+            Platform.exit();
+            System.exit(0);
+        }));
     }
     public static void setGuiView(GUIView view) {
         guiView = view;

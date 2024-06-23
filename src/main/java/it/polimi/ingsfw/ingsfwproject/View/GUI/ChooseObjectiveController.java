@@ -7,6 +7,7 @@ import it.polimi.ingsfw.ingsfwproject.Model.PlayableCard;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServer.ObjectiveCardChosenMessage;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServer.PlayCardMessage;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServer.sendChatMessage;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -66,6 +67,10 @@ public class ChooseObjectiveController extends GUIController implements Initiali
         stage.setScene(scene);
         //stage.setMaximized(true);
         stage.show();
+        stage.setOnCloseRequest((event->{
+            Platform.exit();
+            System.exit(0);
+        }));
     }
 
     public static void setGuiView(GUIView view) {

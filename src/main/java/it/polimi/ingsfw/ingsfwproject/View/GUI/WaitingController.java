@@ -2,6 +2,7 @@ package it.polimi.ingsfw.ingsfwproject.View.GUI;
 
 import it.polimi.ingsfw.ingsfwproject.Model.ChatMessage;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServer.sendChatMessage;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -60,6 +61,10 @@ public class WaitingController extends GUIController{
         stage.setTitle("Waiting");
         stage.setScene(scene);
         //stage.setMaximized(true);
+        stage.setOnCloseRequest((event->{
+            Platform.exit();
+            System.exit(0);
+        }));
         stage.show();
     }
     @FXML

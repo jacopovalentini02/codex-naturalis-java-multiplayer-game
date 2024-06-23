@@ -29,7 +29,8 @@ abstract public class AbstractHandler extends UnicastRemoteObject implements Han
         if(messFromClient.isForServer())
             server.addToQueue(message);
         else
-            gameServerInstance.addToQueue(message);
+            if (gameServerInstance != null) //TODO: forse inutile, rimuovere
+                gameServerInstance.addToQueue(message);
     }
 
     public void setGameServerInstance(GameServerInstance instance){

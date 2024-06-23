@@ -3,6 +3,7 @@ package it.polimi.ingsfw.ingsfwproject.View.GUI;
 import it.polimi.ingsfw.ingsfwproject.Network.Client.RMIClient;
 import it.polimi.ingsfw.ingsfwproject.Network.Client.SocketClient;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -51,12 +52,11 @@ public class ChooseConnectionController extends Application  {
                 stage.setMinHeight(MIN_HEIGHT);
             }
         });
-
-
         stage.show();
-
-
-
+        stage.setOnCloseRequest((event->{
+            Platform.exit();
+            System.exit(0);
+        }));
     }
 
     @FXML

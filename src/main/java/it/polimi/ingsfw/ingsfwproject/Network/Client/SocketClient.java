@@ -1,6 +1,8 @@
 package it.polimi.ingsfw.ingsfwproject.Network.Client;
 
+import it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServer.HeartBeatMessage;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.Message;
+import it.polimi.ingsfw.ingsfwproject.Network.Messages.MessageType;
 import it.polimi.ingsfw.ingsfwproject.View.View;
 
 import java.io.IOException;
@@ -35,7 +37,6 @@ public class SocketClient extends Client{
             this.input = new ObjectInputStream(socket.getInputStream());
 
             this.setConnected(true);
-
             this.receiveMessage();
 
         } else {

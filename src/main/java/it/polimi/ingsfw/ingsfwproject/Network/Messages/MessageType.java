@@ -14,6 +14,7 @@ public enum MessageType {
     CHOSEN_OBJECTIVE_CARD,
 
     CHAT,
+    HEARTBEAT,
 
 
     //Exception

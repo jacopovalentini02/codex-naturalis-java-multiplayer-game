@@ -9,6 +9,7 @@ import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.*;
 import java.rmi.RemoteException;
 import java.util.*;
 import java.util.concurrent.BlockingDeque;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingDeque;
 
 public class GameServerInstance {
@@ -21,11 +22,17 @@ public class GameServerInstance {
     private HashMap<Integer, Handler> handlers;
     private HashMap<Player, Integer> players;
 
+    private ConcurrentHashMap<Integer, Long> heartbeats;
+
+    private boolean inGame = true;
+
     public GameServerInstance() {
         this.queue = new LinkedBlockingDeque<>(); // Inizializzazione della coda
         this.handlers = new HashMap<>();
         this.players = new HashMap<>();
+        this.heartbeats = new ConcurrentHashMap<>();
         Thread instanceReaderThread = new Thread(this::readQueue);
+        startDisconnectionCheckThread();
         instanceReaderThread.start();
     }
 
@@ -46,9 +53,42 @@ public class GameServerInstance {
         messToProcess.execute(gameController);
     }
 
+    public void heartbeat(int clientID){
+        long currentDate = System.currentTimeMillis();
+        heartbeats.put(clientID, currentDate);
+    }
+
+    private void startDisconnectionCheckThread(){
+
+        Thread disconnectionCheck = new Thread(()-> {
+            while (inGame) {
+                for (Integer clientID : heartbeats.keySet()) {
+                    try {
+                        long timeSinceLastHeartBeat = System.currentTimeMillis() - heartbeats.get(clientID);
+                        if (timeSinceLastHeartBeat > 1000) {
+                            clientDisconnected(clientID);
+                        }
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        break;
+                    }
+                }
+            }});
+        disconnectionCheck.start();
+    }
+
+    public void clientDisconnected(int clientID){
+        inGame = false;
+        handlers.remove(clientID);
+        ExcpetionMessage excpetionMessage = new ExcpetionMessage(-10, "A client has disconnected. Game ended.");
+        sendUpdateToAll(excpetionMessage);
+        gameController.getModel().setState(GameState.ENDED);
+        gameController.getModel().endGame();
+    }
+
     public void addToQueue(Message message){
         try {
-            queue.put(message); // Aggiunge il messaggio alla coda
+            queue.put(message);// Aggiunge il messaggio alla coda
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt(); // Gestione dell'interruzione
             System.err.println("Errore durante l'aggiunta del messaggio alla coda: " + e.getMessage());
@@ -84,6 +124,7 @@ public class GameServerInstance {
 
     public void addPlayer(Player player, int clientID){
         this.players.put(player, clientID);
+        this.heartbeats.put(clientID, System.currentTimeMillis());
     }
 
     public int getClientIDbyNickname(String nickname){

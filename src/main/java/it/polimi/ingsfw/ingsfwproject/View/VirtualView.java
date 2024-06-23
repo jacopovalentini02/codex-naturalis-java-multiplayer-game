@@ -1,6 +1,7 @@
 package it.polimi.ingsfw.ingsfwproject.View;
 
 import it.polimi.ingsfw.ingsfwproject.Model.*;
+import it.polimi.ingsfw.ingsfwproject.Network.Client.InGameListener;
 
 import java.util.*;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -35,6 +36,8 @@ public class VirtualView {
 
     private HashMap<String, Queue<ChatMessage>> privateChats;
 
+    private InGameListener listener;
+
     public VirtualView() {
         this.listOfPlayers = new ArrayList<String>();
         this.grids = new LinkedHashMap<>();
@@ -43,6 +46,10 @@ public class VirtualView {
         this.globalChat = new LinkedBlockingQueue<>();
         this.playerColorMap=new HashMap<>();
         this.privateChats = new HashMap<>();
+    }
+
+    public void setInGameListener(InGameListener listener){
+        this.listener = listener;
     }
 
     public ArrayList<PlayableCard> getHandCards() {
@@ -102,6 +109,12 @@ public class VirtualView {
 
     public void setState(GameState state) {
         this.state = state;
+        if (listener != null) {
+            if (state.equals(GameState.WAITING_FOR_PLAYERS) || state.equals(GameState.CHOOSING_STARTER_CARDS))
+                listener.onGameStatusChanged(true);
+            if (state.equals(GameState.ENDED))
+                listener.onGameStatusChanged(false);
+        }
     }
 
     public int getGameID() {
