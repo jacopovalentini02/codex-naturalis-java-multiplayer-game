@@ -2,6 +2,11 @@ package it.polimi.ingsfw.ingsfwproject.Model;
 
 import java.io.Serializable;
 
+/**
+ * This class represents a counter to keep track of a player's number of resources and objects.
+ * It implements {@link java.io.Serializable} to allow the coordinate objects to be serialized.
+ */
+
 public class ContentCounter implements Serializable {
     /*
     countersArray[0] = FUNGI_KINGDOM
@@ -15,6 +20,9 @@ public class ContentCounter implements Serializable {
 
     private int[] countersArray;
 
+    /**
+     * Constructs a Content Counter
+     */
     public ContentCounter() {
         countersArray = new int[7];
     }
@@ -36,14 +44,27 @@ public class ContentCounter implements Serializable {
             countersArray[6] = newValue;
     }
 
+    /**
+     * Decrements the count of the object or the resource passed as a parameter
+     * @param content the resource or object that needs to be decreased
+     */
     public void decrementCounter(Content content) {
         this.setCounter(content, getCounter(content)-1);
     }
 
+    /**
+     * Increments the count of the object or the resource passed as a parameter
+     * @param content the resource or object that needs to be increased
+     */
     public void incrementCounter(Content content) {
         this.setCounter(content, getCounter(content)+1);
     }
 
+    /**
+     * Returns the count of the object or the resource passed as a parameter
+     * @param content the resource or object for which you want to know the count
+     * @return the count of the resource or object passed as a parameter
+     */
     public int getCounter(Content content) {
         if (content == Content.FUNGI_KINGDOM)
             return countersArray[0];
@@ -62,6 +83,10 @@ public class ContentCounter implements Serializable {
         return 0;
     }
 
+    /**
+     * Returns a copy of the counter
+     * @return a copy of the counter
+     */
     public ContentCounter getCopy(){
         ContentCounter copy = new ContentCounter();
         for(Content c : Content.values()){
@@ -69,16 +94,4 @@ public class ContentCounter implements Serializable {
         }
         return copy;
     }
-
-//    public String toString() {
-//        String s = "";
-//        for(Content c : Content.values()){
-//            s += c.toString() + " count: " + getCounter(c) + "\n";
-//        }
-//        return s;
-//    }
-
-
-
-
 }

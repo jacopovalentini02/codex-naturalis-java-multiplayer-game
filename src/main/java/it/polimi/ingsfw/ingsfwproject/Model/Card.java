@@ -2,17 +2,37 @@ package it.polimi.ingsfw.ingsfwproject.Model;
 
 import java.io.Serializable;
 
+/**
+ * The abstract {@code Card} class represents a card of the game.
+ * Each card has an integer ID.
+ * It implements {@link java.io.Serializable} to allow the coordinate objects to be serialized.
+ */
+
 abstract public class Card implements Serializable {
     private int idCard;
 
+    /**
+     * Constructs a new {@code Card} with the specified value.
+     * @param idCard the ID of the card.
+     */
+    public Card(int idCard) {
+        this.idCard = idCard;
+    }
+
+    /**
+     * Returns this card's ID.
+     * @return an integer with this card's ID.
+     */
     public int getIdCard() {
         return idCard;
     }
 
-    public void setIdCard(int idCard) {
-        this.idCard = idCard;
-    }
-
+    /**
+     * This static method returns the {@code Content} representing this card's type.
+     * Returns null if the card has no type (i.e. {@code StarterCard} or {@code ObjectiveCard}).
+     * @param id the id of the card whose type you want to have
+     * @return
+     */
     public static Content getType(int id){
         if(id<=10 || (id>=41 && id<=50))
             return Content.FUNGI_KINGDOM;
@@ -24,9 +44,5 @@ abstract public class Card implements Serializable {
             return Content.INSECT_KINGDOM;
         else
             return Content.EMPTY;
-    }
-
-    public Card(int idCard) {
-        this.idCard = idCard;
     }
 }

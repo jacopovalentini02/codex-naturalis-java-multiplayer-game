@@ -1,45 +1,38 @@
 package it.polimi.ingsfw.ingsfwproject.Model;
 
-import java.util.Arrays;
-
+/**
+ * The {@code ResourceCard} class represents a resource card of the game.
+ * It extends {@code NormalCard} and it adds a specific {@code NormalFace} front face.
+ */
 public class ResourceCard extends NormalCard{
     private NormalFace front;
 
-    public NormalFace getFront() {
-        return front;
-    }
-
-    @Override
-    public Face getBack() {
-        return this.getBackface();
-    }
-
+    /**
+     * Constructs a new {@code ResourceCard} instance with the specified values.
+     * @param front the {@code NormalFace} front face of this card
+     * @param backface the {@code NormalBack} back face of this card
+     * @param id the ID of this card
+     */
     public ResourceCard(NormalFace front, NormalBack backface, int id) {
         super(id, backface);
         this.front = front;
     }
 
-    public void setFront(NormalFace front) {
-        this.front = front;
+    /**
+     * Returns the front face of this card.
+     * @return The {@code NormalFace} object representing the front face of this card.
+     */
+    public NormalFace getFront() {
+        return front;
     }
 
-//   public void createCard(int id, Content center, int points, Content[] corners){
-//       this.front = new NormalFace(id);
-//       NormalBack normalBack = new NormalBack(id);
-//       this.setBackface(normalBack);
-//       this.front.setCornerList(corners);
-//       this.front.setPoints(points);
-//       this.setIdCard(id);
-//       this.front.setIdCard(id);
-//       normalBack.setIdCard(id);
-//       normalBack.setCenter(center);
-//       Content[] emptyCorners = {Content.valueOf("EMPTY"),Content.valueOf("EMPTY"),Content.valueOf("EMPTY"),Content.valueOf("EMPTY")};
-//       normalBack.setCornerList(emptyCorners);
-//       boolean[] coveredCorn = new boolean[4];
-//       normalBack.setCoveredCorner(coveredCorn);
-//
-//
-//
-//    }
+    /**
+     * Returns the back face of this card.
+     * @return The {@code Face} object representing the back face of this card.
+     */
+    @Override
+    public Face getBack() {
+        return this.getBackface();
+    }
 
 }
