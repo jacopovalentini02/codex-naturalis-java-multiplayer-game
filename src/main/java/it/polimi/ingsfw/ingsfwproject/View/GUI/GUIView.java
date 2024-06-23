@@ -14,28 +14,24 @@ import javafx.stage.Stage;
 
 import java.util.*;
 
-
+/**
+ * GUI representation of the client-side view.
+ */
 public class GUIView extends View {
-
-
     private Stage stage;
-
     private WaitingController waitingController;
     private ChooseObjectiveController chooseObjectiveController;
     private ChooseStarterController chooseStarterController;
     private LobbyGUIController lobbyGUIController;
     private ChooseColorController chooseColorController;
     private GameBoardController gameBoardController;
-
-
-
     private GUIController currentController;
-
     private ObservableList<String> chatOptions;
-
     private Map<String, ObservableList<ChatMessage>> chats;
 
-
+    /**
+     * Initializes GUIView with default chat options and a global chat.
+     */
     public GUIView(){
         chooseConnection();
         chatOptions = FXCollections.observableArrayList();
@@ -45,17 +41,27 @@ public class GUIView extends View {
 
     }
 
+    /**
+     * Retrieves the list of available chat options.
+     * @return ObservableList of chat options.
+     */
     public ObservableList<String> getChatOptions(){
         return this.chatOptions;
     }
 
+    /**
+     * Retrieves the map of chat messages
+     * @return Map of chat messages.
+     */
     public Map<String, ObservableList<ChatMessage>> getChats(){
         return this.chats;
     }
 
+    /**
+     * Opens the lobby GUI.
+     */
     public void openLobby() {
         Platform.runLater(() -> {
-            System.out.println("open lobby");
             try {
                 lobbyGUIController =new LobbyGUIController();
                 currentController=lobbyGUIController;
@@ -68,6 +74,9 @@ public class GUIView extends View {
         });
     }
 
+    /**
+     * Opens the window for creating a new game.
+     */
     public void openCreateGameWindow(){
         Platform.runLater(() -> {
             try {
@@ -80,6 +89,9 @@ public class GUIView extends View {
         });
     }
 
+    /**
+     * Opens the waiting screen.
+     */
     public void openWaiting(){
         waitingController =new WaitingController();
 
@@ -93,26 +105,35 @@ public class GUIView extends View {
         });
     }
 
+    /**
+     * Displays a connection error alert.
+     */
     public void showConnectionError() {
         Platform.runLater(() -> {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Connection Error");
             alert.setHeaderText(null);
-            alert.setContentText("Connection could not be established. Please retry. Server may be down.");
+            alert.setContentText("Connection could not be established. Please retry.");
             alert.showAndWait();
         });
 
     }
 
+    /**
+     * Initiates the connection process by setting up the GUI view for connection and launching the ChooseConnectionController.
+     * This method starts a new thread to handle the application launch for the connection controller.
+     */
     @Override
     public void chooseConnection() {
         ChooseConnectionController.setGuiView(this);
-        // Lanciare ChooseConnectionApp
         new Thread(() -> Application.launch(ChooseConnectionController.class)).start();
-
-
     }
 
+    /**
+     * Notifies the user of a game-related exception by displaying an error alert.
+     *
+     * @param message The error message to display in the alert.
+     */
     @Override
     public void notifyException(String message) {
         Platform.runLater(() -> {
@@ -124,6 +145,11 @@ public class GUIView extends View {
         });
     }
 
+    /**
+     * Displays the first message upon successful connection, showing an information alert.
+     *
+     * @param clientID The ID of the client for which the connection was established.
+     */
     @Override
     public void displayFirstMessage(int clientID) {
         Platform.runLater(() -> {
@@ -135,6 +161,11 @@ public class GUIView extends View {
         });
     }
 
+    /**
+     * Displays the list of games in the lobby GUI controller.
+     *
+     * @param gameList A HashMap containing the list of game IDs and their respective player counts.
+     */
     @Override
     public void displayGameList(HashMap<Integer, Integer> gameList) {
         Platform.runLater(() -> {
@@ -142,18 +173,28 @@ public class GUIView extends View {
         });
     }
 
+    /**
+     * Notifies the GUI that the client has joined a game.
+     * Opens the waiting screen and sets the player nickname in the waiting controller if available.
+     *
+     * @param idGame The ID of the game that the client has joined.
+     */
     @Override
     public void notifyGameJoined(int idGame) {
         openWaiting();
         Platform.runLater(() -> {
             if (waitingController != null && waitingController.getNewPlayerJoined() != null) {
                 waitingController.setPlayerNickname(client.getNickname());
-            } else {
-                System.err.println("Errore: setUpGame o newPlayerJoined TextArea è null");
             }
         });
     }
 
+    /**
+     * Notifies the GUI that new players have joined the game.
+     * Updates the waiting screen with the newly joined players' nicknames and adds them to the chat list.
+     *
+     * @param nicknames The list of nicknames of the new players who have joined.
+     */
     @Override
     public void notifyNewPlayerJoined(ArrayList<String> nicknames) {
         Platform.runLater(() -> {
@@ -162,14 +203,17 @@ public class GUIView extends View {
                 waitingController.addNickname(lastNickname);
                 for (String s: nicknames)
                     addChat(s);
-            } else {
-                System.err.println("Errore: setUpGame o newPlayerJoined TextArea è null");
             }
         });
 
 
     }
 
+    /**
+     * Adds a new chat tab for the specified nickname if it doesn't already exist.
+     *
+     * @param nickname The nickname of the player to add a new chat tab for.
+     */
     public void addChat(String nickname){
         if (!Objects.equals(nickname, client.getNickname()) && !(chats.containsKey(nickname))){
             chatOptions.add(nickname);
@@ -177,6 +221,9 @@ public class GUIView extends View {
         }
     }
 
+    /**
+     * Notifies the GUI that the starter card has been chosen.
+     */
     @Override
     public void notifyStarterCard() {
         Platform.runLater(() -> {
@@ -184,6 +231,11 @@ public class GUIView extends View {
         });
     }
 
+    /**
+     * Notifies the GUI that the available player colors have been updated.
+     *
+     * @param colors The list of available player colors.
+     */
     @Override
     public void notifyColorsAvailable(List<PlayerColor> colors) {
         Platform.runLater(() -> {
@@ -191,6 +243,9 @@ public class GUIView extends View {
         });
     }
 
+    /**
+     * Notifies the GUI that the gold deck has been updated.
+     */
     @Override
     public void notifyGoldDeckUpdate() {
         if(currentController.equals(gameBoardController)){
@@ -200,6 +255,9 @@ public class GUIView extends View {
         }
     }
 
+    /**
+     * Notifies the GUI that the resource deck has been updated.
+     */
     @Override
     public void notifyResourceDeckUpdate() {
         if(currentController.equals(gameBoardController)){
@@ -209,6 +267,11 @@ public class GUIView extends View {
         }
     }
 
+    /**
+     * Notifies the GUI that the displayed cards have been updated.
+     *
+     * @param displayedCards The list of playable cards to be displayed.
+     */
     @Override
     public void notifyDisplayedCardsUpdate(ArrayList<PlayableCard> displayedCards) {
         if(currentController.equals(gameBoardController)){
@@ -219,6 +282,12 @@ public class GUIView extends View {
 
     }
 
+    /**
+     * Notifies the GUI of the current player's turn.
+     * It checks which controller is currently active and sets the turn accordingly.
+     *
+     * @param nickname The nickname of the current player.
+     */
     @Override
     public void notifyCurrentPlayer(String nickname) {
         if(currentController.equals(chooseStarterController)){
@@ -246,9 +315,13 @@ public class GUIView extends View {
 
     }
 
+    /**
+     * Notifies the GUI about updates to the hand of objective cards.
+     *
+     * @param cards The list of objective cards to be displayed in the GUI.
+     */
     @Override
     public void notifyHandObjectives(ArrayList<ObjectiveCard> cards) {
-
         Platform.runLater(() -> {
             if(currentController.equals(chooseObjectiveController)){
                 chooseObjectiveController.showObjective(cards);
@@ -257,6 +330,11 @@ public class GUIView extends View {
         });
     }
 
+    /**
+     * Notifies the GUI about changes in the game state and updates the corresponding views accordingly.
+     * *
+     * @param state The current state of the game.
+     */
     @Override
     public void notifyGameState(GameState state) {
         chooseStarterController=new ChooseStarterController();
@@ -265,8 +343,6 @@ public class GUIView extends View {
 
         if(state==GameState.WAITING_FOR_PLAYERS){
             openWaiting();
-
-
         }else if(state==GameState.CHOOSING_STARTER_CARDS){
             gameBoardController=new GameBoardController();
             Platform.runLater(() -> {
@@ -309,16 +385,14 @@ public class GUIView extends View {
         } else if (state==GameState.ENDING) {
             Platform.runLater(() -> {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Messaggio");
+                alert.setTitle("Game Ending");
                 alert.setHeaderText(null);
-                alert.setContentText("Gamestate ending");
+                alert.setContentText("Last turn for each player!");
                 alert.showAndWait();
             });
         }else if(state==GameState.ENDED){
-            System.out.println("game ended");
             Platform.runLater(()->{
                 try {
-                    System.out.println("qua");
                     openLobby();
                 } catch (Exception e) {
                     throw new RuntimeException(e);
@@ -330,12 +404,17 @@ public class GUIView extends View {
 
     }
 
+    /**
+     * Notifies the GUI about updates to the grid for a specific player.
+     *
+     * @param nickname The nickname of the player whose grid is being updated.
+     * @param grid     The updated grid
+     */
     @Override
     public void notifyGridUpdate(String nickname, Map<Coordinate, Face> grid) {
         if(gameBoardController.equals(currentController)){
             Platform.runLater(() -> {
                 try {
-
                     gameBoardController. updatePane();
                 } catch (Exception ex) {
                     throw new RuntimeException(ex);
@@ -350,6 +429,11 @@ public class GUIView extends View {
 
     }
 
+    /**
+     * Notifies the GUI about the winner of the game and displays final scores in an alert dialog.
+     *
+     * @param nickname The nickname of the player who has won the game.
+     */
     @Override
     public void notifyWinnerUpdate(String nickname) {
         System.out.println("Winner: "+nickname);
@@ -373,6 +457,11 @@ public class GUIView extends View {
 
     }
 
+    /**
+     * Notifies the GUI about updates to the hand cards of the current player.
+     *
+     * @param cards The list of playable cards in the current player's hand.
+     */
     @Override
     public void notifyHandCardsUpdate(ArrayList<PlayableCard> cards) {
         if(client.getVirtualView().getState()==GameState.CHOOSING_STARTER_CARDS){
@@ -394,6 +483,11 @@ public class GUIView extends View {
 
     }
 
+    /**
+     * Notifies the GUI about updates to the scores of players in the game.
+     *
+     * @param scores A map containing player nicknames as keys and their corresponding scores as values.
+     */
     @Override
     public void notifyScores(Map<String, Integer> scores) {
          if(gameBoardController.equals(currentController)){
@@ -413,6 +507,12 @@ public class GUIView extends View {
 
     }
 
+    /**
+     * Notifies the GUI about a new chat message received.
+     * This method dispatches the message to the appropriate controller based on the current active controller.
+     *
+     * @param message The chat message to be displayed.
+     */
     @Override
     public void notifyChatMessage(ChatMessage message) {
 
@@ -440,52 +540,86 @@ public class GUIView extends View {
         //TODO: DA FARE
     }
 
-    @Override
-    public void run() {
-         //Application.launch(ChooseConnectionApp.class);
-       //chooseConnection();
-     }
-
+    /**
+     * Sets the client instance.
+     * @param c Client instance to set.
+     */
     public void setClient(Client c){
         super.client = c;
     }
 
+    /**
+     * Sets the stage for the GUI.
+     * @param stage Stage to set.
+     */
     public void setStage(Stage stage){
         this.stage = stage;
     }
 
+    /**
+     * Retrieves the current stage of the GUI.
+     * @return Current stage.
+     */
     public Stage getStage() {
         return stage;
     }
 
+    /**
+     * Sets the controller for setting up the game and assigns it as the current controller.
+     * @param waitingController The WaitingController instance to set.
+     */
     public void setSetUpGameController(WaitingController waitingController) {
         this.waitingController = waitingController;
         this.currentController=waitingController;
     }
 
+    /**
+     * Sets the controller for choosing objective cards and assigns it as the current controller.
+     * @param chooseObjectiveController The ChooseObjectiveController instance to set.
+     */
     public void setChooseObjectiveController(ChooseObjectiveController chooseObjectiveController) {
         this.chooseObjectiveController = chooseObjectiveController;
         this.currentController=chooseObjectiveController;
     }
 
+    /**
+     * Sets the controller for choosing starter cards and assigns it as the current controller.
+     * @param chooseStarterController The ChooseStarterController instance to set.
+     */
     public void setChooseStarterController(ChooseStarterController chooseStarterController) {
         this.chooseStarterController = chooseStarterController;
         this.currentController=chooseStarterController;
     }
 
-
+    /**
+     * Sets the controller for choosing player colors and assigns it as the current controller.
+     * @param chooseColorController The ChooseColorController instance to set.
+     */
     public void setChooseColorController(ChooseColorController chooseColorController) {
         this.chooseColorController = chooseColorController;
         this.currentController=chooseColorController;
     }
 
+    /**
+     * Sets the controller for the lobby interface and assigns it as the current controller.
+     * @param lobbyGUIController The LobbyGUIController instance to set.
+     */
     public void setLobbyGUIController(LobbyGUIController lobbyGUIController) {
         this.lobbyGUIController = lobbyGUIController;
         this.currentController=lobbyGUIController;
     }
 
+    /**
+     * Sets the controller for the game board interface and assigns it as the current controller.
+     * @param gameBoardController The GameBoardController instance to set.
+     */
     public void setGameBoardController(GameBoardController gameBoardController) {
         this.gameBoardController = gameBoardController;
         this.currentController=gameBoardController;
+    }
+
+    @Override
+    public void run() {
+
     }
 }

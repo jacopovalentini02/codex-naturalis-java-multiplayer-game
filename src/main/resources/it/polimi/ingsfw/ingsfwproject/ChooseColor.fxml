@@ -16,36 +16,36 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="713.0" prefWidth="1283.0" style="-fx-background-color: #e6ddbc;" stylesheets="@Style.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsfw.ingsfwproject.View.GUI.ChooseColorController">
+<AnchorPane prefHeight="855.0" prefWidth="1444.0" style="-fx-background-color: #e6ddbc;" stylesheets="@Style.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsfw.ingsfwproject.View.GUI.ChooseColorController">
    <effect>
       <Blend />
    </effect>
    <children>
-      <ImageView fitHeight="675.0" fitWidth="1052.0" layoutX="-161.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="729.0" fitWidth="1036.0" layoutX="-161.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@Images/logoTagliato.png" />
          </image>
       </ImageView>
-      <Text fx:id="stateLabel" layoutX="792.0" layoutY="158.0" strokeType="OUTSIDE" strokeWidth="0.0" text="CHOOSING  COLOR" wrappingWidth="483.81787109375">
+      <Text fx:id="stateLabel" layoutX="874.0" layoutY="155.0" strokeType="OUTSIDE" strokeWidth="0.0" text="CHOOSING  COLOR" wrappingWidth="483.81787109375">
          <font>
             <Font name="Bodoni 72 Oldstyle Bold" size="30.0" />
          </font>
       </Text>
-      <Label fx:id="turn" layoutX="763.0" layoutY="74.0" prefHeight="46.0" prefWidth="484.0">
+      <Label fx:id="turn" layoutX="848.0" layoutY="85.0" prefHeight="46.0" prefWidth="484.0">
          <font>
             <Font name="Bodoni 72 Smallcaps Book" size="37.0" />
          </font>
       </Label>
-      <Label fx:id="labelInstruction" layoutX="825.0" layoutY="175.0" text="Click on the color you want">
+      <Label fx:id="labelInstruction" layoutX="907.0" layoutY="172.0" text="Click on the color you want">
          <font>
             <Font name="Bodoni 72 Smallcaps Book" size="24.0" />
          </font>
       </Label>
-      <Rectangle fx:id="blueRectangle" arcHeight="5.0" arcWidth="5.0" fill="#3970f8" height="96.0" layoutX="1015.0" layoutY="271.0" onMouseClicked="#blueChosen" stroke="TRANSPARENT" strokeType="INSIDE" visible="false" width="101.0" />
-      <Rectangle fx:id="greenRectangle" arcHeight="5.0" arcWidth="5.0" fill="#25a129" height="96.0" layoutX="825.0" layoutY="271.0" onMouseClicked="#greenChosen" stroke="TRANSPARENT" strokeType="INSIDE" visible="false" width="101.0" />
-      <Rectangle fx:id="redRectangle" arcHeight="5.0" arcWidth="5.0" fill="#f82f2f" height="96.0" layoutX="825.0" layoutY="430.0" onMouseClicked="#redChosen" stroke="TRANSPARENT" strokeType="INSIDE" visible="false" width="101.0" />
-      <Rectangle fx:id="yellowRectangle" arcHeight="5.0" arcWidth="5.0" fill="#ebf55e" height="96.0" layoutX="1015.0" layoutY="430.0" onMouseClicked="#yellowChosen" stroke="TRANSPARENT" strokeType="INSIDE" visible="false" width="101.0" />
-      <Button fx:id="showChat" layoutX="1094.0" layoutY="41.0" mnemonicParsing="false" onAction="#toggleChatMenu" prefHeight="47.0" prefWidth="153.0" style="-fx-background-color: #5F3075;" text="Show Chat" textFill="WHITE">
+      <Rectangle fx:id="blueRectangle" arcHeight="5.0" arcWidth="5.0" fill="#3970f8" height="96.0" layoutX="1090.0" layoutY="271.0" onMouseClicked="#blueChosen" stroke="TRANSPARENT" strokeType="INSIDE" visible="false" width="101.0" />
+      <Rectangle fx:id="greenRectangle" arcHeight="5.0" arcWidth="5.0" fill="#25a129" height="96.0" layoutX="930.0" layoutY="271.0" onMouseClicked="#greenChosen" stroke="TRANSPARENT" strokeType="INSIDE" visible="false" width="101.0" />
+      <Rectangle fx:id="redRectangle" arcHeight="5.0" arcWidth="5.0" fill="#f82f2f" height="96.0" layoutX="930.0" layoutY="430.0" onMouseClicked="#redChosen" stroke="TRANSPARENT" strokeType="INSIDE" visible="false" width="101.0" />
+      <Rectangle fx:id="yellowRectangle" arcHeight="5.0" arcWidth="5.0" fill="#ebf55e" height="96.0" layoutX="1090.0" layoutY="430.0" onMouseClicked="#yellowChosen" stroke="TRANSPARENT" strokeType="INSIDE" visible="false" width="101.0" />
+      <Button fx:id="showChat" layoutX="1176.0" layoutY="38.0" mnemonicParsing="false" onAction="#toggleChatMenu" prefHeight="47.0" prefWidth="153.0" style="-fx-background-color: #5F3075;" text="Show Chat" textFill="WHITE">
          <font>
             <Font name="Bodoni 72 Smallcaps Book" size="22.0" />
          </font>

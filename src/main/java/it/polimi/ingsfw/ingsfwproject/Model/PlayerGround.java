@@ -119,19 +119,19 @@ public class PlayerGround implements Serializable {
 
                     if(i==-1 && j==-1) { //bottom left card
                         contentCounter.decrementCounter(grid.get(check).getTR());
-                        grid.get(check).setCoveredTR(true);
+                        grid.get(check).setCoveredTR();
                     }
                     else if(i==-1) { // && j==1 //top left card
                         contentCounter.decrementCounter(grid.get(check).getBR());
-                        grid.get(check).setCoveredBR(true);
+                        grid.get(check).setCoveredBR();
                     }
                     else if(i==1 && j==-1) { //bottom right card
                         contentCounter.decrementCounter(grid.get(check).getTL());
-                        grid.get(check).setCoveredTL(true);
+                        grid.get(check).setCoveredTL();
                     }
                     else /*if(i==1 && j==1)*/ { //top right card
                         contentCounter.decrementCounter(grid.get(check).getBL());
-                        grid.get(check).setCoveredBL(true);
+                        grid.get(check).setCoveredBL();
                     }
                 }
             }

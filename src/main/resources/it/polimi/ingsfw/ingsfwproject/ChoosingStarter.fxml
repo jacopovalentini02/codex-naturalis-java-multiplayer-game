@@ -15,7 +15,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="713.0" prefWidth="1283.0" style="-fx-background-color: #e6ddbc;" stylesheets="@Style.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsfw.ingsfwproject.View.GUI.ChooseStarterController">
+<AnchorPane prefHeight="855.0" prefWidth="1444.0" style="-fx-background-color: #e6ddbc;" stylesheets="@Style.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsfw.ingsfwproject.View.GUI.ChooseStarterController">
    <effect>
       <Blend />
    </effect>
@@ -25,34 +25,34 @@
             <Image url="@Images/logoTagliato.png" />
          </image>
       </ImageView>
-      <Text fx:id="stateLabel" layoutX="792.0" layoutY="158.0" strokeType="OUTSIDE" strokeWidth="0.0" text="CHOOSING  STARTER CARD" wrappingWidth="483.81787109375">
+      <Text fx:id="stateLabel" layoutX="843.0" layoutY="158.0" strokeType="OUTSIDE" strokeWidth="0.0" text="CHOOSING  STARTER CARD" wrappingWidth="483.81787109375">
          <font>
             <Font name="Bodoni 72 Oldstyle Bold" size="30.0" />
          </font>
       </Text>
-      <Label fx:id="turn" layoutX="763.0" layoutY="74.0" prefHeight="46.0" prefWidth="484.0">
+      <Label fx:id="turn" layoutX="814.0" layoutY="74.0" prefHeight="46.0" prefWidth="484.0">
          <font>
             <Font name="Bodoni 72 Smallcaps Book" size="37.0" />
          </font>
       </Label>
-      <ImageView fx:id="starterFront" fitHeight="161.0" fitWidth="252.0" layoutX="869.0" layoutY="241.0" onMouseClicked="#sendFront" pickOnBounds="true" preserveRatio="true" visible="false">
+      <ImageView fx:id="starterFront" fitHeight="161.0" fitWidth="252.0" layoutX="920.0" layoutY="241.0" onMouseClicked="#sendFront" pickOnBounds="true" preserveRatio="true" visible="false">
          <image>
             <Image url="@Images/CODEX_cards_gold_front/090.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="starterBack" fitHeight="161.0" fitWidth="278.0" layoutX="869.0" layoutY="433.0" onMouseClicked="#sendBack" pickOnBounds="true" preserveRatio="true" visible="false">
+      <ImageView fx:id="starterBack" fitHeight="161.0" fitWidth="278.0" layoutX="920.0" layoutY="433.0" onMouseClicked="#sendBack" pickOnBounds="true" preserveRatio="true" visible="false">
          <image>
             <Image url="@Images/CODEX_cards_gold_front/091.png" />
          </image>
       </ImageView>
-      <Label fx:id="labelInstruction" layoutX="825.0" layoutY="175.0" text="Click on the face you want to play">
+      <Label fx:id="labelInstruction" layoutX="876.0" layoutY="175.0" text="Click on the face you want to play">
          <font>
             <Font name="Bodoni 72 Smallcaps Book" size="24.0" />
          </font>
       </Label>
-      <AnchorPane fx:id="chatPane" layoutX="8.0" layoutY="8.0" prefHeight="717.0" prefWidth="450.0" style="-fx-background-color: none;" visible="false">
+      <AnchorPane fx:id="chatPane" layoutX="8.0" layoutY="8.0" prefHeight="738.0" prefWidth="535.0" style="-fx-background-color: none;" visible="false">
          <children>
-            <BorderPane prefHeight="716.0" prefWidth="469.0" style="-fx-border-color: #5F3075; -fx-border-width: 0 3 3 0; -fx-background-color: white;">
+            <BorderPane prefHeight="738.0" prefWidth="535.0" style="-fx-border-color: #5F3075; -fx-border-width: 0 3 3 0; -fx-background-color: white;">
                <top>
                   <Pane prefHeight="54.0" prefWidth="479.0" style="-fx-background-color: #e6ddbc; -fx-border-width: 100px;" BorderPane.alignment="CENTER">
                      <children>
@@ -92,7 +92,7 @@
             </BorderPane>
          </children>
       </AnchorPane>
-      <Button fx:id="showChat" layoutX="1094.0" layoutY="41.0" mnemonicParsing="false" onAction="#toggleChatMenu" prefHeight="47.0" prefWidth="153.0" style="-fx-background-color: #5F3075;" text="Show Chat" textFill="WHITE">
+      <Button fx:id="showChat" layoutX="1145.0" layoutY="41.0" mnemonicParsing="false" onAction="#toggleChatMenu" prefHeight="47.0" prefWidth="153.0" style="-fx-background-color: #5F3075;" text="Show Chat" textFill="WHITE">
          <font>
             <Font name="Bodoni 72 Smallcaps Book" size="22.0" />
          </font>

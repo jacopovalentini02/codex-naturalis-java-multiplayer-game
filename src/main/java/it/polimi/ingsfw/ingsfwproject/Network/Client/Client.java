@@ -39,7 +39,6 @@ public abstract class Client implements InGameListener {
     private View view;
 
     private boolean connected;
- //   private final ScheduledExecutorService scheduler;
 
 
     public Client(String ip, int port, View view) {

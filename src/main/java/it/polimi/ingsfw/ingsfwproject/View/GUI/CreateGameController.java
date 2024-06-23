@@ -15,6 +15,9 @@ import java.io.IOException;
 
 import static it.polimi.ingsfw.ingsfwproject.View.View.client;
 
+/**
+ * The controller of the scene where a new game is created
+ */
 public class CreateGameController extends GUIController{
     @FXML
     private Button createButton;
@@ -24,7 +27,12 @@ public class CreateGameController extends GUIController{
     public Spinner num_of_players;
     public static GUIView guiView;
 
-
+    /**
+     * Initializes and displays the stage for creating a game.
+     *
+     * @param stage the primary stage for this application
+     * @throws Exception if an error occurs during loading or setting up the scene
+     */
     public void start(Stage stage) throws Exception {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polimi/ingsfw/ingsfwproject/createGame.fxml"));
 
@@ -34,13 +42,20 @@ public class CreateGameController extends GUIController{
         Scene scene = new Scene(root);
         stage.setTitle("Create Game");
         stage.setScene(scene);
-        //stage.setMaximized(true);
+        stage.centerOnScreen();
+
         stage.show();
         stage.setOnCloseRequest((event->{
             Platform.exit();
             System.exit(0);
         }));
     }
+
+    /**
+     * Sends a game creation message with the chosen nickname and number of players.
+     *
+     * @throws IOException if an error occurs while sending the message
+     */
     @FXML
     private void sendCreateGame() throws IOException {
         String nickname = nickname_input.getText();
@@ -53,10 +68,13 @@ public class CreateGameController extends GUIController{
             guiView.openWaiting();
 
         }
-
     }
 
-
+    /**
+     * Sets the GUI view for the application.
+     *
+     * @param gui the {@link GUIView} instance to be set
+     */
     public void setGuiView(GUIView gui) {
         guiView = gui;
     }

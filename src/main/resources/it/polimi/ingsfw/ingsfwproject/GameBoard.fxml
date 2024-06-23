@@ -17,7 +17,7 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="855.0" prefWidth="1444.0" style="-fx-background-color: #e6ddbc;" stylesheets="@Style.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsfw.ingsfwproject.View.GUI.GameBoardController">
+<AnchorPane prefHeight="855.0" prefWidth="1435.0" style="-fx-background-color: #e6ddbc;" stylesheets="@Style.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsfw.ingsfwproject.View.GUI.GameBoardController">
    <effect>
       <Blend />
    </effect>
@@ -64,19 +64,19 @@
             <Image url="@Images/plateau.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="resourceDisplayed1" fitHeight="110.0" fitWidth="150.0" layoutX="388.0" layoutY="141.0" onMouseClicked="#pickResource1" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="resourceDisplayed1" fitHeight="110.0" fitWidth="150.0" layoutX="388.0" layoutY="141.0" onMouseClicked="#pickCard" pickOnBounds="true" preserveRatio="true" userData="0">
          <image>
             <Image url="@Images/CODEX_cards_gold_back/036.png" />
          </image></ImageView>
-      <ImageView fx:id="resourceDisplayed2" fitHeight="110.0" fitWidth="150.0" layoutX="388.0" layoutY="257.0" onMouseClicked="#pickResource2" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="resourceDisplayed2" fitHeight="110.0" fitWidth="150.0" layoutX="388.0" layoutY="257.0" onMouseClicked="#pickCard" pickOnBounds="true" preserveRatio="true" userData="1">
          <image>
             <Image url="@Images/CODEX_cards_gold_front/026.png" />
          </image></ImageView>
-      <ImageView fx:id="goldDisplayed1" fitHeight="110.0" fitWidth="150.0" layoutX="571.0" layoutY="142.0" onMouseClicked="#pickGold1" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="goldDisplayed1" fitHeight="110.0" fitWidth="150.0" layoutX="571.0" layoutY="142.0" onMouseClicked="#pickCard" pickOnBounds="true" preserveRatio="true" userData="2">
          <image>
             <Image url="@Images/CODEX_cards_gold_front/007.png" />
          </image></ImageView>
-      <ImageView fx:id="goldDisplayed2" fitHeight="110.0" fitWidth="150.0" layoutX="571.0" layoutY="256.0" onMouseClicked="#pickGold2" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="goldDisplayed2" fitHeight="110.0" fitWidth="150.0" layoutX="571.0" layoutY="256.0" onMouseClicked="#pickCard" pickOnBounds="true" preserveRatio="true" userData="3">
          <image>
             <Image url="@Images/CODEX_cards_gold_front/012.png" />
          </image></ImageView>
@@ -92,15 +92,15 @@
          <image>
             <Image url="@Images/CODEX_cards_gold_back/006.png" />
          </image></ImageView>
-      <ImageView fx:id="handCard1" fitHeight="115.0" fitWidth="162.0" layoutX="825.0" layoutY="733.0" onDragDetected="#dragCard1" onMouseClicked="#clickHandCard1" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="handCard1" fitHeight="115.0" fitWidth="162.0" layoutX="825.0" layoutY="733.0" onDragDetected="#dragCardDetected" onMouseClicked="#handleHandCardClick" pickOnBounds="true" preserveRatio="true" userData="0">
          <image>
             <Image url="@Images/CODEX_cards_gold_back/006.png" />
          </image></ImageView>
-      <ImageView fx:id="handCard2" fitHeight="115.0" fitWidth="162.0" layoutX="1012.0" layoutY="733.0" onDragDetected="#dragCard2" onMouseClicked="#clickHandCard2" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="handCard2" fitHeight="115.0" fitWidth="162.0" layoutX="1012.0" layoutY="733.0" onDragDetected="#dragCardDetected" onMouseClicked="#handleHandCardClick" pickOnBounds="true" preserveRatio="true" userData="1">
          <image>
             <Image url="@Images/CODEX_cards_gold_back/006.png" />
          </image></ImageView>
-      <ImageView fx:id="handCard3" fitHeight="115.0" fitWidth="162.0" layoutX="1199.0" layoutY="733.0" onDragDetected="#dragCard3" onMouseClicked="#clickHandCard3" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="handCard3" fitHeight="115.0" fitWidth="162.0" layoutX="1199.0" layoutY="733.0" onDragDetected="#dragCardDetected" onMouseClicked="#handleHandCardClick" pickOnBounds="true" preserveRatio="true" userData="2">
          <image>
             <Image url="@Images/CODEX_cards_gold_back/006.png" />
          </image></ImageView>
