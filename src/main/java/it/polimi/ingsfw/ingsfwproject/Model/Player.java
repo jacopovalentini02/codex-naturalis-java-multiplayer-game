@@ -1,6 +1,5 @@
 package it.polimi.ingsfw.ingsfwproject.Model;
 
-import it.polimi.ingsfw.ingsfwproject.Exceptions.CardNotInHandException;
 import it.polimi.ingsfw.ingsfwproject.Exceptions.DeckEmptyException;
 import it.polimi.ingsfw.ingsfwproject.Exceptions.NotEnoughResourcesException;
 import it.polimi.ingsfw.ingsfwproject.Exceptions.PositionNotAvailableException;
@@ -8,7 +7,6 @@ import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.*;
 import it.polimi.ingsfw.ingsfwproject.Network.Server.GameServerInstance;
 
 import java.io.Serializable;
-import java.rmi.RemoteException;
 import java.util.*;
 
 public class Player implements Serializable {
@@ -40,7 +38,7 @@ public class Player implements Serializable {
         try{
             drawnCard = deck.draw();
         }catch (DeckEmptyException e){
-            gameServerInstance.sendUpdateToAll(new ExcpetionMessage(this.clientID,e.getMessage()));
+            gameServerInstance.sendUpdateToAll(new ExceptionMessage(this.clientID,e.getMessage()));
             return false;
         }
 
@@ -62,14 +60,14 @@ public class Player implements Serializable {
             try{
                 points = ground.playCard(cardPlayed, upwards, coord);
             }catch(PositionNotAvailableException | NotEnoughResourcesException e){
-                gameServerInstance.sendUpdateToAll(new ExcpetionMessage(this.clientID,e.getMessage()));
+                gameServerInstance.sendUpdateToAll(new ExceptionMessage(this.clientID,e.getMessage()));
                 return -1;
             }
 
             // remove card from player's hand
             handCard.remove(cardPlayed);
         } else {
-            gameServerInstance.sendUpdateToAll(new ExcpetionMessage(this.clientID,"The card chosen is not in the player's hand"));
+            gameServerInstance.sendUpdateToAll(new ExceptionMessage(this.clientID,"The card chosen is not in the player's hand"));
             return -1;
         }
 
@@ -130,6 +128,10 @@ public class Player implements Serializable {
     public void addToHandObjective(ArrayList<ObjectiveCard> cards){
         this.handObjective.addAll(cards);
         gameServerInstance.sendUpdateToAll(new HandObjectiveMessage(clientID, handObjective));
+    }
+
+    public PlayerColor getToken() {
+        return token;
     }
 
     public int getClientID() {

@@ -1,8 +1,5 @@
 package it.polimi.ingsfw.ingsfwproject.Model;
 
-import it.polimi.ingsfw.ingsfwproject.Model.Card;
-import it.polimi.ingsfw.ingsfwproject.Model.Content;
-
 abstract public class ObjectiveCard extends Card {
     private int points;
 

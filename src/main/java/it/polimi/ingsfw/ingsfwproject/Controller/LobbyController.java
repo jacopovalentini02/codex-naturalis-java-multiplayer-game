@@ -1,20 +1,15 @@
 package it.polimi.ingsfw.ingsfwproject.Controller;
 
-import it.polimi.ingsfw.ingsfwproject.Exceptions.*;
 import it.polimi.ingsfw.ingsfwproject.Model.Game;
 import it.polimi.ingsfw.ingsfwproject.Model.GameManager;
 import it.polimi.ingsfw.ingsfwproject.Model.GameState;
 import it.polimi.ingsfw.ingsfwproject.Model.Player;
-import it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServerMessage;
-import it.polimi.ingsfw.ingsfwproject.Network.Messages.Message;
-import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.ExcpetionMessage;
+import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.ExceptionMessage;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.GameJoinedMessage;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.SendGameListMessage;
 import it.polimi.ingsfw.ingsfwproject.Network.Server.GameServerInstance;
 import it.polimi.ingsfw.ingsfwproject.Network.Server.Server;
 
-import java.rmi.RemoteException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,7 +24,7 @@ public class LobbyController implements Controller {
 
     public void createGame(int numOfPlayers, String thisPlayer, int clientID){
         if(numOfPlayers < 2 || numOfPlayers > 4) {
-            server.sendResponse(new ExcpetionMessage(clientID, "The number of players must be between 2 and 4, but you entered " + numOfPlayers));
+            server.sendResponse(new ExceptionMessage(clientID, "The number of players must be between 2 and 4, but you entered " + numOfPlayers));
             return;
         }
 
@@ -53,7 +48,7 @@ public class LobbyController implements Controller {
         synchronized (lobby) {
 
             if (!lobby.getGameIDs().contains(idGame)){
-                server.sendResponse(new ExcpetionMessage(clientID, "There is no game with ID " + idGame));
+                server.sendResponse(new ExceptionMessage(clientID, "There is no game with ID " + idGame));
                 return;
             }
 
@@ -61,14 +56,14 @@ public class LobbyController implements Controller {
             Game gameToJoin = lobby.getGameList().get(idGame);
 
             if(gameToJoin.getListOfPlayers().size() == gameToJoin.getNumOfPlayers()){
-                server.sendResponse(new ExcpetionMessage(clientID, "Game " + idGame + " is full"));
+                server.sendResponse(new ExceptionMessage(clientID, "Game " + idGame + " is full"));
                 return;
             }
 
 
             for(Player player : gameToJoin.getListOfPlayers()) {
                 if(player.getUsername().equals(nick)) {
-                    server.sendResponse(new ExcpetionMessage(clientID, "Nickname " + nick + " is already taken"));
+                    server.sendResponse(new ExceptionMessage(clientID, "Nickname " + nick + " is already taken"));
                     return;
                 }}
             server.sendResponse(new GameJoinedMessage(clientID, idGame, nick));
@@ -89,7 +84,7 @@ public class LobbyController implements Controller {
     public void deleteGame(int idGame, int clientID){
         synchronized (lobby) {
             if (!lobby.getGameIDs().contains(idGame)) {
-                server.sendResponse(new ExcpetionMessage(clientID, "there's no game with ID:" + idGame));
+                server.sendResponse(new ExceptionMessage(clientID, "there's no game with ID:" + idGame));
                 return;
             }
             lobby.deleteGame(idGame);

@@ -1,6 +1,5 @@
 package it.polimi.ingsfw.ingsfwproject.Model;
 
-import it.polimi.ingsfw.ingsfwproject.Model.Content;
 
 import java.io.Serializable;
 

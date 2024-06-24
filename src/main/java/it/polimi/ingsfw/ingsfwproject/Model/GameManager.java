@@ -1,5 +1,4 @@
 package it.polimi.ingsfw.ingsfwproject.Model;
-import it.polimi.ingsfw.ingsfwproject.Exceptions.DeckEmptyException;
 import it.polimi.ingsfw.ingsfwproject.Network.Server.GameServerInstance;
 
 import java.util.*;
@@ -14,7 +13,6 @@ public class GameManager {
     }
 
     public int createGame(int numOfPlayers, String username, int clientID) {
-        //todo cambio e aggiungo server instance
         GameServerInstance gameServerInstance=new GameServerInstance();
         Game newGame = new Game(gameServerInstance,this, firstAvailableGameID, numOfPlayers, new Player(username,gameServerInstance, clientID));
         gameList.put(firstAvailableGameID, newGame);

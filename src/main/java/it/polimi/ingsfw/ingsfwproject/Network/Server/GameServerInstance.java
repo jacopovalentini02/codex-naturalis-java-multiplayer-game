@@ -4,6 +4,7 @@ import it.polimi.ingsfw.ingsfwproject.Controller.GameController;
 import it.polimi.ingsfw.ingsfwproject.Model.*;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServerMessage;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.Message;
+import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.ExceptionMessage;
 
 import java.rmi.RemoteException;
 import java.util.*;
@@ -90,8 +91,8 @@ public class GameServerInstance {
     public void clientDisconnected(int clientID){
         inGame = false;
         handlers.remove(clientID);
-        ExcpetionMessage excpetionMessage = new ExcpetionMessage(-10, "A client has disconnected. Game ended.");
-        sendUpdateToAll(excpetionMessage);
+        ExceptionMessage exceptionMessage = new ExceptionMessage(-10, "A client has disconnected. Game ended.");
+        sendUpdateToAll(exceptionMessage);
         gameController.getModel().setState(GameState.ENDED);
         gameController.getModel().endGame();
     }

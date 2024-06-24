@@ -1,16 +1,10 @@
 package it.polimi.ingsfw.ingsfwproject.Controller;
-import java.rmi.RemoteException;
 import java.util.*;
-import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
-import it.polimi.ingsfw.ingsfwproject.Exceptions.*;
 import it.polimi.ingsfw.ingsfwproject.Model.*;
-import it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServerMessage;
-import it.polimi.ingsfw.ingsfwproject.Network.Messages.Message;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.*;
 import it.polimi.ingsfw.ingsfwproject.Network.Server.GameServerInstance;
-import it.polimi.ingsfw.ingsfwproject.Network.Server.Server;
 
 
 public class GameController implements Controller {
@@ -50,12 +44,12 @@ public class GameController implements Controller {
         }
 
         if (model.getCurrentPlayer() != player) {
-            serverInstance.sendUpdateToAll(new ExcpetionMessage(player.getClientID(), "Not your turn"));
+            serverInstance.sendUpdateToAll(new ExceptionMessage(player.getClientID(), "Not your turn"));
             return;
         }
 
         if (model.getState() != GameState.CHOOSING_OBJECTIVES) {
-            serverInstance.sendUpdateToAll(new ExcpetionMessage(player.getClientID(), "Phase exception"));
+            serverInstance.sendUpdateToAll(new ExceptionMessage(player.getClientID(), "Phase exception"));
             return;
         }
 
@@ -74,7 +68,6 @@ public class GameController implements Controller {
         Player player = null;
         PlayableCard card = null;
         boolean moveSuccessful = false;
-        System.out.println(username);
         for (Player p: model.getListOfPlayers()){
             if (Objects.equals(p.getUsername(), username))
                 player = p;
@@ -86,18 +79,18 @@ public class GameController implements Controller {
         }
 
         if (model.getState() == GameState.WAITING_FOR_PLAYERS || model.getState() == GameState.CHOOSING_OBJECTIVES || model.getState() == GameState.ENDED || model.getState() == GameState.CHOOSING_COLORS) {
-            serverInstance.sendUpdateToAll(new ExcpetionMessage(player.getClientID(), "You can't play a card now"));
+            serverInstance.sendUpdateToAll(new ExceptionMessage(player.getClientID(), "You can't play a card now"));
             return;
         }
 
 
         if (model.getCurrentPlayer() != player) {
-            serverInstance.sendUpdateToAll(new ExcpetionMessage(player.getClientID(), "Not your turn"));
+            serverInstance.sendUpdateToAll(new ExceptionMessage(player.getClientID(), "Not your turn"));
             return;
         }
 
         if(model.getifCurrentPlayerhasPlayed()) {
-            serverInstance.sendUpdateToAll(new ExcpetionMessage(player.getClientID(), "You have already played, it's time to draw"));
+            serverInstance.sendUpdateToAll(new ExceptionMessage(player.getClientID(), "You have already played, it's time to draw"));
             return;
         }
         synchronized (model){
@@ -179,7 +172,7 @@ public class GameController implements Controller {
 
 
         if (deck.equals(model.getObjectiveDeck())){
-            serverInstance.sendUpdateToAll(new ExcpetionMessage(player.getClientID(),"You can't draw from objective deck!"));
+            serverInstance.sendUpdateToAll(new ExceptionMessage(player.getClientID(),"You can't draw from objective deck!"));
             return;
         }
 
@@ -214,12 +207,12 @@ public class GameController implements Controller {
         }
 
         if (model.getCurrentPlayer() != player){
-            serverInstance.sendUpdateToAll(new ExcpetionMessage(player.getClientID(),"Not your turn"));
+            serverInstance.sendUpdateToAll(new ExceptionMessage(player.getClientID(),"Not your turn"));
             return;
         }
 
         if (model.getState() != GameState.CHOOSING_COLORS){
-            serverInstance.sendUpdateToAll(new ExcpetionMessage(player.getClientID(),"You can't choose a color now"));
+            serverInstance.sendUpdateToAll(new ExceptionMessage(player.getClientID(),"You can't choose a color now"));
             return;
         }
 
@@ -237,17 +230,17 @@ public class GameController implements Controller {
 
     private boolean checkIfDrawPossible(Player player){
         if (model.getState() == GameState.WAITING_FOR_PLAYERS || model.getState() == GameState.CHOOSING_STARTER_CARDS || model.getState() == GameState.CHOOSING_OBJECTIVES || model.getState() == GameState.ENDING || model.getState() == GameState.CHOOSING_COLORS) {
-            serverInstance.sendUpdateToAll(new ExcpetionMessage(player.getClientID(), "You can't draw now"));
+            serverInstance.sendUpdateToAll(new ExceptionMessage(player.getClientID(), "You can't draw now"));
             return false;
         }
 
         if (model.getCurrentPlayer() != player){
-            serverInstance.sendUpdateToAll(new ExcpetionMessage(player.getClientID(),"It's not your turn"));
+            serverInstance.sendUpdateToAll(new ExceptionMessage(player.getClientID(),"It's not your turn"));
             return false;
         }
 
         if (!(model.getifCurrentPlayerhasPlayed())) {
-            serverInstance.sendUpdateToAll(new ExcpetionMessage(player.getClientID(), "You should play a card before drawing"));
+            serverInstance.sendUpdateToAll(new ExceptionMessage(player.getClientID(), "You should play a card before drawing"));
             return false;
         }
 
@@ -279,7 +272,7 @@ public class GameController implements Controller {
     public void forwardPrivateChatMessage(ChatMessage message){
         int recipientClientID = serverInstance.getClientIDbyNickname(message.getRecipient());
         if (recipientClientID == -1) {
-            serverInstance.sendUpdateToAll(new ExcpetionMessage(serverInstance.getClientIDbyNickname(message.getSender()), "There's no player with nick " + message.getRecipient()));
+            serverInstance.sendUpdateToAll(new ExceptionMessage(serverInstance.getClientIDbyNickname(message.getSender()), "There's no player with nick " + message.getRecipient()));
             return;
         } else {
             serverInstance.sendUpdateToAll(new RecieveChatMessage(recipientClientID, message.getSender(), message.getRecipient(), message.getMessage()));

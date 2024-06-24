@@ -67,7 +67,7 @@ public class SocketHandler extends AbstractHandler implements Runnable{
             out.close();
             socket.close();
         } catch (IOException e) {
-            System.err.println(e.getMessage());
+            //System.err.println(e.getMessage());
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }

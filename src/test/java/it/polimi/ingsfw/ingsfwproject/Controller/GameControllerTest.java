@@ -1,17 +1,41 @@
 package it.polimi.ingsfw.ingsfwproject.Controller;
 
-import it.polimi.ingsfw.ingsfwproject.Exceptions.*;
+
 import it.polimi.ingsfw.ingsfwproject.Model.*;
+import it.polimi.ingsfw.ingsfwproject.Network.Server.GameServerInstance;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.Objects;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import static org.junit.jupiter.api.Assertions.*;
 
 class GameControllerTest {
+    private GameServerInstance gameServerInstance;
+    private Player player1;
+    private Player player2;
+    private Player player3;
+    private Player player4;
+    private Game game;
+    @BeforeEach
+    void setUp() {
+        gameServerInstance=new GameServerInstance();
+        player1 = new Player("user1", gameServerInstance, 0);
+        game = new Game(gameServerInstance,new GameManager(), 1, 4, player1);
+        player2 = new Player("user2", gameServerInstance, 1);
+        player3 = new Player("user3", gameServerInstance,2);
+        player4 = new Player("user4", gameServerInstance,3);
+        game.addPlayer(player2);
+        game.addPlayer(player3);
+        game.addPlayer(player4);
+
+        game.setUpCards();
+    }
     @Test
     void testChooseObjectiveCard() {
+
+
     }
+
 
     @Test
     void testPlayCard() {
