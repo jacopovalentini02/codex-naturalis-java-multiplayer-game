@@ -24,8 +24,6 @@ public class PlayerGround implements Serializable {
 
         //get the face
         Face face = upwards? card.getFront() : card.getBack();
-        System.out.println(face.getImagePath());
-
         //add the face in the grid
         grid.put(coord, face);
 

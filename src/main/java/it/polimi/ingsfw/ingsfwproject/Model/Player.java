@@ -1,6 +1,7 @@
 package it.polimi.ingsfw.ingsfwproject.Model;
 
 import it.polimi.ingsfw.ingsfwproject.Exceptions.DeckEmptyException;
+import it.polimi.ingsfw.ingsfwproject.Exceptions.NoMoreAvailablePosition;
 import it.polimi.ingsfw.ingsfwproject.Exceptions.NotEnoughResourcesException;
 import it.polimi.ingsfw.ingsfwproject.Exceptions.PositionNotAvailableException;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.*;
@@ -16,6 +17,7 @@ public class Player implements Serializable {
     private PlayerGround ground;
     private ArrayList<PlayableCard> handCard;
     private final GameServerInstance gameServerInstance;
+    private boolean canPlay;
 
     public ArrayList<ObjectiveCard> getHandObjective() {
         return handObjective;
@@ -31,6 +33,7 @@ public class Player implements Serializable {
         this.handCard = new ArrayList<>();
         this.handObjective = new ArrayList<>();
         this.clientID = clientID;
+        this.canPlay=true;
     }
 
     public boolean draw(Deck deck) {
@@ -59,6 +62,7 @@ public class Player implements Serializable {
         if (handCard.contains(cardPlayed)) {
             try{
                 points = ground.playCard(cardPlayed, upwards, coord);
+
             }catch(PositionNotAvailableException | NotEnoughResourcesException e){
                 gameServerInstance.sendUpdateToAll(new ExceptionMessage(this.clientID,e.getMessage()));
                 return -1;
@@ -136,5 +140,13 @@ public class Player implements Serializable {
 
     public int getClientID() {
         return clientID;
+    }
+
+    public boolean canPlay() {
+        return canPlay;
+    }
+
+    public void setCanPlay(boolean canPlay) {
+        this.canPlay = canPlay;
     }
 }

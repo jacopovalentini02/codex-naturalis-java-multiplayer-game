@@ -207,6 +207,7 @@ public class Game {
         this.setState(GameState.STARTED);
         setCurrentPlayer(getFirstPlayer());
 
+
     }
 
 
@@ -284,6 +285,9 @@ public class Game {
         else{
             int newIndex = (listOfPlayers.indexOf(currentPlayer) + 1) % listOfPlayers.size();
             this.setCurrentPlayer(listOfPlayers.get(newIndex));
+
+            if(!currentPlayer.canPlay())
+                nextTurn();
         }
     }
 

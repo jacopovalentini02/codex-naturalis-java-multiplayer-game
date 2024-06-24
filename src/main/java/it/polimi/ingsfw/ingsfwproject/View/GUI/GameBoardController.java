@@ -378,8 +378,12 @@ public class GameBoardController extends GUIController implements Initializable 
      * Retrieves the ID of the card, formats it, and sets the corresponding back image to the ImageView component.
      */
     public void updateGoldDeck(){
-        String id = String.format("%03d", client.getVirtualView().getGoldDeck().getCardList().getFirst().getIdCard());
-        goldDeck.setImage(getImageBack(id));
+        if(!client.getVirtualView().getResourceDeck().getCardList().isEmpty()){
+            String id = String.format("%03d", client.getVirtualView().getGoldDeck().getCardList().getFirst().getIdCard());
+            goldDeck.setImage(getImageBack(id));
+        }else{
+            resourceDeck.setVisible(false);
+        }
     }
 
     /**
@@ -387,8 +391,13 @@ public class GameBoardController extends GUIController implements Initializable 
      * Retrieves the ID of the card, formats it, and sets the corresponding back image to the ImageView component.
      */
     public void updateResourceDeck(){
-        String id = String.format("%03d", client.getVirtualView().getResourceDeck().getCardList().getFirst().getIdCard());
-        resourceDeck.setImage(getImageBack(id));
+        if(!client.getVirtualView().getResourceDeck().getCardList().isEmpty()){
+            String id = String.format("%03d", client.getVirtualView().getResourceDeck().getCardList().getFirst().getIdCard());
+            resourceDeck.setImage(getImageBack(id));
+        }else{
+            resourceDeck.setVisible(false);
+        }
+
     }
 
     /**
@@ -402,6 +411,10 @@ public class GameBoardController extends GUIController implements Initializable 
             String id = String.format("%03d", displayedCards.get(i).getIdCard());
             cardViews.get(i).setImage(getImageFront(id));
             cardViews.get(i).setVisible(true);
+        }
+
+        for (int i = displayedCards.size(); i < cardViews.size(); i++) {
+            cardViews.get(i).setVisible(false);
         }
     }
 

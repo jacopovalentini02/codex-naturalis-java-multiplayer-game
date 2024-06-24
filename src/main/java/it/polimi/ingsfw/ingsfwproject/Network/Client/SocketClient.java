@@ -1,8 +1,6 @@
 package it.polimi.ingsfw.ingsfwproject.Network.Client;
 
-import it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServer.HeartBeatMessage;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.Message;
-import it.polimi.ingsfw.ingsfwproject.Network.Messages.MessageType;
 import it.polimi.ingsfw.ingsfwproject.View.View;
 
 import java.io.IOException;
@@ -13,16 +11,32 @@ import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+/**
+ * The SocketClient class handles the communication between the client and the server using sockets.
+ */
 public class SocketClient extends Client{
     private ObjectInputStream input;
     private ObjectOutputStream output;
     private Socket socket;
     private ExecutorService readExecutionQueue;
 
+    /**
+     * Constructs a new SocketClient.
+     *
+     * @param ip the IP address of the server
+     * @param port the port of the server
+     * @param view the view associated with this client
+     */
     public SocketClient(String ip, int port, View view){
         super(ip,port, view);
     }
 
+    /**
+     * Starts the connection to the server.
+     *
+     * @throws IOException if an I/O error occurs when connecting
+     * @throws ClassNotFoundException if the class of a serialized object cannot be found
+     */
     @Override
     public void startConnection() throws IOException, ClassNotFoundException {
         this.socket = new Socket();
@@ -40,14 +54,19 @@ public class SocketClient extends Client{
             this.receiveMessage();
 
         } else {
-            System.out.println("Connessione al server fallita");
+            System.out.println("Connection failed");
             this.setConnected(false);
-            throw new IOException("Connessione al server fallita");
+            //throw new IOException("Connessione al server fallita");
         }
 
     }
 
-    //Send message to server
+    /**
+     * Sends a message to the server.
+     *
+     * @param message the message to send
+     * @throws IOException if an I/O error occurs while sending the message
+     */
     @Override
     public void sendMessage(Message message) throws IOException {
         try {
@@ -60,7 +79,9 @@ public class SocketClient extends Client{
         }
     }
 
-
+    /**
+     * Disconnects from the server.
+     */
     @Override
     public void disconnect(){
         readExecutionQueue.shutdown();
@@ -74,8 +95,10 @@ public class SocketClient extends Client{
         }
     }
 
-
-    public void receiveMessage() throws IOException, ClassNotFoundException {
+    /**
+     * Receives messages from the server.
+     */
+    public void receiveMessage(){
         readExecutionQueue.execute(() -> {
             try {
                 while (!readExecutionQueue.isShutdown()) {

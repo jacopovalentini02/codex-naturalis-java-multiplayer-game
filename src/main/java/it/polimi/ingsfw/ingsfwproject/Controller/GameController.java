@@ -73,6 +73,20 @@ public class GameController implements Controller {
                 player = p;
         }
         assert player != null;
+
+        if (model.getCurrentPlayer() != player) {
+            serverInstance.sendUpdateToAll(new ExceptionMessage(player.getClientID(), "Not your turn"));
+            return;
+        }
+
+        if(model.getState()==GameState.STARTED || model.getState()==GameState.ENDING){
+            if(!player.canPlay()){
+                serverInstance.sendUpdateToAll(new ExceptionMessage(player.getClientID(), "You don't have available position! Wait for the game to end"));
+                return;
+            }
+        }
+
+
         for (PlayableCard pc: player.getHandCard()){
             if (pc.getIdCard() == cardID)
                 card = pc;
@@ -80,12 +94,6 @@ public class GameController implements Controller {
 
         if (model.getState() == GameState.WAITING_FOR_PLAYERS || model.getState() == GameState.CHOOSING_OBJECTIVES || model.getState() == GameState.ENDED || model.getState() == GameState.CHOOSING_COLORS) {
             serverInstance.sendUpdateToAll(new ExceptionMessage(player.getClientID(), "You can't play a card now"));
-            return;
-        }
-
-
-        if (model.getCurrentPlayer() != player) {
-            serverInstance.sendUpdateToAll(new ExceptionMessage(player.getClientID(), "Not your turn"));
             return;
         }
 
@@ -100,6 +108,11 @@ public class GameController implements Controller {
                 return;
             } else {
                 model.updatePoints(pointsMade, player);
+            }
+
+            if(player.getGround().getAvailablePositions().isEmpty()){
+                serverInstance.sendUpdateToAll(new ExceptionMessage(player.getClientID(),"There are no more available position! Wait for the game to end"));
+                player.setCanPlay(false);
             }
 
             if (card instanceof StarterCard)
@@ -124,6 +137,8 @@ public class GameController implements Controller {
             if (Objects.equals(p.getUsername(), username))
                 player = p;
         }
+
+
         for (PlayableCard pc: model.getDisplayedPlayableCard()){
             if (pc.getIdCard() == cardID)
                 card = pc;
@@ -132,6 +147,7 @@ public class GameController implements Controller {
         moveSuccesful = checkIfDrawPossible(player);
         if (!moveSuccesful)
             return;
+
 
         synchronized (model){
              moveSuccesful = model.drawDisplayedPlayableCard(card, player);
@@ -158,6 +174,8 @@ public class GameController implements Controller {
             if (Objects.equals(p.getUsername(), username))
                 player = p;
         }
+        assert player != null;
+
 
         if (resourceDeck){
             deck = model.getResourceDeck();
@@ -236,6 +254,11 @@ public class GameController implements Controller {
 
         if (model.getCurrentPlayer() != player){
             serverInstance.sendUpdateToAll(new ExceptionMessage(player.getClientID(),"It's not your turn"));
+            return false;
+        }
+
+        if(!player.canPlay()){
+            serverInstance.sendUpdateToAll(new ExceptionMessage(player.getClientID(), "You don't have available position! Wait for the game to end"));
             return false;
         }
 
