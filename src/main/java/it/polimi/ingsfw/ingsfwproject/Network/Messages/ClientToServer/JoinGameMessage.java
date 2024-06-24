@@ -2,32 +2,39 @@ package it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServer;
 
 import it.polimi.ingsfw.ingsfwproject.Controller.Controller;
 import it.polimi.ingsfw.ingsfwproject.Controller.LobbyController;
-import it.polimi.ingsfw.ingsfwproject.Exceptions.*;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServerMessage;
-import it.polimi.ingsfw.ingsfwproject.Network.Messages.Message;
-import it.polimi.ingsfw.ingsfwproject.Network.Messages.MessageType;
 
 import java.io.Serializable;
 
+/**
+ * Message from client to server to request joining an existing game.
+ */
 public class JoinGameMessage extends ClientToServerMessage implements Serializable {
     private String nickname;
     private int gameID;
 
+    /**
+     * Constructs a JoinGameMessage with the specified parameters.
+     *
+     * @param clientID the ID of the client sending the message
+     * @param nickname the nickname of the client requesting to join
+     * @param gameID   the ID of the game to join
+     */
     public JoinGameMessage(int clientID, String nickname, int gameID) {
-        super(clientID, MessageType.JOIN_GAME,true);
+        super(clientID, true);
         this.nickname=nickname;
         this.gameID=gameID;
     }
 
-    public String getNickname() {
-        return nickname;
-    }
+//    public String getNickname() {
+//        return nickname;
+//    }
 
-    public int getGameID() {
-        return gameID;
-    }
-
-
+    /**
+     * Process the client's request to join an existing game.
+     *
+     * @param controller the controller on which to execute the message
+     */
     @Override
     public void execute(Controller controller){
         LobbyController lobbyController=(LobbyController) controller;

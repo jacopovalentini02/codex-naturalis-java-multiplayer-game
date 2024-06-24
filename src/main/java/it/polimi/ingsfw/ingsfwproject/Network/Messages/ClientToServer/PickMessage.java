@@ -2,29 +2,33 @@ package it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServer;
 
 import it.polimi.ingsfw.ingsfwproject.Controller.Controller;
 import it.polimi.ingsfw.ingsfwproject.Controller.GameController;
-import it.polimi.ingsfw.ingsfwproject.Exceptions.*;
-import it.polimi.ingsfw.ingsfwproject.Model.Card;
-import it.polimi.ingsfw.ingsfwproject.Model.PlayableCard;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServerMessage;
-import it.polimi.ingsfw.ingsfwproject.Network.Messages.Message;
-import it.polimi.ingsfw.ingsfwproject.Network.Messages.MessageType;
 
+/**
+ * Message from client to server indicating that a player has picked a displayed playable card.
+ */
 public class PickMessage extends ClientToServerMessage {
     String nickname;
     int cardID;
+
+    /**
+     * Constructs a PickMessage with the specified parameters.
+     *
+     * @param clientID the ID of the client sending the message
+     * @param cardID   the ID of the displayed playable card picked by the player
+     * @param nickname the nickname of the player who picked the card
+     */
     public PickMessage(int clientID, int cardID, String nickname) {
-        super(clientID, MessageType.PICK, false);
+        super(clientID, false);
         this.cardID=cardID;
         this.nickname=nickname;
     }
-    public int getCardID() {
-        return cardID;
-    }
 
-    public String getNickname() {
-        return nickname;
-    }
-
+    /**
+     * Handle the player's pick of a displayed playable card.
+     *
+     * @param controller the controller on which to execute the message
+     */
     @Override
     public void execute(Controller controller) {
         GameController gameController=(GameController)  controller;

@@ -88,7 +88,7 @@ public abstract class Client implements InGameListener {
                         }
                     }
 
-                    Message heartbeat = new HeartBeatMessage(clientID, nickname, MessageType.HEARTBEAT, false);
+                    Message heartbeat = new HeartBeatMessage(clientID, nickname, false);
                     try {
                         sendMessage(heartbeat);
                     } catch (IOException e) {

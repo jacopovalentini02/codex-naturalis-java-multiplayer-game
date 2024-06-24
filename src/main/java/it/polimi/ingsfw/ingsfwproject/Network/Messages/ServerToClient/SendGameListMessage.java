@@ -10,31 +10,28 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-//Server - client, clients receive the list of the game
+/**
+ * Message sent from server to client to provide the list of active games.
+ */
 public class SendGameListMessage extends ServerToClientMessage implements Serializable {
     private final HashMap<Integer, Integer> gameList;
 
+    /**
+     * Constructs a SendGameListMessage with the specified client ID and game list.
+     *
+     * @param clientID the ID of the client receiving the message
+     * @param gameList a map representing the list of active games (game ID to number of players)
+     */
     public SendGameListMessage(int clientID, HashMap<Integer, Integer> gameList) {
         super(clientID);
         this.gameList = gameList;
     }
 
-    public HashMap<Integer, Integer> getGameList() {
-        return gameList;
-    }
-
-    public void printGameList() {
-        if (gameList.isEmpty()) {
-            System.out.println("No games in progress");
-        } else {
-            System.out.println(gameList.size());
-            for (Map.Entry<Integer, Integer> entry : gameList.entrySet()) {
-                int gameId = entry.getKey();
-                System.out.println("Game ID: " + gameId);
-            }
-        }
-    }
-
+    /**
+     * Displays the received game list in the client's view.
+     *
+     * @param client the client on which to execute the message
+     */
     @Override
     public void execute(Client client) {
         client.getView().displayGameList(gameList);

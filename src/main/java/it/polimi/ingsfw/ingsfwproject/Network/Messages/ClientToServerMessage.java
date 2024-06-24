@@ -1,7 +1,6 @@
 package it.polimi.ingsfw.ingsfwproject.Network.Messages;
 
 import it.polimi.ingsfw.ingsfwproject.Controller.Controller;
-import it.polimi.ingsfw.ingsfwproject.Exceptions.*;
 
 import java.io.Serializable;
 
@@ -11,18 +10,15 @@ import java.io.Serializable;
  */
 public abstract class ClientToServerMessage extends Message implements Serializable {
     int clientID;
-    private MessageType type;
-    private boolean isForServer;
+    private final boolean isForServer;
 
     /**
      * Constructs a new ClientToServerMessage.
      *
-     * @param clientID the ID of the client sending the message
-     * @param messageType the type of the message
+     * @param clientID    the ID of the client sending the message
      * @param isForServer a boolean indicating if the message is intended for the server
      */
-    public ClientToServerMessage(int clientID, MessageType messageType, Boolean isForServer) {
-        this.type=messageType;
+    public ClientToServerMessage(int clientID, Boolean isForServer) {
         this.clientID=clientID;
         this.isForServer=isForServer;
     }

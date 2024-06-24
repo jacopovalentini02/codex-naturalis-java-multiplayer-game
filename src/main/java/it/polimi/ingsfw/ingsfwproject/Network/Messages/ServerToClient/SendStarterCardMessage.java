@@ -16,9 +16,6 @@ public class SendStarterCardMessage extends ServerToClientMessage implements Ser
         this.starterCard=starterCard;
     }
 
-    public StarterCard getStarterCard() {
-        return starterCard;
-    }
 
 
     @Override
