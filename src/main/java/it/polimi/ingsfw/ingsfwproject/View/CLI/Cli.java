@@ -292,7 +292,7 @@ public class Cli extends View implements Runnable {
     @Override
     public void notifyGameState(GameState state){
         if(!state.equals(client.getVirtualView().getState()))
-            System.out.println("Game state updated to: '" + state);
+            System.out.println("Game state updated to: '" + state +"'.");
         if(state.equals(GameState.ENDING)){
             System.out.println("it's your last turn!");
         }
@@ -352,7 +352,7 @@ public class Cli extends View implements Runnable {
 
         String helpCommand = "\n\t-> ? ";
 
-        String notMyTurnCommands = showCommands + separatorString + chatCommands + helpCommand;
+        String notMyTurnCommands = showCommands + separatorString + chatCommands;
 
         GameState currentState = client.getVirtualView().getState();
 
@@ -491,7 +491,7 @@ public class Cli extends View implements Runnable {
                         break;
                     }
                     if(client.getVirtualView().getGrids().get(client.getNickname()) != null && !client.getVirtualView().getGrids().get(client.getNickname()).isEmpty())
-                        printGrid(client.getVirtualView().getGrids().get(client.getNickname()),false);
+                        printGrid(client.getVirtualView().getGrids().get(client.getNickname()),true);
 
                     int idCard = askForIdCardInput("Among the cards in your hand, which one do you want to play? Here the cards' id:", client.getVirtualView().getHandCards());
                     boolean face = askForFaceToPlay();
@@ -551,7 +551,7 @@ public class Cli extends View implements Runnable {
                         }
                     } while (!otherPlayersNick.contains(playerAsked));
                     if(client.getVirtualView().getGrids().get(playerAsked) != null)
-                        printGrid(client.getVirtualView().getGrids().get(playerAsked),true);
+                        printGrid(client.getVirtualView().getGrids().get(playerAsked),false);
                     else
                         System.out.println("The player has not played yet");
                     break;
