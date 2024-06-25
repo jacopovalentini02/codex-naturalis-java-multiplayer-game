@@ -570,63 +570,6 @@ public class GameBoardController extends GUIController implements Initializable 
         }
 
     }
-//    @FXML
-//    private void dragCard1(MouseEvent event){
-//        if (event.getButton() == MouseButton.PRIMARY) {
-//            dragging = true;
-//            Dragboard db = handCard1.startDragAndDrop(TransferMode.MOVE);
-//            ClipboardContent content = new ClipboardContent();
-//            int cardID = client.getVirtualView().getHandCards().getFirst().getIdCard();
-//            String data = cardID + ";" + faceShowed[0];
-//            content.putString(data);
-//            db.setContent(content);
-//            SnapshotParameters parameters = new SnapshotParameters();
-//            parameters.setTransform(new Scale(0.7, 0.7));
-//            WritableImage snapshot = handCard1.snapshot(parameters, null);
-//            db.setDragView(snapshot);
-//            handCard1.setOnDragDone(e -> dragging = false);
-//            event.consume();
-//        }
-//    }
-//
-//
-//    @FXML
-//    private void dragCard2(MouseEvent event){
-//        if (event.getButton() == MouseButton.PRIMARY) {
-//            dragging = true;
-//            Dragboard db = handCard2.startDragAndDrop(TransferMode.MOVE);
-//            ClipboardContent content = new ClipboardContent();
-//            int cardID = client.getVirtualView().getHandCards().get(1).getIdCard();
-//            String data = cardID + ";" + faceShowed[1];
-//            content.putString(data);
-//            db.setContent(content);
-//            SnapshotParameters parameters = new SnapshotParameters();
-//            parameters.setTransform(new Scale(0.7, 0.7));
-//            WritableImage snapshot = handCard2.snapshot(parameters, null);
-//            db.setDragView(snapshot);
-//            handCard2.setOnDragDone(e->dragging = false);
-//            event.consume();
-//        }
-//    }
-//
-//    @FXML
-//    private void dragCard3(MouseEvent event){
-//        if (event.getButton() == MouseButton.PRIMARY) {
-//            dragging = true;
-//            Dragboard db = handCard3.startDragAndDrop(TransferMode.MOVE);
-//            ClipboardContent content = new ClipboardContent();
-//            int cardID = client.getVirtualView().getHandCards().getLast().getIdCard();
-//            String data = cardID + ";" + faceShowed[2];
-//            content.putString(data);
-//            db.setContent(content);
-//            SnapshotParameters parameters = new SnapshotParameters();
-//            parameters.setTransform(new Scale(0.7, 0.7));
-//            WritableImage snapshot = handCard3.snapshot(parameters, null);
-//            db.setDragView(snapshot);
-//            handCard3.setOnDragDone(e->dragging = false);
-//            event.consume();
-//        }
-//    }
 
     /**
      * Show the other face of the card

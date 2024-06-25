@@ -79,12 +79,12 @@ public class GameController implements Controller {
             return;
         }
 
-        if(model.getState()==GameState.STARTED || model.getState()==GameState.ENDING){
+        //if(model.getState()==GameState.STARTED || model.getState()==GameState.ENDING){
             if(!player.canPlay()){
                 serverInstance.sendUpdateToAll(new ExceptionMessage(player.getClientID(), "You don't have available position! Wait for the game to end"));
                 return;
             }
-        }
+        //}
 
 
         for (PlayableCard pc: player.getHandCard()){

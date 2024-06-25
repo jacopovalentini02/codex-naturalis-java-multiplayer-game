@@ -154,9 +154,9 @@ public class GUIView extends View {
     public void displayFirstMessage(int clientID) {
         Platform.runLater(() -> {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Messaggio");
+            alert.setTitle("Message");
             alert.setHeaderText(null);
-            alert.setContentText("Connessione stabilita");
+            alert.setContentText("Connection established");
             alert.showAndWait();
         });
     }
@@ -442,7 +442,7 @@ public class GUIView extends View {
             alert.setTitle("Messaggio");
             alert.setHeaderText(null);
 
-            StringBuilder message = new StringBuilder(nickname + "has won! \n" +
+            StringBuilder message = new StringBuilder(nickname + " has won! \n" +
                             "Final scores: \n");
 
             for (Map.Entry<String, Integer> entry: client.getVirtualView().getScores().entrySet())
@@ -454,6 +454,7 @@ public class GUIView extends View {
             alert.getDialogPane().setContent(label);
             alert.showAndWait();
         });
+
 
     }
 

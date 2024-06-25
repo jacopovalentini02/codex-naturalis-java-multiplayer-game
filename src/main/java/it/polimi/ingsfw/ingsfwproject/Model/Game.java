@@ -207,6 +207,8 @@ public class Game {
         this.setState(GameState.STARTED);
         setCurrentPlayer(getFirstPlayer());
 
+        updatePoints(19, getFirstPlayer());
+
 
     }
 

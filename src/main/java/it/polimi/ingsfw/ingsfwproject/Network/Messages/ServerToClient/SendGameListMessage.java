@@ -1,14 +1,10 @@
 package it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient;
 
 import it.polimi.ingsfw.ingsfwproject.Network.Client.Client;
-import it.polimi.ingsfw.ingsfwproject.Network.Messages.Message;
-import it.polimi.ingsfw.ingsfwproject.Network.Messages.MessageType;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClientMessage;
-import it.polimi.ingsfw.ingsfwproject.View.View;
 
 import java.io.Serializable;
 import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Message sent from server to client to provide the list of active games.

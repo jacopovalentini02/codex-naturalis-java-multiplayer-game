@@ -31,7 +31,7 @@ public class PlayCardMessage extends ClientToServerMessage {
     }
 
     /**
-     * Handle the player's request to play a card on the board.
+     * Handle the player's request to play a card.
      *
      * @param controller the controller on which to execute the message
      */
