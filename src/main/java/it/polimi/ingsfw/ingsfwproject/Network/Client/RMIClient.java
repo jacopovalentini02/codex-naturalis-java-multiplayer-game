@@ -13,14 +13,29 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
+/**
+ * This client communicates with the server using RMI.
+ */
 public class RMIClient extends Client implements Serializable {
 
     private Handler handler;
 
+    /**
+     * Constructs a new RMIClient.
+     *
+     * @param ip the IP address of the server
+     * @param port the port number of the server
+     * @param view the view associated with this client
+     */
     public RMIClient(String ip, int port, View view){
         super(ip, port, view);
     }
 
+    /**
+     * Starts the connection to the RMI server.
+     *
+     * @throws Exception if an error occurs while starting the connection
+     */
     @Override
     public void startConnection() throws Exception {
         Registry registry = LocateRegistry.getRegistry(this.getIp(), this.getPort());
@@ -51,17 +66,32 @@ public class RMIClient extends Client implements Serializable {
         this.setConnected(true);
     }
 
-
+    /**
+     * Sends a message to the server.
+     *
+     * @param message the message to send
+     * @throws IOException if an I/O error occurs while sending the message
+     */
     @Override
     public void sendMessage(Message message) throws IOException {
         handler.sendMessage(message);
     }
 
+    /**
+     * Disconnects from the server.
+     *
+     * @throws Exception if an error occurs while disconnecting
+     */
     @Override
     public void disconnect() throws Exception {
 
     }
 
+    /**
+     * Receives a message from the server.
+     *
+     * @param m the message received
+     */
     public void receiveMessage(Message m) {
         handleMessage(m);
     }

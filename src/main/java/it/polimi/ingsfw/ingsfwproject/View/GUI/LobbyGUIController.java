@@ -2,6 +2,8 @@ package it.polimi.ingsfw.ingsfwproject.View.GUI;
 
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServer.GetGameListMessage;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServer.JoinGameMessage;
+import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.GameJoinedMessage;
+import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -51,6 +53,10 @@ public class LobbyGUIController extends GUIController implements Initializable {
         stage.setTitle("Lobby");
         stage.setScene(scene);
         stage.centerOnScreen();
+        stage.setOnCloseRequest((event->{
+            Platform.exit();
+            System.exit(0);
+        }));
         stage.show();
     }
 
@@ -71,7 +77,12 @@ public class LobbyGUIController extends GUIController implements Initializable {
         guiView = view;
     }
 
-
+    /**
+     * Initializes the table columns and refreshes the list of games.
+     *
+     * @param url the location used to resolve relative paths for the root object, or null if not known
+     * @param resourceBundle the resources for the root object, or null if there are no resources
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         gameIdColumn.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<>(cellData.getValue().getKey()));

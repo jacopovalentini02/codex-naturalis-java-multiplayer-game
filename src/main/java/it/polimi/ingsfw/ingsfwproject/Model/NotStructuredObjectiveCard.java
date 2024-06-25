@@ -9,10 +9,6 @@ public class NotStructuredObjectiveCard extends ObjectiveCard{
         return objectRequested;
     }
 
-    public void setObjectRequested(ArrayList<Content> objectRequested) {
-        this.objectRequested = objectRequested;
-    }
-
     public NotStructuredObjectiveCard(int idCard, int points, ArrayList<Content> objectRequested) {
         super(idCard, points);
         this.objectRequested = objectRequested;

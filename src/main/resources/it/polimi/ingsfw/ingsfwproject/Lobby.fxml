@@ -16,22 +16,22 @@
    <effect>
       <Blend />
    </effect>
-   <ImageView fitHeight="319.0" fitWidth="319.0" layoutX="971.0" layoutY="303.0" pickOnBounds="true" preserveRatio="true">
+   <ImageView fitHeight="371.0" fitWidth="378.0" layoutX="971.0" layoutY="303.0" pickOnBounds="true" preserveRatio="true">
       <image>
          <Image url="@Images/02.png" />
       </image>
    </ImageView>
-   <Button fx:id="createButtonLobby" layoutX="727.0" layoutY="439.0" mnemonicParsing="false" onAction="#openCreateGame" prefHeight="47.0" prefWidth="202.0" style="-fx-background-color: #5F3075;" text="Create New Game" textFill="WHITE">
+   <Button fx:id="createButtonLobby" layoutX="505.0" layoutY="685.0" mnemonicParsing="false" onAction="#openCreateGame" prefHeight="60.0" prefWidth="260.0" style="-fx-background-color: #5F3075;" text="Create New Game" textFill="WHITE">
       <font>
-         <Font name="Bodoni 72 Bold" size="22.0" />
+         <Font name="Bodoni 72 Bold" size="24.0" />
       </font>
    </Button>
-   <Button fx:id="refreshButton" layoutX="1051.0" layoutY="653.0" mnemonicParsing="false" onAction="#refreshGames" prefHeight="47.0" prefWidth="153.0" style="-fx-background-color: #5F3075;" text="Refresh List" textFill="WHITE">
+   <Button fx:id="refreshButton" layoutX="1066.0" layoutY="685.0" mnemonicParsing="false" onAction="#refreshGames" prefHeight="60.0" prefWidth="153.0" style="-fx-background-color: #5F3075;" text="Refresh List" textFill="WHITE">
       <font>
-         <Font name="Bodoni 72 Bold" size="22.0" />
+         <Font name="Bodoni 72 Bold" size="24.0" />
       </font>
    </Button>
-   <TableView fx:id="tableView" layoutX="999.0" layoutY="320.0" prefHeight="285.0" prefWidth="263.0">
+   <TableView fx:id="tableView" layoutX="999.0" layoutY="329.0" prefHeight="318.0" prefWidth="315.0">
       <columns>
          <TableColumn fx:id="gameIdColumn" editable="false" maxWidth="1.7976931348623157E308" minWidth="3.0" prefWidth="94.0" text="ID" />
          <TableColumn fx:id="playerCountColumn" prefWidth="168.0" text="Number of Players" />

@@ -3,9 +3,9 @@ package it.polimi.ingsfw.ingsfwproject.View.GUI;
 import it.polimi.ingsfw.ingsfwproject.Model.ChatMessage;
 import it.polimi.ingsfw.ingsfwproject.Model.Coordinate;
 import it.polimi.ingsfw.ingsfwproject.Model.PlayableCard;
-import it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServer.CreateGameMessage;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServer.PlayCardMessage;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServer.sendChatMessage;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -17,7 +17,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -28,6 +27,9 @@ import java.util.ResourceBundle;
 
 import static it.polimi.ingsfw.ingsfwproject.View.View.client;
 
+/**
+ * The controller of the scene where the starter card is chosen
+ */
 public class ChooseStarterController extends GUIController implements Initializable  {
     @FXML public Text stateLabel;
     @FXML public Label turn;
@@ -51,6 +53,12 @@ public class ChooseStarterController extends GUIController implements Initializa
     @FXML
     private AnchorPane chatPane;
 
+    /**
+     * Initializes and displays the stage for choosing the starter card.
+     *
+     * @param stage the primary stage for this application
+     * @throws Exception if an error occurs during loading or setting up the scene
+     */
     public void start(Stage stage) throws Exception {
         setGuiView(guiView);
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polimi/ingsfw/ingsfwproject/ChoosingStarter.fxml"));
@@ -59,21 +67,35 @@ public class ChooseStarterController extends GUIController implements Initializa
         guiView.setChooseStarterController(chooseStarterController);
         guiView.setStage(stage);
         Scene scene = new Scene(root);
-
-
         stage.setTitle("Choosing Starter Card");
         stage.setScene(scene);
         stage.centerOnScreen();
 
-
         stage.show();
-
+        stage.setOnCloseRequest((event->{
+            Platform.exit();
+            System.exit(0);
+        }));
     }
 
+    /**
+     * Sets the GUI view for the application.
+     *
+     * @param view the {@link GUIView} instance to be set
+     */
     public static void setGuiView(GUIView view) {
         guiView = view;
     }
 
+    /**
+     * Initializes the controller upon loading.
+     *
+     * <p>Sets up UI components based on the current player, configures chat options,
+     * customizes chat message appearance, and updates the current chat display.
+     *
+     * @param url location used to resolve relative paths for the root object, or null if unknown
+     * @param resourceBundle resources for the root object, or null if there are no resources
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         if(Objects.equals(client.getNickname(), client.getVirtualView().getCurrentPlayer())){
@@ -102,18 +124,27 @@ public class ChooseStarterController extends GUIController implements Initializa
         updateCurrentChat();
     }
 
+    /**
+     * Displays the front and back images of a playable card.
+     *
+     * @param card the {@link PlayableCard} object containing information about the card to display
+     */
     public void showStarter(PlayableCard card){
-        String id="0"+card.getIdCard();
         String pathFront=card.getFront().getImagePath();
         String pathBack=card.getBack().getImagePath();
-
-        System.out.println(pathBack);
         Image imageBack = new Image(Objects.requireNonNull(getClass().getResourceAsStream(pathBack)));
         Image imageFront = new Image(Objects.requireNonNull(getClass().getResourceAsStream(pathFront)));
         starterFront.setImage(imageFront);
         starterBack.setImage(imageBack);
     }
 
+
+    /**
+     * Sends a message to play the front side of the starter card in the player's hand and handles the card selection.
+     *
+     * @param mouseEvent the MouseEvent triggered by the user's interaction
+     * @throws IOException if an error occurs while sending the message
+     */
     @FXML
     public void sendFront(MouseEvent mouseEvent) throws IOException {
         PlayCardMessage playCardMessage=new PlayCardMessage(client.getClientID(), client.getVirtualView().getHandCards().getFirst().getIdCard(), true, new Coordinate(0,0), client.getNickname());
@@ -121,6 +152,13 @@ public class ChooseStarterController extends GUIController implements Initializa
         cardChosen();
     }
 
+
+    /**
+     * Sends a message to play the back side of the starter card in the player's hand and handles the card selection.
+     *
+     * @param mouseEvent the MouseEvent triggered by the user's interaction
+     * @throws IOException if an error occurs while sending the message
+     */
     @FXML
     public void sendBack(MouseEvent mouseEvent) throws IOException {
         PlayCardMessage playCardMessage=new PlayCardMessage(client.getClientID(), client.getVirtualView().getHandCards().getFirst().getIdCard(), false, new Coordinate(0,0), client.getNickname());
@@ -128,12 +166,19 @@ public class ChooseStarterController extends GUIController implements Initializa
         cardChosen();
     }
 
+    /**
+     * Updates the UI after a card has been chosen.
+     */
     public void cardChosen(){
         starterFront.setVisible(false);
         starterBack.setVisible(false);
         labelInstruction.setText("Card Chosen.\nWaiting for other players choice");
     }
 
+    /**
+     * Sets turn's text based on the current player.
+     *  @throws RuntimeException if an IOException occurs while sending the message to retrieve available colors
+     */
     public void setTurn(){
         if(Objects.equals(client.getNickname(), client.getVirtualView().getCurrentPlayer())){
             turn.setText("It's your turn!");
@@ -146,11 +191,19 @@ public class ChooseStarterController extends GUIController implements Initializa
     }
 
 
+    /**
+     * Updates the current chat display when triggered by an action event.
+     *
+     * @param event the ActionEvent triggered by the user's interaction
+     */
     @FXML
     private void changeChat(ActionEvent event){
         updateCurrentChat();
     }
 
+    /**
+     * Updates the current chat display based on the selected chat from the chat selector.
+     */
     private void updateCurrentChat() {
         String selectedChat = chatSelector.getSelectionModel().getSelectedItem();
         if (selectedChat != null && guiView.getChats().containsKey(selectedChat)) {
@@ -158,6 +211,11 @@ public class ChooseStarterController extends GUIController implements Initializa
         }
     }
 
+    /**
+     * Adds a message to the appropriate chat and updates the current chat display if necessary.
+     *
+     * @param message the {@link ChatMessage} to be added to the chat
+     */
     public void addMessageToChat(ChatMessage message){
         String sender = message.getSender();
         String key;
@@ -176,6 +234,12 @@ public class ChooseStarterController extends GUIController implements Initializa
         }
     }
 
+    /**
+     * Sends a chat message based on the user's input and updates the chat.
+     *
+     * @param event the {@link ActionEvent} triggered by the user action
+     * @throws IOException if an I/O error occurs while sending the message
+     */
     @FXML
     public void sendMessage(ActionEvent event) throws IOException {
         String messageText = chatTextField.getText();
@@ -183,7 +247,7 @@ public class ChooseStarterController extends GUIController implements Initializa
             String selectedChat = chatSelector.getSelectionModel().getSelectedItem();
             String author = client.getNickname();
             ChatMessage message = new ChatMessage(author, selectedChat, messageText);
-            if (message.getRecipient() != "global"){
+            if (!Objects.equals(message.getRecipient(), "global")){
                 addMessageToChat(message);
             }
             client.sendMessage(new sendChatMessage(client.getClientID(),author, selectedChat, messageText));
@@ -191,6 +255,11 @@ public class ChooseStarterController extends GUIController implements Initializa
         }
     }
 
+    /**
+     * Toggles the visibility of the chat pane and updates the button text accordingly.
+     *
+     * @param actionEvent the {@link ActionEvent} triggered by the user action
+     */
     @FXML
     public void toggleChatMenu(ActionEvent actionEvent) {
         if (chatPane.isVisible()){

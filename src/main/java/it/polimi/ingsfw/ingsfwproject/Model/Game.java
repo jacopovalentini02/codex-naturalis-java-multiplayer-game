@@ -2,7 +2,6 @@ package it.polimi.ingsfw.ingsfwproject.Model;
 
 import it.polimi.ingsfw.ingsfwproject.Controller.GameController;
 import it.polimi.ingsfw.ingsfwproject.Exceptions.DeckEmptyException;
-import it.polimi.ingsfw.ingsfwproject.Exceptions.*;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.*;
 import it.polimi.ingsfw.ingsfwproject.Network.Server.GameServerInstance;
 import org.json.JSONArray;
@@ -11,20 +10,14 @@ import org.json.JSONObject;
 import org.json.*;
 import java.io.FileReader;
 import java.io.IOException;
-import java.rmi.RemoteException;
 import java.util.*;
 
 
 public class Game {
     private int idGame;
     private GameState state;
-    private final GameController controller;
+    private GameController controller;
     private List<Player> listOfPlayers;
-
-    public List<PlayerColor> getTokenAvailable() {
-        return tokenAvailable;
-    }
-
     private List<PlayerColor> tokenAvailable;
     private int numOfPlayers;
     private Map<Player, Integer> scores;
@@ -55,10 +48,6 @@ public class Game {
 
     public int getObjectiveCardsChosen() {
         return objectiveCardsChosen;
-    }
-
-    public void setObjectiveCardsChosen(int objectiveCardsChosen) {
-        this.objectiveCardsChosen = objectiveCardsChosen;
     }
 
     public boolean getifCurrentPlayerhasPlayed() {return currentPlayerhasPlayed;}
@@ -139,17 +128,11 @@ public class Game {
 
     public boolean chooseColor(Player player, PlayerColor color)  {
         if(!tokenAvailable.contains(color)) {
-            gameServerInstance.sendUpdateToAll(new ExcpetionMessage(player.getClientID(), "This color is already taken"));
+            gameServerInstance.sendUpdateToAll(new ExceptionMessage(player.getClientID(), "This color is already taken"));
             return false;
         }
         player.setToken(color);
-
         tokenAvailable.remove(color);
-
-        //colorChosen++;
-
-        //if (colorChosen == this.numOfPlayers)
-          //  setupHandsAndObjectives();
         return true;
 
     }
@@ -158,7 +141,7 @@ public class Game {
 
 
         if (!player.getHandObjective().contains((ObjectiveCard) card)) {
-            gameServerInstance.sendUpdateToAll(new ExcpetionMessage(player.getClientID(), "You can't choose this card"));
+            gameServerInstance.sendUpdateToAll(new ExceptionMessage(player.getClientID(), "You can't choose this card"));
             return false;
         }
 
@@ -223,6 +206,9 @@ public class Game {
         setFirstPlayer(listOfPlayers.get(index));
         this.setState(GameState.STARTED);
         setCurrentPlayer(getFirstPlayer());
+
+        updatePoints(19, getFirstPlayer());
+
 
     }
 
@@ -301,8 +287,10 @@ public class Game {
         else{
             int newIndex = (listOfPlayers.indexOf(currentPlayer) + 1) % listOfPlayers.size();
             this.setCurrentPlayer(listOfPlayers.get(newIndex));
+
+            if(!currentPlayer.canPlay())
+                nextTurn();
         }
-        //currentPlayerhasPlayed = false;
     }
 
     public void updatePoints(int score, Player player){
@@ -324,7 +312,7 @@ public class Game {
     public boolean drawDisplayedPlayableCard(PlayableCard card, Player player)  {
 
         if (!(displayedPlayableCard.contains(card))){
-            gameServerInstance.sendUpdateToAll(new ExcpetionMessage(player.getClientID(),"Card is not within the displayed playable cards"));
+            gameServerInstance.sendUpdateToAll(new ExceptionMessage(player.getClientID(),"Card is not within the displayed playable cards"));
             return false;
         }
 
@@ -336,7 +324,7 @@ public class Game {
             try {
                 displayedPlayableCard.add((PlayableCard) goldDeck.draw());
             } catch (DeckEmptyException e) {
-                gameServerInstance.sendUpdateToAll(new ExcpetionMessage(player.getClientID(),e.getMessage()));
+                gameServerInstance.sendUpdateToAll(new ExceptionMessage(player.getClientID(),e.getMessage()));
                 return false;
             }
             gameServerInstance.sendUpdateToAll(new GoldDeckMessage(-10, goldDeck));
@@ -344,7 +332,7 @@ public class Game {
             try {
                 displayedPlayableCard.add((PlayableCard) resourceDeck.draw());
             } catch (DeckEmptyException e) {
-                gameServerInstance.sendUpdateToAll(new ExcpetionMessage(player.getClientID(),e.getMessage()));
+                gameServerInstance.sendUpdateToAll(new ExceptionMessage(player.getClientID(),e.getMessage()));
                 return false;
             }
             gameServerInstance.sendUpdateToAll(new ResourceDeckMessage(-10, resourceDeck));
@@ -393,8 +381,6 @@ public class Game {
 
 
     public void clientDisconnected() {
-        //TODO MESSAGGIO
-
 
 //        for (ClientCallbackInterface c: this.listeners.values()){
 //            try {
@@ -429,10 +415,6 @@ public class Game {
 
     public Deck getStarterDeck() {
         return starterDeck;
-    }
-
-    public void setStarterDeck(Deck starterDeck) {
-        this.starterDeck = starterDeck;
     }
 
     public int getIdGame() {
@@ -479,53 +461,30 @@ public class Game {
         return currentPlayer;
     }
 
-    public void setIdGame(int idGame) {
-        this.idGame = idGame;
-    }
-
-    public void setListOfPlayers(List<Player> listOfPlayers) {
-        this.listOfPlayers = listOfPlayers;
-    }
-
-    public void setNumOfPlayers(int numOfPlayers) {
-        this.numOfPlayers = numOfPlayers;
-    }
-
-    public void setScores(Map<Player, Integer> scores) {
-        this.scores = scores;
-    }
-
     public void setFirstPlayer(Player firstPlayer) {
         this.firstPlayer = firstPlayer;
     }
 
-    public void setResourceDeck(Deck resourceDeck) {
-        this.resourceDeck = resourceDeck;
-    }
-
-    public void setGoldDeck(Deck goldDeck) {
-        this.goldDeck = goldDeck;
-    }
-
-    public void setObjectiveDeck(Deck objectiveDeck) {
-        this.objectiveDeck = objectiveDeck;
-    }
-
-    public void setDisplayedPlayableCard(ArrayList<PlayableCard> displayedPlayableCard) {
-        this.displayedPlayableCard = displayedPlayableCard;
-    }
-
-    public void setDisplayedObjectiveCard(ArrayList<ObjectiveCard> displayedObjectiveCard) {
-        this.displayedObjectiveCard = displayedObjectiveCard;
-    }
 
     public void setCurrentPlayer(Player currentPlayer) {
         this.currentPlayer = currentPlayer;
         gameServerInstance.sendUpdateToAll(new CurrentPlayerMessage(-10, currentPlayer.getUsername()));
     }
 
-    public int getLastRoundsplayed() {
-        return lastRoundsplayed;
+    public List<PlayerColor> getTokenAvailable() {
+        return tokenAvailable;
+    }
+
+    public void setLastRoundsplayed(int lastRoundsplayed) {
+        this.lastRoundsplayed = lastRoundsplayed;
+    }
+
+    public Player getWinner() {
+        return winner;
+    }
+
+    public void setController(GameController controller) {
+        this.controller = controller;
     }
 
 
