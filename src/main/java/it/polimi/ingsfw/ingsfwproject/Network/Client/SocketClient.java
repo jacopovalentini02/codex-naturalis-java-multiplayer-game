@@ -35,10 +35,9 @@ public class SocketClient extends Client{
      * Starts the connection to the server.
      *
      * @throws IOException if an I/O error occurs when connecting
-     * @throws ClassNotFoundException if the class of a serialized object cannot be found
      */
     @Override
-    public void startConnection() throws IOException, ClassNotFoundException {
+    public void startConnection() throws IOException {
         this.socket = new Socket();
         this.socket.connect(new InetSocketAddress(getIp(), getPort()));
 
