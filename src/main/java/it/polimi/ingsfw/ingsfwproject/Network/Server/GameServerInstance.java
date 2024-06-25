@@ -22,13 +22,14 @@ public class GameServerInstance {
     private HashMap<Integer, Handler> handlers;
     private HashMap<Player, Integer> players;
 
-    /**
-     * Constructs a GameServerInstance initializing the message queue and starting the message processing thread.
-     */
+
     private ConcurrentHashMap<Integer, Long> heartbeats;
 
     private boolean inGame = true;
 
+    /**
+     * Constructs a GameServerInstance initializing the message queue and starting the message processing thread.
+     */
     public GameServerInstance() {
         this.queue = new LinkedBlockingDeque<>(); // Inizializzazione della coda
         this.handlers = new HashMap<>();

@@ -137,7 +137,7 @@ public class GameController implements Controller {
             if (Objects.equals(p.getUsername(), username))
                 player = p;
         }
-
+        assert player != null;
 
         for (PlayableCard pc: model.getDisplayedPlayableCard()){
             if (pc.getIdCard() == cardID)
@@ -187,12 +187,6 @@ public class GameController implements Controller {
 
         if (!moveSuccessfull)
             return;
-
-
-        if (deck.equals(model.getObjectiveDeck())){
-            serverInstance.sendUpdateToAll(new ExceptionMessage(player.getClientID(),"You can't draw from objective deck!"));
-            return;
-        }
 
         synchronized (model){
             moveSuccessfull=player.draw(deck);//
@@ -302,9 +296,9 @@ public class GameController implements Controller {
         }
     }
 
-    public void clientDisconnected(){
-        this.model.clientDisconnected();
-    }
+//    public void clientDisconnected(){
+//        this.model.clientDisconnected();
+//    }
 
     public Game getModel() {
         return model;

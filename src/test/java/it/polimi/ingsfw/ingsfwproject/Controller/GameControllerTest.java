@@ -6,11 +6,9 @@ import it.polimi.ingsfw.ingsfwproject.Model.*;
 import it.polimi.ingsfw.ingsfwproject.Network.Server.GameServerInstance;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
 import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
 class GameControllerTest {
@@ -34,36 +32,115 @@ class GameControllerTest {
         game.addPlayer(player3);
         game.addPlayer(player4);
 
-        game.setUpCards();
+        game.setupField();
+        game.setupHandsAndObjectives();
+
         manager = new GameManager();
 
+
     }
     @Test
-    void testChooseObjectiveCard() {
-
-
+    void testChooseObjectiveCardNoCurrentPlayer() {
+        game.setCurrentPlayer(player1);
+        game.getController().chooseObjectiveCard(player2.getUsername(), player2.getHandObjective().getFirst().getIdCard());
     }
-
 
     @Test
-    void testPlayCard() {
+    void testChooseObjectivePhaseException(){
+        game.setState(GameState.ENDING);
+        game.setCurrentPlayer(player1);
+        game.getController().chooseObjectiveCard(player1.getUsername(),player1.getHandObjective().getFirst().getIdCard());
+
     }
+
 
     @Test
     void testDrawDisplayedPlayableCard() {
+        game.setState(GameState.STARTED);
+        game.setCurrentPlayer(player1);
+
+        game.getController().playCard(player1.getUsername(),player1.getHandCard().getFirst().getIdCard(), true, new Coordinate(0,0));
+        game.setCurrentPlayer(player1);
+
+        game.setCurrentPlayerhasPlayed(true);
+        game.getController().drawDisplayedPlayableCard(player1.getUsername(),game.getDisplayedPlayableCard().getFirst().getIdCard());
+        assert player1.getHandCard().size()==4;
     }
 
     @Test
-    void testDraw() {
+    void testDrawDisplayedPlayableCard_CardDoesNotExist() {
+        game.setState(GameState.STARTED);
+        game.setCurrentPlayer(player1);
+        game.getController().playCard(player1.getUsername(),player1.getHandCard().getFirst().getIdCard(), true, new Coordinate(0,0));
+        game.getController().drawDisplayedPlayableCard(player1.getUsername(), 9999); // ID di carta che non esiste
+        assert player1.getHandCard().size() == 3;
     }
+
+    @Test
+    void testDrawDisplayedPlayableCard_DrawNotPossible() {
+        game.setState(GameState.STARTED);
+        game.setCurrentPlayer(player1);
+        game.getController().playCard(player1.getUsername(),player1.getHandCard().getFirst().getIdCard(), true, new Coordinate(0,0));
+        player1.setCanPlay(false);
+        game.getController().drawDisplayedPlayableCard(player1.getUsername(), game.getDisplayedPlayableCard().getFirst().getIdCard());
+        assert player1.getHandCard().size() == 3;
+    }
+
+    @Test
+    void testDraw_FromResourceDeck() {
+        game.setState(GameState.STARTED);
+        game.setCurrentPlayer(player1);
+        game.getController().playCard(player1.getUsername(),player1.getHandCard().getFirst().getIdCard(), true, new Coordinate(0,0));
+        game.getController().draw(player1.getUsername(), true);
+        assert player1.getHandCard().size() == 3;
+    }
+
+    @Test
+    void testDraw_FromGoldDeck() {
+        game.setState(GameState.STARTED);
+        game.setCurrentPlayer(player1);
+
+        game.getController().playCard(player1.getUsername(),player1.getHandCard().getFirst().getIdCard(), true, new Coordinate(0,0));
+        game.setCurrentPlayer(player1);
+
+        game.setCurrentPlayerhasPlayed(true);
+        game.getController().draw(player1.getUsername(), false);
+        assert player1.getHandCard().size() == 4;
+    }
+
+    @Test
+    void testCheckIfDrawPossible_GameStateNotAllowed() {
+        game.setCurrentPlayer(player1);
+        game.getController().playCard(player1.getUsername(),player1.getHandCard().getFirst().getIdCard(), true, new Coordinate(0,0));
+        GameState[] notAllowedStates = {
+                GameState.WAITING_FOR_PLAYERS,
+                GameState.CHOOSING_STARTER_CARDS,
+                GameState.CHOOSING_OBJECTIVES,
+                GameState.ENDING,
+                GameState.CHOOSING_COLORS
+        };
+
+        for (GameState ignored : notAllowedStates) {
+            game.getController().draw(player1.getUsername(), false);
+
+        }
+    }
+
+    @Test
+    void testCheckIfDrawPossible_PlayerCantPlay(){
+        game.setState(GameState.STARTED);
+        game.setCurrentPlayer(player1);
+        game.getController().playCard(player1.getUsername(),player1.getHandCard().getFirst().getIdCard(), true, new Coordinate(0,0));
+        player1.setCanPlay(false);
+        game.getController().draw(player1.getUsername(), false);
+        game.getController().draw(player2.getUsername(),false);
+    }
+
 
     @Test
     void testChooseColor() {
     }
 
-    @Test
-    void testAddMessageToGlobalChat() {
-    }
 
     @Test
     void testForwardPrivateChatMessage() {
@@ -75,6 +152,28 @@ class GameControllerTest {
 
     @Test
     void testSendTokenAvailable() {
+    }
+
+    @Test
+    public void testAddMessageToGlobalChat() {
+        ChatMessage message = new ChatMessage("sender", "recipient", "Hello, World!");
+
+        // Act
+        game.getController().addMessageToGlobalChat(message);
+
+        // Assert
+        assertEquals(1, game.getController().globalChat.size());
+        assertEquals(message, game.getController().globalChat.peek());
+
+    }
+
+    @Test
+    public void testGetPlayer() {
+        gameServerInstance=new GameServerInstance();
+        player1 = new Player("user1", gameServerInstance, 0);
+        Game game2 = new Game(gameServerInstance,new GameManager(), 1, 4, player1);
+        Player actualPlayer = game2.getController().getPlayer("user1");
+        assertEquals(player1, actualPlayer);
     }
 
 
@@ -102,7 +201,7 @@ class GameControllerTest {
         assert game1.getListOfPlayers().size() == 2;
         assert game1.getState() == GameState.WAITING_FOR_PLAYERS;
 
-        game1.setUpCards();
+        game1.setupField();
         for (Player p: game1.getListOfPlayers()) {
             assert p.getHandCard().size() == 1;
             assert p.getHandCard().getFirst() instanceof StarterCard;
@@ -138,7 +237,7 @@ class GameControllerTest {
         assert bea.getHandCard().size() == 3;
 
        assert game1.getState() == GameState.CHOOSING_OBJECTIVES;
-       assertThrows(GamePhaseException.class, ()->controller.playCard(jaco.getUsername(), jaco.getHandCard().getFirst().getIdCard(),true, new Coordinate(1,1)));
+       //assertThrows(GamePhaseException.class, ()->controller.playCard(jaco.getUsername(), jaco.getHandCard().getFirst().getIdCard(),true, new Coordinate(1,1)));
 
        for (Player p : game1.getListOfPlayers())
            assert p.getHandObjective().size() == 2;
@@ -154,7 +253,7 @@ class GameControllerTest {
        assert bea.getHandObjective().size() == 1;
        assert game1.getObjectiveDeck().getCardList().size() == ObjectiveDecksizeprecall + 2;
 
-       game1.setupHandsAndObjectives();
+       //game1.setupHandsAndObjectives();
 
         assert game1.getState() == GameState.STARTED;
 

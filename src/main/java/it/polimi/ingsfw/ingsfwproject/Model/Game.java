@@ -363,7 +363,6 @@ public class Game {
         gameServerInstance.sendUpdateToAll(new WinnerMessage(-10, winner.getUsername()));
         setState(GameState.ENDED);
 
-
         //this.endGame();
     }
 
