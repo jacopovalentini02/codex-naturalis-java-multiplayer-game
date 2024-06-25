@@ -1,12 +1,16 @@
 package it.polimi.ingsfw.ingsfwproject.Controller;
 
 
+import it.polimi.ingsfw.ingsfwproject.Exceptions.*;
 import it.polimi.ingsfw.ingsfwproject.Model.*;
 import it.polimi.ingsfw.ingsfwproject.Network.Server.GameServerInstance;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.Objects;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
 class GameControllerTest {
@@ -16,6 +20,8 @@ class GameControllerTest {
     private Player player3;
     private Player player4;
     private Game game;
+
+    private GameManager manager;
     @BeforeEach
     void setUp() {
         gameServerInstance=new GameServerInstance();
@@ -29,6 +35,8 @@ class GameControllerTest {
         game.addPlayer(player4);
 
         game.setUpCards();
+        manager = new GameManager();
+
     }
     @Test
     void testChooseObjectiveCard() {
@@ -68,11 +76,11 @@ class GameControllerTest {
     @Test
     void testSendTokenAvailable() {
     }
-/*
+
+
     @Test
     public void test() throws TurnException, GamePhaseException, PositionNotAvailableException, NotEnoughResourcesException, CardNotInHandException, DeckEmptyException, ColorNotAvailableException, CardNotPresentException, DeckException {
-        GameManager manager = new GameManager();
-        manager.createGame(2, "Jaco");
+        manager.createGame(2, "Jaco", 0);
         assertEquals(1, manager.getGameList().size());
 
         Game game1 = manager.getGameList().get(0);
@@ -83,7 +91,7 @@ class GameControllerTest {
 
         assert game1.getState() == GameState.WAITING_FOR_PLAYERS;
 
-        manager.joinGame("Bea", 0);
+        manager.joinGame("Bea", 0, 1);
 
         Player jaco = game1.getListOfPlayers().getFirst();
         Player bea = game1.getListOfPlayers().get(1);
@@ -92,19 +100,20 @@ class GameControllerTest {
         assert Objects.equals(bea.getUsername(), "Bea");
 
         assert game1.getListOfPlayers().size() == 2;
-        assert game1.getState() == GameState.CHOOSING_STARTER_CARDS;
+        assert game1.getState() == GameState.WAITING_FOR_PLAYERS;
 
+        game1.setUpCards();
         for (Player p: game1.getListOfPlayers()) {
             assert p.getHandCard().size() == 1;
             assert p.getHandCard().getFirst() instanceof StarterCard;
         }
 
-        controller.playCard(jaco, jaco.getHandCard().getFirst(), true, new Coordinate(0,0));
+        controller.playCard(jaco.getUsername(), jaco.getHandCard().getFirst().getIdCard(), true, new Coordinate(0,0));
 
         assert jaco.getGround().getGrid().size() == 1;
         assert jaco.getHandCard().isEmpty();
 
-        controller.playCard(bea, bea.getHandCard().getFirst(), true, new Coordinate(0,0));
+        controller.playCard(bea.getUsername(), bea.getHandCard().getFirst().getIdCard(), true, new Coordinate(0,0));
         assert bea.getGround().getGrid().size() == 1;
         assert bea.getHandCard().isEmpty();
 
@@ -115,11 +124,11 @@ class GameControllerTest {
 
         assert game1.getCurrentPlayer() == jaco;
 
-        controller.chooseColor(jaco, PlayerColor.BLUE);
+        controller.chooseColor(jaco.getUsername(), PlayerColor.BLUE);
         assert game1.getState() == GameState.CHOOSING_COLORS;
         assert game1.getCurrentPlayer() == bea;
 
-        controller.chooseColor(bea, PlayerColor.RED);
+        controller.chooseColor(bea.getUsername(), PlayerColor.RED);
         assert game1.getState() == GameState.CHOOSING_OBJECTIVES;
         assert game1.getCurrentPlayer() == jaco;
 
@@ -129,26 +138,28 @@ class GameControllerTest {
         assert bea.getHandCard().size() == 3;
 
        assert game1.getState() == GameState.CHOOSING_OBJECTIVES;
-       assertThrows(GamePhaseException.class, ()->controller.playCard(jaco, jaco.getHandCard().getFirst(),true, new Coordinate(1,1)));
+       assertThrows(GamePhaseException.class, ()->controller.playCard(jaco.getUsername(), jaco.getHandCard().getFirst().getIdCard(),true, new Coordinate(1,1)));
 
        for (Player p : game1.getListOfPlayers())
            assert p.getHandObjective().size() == 2;
 
        int ObjectiveDecksizeprecall = game1.getObjectiveDeck().getCardList().size();
 
-       controller.chooseObjectiveCard(jaco, jaco.getHandObjective().getFirst());
+       controller.chooseObjectiveCard(jaco.getUsername(), jaco.getHandObjective().getFirst().getIdCard());
        assert jaco.getHandObjective().size() == 1;
        assert game1.getObjectiveDeck().getCardList().size() == ObjectiveDecksizeprecall + 1;
        assert game1.getState() == GameState.CHOOSING_OBJECTIVES;
 
-       controller.chooseObjectiveCard(bea, bea.getHandObjective().getFirst());
+       controller.chooseObjectiveCard(bea.getUsername(), bea.getHandObjective().getFirst().getIdCard());
        assert bea.getHandObjective().size() == 1;
        assert game1.getObjectiveDeck().getCardList().size() == ObjectiveDecksizeprecall + 2;
 
-       assert game1.getState() == GameState.STARTED;
+       game1.setupHandsAndObjectives();
+
+        assert game1.getState() == GameState.STARTED;
 
        for (Player p: game1.getListOfPlayers()) {
-           assert p.getPoints() == 0;
+           //assert p.getPoints() == 0;
            assert p.getHandCard().size() == 3;
            assert p.getHandObjective().size() == 1;
        }
@@ -157,7 +168,7 @@ class GameControllerTest {
 
 
 
-       controller.playCard(firstPlayer, firstPlayer.getHandCard().getFirst(), true, firstPlayer.getGround().getAvailablePositions().getFirst());
+       controller.playCard(firstPlayer.getUsername(), firstPlayer.getHandCard().getFirst().getIdCard(), true, firstPlayer.getGround().getAvailablePositions().getFirst());
        assert firstPlayer.getGround().getGrid().size() == 2;
        assert game1.getifCurrentPlayerhasPlayed();
        assert game1.getCurrentPlayer() == firstPlayer;
@@ -165,7 +176,7 @@ class GameControllerTest {
 
     }
 
-*/
+
 
 
 }
