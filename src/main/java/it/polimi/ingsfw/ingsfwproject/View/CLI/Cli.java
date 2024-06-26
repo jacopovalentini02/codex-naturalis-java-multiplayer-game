@@ -6,10 +6,12 @@ import it.polimi.ingsfw.ingsfwproject.Network.Client.SocketClient;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServer.*;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.Message;
 
+import java.net.ConnectException;
 import java.util.*;
 
 import java.util.HashMap;
 import java.util.Scanner;
+import java.util.regex.Pattern;
 
 import it.polimi.ingsfw.ingsfwproject.View.View;
 
@@ -182,12 +184,13 @@ public class Cli extends View implements Runnable {
     public void chooseConnection() {
         int choice = askForIntInput("Choose a connection method\n1. Socket\n2. RMI", 1, 2);
 
-        //todo: a fine sviluppo va chiesto all'utente!
-        String ip = "localhost";
-        int port = choice == 1? 1337 : 1099;
-
+        String ip = askForStringInput("Insert the IP address: ");
+        while(!(validate(ip) || ip.equals("localhost"))) {
+            ip = askForStringInput("IP address not valid! Insert the IP address: ");
+        }
         try {
-            super.client = choice == 1? new SocketClient(ip,port, this) : new RMIClient(ip,port, this);
+            int port = choice == 1? 1337 : 1099;
+            super.client = choice == 1 ? new SocketClient(ip, port, this) : new RMIClient(ip, port, this);
             client.startConnection();
         } catch (java.lang.Exception e) {
             throw new RuntimeException(e);
@@ -1384,5 +1387,18 @@ public class Cli extends View implements Runnable {
 
     public String getWhite(){
         return "\u001B[0m";
+    }
+
+    private static final Pattern PATTERN = Pattern.compile("^(([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.){3}([01]?\\d\\d?|2[0-4]\\d|25[0-5])$");
+
+    /**
+     * Validates if the given string is a valid IPv4 address.
+     *
+     * @param ip the IP address string to be validated
+     * @return {@code true} if the input string is a valid IPv4 address,
+     *         {@code false} otherwise
+     */
+    public static boolean validate(final String ip) {
+        return PATTERN.matcher(ip).matches();
     }
 }

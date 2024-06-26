@@ -11,13 +11,18 @@ public class GameController implements Controller {
     private final Game model;
 
     public Queue<ChatMessage> globalChat;
+    //push di prova
 
     private int starterCardsPlayed;
     private int colorChosen;
 
     private final GameServerInstance serverInstance;
 
-
+    /**
+     * Constructs a new {@code GameController}.
+     * @param model the {@code Game} that this controller is managing.
+     * @param serverInstance the {@code GameServerInstance} that manages.
+     */
     public GameController(Game model, GameServerInstance serverInstance){
         this.model = model;
         starterCardsPlayed = 0;
@@ -26,6 +31,13 @@ public class GameController implements Controller {
         this.globalChat = new LinkedBlockingQueue<>();
     }
 
+    /**
+     * This method allows a player to choose an {@code ObjectiveCard} during the initial phase of the game.
+     * It sends an {@code ExceptionMessage} if it's not the turn of the player that called this method, or if the
+     * {@code Gamestate} is not equal to {@code CHOOSING_OBJECTIVE}.
+     * @param username the username of the player that want to choose a {@code ObjectiveCard}.
+     * @param cardID the {@code Card} ID of the card that the player wants to choose.
+     */
     public void chooseObjectiveCard(String username, int cardID){
 
         Player player = null;
@@ -63,6 +75,27 @@ public class GameController implements Controller {
                 model.nextTurn();
         }
     }
+
+    /**
+     * Allows a player to play a card in their {@code Playerground}.
+     *
+     * This method performs several checks before allowing the action:
+     * <ul>
+     *   <li>Sends an error message to the client if it's not the player's turn.</li>
+     *   <li>Sends an error message to the client if the player doesn't have available positions.</li>
+     *   <li>Sends an error message to the client if the {@code GameState} is one of the following:
+     *       {@code WAITING_FOR_PLAYERS}, {@code CHOOSING_OBJECTIVES}, {@code ENDED}, or {@code CHOOSING_COLOR}.</li>
+     *   <li>Sends an error message to the client if the player has already played a card this turn.</li>
+     *   <li>Sends an error message to the client if the chosen {@code Coordinate} is not available.</li>
+     * </ul>
+     *
+     * If all checks pass, the method allows the player to play the card and then enables them to draw/pick a card.
+     *
+     * @param username the username of the player who wants to play a card.
+     * @param cardID the ID of the card the player wants to play.
+     * @param upwards {@code true} if the player wants to play the card upwards, {@code false} if downwards.
+     * @param coord the {@code Coordinate} where the player wants to play the card.
+     */
     public void playCard(String username, int cardID, boolean upwards, Coordinate coord){
         int pointsMade = 0;
         Player player = null;
@@ -79,12 +112,10 @@ public class GameController implements Controller {
             return;
         }
 
-        //if(model.getState()==GameState.STARTED || model.getState()==GameState.ENDING){
-            if(!player.canPlay()){
-                serverInstance.sendUpdateToAll(new ExceptionMessage(player.getClientID(), "You don't have available position! Wait for the game to end"));
-                return;
-            }
-        //}
+        if(!player.canPlay()){
+            serverInstance.sendUpdateToAll(new ExceptionMessage(player.getClientID(), "You don't have available position! Wait for the game to end"));
+            return;
+        }
 
 
         for (PlayableCard pc: player.getHandCard()){
@@ -127,6 +158,12 @@ public class GameController implements Controller {
         }
     }
 
+    /**
+     * Allows a player to draw one of the displayed card.
+     *
+     * @param username the player who wants to draw a displayed card
+     * @param cardID the id of the card that he wants to draw.
+     */
     public void drawDisplayedPlayableCard(String username, int cardID){
 
         Player player = null;
@@ -137,7 +174,7 @@ public class GameController implements Controller {
             if (Objects.equals(p.getUsername(), username))
                 player = p;
         }
-        assert player != null;
+
 
         for (PlayableCard pc: model.getDisplayedPlayableCard()){
             if (pc.getIdCard() == cardID)
@@ -163,8 +200,13 @@ public class GameController implements Controller {
 
 
     }
-    //cambiato Deck in boolean alrimenti era difficile capire da che mazzo volesse pescare e quindi che mazzo aggiornare
-    //true: resource deck, false: gold deck
+
+    /**
+     * Allows a player to draw from a deck.
+     *
+     * @param username the player who wants to draw from a deck.
+     * @param resourceDeck {@code true} to draw from {@code ResourceDeck}, {@code false} to draw from {@code GoldDeck}.
+     */
     public void draw(String username,boolean resourceDeck)  {
         Deck deck;
         Player player = null;
@@ -188,6 +230,12 @@ public class GameController implements Controller {
         if (!moveSuccessfull)
             return;
 
+
+        if (deck.equals(model.getObjectiveDeck())){
+            serverInstance.sendUpdateToAll(new ExceptionMessage(player.getClientID(),"You can't draw from objective deck!"));
+            return;
+        }
+
         synchronized (model){
             moveSuccessfull=player.draw(deck);//
 
@@ -209,6 +257,12 @@ public class GameController implements Controller {
 
     }
 
+    /**
+     * Allows a player to choose a color.
+     * It sends an {@code ExceptionMessage} if it's not the player's turn or if the {@code GameState} isn't equal to {@code CHOOSING_COLOR}.
+     * @param username the player who wants to choose a color.
+     * @param color the color that the player wants to pick.
+     */
     public void chooseColor(String username, PlayerColor color) {
         boolean moveSuccessfull=true;
 
@@ -240,6 +294,18 @@ public class GameController implements Controller {
         }
     }
 
+    /**
+     * This method performs several checks:
+     * <ul>
+     *   <li>Sends an error message to the client if it's not the player's turn.</li>
+     *   <li>Sends an error message to the client if the player doesn't have available positions.</li>
+     *   <li>Sends an error message to the client if the {@code GameState} is one of the following:
+     *       {@code WAITING_FOR_PLAYERS}, {@code CHOOSING_STARTER_CARD}, {@code CHOOSING_OBJECTIVES}, {@code ENDING}, or {@code CHOOSING_COLOR}.</li>
+     *   <li>Sends an error message to the client if the player has not played a card in this turn yet.</li>
+     * </ul>
+     * @param player The player who wants to draw
+     * @return {@code true} if the player can draw, {@code false} otherwise.
+     */
     private boolean checkIfDrawPossible(Player player){
         if (model.getState() == GameState.WAITING_FOR_PLAYERS || model.getState() == GameState.CHOOSING_STARTER_CARDS || model.getState() == GameState.CHOOSING_OBJECTIVES || model.getState() == GameState.ENDING || model.getState() == GameState.CHOOSING_COLORS) {
             serverInstance.sendUpdateToAll(new ExceptionMessage(player.getClientID(), "You can't draw now"));
@@ -264,59 +330,75 @@ public class GameController implements Controller {
         return true;
     }
 
+    /**
+     * This method counts how many players have played the starter card. If this count matches the number of players,
+     * the {@code GameState} is set to {@code CHOOSING_COLOR}.
+     */
     private void starterCardPlayed() {
         starterCardsPlayed++;
         if (starterCardsPlayed == model.getNumOfPlayers()){
             model.setState(GameState.CHOOSING_COLORS);
         }
-
     }
 
+    /**
+     * This method counts how many players have chosen the color. If this count matches the number of players,
+     * the {@code GameState} is set to {@code CHOOSING_ OBJECTIVES}.
+     */
     private void colorChosenCounter() {
         colorChosen++;
         if (colorChosen == model.getNumOfPlayers()){
             model.setState(GameState.CHOOSING_OBJECTIVES);
-
         }
-
     }
 
+    /**
+     * This method sends the global message passed as a parameter to all players in the game.
+     * @param message the {@code ChatMessage} that needs to be sent.
+     */
     public void addMessageToGlobalChat(ChatMessage message){
         this.globalChat.add(message);
         serverInstance.sendUpdateToAll(new RecieveChatMessage(-10, message.getSender(), message.getRecipient(), message.getMessage()));
     }
 
+    /**
+     * This method sends the message passed as a parameter to the recipient contained in the message.
+     * @param message the {@code ChatMessage} that needs to be sent.
+     */
     public void forwardPrivateChatMessage(ChatMessage message){
         int recipientClientID = serverInstance.getClientIDbyNickname(message.getRecipient());
         if (recipientClientID == -1) {
             serverInstance.sendUpdateToAll(new ExceptionMessage(serverInstance.getClientIDbyNickname(message.getSender()), "There's no player with nick " + message.getRecipient()));
-            return;
         } else {
             serverInstance.sendUpdateToAll(new RecieveChatMessage(recipientClientID, message.getSender(), message.getRecipient(), message.getMessage()));
         }
     }
 
-//    public void clientDisconnected(){
-//        this.model.clientDisconnected();
-//    }
-
-
+    /**
+     * Returns the {@code Game} to which this controller is connected.
+     * @return
+     */
     public Game getModel() {
         return model;
     }
+
+    /**
+     * Retrieves the player object associated with the given username.
+     * @param username the username of the player to retrieve.
+     * @return the {@code Player} object associated with the given username.
+     */
     public Player getPlayer(String username){
        synchronized (model){
            return model.getPlayer(username);
        }
     }
 
+    public void heartbeat(int clientID){
+        this.serverInstance.heartbeat(clientID);
+    }
 
-    //    public void heartbeat(int clientID){
-//        this.serverInstance.heartbeat(clientID);
-//    }
-
-//    public void sendTokenAvailable(int clientID){
-//        serverInstance.sendUpdateToAll(new ColorAvailableMessage(clientID, model.getTokenAvailable()));
-//    }
+    public void sendTokenAvailable(int clientID){
+        serverInstance.sendUpdateToAll(new ColorAvailableMessage(clientID, model.getTokenAvailable()));
+    }
 }
 

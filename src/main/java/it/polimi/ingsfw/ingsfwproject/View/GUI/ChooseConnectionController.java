@@ -137,7 +137,7 @@ public class ChooseConnectionController extends Application  {
     }
 
     /**
-     * Expression pattern to match valid IPv4 addresses..
+     * Expression pattern to match valid IPv4 addresses.
      */
     private static final Pattern PATTERN = Pattern.compile(
             "^(([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.){3}([01]?\\d\\d?|2[0-4]\\d|25[0-5])$");
@@ -146,9 +146,9 @@ public class ChooseConnectionController extends Application  {
     * Validates if the given string is a valid IPv4 address.
     *
     * @param ip the IP address string to be validated
-     * @return {@code true} if the input string is a valid IPv4 address,
-     *         {@code false} otherwise
-     */
+    * @return {@code true} if the input string is a valid IPv4 address,
+    *         {@code false} otherwise
+    */
     public static boolean validate(final String ip) {
         return PATTERN.matcher(ip).matches();
     }
