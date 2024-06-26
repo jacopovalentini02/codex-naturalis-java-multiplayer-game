@@ -1,6 +1,5 @@
 package it.polimi.ingsfw.ingsfwproject.Network.Server;
 
-import it.polimi.ingsfw.ingsfwproject.Controller.LobbyController;
 import it.polimi.ingsfw.ingsfwproject.Model.GameManager;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServerMessage;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.Message;
@@ -21,7 +20,7 @@ import java.util.concurrent.*;
  * and message distribution among clients.
  */
 public class Server {
-    private LobbyController lobbyController;
+    private Lobby lobby;
     private BlockingQueue<Message> queue;
     private HashMap<Integer, Handler> handlers;//clientID-handler
     private HashMap<Integer, AbstractHandler> unistancedHandlers; //temporary list used to give an instance to handlers
@@ -30,13 +29,13 @@ public class Server {
 
     /**
      * Constructor for the Server class. Initializes the GameManager,
-     * LobbyController, message queue, and various data structures.
+     * Lobby, message queue, and various data structures.
      * Starts both RMI and socket servers.
      */
     public Server(){
         //Socket server e rmi server partono
         GameManager manager = new GameManager();
-        lobbyController = new LobbyController(manager, this);
+        lobby = new Lobby(manager, this);
         queue = new LinkedBlockingQueue<Message>();
         handlers = new HashMap<Integer, Handler>();
         games = new HashMap<Integer, GameServerInstance>();
@@ -50,7 +49,7 @@ public class Server {
     }
 
     /**
-     * Reads messages from the queue and processes them using the LobbyController.
+     * Reads messages from the queue and processes them using the Lobby.
      */
     public void readQueue(){//read and process messages in the queue
         System.out.println("Reader Thread started");
@@ -58,7 +57,7 @@ public class Server {
             try {
                 Message toProcess = queue.take();
                 //processMessage((ClientToServerMessage) toProcess);
-                ((ClientToServerMessage) toProcess).execute(lobbyController);
+                ((ClientToServerMessage) toProcess).execute(lobby);
             } catch (InterruptedException e){
                 System.out.println("Reader thread interrotto");
                 return;

@@ -382,7 +382,7 @@ public class GameController implements Controller {
 
     /**
      * Returns the {@code Game} to which this controller is connected.
-     * @return
+     * @return the {@code Game} to which this controller is connected.
      */
     public Game getModel() {
         return model;

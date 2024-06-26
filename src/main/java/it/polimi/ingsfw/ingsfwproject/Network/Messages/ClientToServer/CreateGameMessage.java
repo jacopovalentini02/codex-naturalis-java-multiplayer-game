@@ -1,7 +1,7 @@
 package it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServer;
 
 import it.polimi.ingsfw.ingsfwproject.Controller.Controller;
-import it.polimi.ingsfw.ingsfwproject.Controller.LobbyController;
+import it.polimi.ingsfw.ingsfwproject.Network.Server.Lobby;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServerMessage;
 
 import java.io.Serializable;
@@ -51,7 +51,7 @@ public class CreateGameMessage extends ClientToServerMessage implements Serializ
      */
     @Override
     public void execute(Controller controller)  {
-        LobbyController lobbyController=(LobbyController) controller;
-        lobbyController.createGame(this.numPlayer,this.nickname,this.getClientID());
+        Lobby lobby =(Lobby) controller;
+        lobby.createGame(this.numPlayer,this.nickname,this.getClientID());
     }
 }
