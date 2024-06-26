@@ -11,6 +11,7 @@ public class GameController implements Controller {
     private final Game model;
 
     public Queue<ChatMessage> globalChat;
+    //push di prova
 
     private int starterCardsPlayed;
     private int colorChosen;
