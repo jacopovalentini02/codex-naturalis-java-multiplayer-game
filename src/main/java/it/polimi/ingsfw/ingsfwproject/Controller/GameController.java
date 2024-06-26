@@ -6,12 +6,18 @@ import it.polimi.ingsfw.ingsfwproject.Model.*;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.*;
 import it.polimi.ingsfw.ingsfwproject.Network.Server.GameServerInstance;
 
+/**
+ * The {@code GameController} class implements the {@code Controller} interface to manage game-related logic and interactions.
+ *
+ * This controller is responsible for coordinating actions and behaviors within the game, handling player input,
+ * updating the game state, and interacting with the game model and view components.
+ *
+ */
 
 public class GameController implements Controller {
     private final Game model;
 
     public Queue<ChatMessage> globalChat;
-    //push di prova
 
     private int starterCardsPlayed;
     private int colorChosen;
@@ -391,14 +397,6 @@ public class GameController implements Controller {
        synchronized (model){
            return model.getPlayer(username);
        }
-    }
-
-    public void heartbeat(int clientID){
-        this.serverInstance.heartbeat(clientID);
-    }
-
-    public void sendTokenAvailable(int clientID){
-        serverInstance.sendUpdateToAll(new ColorAvailableMessage(clientID, model.getTokenAvailable()));
     }
 }
 
