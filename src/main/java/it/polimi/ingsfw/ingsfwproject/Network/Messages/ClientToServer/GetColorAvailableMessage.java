@@ -2,11 +2,7 @@ package it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServer;
 
 import it.polimi.ingsfw.ingsfwproject.Controller.Controller;
 import it.polimi.ingsfw.ingsfwproject.Controller.GameController;
-import it.polimi.ingsfw.ingsfwproject.Controller.LobbyController;
-import it.polimi.ingsfw.ingsfwproject.Model.Game;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServerMessage;
-import it.polimi.ingsfw.ingsfwproject.Network.Messages.Message;
-import it.polimi.ingsfw.ingsfwproject.Network.Messages.MessageType;
 
 /**
  * Message from client to server to request available colors for tokens.

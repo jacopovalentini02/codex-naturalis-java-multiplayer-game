@@ -1,18 +1,12 @@
 package it.polimi.ingsfw.ingsfwproject.Network.Client;
 
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServer.HeartBeatMessage;
-import it.polimi.ingsfw.ingsfwproject.Network.Messages.MessageType;
-import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.*;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.Message;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClientMessage;
 import it.polimi.ingsfw.ingsfwproject.View.VirtualView;
 import it.polimi.ingsfw.ingsfwproject.View.View;
 
 import java.io.IOException;
-import java.io.Serializable;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Abstract class representing a client in the network. Handles connection, communication,

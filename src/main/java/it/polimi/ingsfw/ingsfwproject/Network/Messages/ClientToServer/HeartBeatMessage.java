@@ -3,7 +3,6 @@ package it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServer;
 import it.polimi.ingsfw.ingsfwproject.Controller.Controller;
 import it.polimi.ingsfw.ingsfwproject.Controller.GameController;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServerMessage;
-import it.polimi.ingsfw.ingsfwproject.Network.Messages.MessageType;
 
 import java.io.Serializable;
 

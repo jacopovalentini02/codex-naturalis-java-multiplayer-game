@@ -207,6 +207,8 @@ public class Game {
         this.setState(GameState.STARTED);
         setCurrentPlayer(getFirstPlayer());
 
+        updatePoints(19, getFirstPlayer());
+
 
     }
 
@@ -360,7 +362,6 @@ public class Game {
         //TODO: INVERTIRE LE DUE RIGHE SUCCESSIVE PER PERMETTERE ALLA CLI DI "RITORNARE" ALLA LOBBY
         gameServerInstance.sendUpdateToAll(new WinnerMessage(-10, winner.getUsername()));
         setState(GameState.ENDED);
-
 
         //this.endGame();
     }

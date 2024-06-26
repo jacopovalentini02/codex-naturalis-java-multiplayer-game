@@ -2,8 +2,6 @@ package it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient;
 
 import it.polimi.ingsfw.ingsfwproject.Model.StarterCard;
 import it.polimi.ingsfw.ingsfwproject.Network.Client.Client;
-import it.polimi.ingsfw.ingsfwproject.Network.Messages.Message;
-import it.polimi.ingsfw.ingsfwproject.Network.Messages.MessageType;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClientMessage;
 
 import java.io.Serializable;

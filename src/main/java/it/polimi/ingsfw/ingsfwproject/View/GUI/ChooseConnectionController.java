@@ -16,6 +16,7 @@ import static it.polimi.ingsfw.ingsfwproject.View.View.client;
 
 import java.net.ConnectException;
 import java.net.URI;
+import java.util.regex.Pattern;
 
 /**
  * The controller of the scene where you have to put the server's IP and choose the type of connection
@@ -82,7 +83,7 @@ public class ChooseConnectionController extends Application  {
     @FXML
     private void handleSocketConnection(){
         String ip=serverIP.getText();
-        if(validateIp(ip)){
+        if(validate(ip) || ip.equals("localhost")){
             try {
                 client = new SocketClient(ip, 1337, guiView);
                 client.startConnection();
@@ -110,7 +111,7 @@ public class ChooseConnectionController extends Application  {
     @FXML
     private void handleRMIConnection() {
         String ip=serverIP.getText();
-        if(validateIp(ip)){
+        if(validate(ip) || ip.equals("localhost")){
             try {
                 client = new RMIClient(ip, 1099, guiView);
                 client.startConnection();
@@ -125,31 +126,6 @@ public class ChooseConnectionController extends Application  {
 
     }
 
-    /**
-     * Validates the given IPv4 address by using a regex.
-     *
-     * @param ip string of the ip address to be validated
-     * @return {@code true} if the ip is valid, {@code false} otherwise.
-     */
-    public boolean validateIp(String ip){
-        String regex = "^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +
-                "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +
-                "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +
-                "([01]?\\d\\d?|2[0-4]\\d|25[0-5])$";
-
-        if (ip.matches(regex)) {
-            return true;
-        } else {
-            try {
-                new URI(ip);
-                return true;
-            }
-            catch (Exception e) {
-                return false;
-            }
-
-        }
-    }
 
     /**
      * Sets the GUI view for the application.
@@ -160,5 +136,21 @@ public class ChooseConnectionController extends Application  {
         guiView = gui;
     }
 
+    /**
+     * Expression pattern to match valid IPv4 addresses..
+     */
+    private static final Pattern PATTERN = Pattern.compile(
+            "^(([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.){3}([01]?\\d\\d?|2[0-4]\\d|25[0-5])$");
+
+    /**
+    * Validates if the given string is a valid IPv4 address.
+    *
+    * @param ip the IP address string to be validated
+     * @return {@code true} if the input string is a valid IPv4 address,
+     *         {@code false} otherwise
+     */
+    public static boolean validate(final String ip) {
+        return PATTERN.matcher(ip).matches();
+    }
 
 }
