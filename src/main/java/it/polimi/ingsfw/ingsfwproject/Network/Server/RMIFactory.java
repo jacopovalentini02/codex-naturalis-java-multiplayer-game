@@ -4,7 +4,7 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 
 /**
- * The RMIFactory interface defines the methods that must be implemented by any remote object
+ * Defines the methods that must be implemented by any remote object
  * acting as an RMI factory for creating and managing client-server communication handlers.
  */
 public interface RMIFactory extends Remote {

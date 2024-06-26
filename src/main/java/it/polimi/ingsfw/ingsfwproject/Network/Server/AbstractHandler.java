@@ -7,8 +7,8 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
 /**
- * The AbstractHandler class provides a base implementation of the Handler interface and extends UnicastRemoteObject.
- * It manages communication between the server and a client identified by a unique client ID.
+ * Base implementation of the Handler interface and extends UnicastRemoteObject.
+ * It manages communication between the server and a client.
  */
 abstract public class AbstractHandler extends UnicastRemoteObject implements Handler {
     private final int clientID;

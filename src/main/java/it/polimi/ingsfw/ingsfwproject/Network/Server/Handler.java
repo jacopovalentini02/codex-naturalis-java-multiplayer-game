@@ -6,8 +6,7 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 
 /**
- * The Handler interface defines the methods that must be implemented by any remote object
- * acting as a handler for communication with clients via RMI.
+ * Defines the methods that must be implemented by any remote object acting as a handler for communication with clients via RMI.
  */
 public interface Handler extends Remote {
 

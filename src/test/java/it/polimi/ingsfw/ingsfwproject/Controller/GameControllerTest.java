@@ -87,12 +87,26 @@ class GameControllerTest {
     }
 
     @Test
+    void testPickLastTurn(){
+        game.setState(GameState.STARTED);
+        game.setCurrentPlayer(player1);
+        game.setPotentialWinner(player1);
+        game.setCurrentPlayerhasPlayed(true);
+        game.getController().drawDisplayedPlayableCard(player1.getUsername(), game.getDisplayedPlayableCard().getFirst().getIdCard());
+        assertEquals(game.getState(), GameState.ENDING);
+    }
+
+    @Test
     void testDraw_FromResourceDeck() {
         game.setState(GameState.STARTED);
         game.setCurrentPlayer(player1);
+
         game.getController().playCard(player1.getUsername(),player1.getHandCard().getFirst().getIdCard(), true, new Coordinate(0,0));
+        game.setCurrentPlayer(player1);
+
+        game.setCurrentPlayerhasPlayed(true);
         game.getController().draw(player1.getUsername(), true);
-        assert player1.getHandCard().size() == 3;
+        assert player1.getHandCard().size() == 4;
     }
 
     @Test
@@ -130,15 +144,33 @@ class GameControllerTest {
     void testCheckIfDrawPossible_PlayerCantPlay(){
         game.setState(GameState.STARTED);
         game.setCurrentPlayer(player1);
-        game.getController().playCard(player1.getUsername(),player1.getHandCard().getFirst().getIdCard(), true, new Coordinate(0,0));
         player1.setCanPlay(false);
         game.getController().draw(player1.getUsername(), false);
-        game.getController().draw(player2.getUsername(),false);
+    }
+
+    @Test
+    void testCheckIfDrawLastTurn(){
+        game.setState(GameState.STARTED);
+        game.setCurrentPlayer(player1);
+        game.setPotentialWinner(player1);
+        game.setCurrentPlayerhasPlayed(true);
+        game.getController().draw(player1.getUsername(), false);
+        assertEquals(game.getState(), GameState.ENDING);
     }
 
 
     @Test
-    void testChooseColor() {
+    void testChooseColorWrongTurn() {
+        game.setState(GameState.CHOOSING_COLORS);
+        game.setCurrentPlayer(player1);
+        game.getController().chooseColor(player2.getUsername(),PlayerColor.BLUE);
+    }
+
+    @Test
+    void testChooseColorWrongState() {
+        game.setState(GameState.ENDING);
+        game.setCurrentPlayer(player1);
+        game.getController().chooseColor(player1.getUsername(),PlayerColor.BLUE);
     }
 
 
@@ -157,11 +189,7 @@ class GameControllerTest {
     @Test
     public void testAddMessageToGlobalChat() {
         ChatMessage message = new ChatMessage("sender", "recipient", "Hello, World!");
-
-        // Act
         game.getController().addMessageToGlobalChat(message);
-
-        // Assert
         assertEquals(1, game.getController().globalChat.size());
         assertEquals(message, game.getController().globalChat.peek());
 

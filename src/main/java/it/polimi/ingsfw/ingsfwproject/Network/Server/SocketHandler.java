@@ -10,7 +10,7 @@ import java.net.Socket;
 
 /**
  * The SocketHandler class represents a handler for client connections via sockets in the server.
- * It manages communication with a specific client identified by a unique client ID.
+ * It manages communication with a specific client.
  */
 public class SocketHandler extends AbstractHandler implements Runnable{
     private Socket socket;

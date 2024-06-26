@@ -207,9 +207,6 @@ public class Game {
         this.setState(GameState.STARTED);
         setCurrentPlayer(getFirstPlayer());
 
-        updatePoints(19, getFirstPlayer());
-
-
     }
 
 
@@ -486,6 +483,8 @@ public class Game {
         this.controller = controller;
     }
 
-
+    public void setPotentialWinner(Player potentialWinner) {
+        this.potentialWinner = potentialWinner;
+    }
 }
 

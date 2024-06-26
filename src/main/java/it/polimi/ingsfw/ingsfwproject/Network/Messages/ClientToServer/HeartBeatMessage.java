@@ -32,6 +32,6 @@ public class HeartBeatMessage extends ClientToServerMessage implements Serializa
     @Override
     public void execute(Controller controller) {
         GameController gc = (GameController) controller;
-        gc.heartbeat(this.getClientID());
+        gc.getModel().getGameServerInstance().heartbeat(this.getClientID());
     }
 }

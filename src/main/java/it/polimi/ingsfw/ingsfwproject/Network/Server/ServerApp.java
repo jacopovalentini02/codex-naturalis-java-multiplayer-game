@@ -1,8 +1,7 @@
 package it.polimi.ingsfw.ingsfwproject.Network.Server;
 
 /**
- * The ServerApp class serves as the entry point for starting the server application.
- * It initializes and starts the server instance upon execution.
+ * It starts the server application.
  */
 public class ServerApp {
     /**

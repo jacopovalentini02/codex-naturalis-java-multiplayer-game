@@ -300,6 +300,7 @@ public class GameController implements Controller {
 //        this.model.clientDisconnected();
 //    }
 
+
     public Game getModel() {
         return model;
     }
@@ -309,12 +310,13 @@ public class GameController implements Controller {
        }
     }
 
-    public void heartbeat(int clientID){
-        this.serverInstance.heartbeat(clientID);
-    }
 
-    public void sendTokenAvailable(int clientID){
-        serverInstance.sendUpdateToAll(new ColorAvailableMessage(clientID, model.getTokenAvailable()));
-    }
+    //    public void heartbeat(int clientID){
+//        this.serverInstance.heartbeat(clientID);
+//    }
+
+//    public void sendTokenAvailable(int clientID){
+//        serverInstance.sendUpdateToAll(new ColorAvailableMessage(clientID, model.getTokenAvailable()));
+//    }
 }
 

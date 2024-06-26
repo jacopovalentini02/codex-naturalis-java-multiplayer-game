@@ -55,9 +55,9 @@ public abstract class Client implements InGameListener {
    }
 
     /**
-     * Handles the game status change event.
+     * Handles the game state change.
      *
-     * @param idGame the new game status
+     * @param idGame the new game state
      */
     @Override
     public void onGameStatusChanged(boolean idGame){
