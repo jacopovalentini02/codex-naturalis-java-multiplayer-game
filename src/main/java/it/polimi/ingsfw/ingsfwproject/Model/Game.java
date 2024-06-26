@@ -10,6 +10,7 @@ import org.json.JSONObject;
 import org.json.*;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.*;
 
 
@@ -215,14 +216,19 @@ public class Game {
 
         try {
             // path to JSON file
-            String filePath = "src/main/java/it/polimi/ingsfw/ingsfwproject/Model/cards.json";
+            String filePath = "/it/polimi/ingsfw/ingsfwproject/cards.json";
+            InputStream inputStream = getClass().getResourceAsStream(filePath);
+            if (inputStream == null) {
+                throw new IOException("Cannot find resource file: " + filePath);
+            }
 
-            // reading of JSON file
-            FileReader reader = new FileReader(filePath);
+
+            Scanner scanner = new Scanner(inputStream).useDelimiter("\\A");
+            String jsonText = scanner.hasNext() ? scanner.next() : "";
+            scanner.close();
 
             // Parsing of JSON file
-            JSONTokener tokener = new JSONTokener(reader);
-            JSONObject jsonObject = new JSONObject(tokener);
+            JSONObject jsonObject = new JSONObject(jsonText);
 
             // Obtaining array of cards from JSON
             JSONArray cardsArray = jsonObject.getJSONArray("cards");
@@ -248,8 +254,7 @@ public class Game {
                 }
             }
 
-            // close reader
-            reader.close();
+            inputStream.close();
 
         } catch (IOException | JSONException e) {
             e.printStackTrace();
@@ -320,17 +325,15 @@ public class Game {
         if (card instanceof GoldCard) {
             try {
                 displayedPlayableCard.add((PlayableCard) goldDeck.draw());
-            } catch (DeckEmptyException e) {
-                gameServerInstance.sendUpdateToAll(new ExceptionMessage(player.getClientID(),e.getMessage()));
-                return false;
+            } catch (DeckEmptyException ignored) {
+
             }
             gameServerInstance.sendUpdateToAll(new GoldDeckMessage(-10, goldDeck));
         } else if (card instanceof ResourceCard) {
             try {
                 displayedPlayableCard.add((PlayableCard) resourceDeck.draw());
-            } catch (DeckEmptyException e) {
-                gameServerInstance.sendUpdateToAll(new ExceptionMessage(player.getClientID(),e.getMessage()));
-                return false;
+            } catch (DeckEmptyException ignored) {
+
             }
             gameServerInstance.sendUpdateToAll(new ResourceDeckMessage(-10, resourceDeck));
         }

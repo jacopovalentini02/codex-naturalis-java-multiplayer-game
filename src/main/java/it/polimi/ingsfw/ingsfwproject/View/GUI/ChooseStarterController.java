@@ -44,6 +44,7 @@ public class ChooseStarterController extends GUIController implements Initializa
     public TextField chatTextField;
     @FXML
     public Button sendButton;
+    public Text newMessage;
     @FXML
     private ListView<ChatMessage> currentChat;
 
@@ -51,7 +52,7 @@ public class ChooseStarterController extends GUIController implements Initializa
     private Button showChat;
 
     @FXML
-    private AnchorPane chatPane;
+    public AnchorPane chatPane;
 
     /**
      * Initializes and displays the stage for choosing the starter card.
@@ -268,6 +269,7 @@ public class ChooseStarterController extends GUIController implements Initializa
         } else {
             chatPane.setVisible(true);
             showChat.setText("Hide chat");
+            showChat.setVisible(false);
         }
     }
 

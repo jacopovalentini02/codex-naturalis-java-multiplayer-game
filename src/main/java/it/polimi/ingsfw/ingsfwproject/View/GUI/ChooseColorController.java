@@ -53,7 +53,9 @@ public class ChooseColorController extends GUIController implements Initializabl
     private Button showChat;
 
     @FXML
-    private AnchorPane chatPane;
+    public AnchorPane chatPane;
+
+    public Text newMessage;
 
     /**
      * Initializes and displays the primary stage for the color selection UI.
@@ -290,6 +292,7 @@ public class ChooseColorController extends GUIController implements Initializabl
         } else {
             chatPane.setVisible(true);
             showChat.setText("Hide chat");
+            newMessage.setVisible(false);
         }
     }
 

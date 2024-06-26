@@ -20,6 +20,7 @@ import javafx.scene.image.WritableImage;
 import javafx.scene.input.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.text.Text;
 import javafx.scene.transform.Scale;
 import javafx.stage.Stage;
 import javafx.scene.shape.Rectangle;
@@ -178,6 +179,7 @@ public class GameBoardController extends GUIController implements Initializable 
     public Button showGrid3;
     public Button showGrid2;
     public Button showMyGrid;
+    public Text newMessage;
     private boolean dragging;
     private boolean[] faceShowed;
     private Map<PlayerColor, String> colorImageMap;
@@ -195,7 +197,7 @@ public class GameBoardController extends GUIController implements Initializable 
     private Button showChat;
 
     @FXML
-    private AnchorPane chatPane;
+    public AnchorPane chatPane;
 
     /**
      * Initializes the JavaFX application, loads the GameBoard.fxml file, and sets up the main stage.

@@ -510,7 +510,6 @@ public class GUIView extends View {
 
     /**
      * Notifies the GUI about a new chat message received.
-     * This method dispatches the message to the appropriate controller based on the current active controller.
      *
      * @param message The chat message to be displayed.
      */
@@ -519,19 +518,39 @@ public class GUIView extends View {
 
         if(currentController.equals(chooseStarterController)){
             Platform.runLater(() -> {
+                if(!chooseStarterController.chatPane.isVisible()){
+                    chooseStarterController.newMessage.setVisible(true);
+                }
                 chooseStarterController.addMessageToChat(message);
             });
         }else if(currentController.equals(chooseColorController)){
             Platform.runLater(() -> {
+                if(!chooseColorController.chatPane.isVisible()){
+                    chooseColorController.newMessage.setVisible(true);
+                }
                 chooseColorController.addMessageToChat(message);
             });
         }else if(currentController.equals(chooseObjectiveController)){
             Platform.runLater(() -> {
+                if(!chooseObjectiveController.chatPane.isVisible()){
+                    chooseObjectiveController.newMessage.setVisible(true);
+                }
                 chooseObjectiveController.addMessageToChat(message);
             });
         }else if(currentController.equals(gameBoardController)){
             Platform.runLater(() -> {
+                if(!gameBoardController.chatPane.isVisible()){
+                    gameBoardController.newMessage.setVisible(true);
+                }
                 gameBoardController.addMessageToChat(message);
+            });
+        }else{
+            Platform.runLater(() -> {
+                if(!waitingController.chatPane.isVisible()){
+                    waitingController.newMessage.setVisible(true);
+                }
+
+                waitingController.addMessageToChat(message);
             });
         }
     }

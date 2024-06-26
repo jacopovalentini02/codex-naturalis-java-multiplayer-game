@@ -34,6 +34,7 @@ public class WaitingController extends GUIController{
     public TextField chatTextField;
     @FXML
     public Button sendButton;
+    public Text newMessage;
     @FXML
     private ListView<ChatMessage> currentChat;
 
@@ -41,7 +42,7 @@ public class WaitingController extends GUIController{
     private Button showChat;
 
     @FXML
-    private AnchorPane chatPane;
+    public AnchorPane chatPane;
 
     @FXML
     private TextArea newPlayerJoined;

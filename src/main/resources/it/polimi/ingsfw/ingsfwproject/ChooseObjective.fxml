@@ -15,6 +15,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
+<?import javafx.scene.effect.Glow?>
 <AnchorPane prefHeight="855.0" prefWidth="1444.0" style="-fx-background-color: #e6ddbc;" stylesheets="@Style.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsfw.ingsfwproject.View.GUI.ChooseObjectiveController">
    <effect>
       <Blend />
@@ -89,5 +90,13 @@
             </BorderPane>
          </children>
       </AnchorPane>
+      <Text fx:id="newMessage" layoutX="1210.0" layoutY="33.0" strokeType="OUTSIDE" strokeWidth="0.0" text="New message!" visible="false" wrappingWidth="84.74578857421858">
+         <font>
+            <Font name="Bodoni 72 Bold" size="15.0" />
+         </font>
+         <effect>
+            <Glow />
+         </effect>
+      </Text>
    </children>
 </AnchorPane>

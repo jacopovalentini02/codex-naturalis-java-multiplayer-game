@@ -42,12 +42,13 @@ public class ChooseObjectiveController extends GUIController implements Initiali
     public TextField chatTextField;
     @FXML
     public Button sendButton;
+    public Text newMessage;
     @FXML
     private ListView<ChatMessage> currentChat;
     @FXML
     private Button showChat;
     @FXML
-    private AnchorPane chatPane;
+    public AnchorPane chatPane;
     public static GUIView guiView;
 
     /**
@@ -273,6 +274,7 @@ public class ChooseObjectiveController extends GUIController implements Initiali
         } else {
             chatPane.setVisible(true);
             showChat.setText("Hide chat");
+            newMessage.setVisible(false);
         }
     }
 
