@@ -10,6 +10,11 @@ import it.polimi.ingsfw.ingsfwproject.Network.Server.GameServerInstance;
 import java.io.Serializable;
 import java.util.*;
 
+/**
+ * Class Player
+ *
+ * Description: This class represents a player in the game. It manages the player's state, including their hand of cards, objectives, ground, and other properties.
+ */
 public class Player implements Serializable {
     private int clientID;
     private String username;
@@ -18,13 +23,22 @@ public class Player implements Serializable {
     private ArrayList<PlayableCard> handCard;
     private final GameServerInstance gameServerInstance;
     private boolean canPlay;
+    private ArrayList<ObjectiveCard> handObjective;
 
+    /**
+     * @return The list of objective cards in the player's hand.
+     */
     public ArrayList<ObjectiveCard> getHandObjective() {
         return handObjective;
     }
 
-    private ArrayList<ObjectiveCard> handObjective;
-
+    /**
+     * Constructor for the Player class.
+     *
+     * @param username The username of the player.
+     * @param gameServerInstance The game server instance.
+     * @param clientID The client ID of the player.
+     */
     public Player(String username, GameServerInstance gameServerInstance, int clientID) {
         this.username = username;
         this.gameServerInstance = gameServerInstance;
@@ -33,45 +47,63 @@ public class Player implements Serializable {
         this.handCard = new ArrayList<>();
         this.handObjective = new ArrayList<>();
         this.clientID = clientID;
-        this.canPlay=true;
+        this.canPlay = true;
     }
 
+    /**
+     * Draws a card from the specified deck and adds it to the player's hand.
+     *
+     * @param deck The deck from which to draw a card.
+     * @return True if a card is successfully drawn, otherwise false.
+     */
     public boolean draw(Deck deck) {
         Card drawnCard = null;
-        try{
+        try {
             drawnCard = deck.draw();
-        }catch (DeckEmptyException e){
-            gameServerInstance.sendUpdateToAll(new ExceptionMessage(this.clientID,e.getMessage()));
+        } catch (DeckEmptyException e) {
+            gameServerInstance.sendUpdateToAll(new ExceptionMessage(this.clientID, e.getMessage()));
             return false;
         }
 
         if (drawnCard != null) {
-            addToHand((PlayableCard)drawnCard);
+            addToHand((PlayableCard) drawnCard);
             return true;
         } else {
             return false;
         }
-
     }
-    public void pick(Card card){
+
+    /**
+     * Adds the specified card to the player's hand.
+     *
+     * @param card The card to add to the hand.
+     */
+    public void pick(Card card) {
         addToHand((PlayableCard) card);
     }
 
-    public int playCard(PlayableCard cardPlayed, boolean upwards, Coordinate coord){
+    /**
+     * Plays the specified card on the player's ground at the given coordinates.
+     *
+     * @param cardPlayed The card to play.
+     * @param upwards Whether the card is placed upwards.
+     * @param coord The coordinates where the card is placed.
+     * @return The points awarded for playing the card, or -1 if an error occurs.
+     */
+    public int playCard(PlayableCard cardPlayed, boolean upwards, Coordinate coord) {
         int points = 0;
         if (handCard.contains(cardPlayed)) {
-            try{
+            try {
                 points = ground.playCard(cardPlayed, upwards, coord);
-
-            }catch(PositionNotAvailableException | NotEnoughResourcesException e){
-                gameServerInstance.sendUpdateToAll(new ExceptionMessage(this.clientID,e.getMessage()));
+            } catch (PositionNotAvailableException | NotEnoughResourcesException e) {
+                gameServerInstance.sendUpdateToAll(new ExceptionMessage(this.clientID, e.getMessage()));
                 return -1;
             }
 
-            // remove card from player's hand
+            // Remove card from player's hand
             handCard.remove(cardPlayed);
         } else {
-            gameServerInstance.sendUpdateToAll(new ExceptionMessage(this.clientID,"The card chosen is not in the player's hand"));
+            gameServerInstance.sendUpdateToAll(new ExceptionMessage(this.clientID, "The card chosen is not in the player's hand"));
             return -1;
         }
 
@@ -82,31 +114,43 @@ public class Player implements Serializable {
         return points;
     }
 
+    /**
+     * @return The username of the player.
+     */
     public String getUsername() {
         return username;
     }
 
+    /**
+     * Sets the player's token to the specified color and notifies all clients.
+     *
+     * @param token The color of the token.
+     */
     public void setToken(PlayerColor token) {
         this.token = token;
         gameServerInstance.sendUpdateToAll(new ColorChosenMessage(-10, token, username));
     }
 
+    /**
+     * @return The player's ground.
+     */
     public PlayerGround getGround() {
         return ground;
     }
 
+    /**
+     * @return The list of playable cards in the player's hand.
+     */
     public ArrayList<PlayableCard> getHandCard() {
         return handCard;
     }
 
-//    @Override
-//    public String toString(){
-//        return this.username;
-//    }
-
-
-    //todo mettere priavate
-    public HashMap<Content, Integer> generateContentMap(){
+    /**
+     * Generates a map of the resources and their counts in the player's ground.
+     *
+     * @return A map of resources and their counts.
+     */
+    public HashMap<Content, Integer> generateContentMap() {
         HashMap<Content, Integer> resources = new HashMap<>();
         resources.put(Content.FUNGI_KINGDOM, this.ground.getContentCount(Content.FUNGI_KINGDOM));
         resources.put(Content.ANIMAL_KINGDOM, this.ground.getContentCount(Content.ANIMAL_KINGDOM));
@@ -118,34 +162,62 @@ public class Player implements Serializable {
         return resources;
     }
 
-    public void addToHand(PlayableCard card){
+    /**
+     * Adds the specified card to the player's hand and notifies all clients.
+     *
+     * @param card The card to add to the hand.
+     */
+    public void addToHand(PlayableCard card) {
         this.handCard.add(card);
-        //TODO: notify clients
         gameServerInstance.sendUpdateToAll(new HandCardsMessage(clientID, handCard));
     }
 
-    public void addToHand(ArrayList<PlayableCard> cards){
+    /**
+     * Adds the specified list of cards to the player's hand and notifies all clients.
+     *
+     * @param cards The list of cards to add to the hand.
+     */
+    public void addToHand(ArrayList<PlayableCard> cards) {
         this.handCard.addAll(cards);
         gameServerInstance.sendUpdateToAll(new HandCardsMessage(clientID, handCard));
     }
 
-    public void addToHandObjective(ArrayList<ObjectiveCard> cards){
+    /**
+     * Adds the specified list of objective cards to the player's hand and notifies all clients.
+     *
+     * @param cards The list of objective cards to add to the hand.
+     */
+    public void addToHandObjective(ArrayList<ObjectiveCard> cards) {
         this.handObjective.addAll(cards);
         gameServerInstance.sendUpdateToAll(new HandObjectiveMessage(clientID, handObjective));
     }
 
+    /**
+     * @return The player's token color.
+     */
     public PlayerColor getToken() {
         return token;
     }
 
+    /**
+     * @return The client's ID.
+     */
     public int getClientID() {
         return clientID;
     }
 
+    /**
+     * @return Whether the player can play.
+     */
     public boolean canPlay() {
         return canPlay;
     }
 
+    /**
+     * Sets whether the player can play.
+     *
+     * @param canPlay True if the player can play, otherwise false.
+     */
     public void setCanPlay(boolean canPlay) {
         this.canPlay = canPlay;
     }
