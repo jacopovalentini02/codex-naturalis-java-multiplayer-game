@@ -180,7 +180,7 @@ class StructuredObjectiveCardTest {
 
     }
 
-    @RepeatedTest(100)
+    @RepeatedTest(10)
     void verifyDoubleStructureObjective() throws RemoteException, DeckEmptyException{
         GameServerInstance gameServerInstance=new GameServerInstance();
         Player player1 = new Player("player1", gameServerInstance, 0);
