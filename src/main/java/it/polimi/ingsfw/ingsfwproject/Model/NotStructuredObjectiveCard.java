@@ -12,7 +12,7 @@ import java.util.*;
 public class NotStructuredObjectiveCard extends ObjectiveCard {
     @Serial
     private static final long serialVersionUID = 9167237774401713066L;
-    private ArrayList<Content> objectRequested;
+    private final ArrayList<Content> objectRequested;
 
     /**
      * @return The list of objects requested by this objective card.

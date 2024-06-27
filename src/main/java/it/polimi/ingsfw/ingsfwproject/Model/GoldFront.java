@@ -24,9 +24,9 @@ import java.util.*;
 public class GoldFront extends NormalFace {
     @Serial
     private static final long serialVersionUID = -6831857852149718598L;
-    private ArrayList<Content> cost;
-    private boolean overlapped;
-    private Content objectNeeded;
+    private final ArrayList<Content> cost;
+    private final boolean overlapped;
+    private final Content objectNeeded;
 
     /**
      * Constructs a {@code GoldFront} with the specifies values.

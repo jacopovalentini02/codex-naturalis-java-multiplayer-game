@@ -75,7 +75,7 @@ public class Coordinate implements Serializable {
      * <p>The hash code is computed using the x and y coordinates
      * in such a way that equal {@code Coordinate} objects will have
      * the same hash code.</p>
-     * @return
+     * @return the hash code value for this {@code Coordinate}.
      */
     @Override
     public int hashCode() {

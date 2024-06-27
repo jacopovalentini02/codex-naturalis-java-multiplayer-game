@@ -9,7 +9,7 @@ import java.io.Serial;
 abstract public class NormalCard extends PlayableCard{
     @Serial
     private static final long serialVersionUID = -909038063445427748L;
-    private NormalBack backface;
+    private final NormalBack backface;
 
     /**
      * Constructs a new {@code NormalCard} instance with the specified parameters.

@@ -1,6 +1,5 @@
 package it.polimi.ingsfw.ingsfwproject.Model;
 
-import it.polimi.ingsfw.ingsfwproject.Exceptions.CardNotInHandException;
 import it.polimi.ingsfw.ingsfwproject.Exceptions.NotEnoughResourcesException;
 import it.polimi.ingsfw.ingsfwproject.Exceptions.PositionNotAvailableException;
 import it.polimi.ingsfw.ingsfwproject.Network.Server.GameServerInstance;

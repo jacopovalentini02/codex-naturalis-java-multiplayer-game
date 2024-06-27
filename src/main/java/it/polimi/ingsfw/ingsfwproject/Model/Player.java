@@ -1,7 +1,6 @@
 package it.polimi.ingsfw.ingsfwproject.Model;
 
 import it.polimi.ingsfw.ingsfwproject.Exceptions.DeckEmptyException;
-import it.polimi.ingsfw.ingsfwproject.Exceptions.NoMoreAvailablePosition;
 import it.polimi.ingsfw.ingsfwproject.Exceptions.NotEnoughResourcesException;
 import it.polimi.ingsfw.ingsfwproject.Exceptions.PositionNotAvailableException;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.*;
@@ -19,14 +18,14 @@ import java.util.*;
 public class Player implements Serializable {
     @Serial
     private static final long serialVersionUID = 8578669925170943251L;
-    private int clientID;
-    private String username;
+    private final int clientID;
+    private final String username;
     private PlayerColor token;
-    private PlayerGround ground;
-    private ArrayList<PlayableCard> handCard;
+    private final PlayerGround ground;
+    private final ArrayList<PlayableCard> handCard;
     private final GameServerInstance gameServerInstance;
     private boolean canPlay;
-    private ArrayList<ObjectiveCard> handObjective;
+    private final ArrayList<ObjectiveCard> handObjective;
 
     /**
      * @return The list of objective cards in the player's hand.

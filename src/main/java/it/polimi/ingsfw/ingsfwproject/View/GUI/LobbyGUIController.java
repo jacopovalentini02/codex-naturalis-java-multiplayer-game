@@ -2,7 +2,6 @@ package it.polimi.ingsfw.ingsfwproject.View.GUI;
 
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServer.GetGameListMessage;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServer.JoinGameMessage;
-import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.GameJoinedMessage;
 import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.fxml.FXML;
@@ -34,7 +33,7 @@ public class LobbyGUIController extends GUIController implements Initializable {
     public TableColumn<Map.Entry<Integer, Integer>, Integer> gameIdColumn;
     @FXML
     public TableColumn<Map.Entry<Integer, Integer>, Integer> playerCountColumn;
-    @FXML public TextField nickanme;
+    @FXML public TextField nickname;
     @FXML private Button refreshButton;
 
 
@@ -121,7 +120,7 @@ public class LobbyGUIController extends GUIController implements Initializable {
             };
 
             cell.setOnMouseClicked(event -> {
-                if(nickanme.getText()!=null && nickanme.getText().length()>=2){
+                if(nickname.getText()!=null && nickname.getText().length()>=2){
                     if (!cell.isEmpty()) {
                         // Ottieni l'ID del gioco associato a questa riga
                         Map.Entry<Integer, Integer> entry = cell.getTableView().getItems().get(cell.getIndex());
@@ -164,7 +163,7 @@ public class LobbyGUIController extends GUIController implements Initializable {
      * @throws IOException if an I/O error occurs while sending the join request message
      */
     public void sendJoinRequest(int gameId) throws IOException {
-        JoinGameMessage joinGameMessage=new JoinGameMessage(client.getClientID(),nickanme.getText(),gameId);
+        JoinGameMessage joinGameMessage=new JoinGameMessage(client.getClientID(),nickname.getText(),gameId);
         client.sendMessage(joinGameMessage);
     }
 

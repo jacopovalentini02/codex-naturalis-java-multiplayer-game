@@ -5,7 +5,6 @@ import it.polimi.ingsfw.ingsfwproject.Model.PlayerColor;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServer.GetColorAvailableMessage;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServer.WantThatColorMessage;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServer.sendChatMessage;
-import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.ColorAvailableMessage;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -107,7 +106,7 @@ public class ChooseColorController extends GUIController implements Initializabl
         chatSelector.setItems(guiView.getChatOptions());
         chatSelector.getSelectionModel().select("global");
         chatSelector.setOnAction(this::changeChat);
-        currentChat.setCellFactory(param -> new ListCell<ChatMessage>() {
+        currentChat.setCellFactory(param -> new ListCell<>() {
             @Override
             protected void updateItem(ChatMessage item, boolean empty) {
                 super.updateItem(item, empty);

@@ -47,7 +47,7 @@
          <Font name="Bodoni 72 Oldstyle Bold" size="47.0" />
       </font>
    </Text>
-   <TextField fx:id="nickanme" layoutX="1037.0" layoutY="233.0" prefHeight="43.0" prefWidth="186.0" promptText="NickName">
+   <TextField fx:id="nickname" layoutX="1037.0" layoutY="233.0" prefHeight="43.0" prefWidth="186.0" promptText="NickName">
       <font>
          <Font size="15.0" />
       </font>

@@ -15,7 +15,6 @@ import static it.polimi.ingsfw.ingsfwproject.View.View.client;
 
 
 import java.net.ConnectException;
-import java.net.URI;
 import java.util.regex.Pattern;
 
 /**
@@ -29,8 +28,6 @@ public class ChooseConnectionController extends Application  {
     private Button rmiButton;
     public static GUIView guiView;
 
-    private static final double MIN_WIDTH = 449.0;
-    private static final double MIN_HEIGHT = 441.0;
 
     /**
      * Initializes and displays the primary stage for the connection selection UI.
@@ -50,22 +47,6 @@ public class ChooseConnectionController extends Application  {
         stage.setTitle("Choose connection");
         stage.setScene(scene);
 
-        // Ascoltatore per gestire le dimensioni della finestra
-        stage.widthProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.doubleValue() < MIN_WIDTH) {
-                stage.setMinWidth(newValue.doubleValue());
-            } else {
-                stage.setMinWidth(MIN_WIDTH);
-            }
-        });
-
-        stage.heightProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.doubleValue() < MIN_HEIGHT) {
-                stage.setMinHeight(newValue.doubleValue());
-            } else {
-                stage.setMinHeight(MIN_HEIGHT);
-            }
-        });
         stage.show();
         stage.setOnCloseRequest((event->{
             Platform.exit();

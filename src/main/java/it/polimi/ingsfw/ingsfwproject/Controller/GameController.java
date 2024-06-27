@@ -71,15 +71,14 @@ public class GameController implements Controller {
             return;
         }
 
-        synchronized (model){
-            moveSuccesful = model.chooseObjectiveCard(player, card);
+        moveSuccesful = model.chooseObjectiveCard(player, card);
 
-            if (!moveSuccesful)
-                return;
+        if (!moveSuccesful)
+            return;
 
-            if(model.getObjectiveCardsChosen()!=model.getNumOfPlayers())
-                model.nextTurn();
-        }
+        if(model.getObjectiveCardsChosen()!=model.getNumOfPlayers())
+            model.nextTurn();
+
     }
 
     /**
@@ -138,29 +137,28 @@ public class GameController implements Controller {
             serverInstance.sendUpdateToAll(new ExceptionMessage(player.getClientID(), "You have already played, it's time to draw"));
             return;
         }
-        synchronized (model){
-            pointsMade = player.playCard(card, upwards, coord);
 
-            if(pointsMade == -1) {
-                return;
-            } else {
-                model.updatePoints(pointsMade, player);
-            }
+        pointsMade = player.playCard(card, upwards, coord);
 
-            if(player.getGround().getAvailablePositions().isEmpty()){
-                serverInstance.sendUpdateToAll(new ExceptionMessage(player.getClientID(),"There are no more available position! Wait for the game to end"));
-                player.setCanPlay(false);
-            }
+        if(pointsMade == -1) {
+            return;
+        } else {
+            model.updatePoints(pointsMade, player);
+        }
 
-            if (card instanceof StarterCard)
-                starterCardPlayed();
+        if(player.getGround().getAvailablePositions().isEmpty()){
+            serverInstance.sendUpdateToAll(new ExceptionMessage(player.getClientID(),"There are no more available position! Wait for the game to end"));
+            player.setCanPlay(false);
+        }
 
-            if (card instanceof StarterCard || model.getState() == GameState.ENDING){
-                model.nextTurn();
-            } else {
-                model.setCurrentPlayerhasPlayed(true);
-                serverInstance.sendUpdateToAll(new CurrentPlayerHasPlayedMessage(player.getClientID(),true));
-            }
+        if (card instanceof StarterCard)
+            starterCardPlayed();
+
+        if (card instanceof StarterCard || model.getState() == GameState.ENDING){
+            model.nextTurn();
+        } else {
+            model.setCurrentPlayerhasPlayed(true);
+            serverInstance.sendUpdateToAll(new CurrentPlayerHasPlayedMessage(player.getClientID(),true));
         }
     }
 
@@ -192,17 +190,15 @@ public class GameController implements Controller {
             return;
 
 
-        synchronized (model){
-             moveSuccesful = model.drawDisplayedPlayableCard(card, player);
+        moveSuccesful = model.drawDisplayedPlayableCard(card, player);
 
-             if (!moveSuccesful)
-                 return;
+        if (!moveSuccesful)
+            return;
 
-            if (model.getCurrentPlayer().equals(model.getPotentialWinner())) {
-                model.setState(GameState.ENDING);
-            }
-            model.nextTurn();
+        if (model.getCurrentPlayer().equals(model.getPotentialWinner())) {
+            model.setState(GameState.ENDING);
         }
+        model.nextTurn();
 
 
     }
@@ -242,25 +238,21 @@ public class GameController implements Controller {
             return;
         }
 
-        synchronized (model){
-            moveSuccessfull=player.draw(deck);//
 
-            if(moveSuccessfull){
-                if (resourceDeck){
-                    serverInstance.sendUpdateToAll(new ResourceDeckMessage(-10, deck));
-                } else {
-                    serverInstance.sendUpdateToAll(new GoldDeckMessage(-10, deck));
-                }
+        moveSuccessfull = player.draw(deck);//
 
-                if (model.getCurrentPlayer().equals(model.getPotentialWinner())) {
-                    model.setState(GameState.ENDING);
-                }
-                model.nextTurn();
+        if (moveSuccessfull) {
+            if (resourceDeck) {
+                serverInstance.sendUpdateToAll(new ResourceDeckMessage(-10, deck));
+            } else {
+                serverInstance.sendUpdateToAll(new GoldDeckMessage(-10, deck));
             }
 
-
+            if (model.getCurrentPlayer().equals(model.getPotentialWinner())) {
+                model.setState(GameState.ENDING);
+            }
+            model.nextTurn();
         }
-
     }
 
     /**
@@ -288,16 +280,15 @@ public class GameController implements Controller {
             return;
         }
 
-        synchronized (model){
-            moveSuccessfull=model.chooseColor(player, color);
-            if(moveSuccessfull){
-                colorChosenCounter();
-                model.nextTurn();
-                if(colorChosen== getModel().getNumOfPlayers())
-                    model.setupHandsAndObjectives();
-            }
 
+        moveSuccessfull = model.chooseColor(player, color);
+        if (moveSuccessfull) {
+            colorChosenCounter();
+            model.nextTurn();
+            if (colorChosen == getModel().getNumOfPlayers())
+                model.setupHandsAndObjectives();
         }
+
     }
 
     /**
@@ -394,9 +385,7 @@ public class GameController implements Controller {
      * @return the {@code Player} object associated with the given username.
      */
     public Player getPlayer(String username){
-       synchronized (model){
-           return model.getPlayer(username);
-       }
+        return model.getPlayer(username);
     }
 }
 

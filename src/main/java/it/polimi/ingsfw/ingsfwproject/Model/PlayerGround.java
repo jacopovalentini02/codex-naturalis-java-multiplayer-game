@@ -17,9 +17,9 @@ public class PlayerGround implements Serializable {
 
     @Serial
     private static final long serialVersionUID = -5738294509649963404L;
-    private ContentCounter contentCounter;
+    private final ContentCounter contentCounter;
     private Map<Coordinate, Face> grid;
-    private ArrayList<Coordinate> availablePositions;
+    private final ArrayList<Coordinate> availablePositions;
 
     /**
      * Constructs a {@code PlayerGround} instance and initialize the {@code ContentCounter}, the {@code Map} for played cards, and

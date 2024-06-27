@@ -9,7 +9,7 @@ import java.io.Serial;
 public class NormalBack extends Face{
     @Serial
     private static final long serialVersionUID = 1573831788109124200L;
-    private Content center;
+    private final Content center;
 
     /**
      * Constructs a new {@code NormalBack} with the specified values.

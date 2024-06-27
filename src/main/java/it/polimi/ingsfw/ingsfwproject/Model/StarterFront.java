@@ -10,7 +10,7 @@ import java.util.*;
 public class StarterFront extends Face{
     @Serial
     private static final long serialVersionUID = 8172874619914616005L;
-    private ArrayList<Content> center;
+    private final ArrayList<Content> center;
 
     /**
      * Constructs a new {@code StarterFront} with the specified values.

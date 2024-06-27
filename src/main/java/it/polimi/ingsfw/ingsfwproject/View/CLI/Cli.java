@@ -502,7 +502,7 @@ public class Cli extends View implements Runnable {
      */
     @Override
     public void notifyWinnerUpdate(String nick){
-        if (nick.equals("tie")){
+        if (nick.equals("t")){
             System.out.println("It's a tie!");
         } else {
             printWithNicksColorNewLine("The winner is " + nick + "! Congrats!", nick);
