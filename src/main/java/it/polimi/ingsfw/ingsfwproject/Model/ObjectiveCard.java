@@ -1,11 +1,15 @@
 package it.polimi.ingsfw.ingsfwproject.Model;
 
+import java.io.Serial;
+
 /**
  * Class ObjectiveCard
  *
  * Description: This abstract class represents an objective card in the game. It extends the Card class and adds a points attribute. Subclasses should provide the implementation for verifying objectives.
  */
 abstract public class ObjectiveCard extends Card {
+    @Serial
+    private static final long serialVersionUID = -428064471331310551L;
     private int points;
 
     /**

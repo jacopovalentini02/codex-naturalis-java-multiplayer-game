@@ -1,5 +1,6 @@
 package it.polimi.ingsfw.ingsfwproject.Model;
 
+import java.io.Serial;
 import java.util.*;
 
 /**
@@ -8,6 +9,8 @@ import java.util.*;
  * Description: This class represents an objective card that requires a specific structure to be completed. It extends the ObjectiveCard class.
  */
 public class StructuredObjectiveCard extends ObjectiveCard {
+    @Serial
+    private static final long serialVersionUID = -4340548073863437007L;
     private Structure structureType;
     private ArrayList<Content> resourceRequested;
 

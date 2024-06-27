@@ -4,6 +4,7 @@ import it.polimi.ingsfw.ingsfwproject.Exceptions.DeckEmptyException;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.*;
 
@@ -13,6 +14,8 @@ import java.util.*;
  */
 public class Deck implements Serializable {
 
+    @Serial
+    private static final long serialVersionUID = -3945441290086881571L;
     private ArrayList<Card> cardList;
 
     /**

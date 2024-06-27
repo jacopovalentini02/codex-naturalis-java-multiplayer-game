@@ -13,7 +13,6 @@ public class ClientApp {
         Scanner scanner = new Scanner(System.in);
         int choice;
         View view = null;
-
         do {
             System.out.println(AnsiColor.POINT_ONE.getFormattedCharacter());
             System.out.println(AnsiColor.POINT_TWO.getFormattedCharacter());

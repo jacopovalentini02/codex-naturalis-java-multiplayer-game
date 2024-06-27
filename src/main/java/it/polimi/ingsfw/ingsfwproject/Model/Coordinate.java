@@ -1,5 +1,6 @@
 package it.polimi.ingsfw.ingsfwproject.Model;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 /**
@@ -12,6 +13,7 @@ public class Coordinate implements Serializable {
     private final int x;
     private final int y;
 
+    @Serial
     private static final long serialVersionUID=1234567890987654321L;
 
     /**

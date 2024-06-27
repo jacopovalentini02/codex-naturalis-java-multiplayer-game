@@ -19,7 +19,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.*;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import javafx.scene.transform.Scale;
 import javafx.stage.Stage;
@@ -876,6 +875,7 @@ public class GameBoardController extends GUIController implements Initializable 
         } else {
             chatPane.setVisible(true);
             showChat.setText("Hide chat");
+            newMessage.setVisible(false);
         }
     }
 

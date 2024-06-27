@@ -10,6 +10,7 @@ import org.json.JSONObject;
 import org.json.*;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.*;
 
 /**
@@ -228,7 +229,6 @@ public class Game {
         setFirstPlayer(listOfPlayers.get(index));
         this.setState(GameState.STARTED);
         setCurrentPlayer(getFirstPlayer());
-        updatePoints(19, getFirstPlayer());
     }
 
     /**
@@ -237,29 +237,49 @@ public class Game {
      */
     public void setUpCards() {
         try {
-            String filePath = "src/main/java/it/polimi/ingsfw/ingsfwproject/Model/cards.json";
-            FileReader reader = new FileReader(filePath);
-            JSONTokener tokener = new JSONTokener(reader);
-            JSONObject jsonObject = new JSONObject(tokener);
+            // path to JSON file
+            String filePath = "/it/polimi/ingsfw/ingsfwproject/cards.json";
+
+            // reading of JSON file
+            InputStream inputStream = getClass().getResourceAsStream(filePath);
+            if (inputStream == null) {
+                throw new IOException("Cannot find resource file: " + filePath);
+            }
+
+            Scanner scanner = new Scanner(inputStream).useDelimiter("\\A");
+            String jsonText = scanner.hasNext() ? scanner.next() : "";
+            scanner.close();
+
+            // Parsing of JSON file
+            JSONObject jsonObject = new JSONObject(jsonText);
+
+            // Obtaining array of cards from JSON
             JSONArray cardsArray = jsonObject.getJSONArray("cards");
 
+            // Cycling on every object of the JSONArray
             for (int i = 0; i < cardsArray.length(); i++) {
                 JSONObject cardObject = cardsArray.getJSONObject(i);
+
+                // Extracting cards data
                 int id = cardObject.getInt("id");
 
-                if (i <= 39) {
+                //Resource card 0-40
+                if(i<=39){
                     resourceDeck.createResourceCard(cardObject, id);
-                } else if (i <= 79) {
+                }else if(i<=79){
                     goldDeck.createGoldCard(cardObject, id);
-                } else if (i <= 85) {
+                }else if(i<=85){
                     starterDeck.createStarterCard(cardObject, id);
-                } else if (i <= 93) {
+                }else if(i<=93){
                     objectiveDeck.createStructObjective(cardObject, id);
-                } else {
+                }else{
                     objectiveDeck.createNotStructObjective(cardObject, id);
                 }
             }
-            reader.close();
+
+            // close reader
+            inputStream.close();
+
         } catch (IOException | JSONException e) {
             e.printStackTrace();
         }
@@ -333,31 +353,34 @@ public class Game {
      * @param player The player drawing the card.
      * @return True if the card is successfully drawn, otherwise false.
      */
-    public boolean drawDisplayedPlayableCard(PlayableCard card, Player player) {
-        if (!displayedPlayableCard.contains(card)) {
-            gameServerInstance.sendUpdateToAll(new ExceptionMessage(player.getClientID(), "Card is not within the displayed playable cards"));
+    public boolean drawDisplayedPlayableCard(PlayableCard card, Player player)  {
+
+        if (!(displayedPlayableCard.contains(card))){
+            gameServerInstance.sendUpdateToAll(new ExceptionMessage(player.getClientID(),"Card is not within the displayed playable cards"));
             return false;
         }
+
         player.pick(card);
+
         displayedPlayableCard.remove(card);
 
         if (card instanceof GoldCard) {
             try {
                 displayedPlayableCard.add((PlayableCard) goldDeck.draw());
-            } catch (DeckEmptyException e) {
-                gameServerInstance.sendUpdateToAll(new ExceptionMessage(player.getClientID(), e.getMessage()));
-                return false;
+            } catch (DeckEmptyException ignored) {
+
             }
             gameServerInstance.sendUpdateToAll(new GoldDeckMessage(-10, goldDeck));
         } else if (card instanceof ResourceCard) {
             try {
                 displayedPlayableCard.add((PlayableCard) resourceDeck.draw());
-            } catch (DeckEmptyException e) {
-                gameServerInstance.sendUpdateToAll(new ExceptionMessage(player.getClientID(), e.getMessage()));
-                return false;
+            } catch (DeckEmptyException ignored) {
+
             }
             gameServerInstance.sendUpdateToAll(new ResourceDeckMessage(-10, resourceDeck));
         }
+
+
         gameServerInstance.sendUpdateToAll(new DisplayedPlayableCardsMessage(-10, displayedPlayableCard));
         return true;
     }
@@ -614,5 +637,9 @@ public class Game {
      */
     public void setController(GameController controller) {
         this.controller = controller;
+    }
+
+    public void setPotentialWinner(Player potentialWinner) {
+        this.potentialWinner = potentialWinner;
     }
 }
