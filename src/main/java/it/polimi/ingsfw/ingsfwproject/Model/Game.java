@@ -655,6 +655,11 @@ public class Game {
         this.controller = controller;
     }
 
+    /**
+     * Sets the potential winner.
+     *
+     * @param potentialWinner The potential winner of the game (the first one to reach 20 points)..
+     */
     public void setPotentialWinner(Player potentialWinner) {
         this.potentialWinner = potentialWinner;
     }
