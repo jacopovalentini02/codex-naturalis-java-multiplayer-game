@@ -1,5 +1,6 @@
 package it.polimi.ingsfw.ingsfwproject.View;
 
+import it.polimi.ingsfw.ingsfwproject.View.CLI.AnsiColor;
 import it.polimi.ingsfw.ingsfwproject.View.CLI.Cli;
 import it.polimi.ingsfw.ingsfwproject.View.GUI.GUIView;
 
@@ -14,6 +15,8 @@ public class ClientApp {
         View view = null;
 
         do {
+            System.out.println(AnsiColor.POINT_ONE.getFormattedCharacter());
+            System.out.println(AnsiColor.POINT_TWO.getFormattedCharacter());
             System.out.println("Con che interfaccia vuoi giocare? \n1) CLI \n2) GUI");
             if (scanner.hasNextInt()) {
                 choice = scanner.nextInt();

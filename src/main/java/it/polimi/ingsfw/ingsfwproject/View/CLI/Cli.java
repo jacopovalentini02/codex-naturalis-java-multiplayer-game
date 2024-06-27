@@ -996,12 +996,14 @@ public class Cli extends View implements Runnable {
         int xmax = getMaxX(grid.keySet());
         int ymax = getMaxY(grid.keySet());
 
+        String tab4 = "    ";
+
         AnsiColor cardType;
 
         Object[] returnArray;
 
         if(printCoordinate)
-            System.out.print("\t");
+            System.out.print(tab4);
 
         for(int j = (ymax*2)+1; j >= (ymin*2)-1; j--){
             for(int i = (xmin*2)-1; i <= (xmax*2)+1; i++){
@@ -1015,7 +1017,7 @@ public class Cli extends View implements Runnable {
                     if(corner != null)
                         printCorner(corner, cardType);
                     else
-                        System.out.print("\t");
+                        System.out.print(tab4);
                 } else if(i%2 == 0 && j%2 == 0){
                     //se i è pari e j è pari, significa che è un centro --> stampo il centro
                     Coordinate coord = new Coordinate(i/2,j/2);
@@ -1023,7 +1025,7 @@ public class Cli extends View implements Runnable {
                     if(grid.containsKey(coord)) {
                         printCenter(coord, grid);
                     }else
-                        System.out.print("\t\t\t");
+                        System.out.print(tab4+tab4+tab4);
                 } else if ( i%2 == 0 && j%2 != 0){
                     //se i è pari e j è dispari, significa che è sopra/sotto il centro --> stampo il sopra/sotto (punti/ objectNeeded/...)
 
@@ -1033,7 +1035,7 @@ public class Cli extends View implements Runnable {
                     if(cardType != null)
                         printCenterVertical(cardType, (boolean)returnArray[1], grid, new Coordinate(i,j));
                     else
-                        System.out.print("\t\t\t");
+                        System.out.print(tab4+tab4+tab4);
                 } else if( i%2 != 0 && j%2 == 0){
                     //se i è dispari e j è pari, significa che è a destra/sinistra del centro --> stampo lati
                     returnArray = searchCenterHorizontalAndCardTypeAtPosition(new Coordinate(i,j), grid);
@@ -1042,21 +1044,21 @@ public class Cli extends View implements Runnable {
                     if(cardType != null)
                         printCenterHorizontal(cardType, (boolean)returnArray[1], grid, new Coordinate(i,j));
                     else
-                        System.out.print("\t");
+                        System.out.print(tab4);
                 }
             }
 
             System.out.println();
             if(printCoordinate) {
                 if (j % 2 != 0 && (j - 1) / 2 != ymin - 1) {
-                    System.out.print((j - 1) / 2 + "\t");
+                    System.out.print((j - 1) / 2 + tab4);
                 } else
-                    System.out.print("\t");
+                    System.out.print(tab4);
             }
         }
         if(printCoordinate){
             for(int i = xmin; i <= xmax; i++){
-                System.out.print("\t\t "+i+"\t\t");
+                System.out.print(tab4+tab4+i+ tab4 + tab4);
             }
         }
         System.out.println();
@@ -1073,11 +1075,12 @@ public class Cli extends View implements Runnable {
     public void printListOfCards(ArrayList<PlayableCard> cards, boolean printId, boolean printCost, boolean printFront, boolean printBack){
 
         HashMap<Coordinate, Face> grid = new HashMap<>();
+        String tab4 = "    ";
 
         //print the id's
         if(printId) {
             for (PlayableCard c : cards) {
-                System.out.print("id card: " + c.getIdCard() + "\t\t\t\t\t\t");
+                System.out.print("id card: " + c.getIdCard() + tab4 + tab4 + tab4);
             }
             System.out.println();
         }
@@ -1086,7 +1089,7 @@ public class Cli extends View implements Runnable {
         if(printCost) {
             for (PlayableCard c : cards) {
                 if (c.getFront() instanceof GoldFront) {
-                    System.out.print("cost:\t");
+                    System.out.print("cost:"+ tab4);
                     int count = 6;
                     for (Content content : ((GoldFront) c.getFront()).getCost()) {
                         AnsiColor ansicolor = AnsiColor.EMPTY_TEXT;
@@ -1094,11 +1097,11 @@ public class Cli extends View implements Runnable {
                         count--;
                     }
                     for(int j = 0; j<count; j++){
-                        System.out.print("\t");
+                        System.out.print(tab4);
                     }
 
                 } else {
-                    System.out.print("\t\t\t\t\t\t\t\t");
+                    System.out.print("\t\t\t\t");
                 }
             }
             System.out.println();

@@ -13,10 +13,10 @@ public enum AnsiColor {
     INKWELL_TEXT("\u001B[43m \uD83E\uDED9 "),// white on ocra background
     MANUSCRIPT_TEXT("\u001B[43m \uD83D\uDCDC "), // white on ocra background
 
-    POINT_ONE("\u001B[33;103m 1\uFE0F⃣ "),
-    POINT_TWO("\u001B[33;103m 2\uFE0F⃣ "),
-    POINT_THREE("\u001B[33;103m 3\uFE0F⃣ "),
-    POINT_FIVE("\u001B[33;103m 5\uFE0F⃣ "),
+    POINT_ONE("\u001B[30;103m  1 \u001B[0m"),
+    POINT_TWO("\u001B[30;103m  2 \u001B[0m"),
+    POINT_THREE("\u001B[30;103m  3 \u001B[0m"),
+    POINT_FIVE("\u001B[30;103m  5 \u001B[0m"),
 
     OVERLAPPED("\u001B[43m ov "),
 
