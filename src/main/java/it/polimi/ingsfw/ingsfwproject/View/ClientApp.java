@@ -20,7 +20,6 @@ public class ClientApp {
         Scanner scanner = new Scanner(System.in);
         int choice;
         View view = null;
-
         do {
 
             System.out.println("Con che interfaccia vuoi giocare? \n1) CLI \n2) GUI");

@@ -1,5 +1,6 @@
 package it.polimi.ingsfw.ingsfwproject.Model;
 
+import java.io.Serial;
 import java.util.*;
 
 /**
@@ -7,6 +8,8 @@ import java.util.*;
  * This class is a subclass of {@code Face} and it adds the central {@code Content} list.
  */
 public class StarterFront extends Face{
+    @Serial
+    private static final long serialVersionUID = 8172874619914616005L;
     private ArrayList<Content> center;
 
     /**

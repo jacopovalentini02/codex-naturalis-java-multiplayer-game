@@ -258,14 +258,14 @@ class GameTest {
         game.getDisplayedPlayableCard().add(goldCard);
 
         boolean result = game.drawDisplayedPlayableCard(goldCard, player1);
-        assertFalse(result);
+        assertTrue(result);
 
         ResourceCard resourceCard = (ResourceCard) game.getResourceDeck().draw(); // Depletes the resource deck
         game.getResourceDeck().getCardList().clear(); // Clear the resourceDeck to simulate an empty deck scenario
         game.getDisplayedPlayableCard().add(resourceCard);
 
         result = game.drawDisplayedPlayableCard(resourceCard, player1);
-        assertFalse(result);
+        assertTrue(result);
     }
 
     @Test

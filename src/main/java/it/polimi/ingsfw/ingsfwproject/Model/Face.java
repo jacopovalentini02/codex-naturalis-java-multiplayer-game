@@ -1,6 +1,7 @@
 package it.polimi.ingsfw.ingsfwproject.Model;
 
 
+import java.io.Serial;
 import java.io.Serializable;
 
 /**
@@ -11,11 +12,13 @@ import java.io.Serializable;
  *
  */
 abstract public class Face implements Serializable {
+    @Serial
+    private static final long serialVersionUID = -4109737873096935172L;
     /*cornerList[0] = top left
-    cornerList[1] = top right
-    cornerList[2] = bottom left
-    cornerList[3] = bottom right
-     */
+        cornerList[1] = top right
+        cornerList[2] = bottom left
+        cornerList[3] = bottom right
+         */
     private int idCard;
     private Content[] cornerList;
     private boolean[] coveredCorner;

@@ -441,9 +441,15 @@ public class GUIView extends View {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Messaggio");
             alert.setHeaderText(null);
+            StringBuilder message = new StringBuilder();
 
-            StringBuilder message = new StringBuilder(nickname + " has won! \n" +
-                            "Final scores: \n");
+            if (nickname.equals("tie")){
+                message.append("It's a tie! \n");
+            } else {
+                message.append(nickname).append(" has won! \n");
+            }
+
+            message.append("Final scores: \n");
 
             for (Map.Entry<String, Integer> entry: client.getVirtualView().getScores().entrySet())
                 message.append(entry.getKey()).append(": ").append(entry.getValue()).append("\n");
