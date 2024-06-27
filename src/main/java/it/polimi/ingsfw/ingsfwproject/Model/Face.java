@@ -19,11 +19,11 @@ abstract public class Face implements Serializable {
         cornerList[2] = bottom left
         cornerList[3] = bottom right
          */
-    private int idCard;
-    private Content[] cornerList;
-    private boolean[] coveredCorner;
+    private final int idCard;
+    private final Content[] cornerList;
+    private final boolean[] coveredCorner;
 
-    private String imagePath;
+    private final String imagePath;
 
     /**
      * Constructs a new {@code Face} with the specified values.

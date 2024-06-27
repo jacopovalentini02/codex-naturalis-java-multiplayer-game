@@ -10,7 +10,7 @@ import java.io.Serializable;
  */
 
 abstract public class Card implements Serializable {
-    private int idCard;
+    private final int idCard;
     @Serial
     private static final long serialVersionUID=19088521543661542L;
 
@@ -34,7 +34,7 @@ abstract public class Card implements Serializable {
      * This static method returns the {@code Content} representing this card's type.
      * Returns null if the card has no type (i.e. {@code StarterCard} or {@code ObjectiveCard}).
      * @param id the id of the card whose type you want to have
-     * @return
+     * @return {@code Content} of the card
      */
     public static Content getType(int id){
         if(id<=10 || (id>=41 && id<=50))

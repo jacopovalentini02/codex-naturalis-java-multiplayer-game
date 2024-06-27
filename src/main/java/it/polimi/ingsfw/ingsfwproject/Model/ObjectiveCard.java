@@ -10,7 +10,7 @@ import java.io.Serial;
 abstract public class ObjectiveCard extends Card {
     @Serial
     private static final long serialVersionUID = -428064471331310551L;
-    private int points;
+    private final int points;
 
     /**
      * Constructor for the ObjectiveCard class.

@@ -10,8 +10,8 @@ import java.util.Arrays;
 public class StarterCard extends PlayableCard{
     @Serial
     private static final long serialVersionUID = -782999640366018206L;
-    private NormalFace back;
-    private StarterFront front;
+    private final NormalFace back;
+    private final StarterFront front;
 
     /**
      * Constructs a new {@code StarterCard} instance with the specified values.

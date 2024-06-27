@@ -10,7 +10,7 @@ import java.util.*;
  * Description: This class manages the lifecycle of games. It is responsible for creating, joining, starting, and deleting games.
  */
 public class GameManager {
-    private HashMap<Integer, Game> gameList;
+    private final HashMap<Integer, Game> gameList;
     int firstAvailableGameID; // Indicates the first available number to be used as a Game ID
 
     /**

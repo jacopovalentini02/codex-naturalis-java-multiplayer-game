@@ -206,7 +206,7 @@ class GameControllerTest {
 
 
     @Test
-    public void test() throws TurnException, GamePhaseException, PositionNotAvailableException, NotEnoughResourcesException, CardNotInHandException, DeckEmptyException, ColorNotAvailableException, CardNotPresentException, DeckException {
+    public void test() throws PositionNotAvailableException, NotEnoughResourcesException, DeckEmptyException {
         manager.createGame(2, "Jaco", 0);
         assertEquals(1, manager.getGameList().size());
 

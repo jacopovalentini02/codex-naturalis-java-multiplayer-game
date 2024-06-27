@@ -7,34 +7,31 @@ import it.polimi.ingsfw.ingsfwproject.Network.Server.GameServerInstance;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.*;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
 
 /**
  * Class Game
- *
  * Description: This class manages the state and behavior of the game. It handles
  * the initialization, setup, and progression of the game, including managing players,
  * decks, and game states.
  */
 public class Game {
-    private int idGame;
+    private final int idGame;
     private GameState state;
     private GameController controller;
-    private List<Player> listOfPlayers;
-    private List<PlayerColor> tokenAvailable;
-    private int numOfPlayers;
-    private Map<Player, Integer> scores;
+    private final List<Player> listOfPlayers;
+    private final List<PlayerColor> tokenAvailable;
+    private final int numOfPlayers;
+    private final Map<Player, Integer> scores;
     private Player firstPlayer;
-    private Deck resourceDeck;
-    private Deck goldDeck;
-    private Deck objectiveDeck;
-    private Deck starterDeck;
-    private ArrayList<PlayableCard> displayedPlayableCard;
-    private List<ObjectiveCard> displayedObjectiveCard;
+    private final Deck resourceDeck;
+    private final Deck goldDeck;
+    private final Deck objectiveDeck;
+    private final Deck starterDeck;
+    private final ArrayList<PlayableCard> displayedPlayableCard;
+    private final List<ObjectiveCard> displayedObjectiveCard;
     private Player currentPlayer;
     private Player potentialWinner;
     private boolean currentPlayerhasPlayed;

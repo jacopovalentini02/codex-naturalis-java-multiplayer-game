@@ -10,7 +10,7 @@ import java.io.Serial;
 public class NormalFace extends Face{
     @Serial
     private static final long serialVersionUID = -3155966952230005436L;
-    private int points;
+    private final int points;
 
     /**
      * Constructs a new {@code NormalFace} with the specified values.

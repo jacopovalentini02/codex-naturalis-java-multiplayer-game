@@ -9,7 +9,7 @@ import java.io.Serial;
 public class ResourceCard extends NormalCard{
     @Serial
     private static final long serialVersionUID = 6051959552075268556L;
-    private NormalFace front;
+    private final NormalFace front;
 
     /**
      * Constructs a new {@code ResourceCard} instance with the specified values.

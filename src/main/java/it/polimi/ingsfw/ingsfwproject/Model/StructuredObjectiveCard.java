@@ -183,21 +183,7 @@ class CoordinateOrderedSet implements Iterable<Coordinate> {
         coordinatesList.add(coordinate);
     }
 
-    /**
-     * Removes a coordinate from the set.
-     *
-     * @param coordinate The coordinate to remove.
-     */
-    public void removeCoordinate(Coordinate coordinate) {
-        coordinatesList.remove(coordinate);
-    }
 
-    /**
-     * @return Whether the set contains the specified coordinate.
-     */
-    public boolean containsCoordinate(Coordinate coordinate) {
-        return this.coordinatesList.contains(coordinate);
-    }
 
     /**
      * @return An iterator over the coordinates in the set, sorted by the Y coordinate.

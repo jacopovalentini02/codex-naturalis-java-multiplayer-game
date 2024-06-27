@@ -26,8 +26,8 @@ public class GUIView extends View {
     private ChooseColorController chooseColorController;
     private GameBoardController gameBoardController;
     private GUIController currentController;
-    private ObservableList<String> chatOptions;
-    private Map<String, ObservableList<ChatMessage>> chats;
+    private final ObservableList<String> chatOptions;
+    private final Map<String, ObservableList<ChatMessage>> chats;
 
     /**
      * Initializes GUIView with default chat options and a global chat.
@@ -168,9 +168,7 @@ public class GUIView extends View {
      */
     @Override
     public void displayGameList(HashMap<Integer, Integer> gameList) {
-        Platform.runLater(() -> {
-            lobbyGUIController.showGames(gameList);
-        });
+        Platform.runLater(() -> lobbyGUIController.showGames(gameList));
     }
 
     /**
@@ -226,9 +224,7 @@ public class GUIView extends View {
      */
     @Override
     public void notifyStarterCard() {
-        Platform.runLater(() -> {
-            chooseStarterController.cardChosen();
-        });
+        Platform.runLater(() -> chooseStarterController.cardChosen());
     }
 
     /**
@@ -238,9 +234,7 @@ public class GUIView extends View {
      */
     @Override
     public void notifyColorsAvailable(List<PlayerColor> colors) {
-        Platform.runLater(() -> {
-            chooseColorController.setColors(colors);
-        });
+        Platform.runLater(() -> chooseColorController.setColors(colors));
     }
 
     /**
@@ -249,9 +243,7 @@ public class GUIView extends View {
     @Override
     public void notifyGoldDeckUpdate() {
         if(currentController.equals(gameBoardController)){
-            Platform.runLater(() -> {
-                gameBoardController.updateGoldDeck();
-            });
+            Platform.runLater(() -> gameBoardController.updateGoldDeck());
         }
     }
 
@@ -261,9 +253,7 @@ public class GUIView extends View {
     @Override
     public void notifyResourceDeckUpdate() {
         if(currentController.equals(gameBoardController)){
-            Platform.runLater(() -> {
-                gameBoardController.updateResourceDeck();
-            });
+            Platform.runLater(() -> gameBoardController.updateResourceDeck());
         }
     }
 
@@ -275,9 +265,7 @@ public class GUIView extends View {
     @Override
     public void notifyDisplayedCardsUpdate(ArrayList<PlayableCard> displayedCards) {
         if(currentController.equals(gameBoardController)){
-            Platform.runLater(() -> {
-                gameBoardController.updateDisplayedCard();
-            });
+            Platform.runLater(() -> gameBoardController.updateDisplayedCard());
         }
 
     }
@@ -291,21 +279,13 @@ public class GUIView extends View {
     @Override
     public void notifyCurrentPlayer(String nickname) {
         if(currentController.equals(chooseStarterController)){
-            Platform.runLater(() -> {
-                chooseStarterController.setTurn();
-            });
+            Platform.runLater(() -> chooseStarterController.setTurn());
         }else if(currentController.equals(chooseColorController)){
-            Platform.runLater(() -> {
-                chooseColorController.setTurn();
-            });
+            Platform.runLater(() -> chooseColorController.setTurn());
         }else if(currentController.equals(chooseObjectiveController)){
-            Platform.runLater(() -> {
-                chooseObjectiveController.setTurn();
-            });
+            Platform.runLater(() -> chooseObjectiveController.setTurn());
         }else if(currentController.equals(gameBoardController)){
-            Platform.runLater(() -> {
-                gameBoardController.setTurn();
-            });
+            Platform.runLater(() -> gameBoardController.setTurn());
         }
 
     }
@@ -474,7 +454,7 @@ public class GUIView extends View {
         if(client.getVirtualView().getState()==GameState.CHOOSING_STARTER_CARDS){
             Platform.runLater(() -> {
                 if(!cards.isEmpty())
-                    chooseStarterController.showStarter(cards.get(0));
+                    chooseStarterController.showStarter(cards.getFirst());
             });
         }else if(client.getVirtualView().getState()==GameState.STARTED || client.getVirtualView().getState()==GameState.ENDING){
             Platform.runLater(() -> {
@@ -571,7 +551,7 @@ public class GUIView extends View {
      * @param c Client instance to set.
      */
     public void setClient(Client c){
-        super.client = c;
+        client = c;
     }
 
     /**

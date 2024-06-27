@@ -9,7 +9,7 @@ import java.io.Serial;
 public class GoldCard extends NormalCard{
     @Serial
     private static final long serialVersionUID = -7670039832266071604L;
-    private GoldFront front;
+    private final GoldFront front;
 
     /**
      * Constructs a  {@code GoldCard} with the specified values.

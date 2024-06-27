@@ -172,15 +172,14 @@ public class Server {
         while (true) {
             try {
                 Socket socket = serverSocket.accept();
-                System.out.println("Connessione stabilita con client: "+socket.getInetAddress());
+                System.out.println("Connection established with client: "+socket.getInetAddress());
                 int id=getClientsCounter();
-                System.out.println("client id: "+id);
                 SocketHandler socketHandler=new SocketHandler(socket,id, this);
                 this.addHandler(id, socketHandler);
                 this.addUnistancedHandler(id, socketHandler);
                 executor.submit(socketHandler);
             } catch(IOException e) {
-                break; // entrerei qui se serverSocket venisse chiuso
+                break;
             }
         }
         executor.shutdown();

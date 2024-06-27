@@ -1,5 +1,6 @@
 package it.polimi.ingsfw.ingsfwproject.Model;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 /**
@@ -17,8 +18,9 @@ public class ContentCounter implements Serializable {
     countersArray[5] =  INKWELL
     countersArray[6] =  MANUSCRIPT
     */
+    @Serial
     private static final long serialVersionUID=1122334455667788990L;
-    private int[] countersArray;
+    private final int[] countersArray;
 
     /**
      * Constructs a Content Counter
