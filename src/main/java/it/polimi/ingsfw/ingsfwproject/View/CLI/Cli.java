@@ -42,7 +42,7 @@ public class Cli extends View implements Runnable {
     /**
      * Prints the title of the game.
      */
-    public void init(){
+    private void init(){
         System.out.println("  ____          _             _   _       _                   _ _     \n" +
                 " / ___|___   __| | _____  __ | \\ | | __ _| |_ _   _ _ __ __ _| (_)___ \n" +
                 "| |   / _ \\ / _` |/ _ \\ \\/ / |  \\| |/ _` | __| | | | '__/ _` | | / __|\n" +
@@ -581,7 +581,7 @@ public class Cli extends View implements Runnable {
     /**
      * Prints the available commands based on current state.
      */
-    public void printAvailableCommands(){
+    private void printAvailableCommands(){
         String startingString = "now you can insert one of the following commands:";
         String separatorString = "\nand";
 
@@ -664,7 +664,7 @@ public class Cli extends View implements Runnable {
      * if he can perform it.
      * @param input the {@code String} input of the user
      */
-    public void handleInput(String input) {
+    private void handleInput(String input) {
         Message messageToSend;
         String name;
         input = input.toLowerCase();
@@ -948,7 +948,7 @@ public class Cli extends View implements Runnable {
      * @param coords the {@code Set} of {@code Coordinate}
      * @return the lowest x-value found
      */
-    public int getMinX(Set<Coordinate> coords){
+    private int getMinX(Set<Coordinate> coords){
         int min = Integer.MAX_VALUE;
         for (Coordinate coord : coords) {
             if (coord.getX() < min) {
@@ -962,7 +962,7 @@ public class Cli extends View implements Runnable {
      * @param coords the {@code Set} of {@code Coordinate}
      * @return the highest x-value found
      */
-    public int getMaxX(Set<Coordinate> coords) {
+    private int getMaxX(Set<Coordinate> coords) {
         int max = Integer.MIN_VALUE;
         for (Coordinate coord : coords) {
             if (coord.getX() > max) {
@@ -977,7 +977,7 @@ public class Cli extends View implements Runnable {
      * @param coords the {@code Set} of {@code Coordinate}
      * @return the lowest y-value found
      */
-    public int getMinY(Set<Coordinate> coords) {
+    private int getMinY(Set<Coordinate> coords) {
         int min = Integer.MAX_VALUE;
         for (Coordinate coord : coords) {
             if (coord.getY() < min) {
@@ -991,7 +991,7 @@ public class Cli extends View implements Runnable {
      * @param coords the {@code Set} of {@code Coordinate}
      * @return the highest y-value found
      */
-    public int getMaxY(Set<Coordinate> coords) {
+    private int getMaxY(Set<Coordinate> coords) {
         int max = Integer.MIN_VALUE;
         for (Coordinate coord : coords) {
             if (coord.getY() > max) {
@@ -1007,7 +1007,7 @@ public class Cli extends View implements Runnable {
      * @param face the face whose points must be printed
      * @param cardType the background of the card printed when the face gives 0 points.
      */
-    public void printFrontPoints(Face face, AnsiColor cardType) {
+    private void printFrontPoints(Face face, AnsiColor cardType) {
         String frontPoints = "";
 
         int points = 0;
@@ -1045,7 +1045,7 @@ public class Cli extends View implements Runnable {
      * @param cardType the {@code AnsiColor} card type
      * @param bORe left border (bORe = 0) or right border (bORe = 1)
      */
-    public void printGoldBorder(AnsiColor cardType, int bORe) {
+    private void printGoldBorder(AnsiColor cardType, int bORe) {
         String border = "";
 
         if (bORe == 0) {
@@ -1072,7 +1072,7 @@ public class Cli extends View implements Runnable {
      * @param face the {@code Face} whose {@code AnsiColor} is returned
      * @return the {@code AnsiColor} of the face
      */
-    public AnsiColor getCardType(Face face){
+    private AnsiColor getCardType(Face face){
         Content background = Card.getType(face.getIdCard());
         assert background != null;
         return switch(background){
@@ -1092,7 +1092,7 @@ public class Cli extends View implements Runnable {
      * Prints an {@code ObjectiveCard}.
      * @param card the {@code ObjectiveCard} to be printed
      */
-    public void printObjectiveCards(ObjectiveCard card){
+    private void printObjectiveCards(ObjectiveCard card){
         System.out.println("card id: "+ card.getIdCard());
         AnsiColor ansiBackground = null;
         String background;
@@ -1272,7 +1272,7 @@ public class Cli extends View implements Runnable {
      * Prints the point given by a {@code ObjectiveCard}
      * @param card the {@code ObjectiveCard} whose points have to be printed
      */
-    public void printObjectivesPoints(ObjectiveCard card){
+    private void printObjectivesPoints(ObjectiveCard card){
         switch (card.getPoints()){
             case 2 -> System.out.print(AnsiColor.POINT_TWO.getFormattedCharacter());
             case 3 -> System.out.print(AnsiColor.POINT_THREE.getFormattedCharacter());
@@ -1282,7 +1282,7 @@ public class Cli extends View implements Runnable {
     /**
      * Prints the scores
      */
-    public void printScores(){
+    private void printScores(){
         System.out.println("The game scores are: ");
         for (Map.Entry<String, Integer> e : client.getVirtualView().getScores().entrySet())
             System.out.println(e.getKey() + ": " + e.getValue());
@@ -1293,7 +1293,7 @@ public class Cli extends View implements Runnable {
      * @param grid the grid to be printed
      * @param printCoordinate {@code true} to print coordinate, {@code false} otherwise
      */
-    public void printGrid(Map<Coordinate, Face> grid, boolean printCoordinate){
+    private void printGrid(Map<Coordinate, Face> grid, boolean printCoordinate){
         int xmin = getMinX(grid.keySet());
         int ymin = getMinY(grid.keySet());
         int xmax = getMaxX(grid.keySet());
@@ -1378,7 +1378,7 @@ public class Cli extends View implements Runnable {
      * Prints a face
      * @param face the face to be printed.
      */
-    public void printFace(Face face){
+    private void printFace(Face face){
         HashMap<Coordinate, Face> grid = new HashMap<>();
         grid.put(new Coordinate(0,0), face);
 
@@ -1393,7 +1393,7 @@ public class Cli extends View implements Runnable {
      * @param printFront {@code true} for printing the front face of the cards, {@code false} otherwise
      * @param printBack {@code true} for printing the back face of the cards, {@code false} otherwise
      */
-    public void printListOfCards(ArrayList<PlayableCard> cards, boolean printId, boolean printCost, boolean printFront, boolean printBack){
+    private void printListOfCards(ArrayList<PlayableCard> cards, boolean printId, boolean printCost, boolean printFront, boolean printBack){
 
         HashMap<Coordinate, Face> grid = new HashMap<>();
 
@@ -1448,7 +1448,7 @@ public class Cli extends View implements Runnable {
     /**
      * Prints the player's hand, or "you have no cards" if the player's hand is empty.
      */
-    public void printPlayerHand() {
+    private void printPlayerHand() {
         ArrayList<PlayableCard> cards = client.getVirtualView().getHandCards();
         if (cards.isEmpty()){
             System.out.println("you have no cards");
@@ -1465,7 +1465,7 @@ public class Cli extends View implements Runnable {
      * @param grid the grid where to search
      * @return an Array of {@code Object} : [0] = Content, [1] = AnsiColor
      */
-    public Object[] searchCornerAndCardTypeAtPosition(Coordinate coord, Map<Coordinate,Face> grid){
+    private Object[] searchCornerAndCardTypeAtPosition(Coordinate coord, Map<Coordinate,Face> grid){
         Coordinate check;
         Content content = null;
         boolean isCovered = true;
@@ -1521,7 +1521,7 @@ public class Cli extends View implements Runnable {
      * @param grid the grid where to search
      * @return an Array of {@code Object} :[0] = Boolean ({@code true} if the face part is underneath, {@code false} if it is above), [1] = AnsiColor
      */
-    public Object[] searchCenterVerticalAndCardTypeAtPosition(Coordinate coord, Map<Coordinate,Face> grid){
+    private Object[] searchCenterVerticalAndCardTypeAtPosition(Coordinate coord, Map<Coordinate,Face> grid){
         Coordinate check;
 
         AnsiColor cardType = null;
@@ -1558,7 +1558,7 @@ public class Cli extends View implements Runnable {
      * @return an Array of {@code Object} :[0] = Boolean ({@code true} if the face part is on the left of the center, {@code false} if it is on the right)
      * , [1] = AnsiColor
      */
-    public Object[] searchCenterHorizontalAndCardTypeAtPosition(Coordinate coord, Map<Coordinate,Face> grid){
+    private Object[] searchCenterHorizontalAndCardTypeAtPosition(Coordinate coord, Map<Coordinate,Face> grid){
         Coordinate check;
         AnsiColor cardType = null;
         boolean isRight = false;
@@ -1590,7 +1590,7 @@ public class Cli extends View implements Runnable {
      * @param content the {@code Content} of the corner
      * @param cardType the {@code AnsiColor} of the face
      */
-    public void printCorner(Content content, AnsiColor cardType){
+    private void printCorner(Content content, AnsiColor cardType){
 
         String cornerText = cardType.getFormattedCharacter(content,cardType);
         System.out.print(cornerText);
@@ -1601,7 +1601,7 @@ public class Cli extends View implements Runnable {
      * @param coord the scaled coordinate (see how to scale in {@code printGrid}) of the center
      * @param grid the grid where the face is
      */
-    public void printCenter(Coordinate coord, Map<Coordinate, Face> grid){
+    private void printCenter(Coordinate coord, Map<Coordinate, Face> grid){
         AnsiColor cardType = getCardType(grid.get(coord));
         Face face = grid.get(coord);
         String centerText = cardType.getFormattedCharacter();
@@ -1628,7 +1628,7 @@ public class Cli extends View implements Runnable {
      * @param grid the grid where the face is
      * @param coord the scaled coordinate (see how to scale in {@code printGrid}) of the center
      */
-    public void printCenterHorizontal(AnsiColor cardType, boolean isRight, Map<Coordinate, Face> grid, Coordinate coord){
+    private void printCenterHorizontal(AnsiColor cardType, boolean isRight, Map<Coordinate, Face> grid, Coordinate coord){
         String centerText = "";
         int i = coord.getX();
         int j = coord.getY();
@@ -1661,7 +1661,7 @@ public class Cli extends View implements Runnable {
      * @param grid the grid where the face is
      * @param coord the scaled coordinate (see how to scale in {@code printGrid}) of the center
      */
-    public void printCenterVertical(AnsiColor cardType, boolean isAbove, Map<Coordinate, Face> grid, Coordinate coord){
+    private void printCenterVertical(AnsiColor cardType, boolean isAbove, Map<Coordinate, Face> grid, Coordinate coord){
         String centerText = "";
         int i = coord.getX();
         int j = coord.getY();
@@ -1725,7 +1725,7 @@ public class Cli extends View implements Runnable {
      * @param stringToPrompt the string to prompt with the player's color
      * @param nickname the nickname of the player
      */
-    public void printWithNicksColor(String stringToPrompt, String nickname){
+    private void printWithNicksColor(String stringToPrompt, String nickname){
         String colorString = getColor(nickname);
         String white = getWhite();
 
@@ -1738,7 +1738,7 @@ public class Cli extends View implements Runnable {
      * @param stringToPrompt the string to prompt with the player's color
      * @param nickname the nickname of the player
      */
-    public void printWithNicksColorNewLine(String stringToPrompt, String nickname){
+    private void printWithNicksColorNewLine(String stringToPrompt, String nickname){
         printWithNicksColor(stringToPrompt + "\n", nickname);
     }
 
@@ -1747,7 +1747,7 @@ public class Cli extends View implements Runnable {
      * @param nickname the nickname of the player
      * @return a colored string of the nickname based on color chosen by the player with that nickname
      */
-    public String getColoredNick(String nickname){
+    private String getColoredNick(String nickname){
         return getColor(nickname)+ nickname + getWhite();
     }
 
@@ -1756,7 +1756,7 @@ public class Cli extends View implements Runnable {
      * @param nickname the nickname of the player
      * @return the color string based on the player's color with the nickname passed as a parameter
      */
-    public String getColor(String nickname){
+    private String getColor(String nickname){
         String blue = "\u001B[34m";
         String red = "\u001B[31m";
         String green = "\u001B[32m";
@@ -1784,7 +1784,7 @@ public class Cli extends View implements Runnable {
      * Returns the white color string
      * @return the white color string
      */
-    public String getWhite(){
+    private String getWhite(){
         return "\u001B[0m";
     }
 
@@ -1797,7 +1797,7 @@ public class Cli extends View implements Runnable {
      * @return {@code true} if the input string is a valid IPv4 address,
      *         {@code false} otherwise
      */
-    public static boolean validate(final String ip) {
+    private static boolean validate(final String ip) {
         return PATTERN.matcher(ip).matches();
     }
 }
