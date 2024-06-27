@@ -162,7 +162,7 @@ public class GUIView extends View {
     }
 
     /**
-     * Displays the list of games in the lobby GUI controller.
+     * Displays the list of available games in the lobby GUI controller.
      *
      * @param gameList A HashMap containing the list of game IDs and their respective player counts.
      */
@@ -310,6 +310,10 @@ public class GUIView extends View {
 
     }
 
+    /**
+     * Notifies the GUI that the available positions have been changed.
+     * @param coord the List of available position.
+     */
     @Override
     public void notifyAvailablePositions(ArrayList<Coordinate> coord) {
 
@@ -424,6 +428,11 @@ public class GUIView extends View {
 
     }
 
+    /**
+     * Notified the GUI that the resource count has been changed.
+     * @param nickname the nickname of the player whose resources have been changed
+     * @param resources the new resources count
+     */
     @Override
     public void notifyResourcesUpdate(String nickname, HashMap<Content, Integer> resources) {
 
@@ -485,6 +494,10 @@ public class GUIView extends View {
 
     }
 
+    /**
+     * Notifies the GUI about updates to the common objective cards.
+     * @param cards the List of new common objective cards
+     */
     @Override
     public void notifyDisplayedObjectives(List<ObjectiveCard> cards) {
 
@@ -508,7 +521,10 @@ public class GUIView extends View {
         }
 
     }
-
+    /**
+     * Notifies the GUI that a player chose a color
+     * @param color the color chosen
+     */
     @Override
     public void notifyColorChosen(PlayerColor color) {
 
@@ -561,9 +577,12 @@ public class GUIView extends View {
         }
     }
 
+    /**
+     * Notifies the CLI when the player has played a card
+     * @param bool {@code boolean} {@code true} if the player has played, {@code false} otherwise
+     */
     @Override
     public void notifyCurrentPlayerHasPlayed(boolean bool){
-        //TODO: DA FARE
     }
 
     /**

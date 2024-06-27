@@ -6,7 +6,6 @@ import it.polimi.ingsfw.ingsfwproject.Network.Client.SocketClient;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServer.*;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.Message;
 
-import java.net.ConnectException;
 import java.util.*;
 
 import java.util.HashMap;
@@ -14,7 +13,17 @@ import java.util.Scanner;
 import java.util.regex.Pattern;
 
 import it.polimi.ingsfw.ingsfwproject.View.View;
-
+/**
+ * The {@code Cli} class extends {@code View} and implements {@code Runnable}.
+ * It is used to provide a command-line interface (CLI) for the application.
+ * This class is responsible for handling CLI input and output and for running
+ * processes in a separate thread.
+ *
+ * <p>
+ * The class inherits methods from {@code View} and must implement the {@code run()}
+ * method from the {@code Runnable} interface.
+ * </p>
+ */
 public class Cli extends View implements Runnable {
 
     Scanner scanner;
@@ -23,10 +32,16 @@ public class Cli extends View implements Runnable {
 
     public static final String RESET = "\033[0m";
 
+    /**
+     * Creates a new instance of the {@code Cli} class
+     */
     public Cli(){
         this.scanner = new Scanner(System.in);
     }
 
+    /**
+     * Prints the title of the game.
+     */
     public void init(){
         System.out.println("  ____          _             _   _       _                   _ _     \n" +
                 " / ___|___   __| | _____  __ | \\ | | __ _| |_ _   _ _ __ __ _| (_)___ \n" +
@@ -36,6 +51,19 @@ public class Cli extends View implements Runnable {
         System.out.println("\nYou are now playing Codex Naturalis\n");
     }
 
+    /**
+     * The main execution method of the {@code Runnable} interface.
+     * This method is called when the thread is started and contains the CLI logic.
+     *
+     * <p>
+     * The {@code run} method performs the following steps:
+     * <ol>
+     * <li>Prints the title by calling {@code init()}.</li>
+     * <li>Prompts the user to choose a connection by calling {@code chooseConnection()}.</li>
+     * <li>Starts a new thread to handle user input by invoking the {@code readInputUser()} method.</li>
+     * </ol>
+     * </p>
+     */
     public void run(){
         init();
         chooseConnection();
@@ -44,12 +72,32 @@ public class Cli extends View implements Runnable {
 
     }
 
+    /**
+     * Continuously reads user input from the command line.
+     *
+     * <p>
+     * The {@code readInputUser} method runs an infinite loop that reads user input
+     * from the command line using a {@code Scanner}. Each line of input is passed
+     * to the {@code handleInput} method for processing.
+     * </p>
+     */
     private void readInputUser(){
         while(true){
             handleInput(scanner.nextLine());
         }
     }
 
+    /**
+     * Prompts the user to input a coordinate from the list of available positions.
+     *
+     * <p>
+     * The {@code askForCoordinateInput} method takes a list of available positions as
+     * input and prompts the user to select one. It returns the selected {@code Coordinate}.
+     * </p>
+     *
+     * @param availablePositions an {@code ArrayList} of {@code Coordinate} objects representing the available positions
+     * @return the selected {@code Coordinate} from the available positions
+     */
     private Coordinate askForCoordinateInput(ArrayList<Coordinate> availablePositions) {
         Coordinate coord = new Coordinate(Integer.MIN_VALUE, Integer.MIN_VALUE);
         String errorString = "Invalid coordinates! Please insert valid ones.\n";
@@ -87,11 +135,29 @@ public class Cli extends View implements Runnable {
         return coord;
     }
 
+    /**
+     * Prompts the user to choose between playing a card upwards or downwards.
+     * @return {@code true} if upwards, {@code backwards} if downwards.
+     */
     private boolean askForFaceToPlay(){
         int iFace = askForIntInput("Which side?\n1)Front\n2)Back", 1, 2);
         return (iFace == 1)? true : false;
     }
 
+    /**
+     * Prompts the user to input an integer within the specified bounds.
+     *
+     * <p>
+     * The {@code askForIntInput} method displays a prompt message to the user and reads input from the command line.
+     * It ensures that the input is an integer within the specified bounds. If the input is invalid, it displays an
+     * error message and prompts the user to try again.
+     * </p>
+     *
+     * @param stringToPrompt the prompt message displayed to the user
+     * @param lowerBound the lower bound for the acceptable integer input (inclusive)
+     * @param upperBound the upper bound for the acceptable integer input (inclusive)
+     * @return the valid integer input from the user within the specified bounds
+     */
     private int askForIntInput(String stringToPrompt, int lowerBound, int upperBound) {
         int choice = lowerBound;
         String errorString = "Error: you have to insert a number between " + lowerBound + " and " + upperBound + "! Retry";
@@ -117,6 +183,19 @@ public class Cli extends View implements Runnable {
         return choice;
     }
 
+    /**
+     * Prompts the user to input a card ID within the {@code ArrayList} passed as a parameter.
+     *
+     * <p>
+     * The {@code askForIntInput} method displays a prompt message to the user and reads input from the command line.
+     * It ensures that the input is a card ID within the {@code ArrayList} passed as a parameter. If the input is invalid, it displays an
+     * error message and prompts the user to try again.
+     * </p>
+     *
+     * @param stringToPrompt the prompt message displayed to the user
+     * @param cards the {@code ArrayList} of {@code PlayableCard} the user can choose from
+     * @return the valid card ID input from the user within the {@code ArrayList} passed as a parameter
+     */
     private int askForIdCardInput(String stringToPrompt, ArrayList<PlayableCard> cards) {
         int choice = -1;
         Set<Integer> idCards = new HashSet<>();
@@ -145,6 +224,19 @@ public class Cli extends View implements Runnable {
         return choice;
     }
 
+    /**
+     * Prompts the user to input a card ID within the {@code ArrayList} passed as a parameter.
+     *
+     * <p>
+     * The {@code askForIdObjectiveInput} method displays a prompt message to the user and reads input from the command line.
+     * It ensures that the input is a card ID within the {@code ArrayList} passed as a parameter. If the input is invalid, it displays an
+     * error message and prompts the user to try again.
+     * </p>
+     *
+     * @param stringToPrompt the prompt message displayed to the user
+     * @param cards the {@code ArrayList} of {@code ObjectiveCard} the user can choose from
+     * @return the valid card ID input from the user within the {@code ArrayList} passed as a parameter
+     */
     private int askForIdObjectiveInput(String stringToPrompt, ArrayList<ObjectiveCard> cards){
         int choice = -1;
         Set<Integer> idCards = new HashSet<>();
@@ -175,11 +267,38 @@ public class Cli extends View implements Runnable {
         return choice;
     }
 
+    /**
+     * Prompts the user to input a string.
+     * @param stringToPrompt the prompt message displayed to the user
+     * @return the {@code String} input from the user
+     */
     private String askForStringInput(String stringToPrompt){
         System.out.println(stringToPrompt);
         return scanner.nextLine();
     };
 
+    /**
+     * Prompts the user to choose a connection method and sets up the connection.
+     *
+     * <p>
+     * The {@code chooseConnection} method allows the user to select between two connection methods:
+     * Socket and RMI. It prompts the user for an IP address and validates it. Based on the user's
+     * choice, it initializes either a {@code SocketClient} or an {@code RMIClient} and starts the
+     * connection.
+     * </p>
+     *
+     * <p>
+     * Steps performed by this method:
+     * <ol>
+     *   <li>Prompts the user to choose a connection method (Socket or RMI).</li>
+     *   <li>Prompts the user to enter an IP address and validates it.</li>
+     *   <li>Initializes the appropriate client based on the user's choice.</li>
+     *   <li>Starts the client connection.</li>
+     * </ol>
+     * </p>
+     *
+     * @throws RuntimeException if there is an exception while setting up the connection
+     */
     @Override
     public void chooseConnection() {
         int choice = askForIntInput("Choose a connection method\n1. Socket\n2. RMI", 1, 2);
@@ -198,38 +317,87 @@ public class Cli extends View implements Runnable {
 
     }
 
+    /**
+     * Notifies the CLI when a new player has joined the game.
+     * @param nicknames the {@code ArrayList} of {@code String} with all the nicknames registered to the game where this player is connected.
+     */
     @Override
     public void notifyNewPlayerJoined(ArrayList<String> nicknames){}
 
+    /**
+     * Notifies the CLI when the gold deck has been updated.
+     */
     @Override
     public void notifyGoldDeckUpdate(){}
-
+    /**
+     * Notifies the CLI when the resource deck has been updated.
+     */
     @Override
     public void notifyResourceDeckUpdate() {}
 
+    /**
+     * Notifies the CLI that the displayed cards have been updated.
+     *
+     * @param displayedCards The list of playable cards to be displayed.
+     */
     @Override
     public void notifyDisplayedCardsUpdate(ArrayList<PlayableCard> displayedCards) {}
 
+    /**
+     * Notifies the CLI that the available positions have been changed.
+     * @param coord the List of available position.
+     */
     @Override
     public void notifyAvailablePositions(ArrayList<Coordinate> coord) {}
+
+    /**
+     * Notifies the CLI about updates to the grid for a specific player.
+     *
+     * @param nickname The nickname of the player whose grid is being updated.
+     * @param grid     The updated grid
+     */
     @Override
     public void notifyGridUpdate(String nickname, Map<Coordinate,Face> grid){}
 
+    /**
+     * Notified the CLI that the resource count has been changed.
+     * @param nickname the nickname of the player whose resources have been changed
+     * @param resources the new resources count
+     */
     @Override
     public void notifyResourcesUpdate(String nickname, HashMap<Content, Integer> resources) {}
 
+    /**
+     * Notifies the CLI about updates to the hand cards of the current player.
+     *
+     * @param cards The list of playable cards in the current player's hand.
+     */
     @Override
     public void notifyHandCardsUpdate(ArrayList<PlayableCard> cards){}
 
+    /**
+     * Notifies the CLI about updates to the common objective cards.
+     * @param cards the List of new common objective cards
+     */
     @Override
     public void notifyDisplayedObjectives(List<ObjectiveCard> cards){}
 
+    /**
+     * Displays the first message upon successful connection.
+     *
+     * @param clientID The ID of the client for which the connection was established.
+     */
     @Override
     public void displayFirstMessage(int clientID){
         System.out.println("the connection was successfully established, your ClientID is: " + clientID);
         printAvailableCommands();
     }
 
+    /**
+     * Displays the list of available games in the CLI.
+     *
+     * @param gameList A HashMap containing the list of game IDs and their respective player counts.
+     */
     @Override
     public void displayGameList(HashMap<Integer, Integer> gameList){
         if(gameList.isEmpty()){
@@ -244,18 +412,30 @@ public class Cli extends View implements Runnable {
         printAvailableCommands();
     }
 
+    /**
+     * Notifies the CLI that the client has joined a game.
+     *
+     * @param idGame The ID of the game that the client has joined.
+     */
     @Override
     public void notifyGameJoined(int idGame){
         System.out.println("You have joined the game " + idGame+ " correctly.");
         System.out.println("Wait for all the players to join the game...");
     }
 
-
+    /**
+     * Notifies the CLI that the starter card has been chosen.
+     */
     @Override
     public void notifyStarterCard(){
         System.out.println("Starter card selected successfully");
     }
 
+    /**
+     * Notifies the CLI that the available player colors have been updated.
+     *
+     * @param colors The list of available player colors.
+     */
     @Override
     public void notifyColorsAvailable(List<PlayerColor> colors){
         System.out.println("The following colors are available :");
@@ -270,10 +450,13 @@ public class Cli extends View implements Runnable {
         }
     }
 
-
+    /**
+     * Notifies the CLI of the current player's turn.
+     *
+     * @param nickname The nickname of the current player.
+     */
     @Override
     public void notifyCurrentPlayer(String nickname){
-        //TODO: QUESTO FUNZIONA SOLO NEL TERMINALE, NON NELL'IDE! A JAR CREATO CONTROLLARE CHE FUNZIONI
         String clearcli = "\033[H\033[2J";
         System.out.println(clearcli);
         System.out.flush();
@@ -285,13 +468,22 @@ public class Cli extends View implements Runnable {
         printAvailableCommands();
     }
 
-
+    /**
+     * Notifies the CLI about updates to the hand of objective cards.
+     *
+     * @param cards The list of objective cards to be displayed in the CLI.
+     */
     @Override
     public void notifyHandObjectives(ArrayList<ObjectiveCard> cards){
         if(cards.size() == 1)
             System.out.println("your objective card has been selected correctly!");
     }
 
+    /**
+     * Notifies the CLI about changes in the game state.
+     * *
+     * @param state The current state of the game.
+     */
     @Override
     public void notifyGameState(GameState state){
         if(!state.equals(client.getVirtualView().getState()))
@@ -303,6 +495,11 @@ public class Cli extends View implements Runnable {
             printAvailableCommands();
     }
 
+    /**
+     * Notifies the CLI about the winner of the game.
+     *
+     * @param nick The nickname of the player who has won the game.
+     */
     @Override
     public void notifyWinnerUpdate(String nick){
         if (nick.equals("tie")){
@@ -312,7 +509,11 @@ public class Cli extends View implements Runnable {
         }
     }
 
-
+    /**
+     * Notifies the CLI about updates to the scores of players in the game.
+     *
+     * @param scores A map containing player nicknames as keys and their corresponding scores as values.
+     */
     @Override
     public void notifyScores(Map<String, Integer> scores){
         if(client.getVirtualView().getState()!=GameState.ENDING)
@@ -321,11 +522,19 @@ public class Cli extends View implements Runnable {
         printScores();
     }
 
+    /**
+     * Notifies the CLI that a player chose a color
+     * @param color the color chosen
+     */
     @Override
     public void notifyColorChosen(PlayerColor color){
         System.out.println(color + " successfully set. ");
     }
 
+    /**
+     * Notifies the CLI when the player has played a card
+     * @param currentPlayerHasPlayed {@code boolean} {@code true} if the player has played, {@code false} otherwise
+     */
     @Override
     public void notifyCurrentPlayerHasPlayed(boolean currentPlayerHasPlayed){
         if(currentPlayerHasPlayed) {
@@ -334,16 +543,29 @@ public class Cli extends View implements Runnable {
         }
     }
 
+    /**
+     * Notifies the CLI about a new chat message received.
+     *
+     * @param message The chat message to be displayed.
+     */
     @Override
     public void notifyChatMessage(ChatMessage message){
         System.out.println(GRAY + "New chat message from " + getColoredNick(message.getSender()) + " : " + message.getMessage() + RESET);
     }
 
+    /**
+     * Notifies the user of a game-related exception by displaying an error alert.
+     *
+     * @param message The error message to display.
+     */
     @Override
     public void notifyException(String message) {
         System.out.println(message);
     }
 
+    /**
+     * Prints the available commands based on current state.
+     */
     public void printAvailableCommands(){
         String startingString = "now you can insert one of the following commands:";
         String separatorString = "\nand";
@@ -370,6 +592,11 @@ public class Cli extends View implements Runnable {
 
         if(currentState.equals(GameState.WAITING_FOR_PLAYERS)){
             System.out.println(startingString + chatCommands + helpCommand);
+            return;
+        }
+        //when someone disconnects when the game has not started yet
+        if(client.getVirtualView().getCurrentPlayer() == null){
+            System.out.println(startingString + lobbyCommands + helpCommand);
             return;
         }
 
@@ -417,6 +644,11 @@ public class Cli extends View implements Runnable {
         }
     }
 
+    /**
+     * Handles the string input of the users and translates it into the correct action that the user wants to execute,
+     * if he can perform it.
+     * @param input the {@code String} input of the user
+     */
     public void handleInput(String input) {
         Message messageToSend;
         String name;
@@ -683,6 +915,10 @@ public class Cli extends View implements Runnable {
         }
     }
 
+    /**
+     * Prints other player's username with the color they choose and separated by a new line
+     * @return the {@code String} with other player's username with the color they choose and separated by a new line
+     */
     private String printOtherPlayers(){
         String toReturn = "";
         for (String s : client.getVirtualView().getListOfPlayers()){
@@ -692,7 +928,11 @@ public class Cli extends View implements Runnable {
         return toReturn;
     }
 
-    // Helper methods for calculating grid boundaries
+    /**
+     * Calculates the lowest horizontal (x) value of a {@code Set} of {@code Coordinate}
+     * @param coords the {@code Set} of {@code Coordinate}
+     * @return the lowest x-value found
+     */
     public int getMinX(Set<Coordinate> coords){
         int min = Integer.MAX_VALUE;
         for (Coordinate coord : coords) {
@@ -702,7 +942,11 @@ public class Cli extends View implements Runnable {
         }
         return min;
     }
-
+    /**
+     * Calculates the highest horizontal (x) value of a {@code Set} of {@code Coordinate}
+     * @param coords the {@code Set} of {@code Coordinate}
+     * @return the highest x-value found
+     */
     public int getMaxX(Set<Coordinate> coords) {
         int max = Integer.MIN_VALUE;
         for (Coordinate coord : coords) {
@@ -713,6 +957,11 @@ public class Cli extends View implements Runnable {
         return max;
     }
 
+    /**
+     * Calculates the lowest vertical (y) value of a {@code Set} of {@code Coordinate}
+     * @param coords the {@code Set} of {@code Coordinate}
+     * @return the lowest y-value found
+     */
     public int getMinY(Set<Coordinate> coords) {
         int min = Integer.MAX_VALUE;
         for (Coordinate coord : coords) {
@@ -722,7 +971,11 @@ public class Cli extends View implements Runnable {
         }
         return min;
     }
-
+    /**
+     * Calculates the highest vertical (y) value of a {@code Set} of {@code Coordinate}
+     * @param coords the {@code Set} of {@code Coordinate}
+     * @return the highest y-value found
+     */
     public int getMaxY(Set<Coordinate> coords) {
         int max = Integer.MIN_VALUE;
         for (Coordinate coord : coords) {
@@ -733,6 +986,12 @@ public class Cli extends View implements Runnable {
         return max;
     }
 
+    /**
+     * Prints the points that a face gives (or the background of the card if points=0) and,
+     * if the face is not a {@code GoldFront} it prints another background, else it prints the overlapped/object needed character .
+     * @param face the face whose points must be printed
+     * @param cardType the background of the card printed when the face gives 0 points.
+     */
     public void printFrontPoints(Face face, AnsiColor cardType) {
         String frontPoints = "";
 
@@ -766,6 +1025,11 @@ public class Cli extends View implements Runnable {
 
     }
 
+    /**
+     * Prints the border of a gold card
+     * @param cardType the {@code AnsiColor} card type
+     * @param bORe left border (bORe = 0) or right border (bORe = 1)
+     */
     public void printGoldBorder(AnsiColor cardType, int bORe) {
         String border = "";
 
@@ -788,6 +1052,11 @@ public class Cli extends View implements Runnable {
         System.out.print(border);
     }
 
+    /**
+     * Returns the {@code AnsiColor} corresponding to the {@code Face} face passed as a parameter
+     * @param face the {@code Face} whose {@code AnsiColor} is returned
+     * @return the {@code AnsiColor} of the face
+     */
     public AnsiColor getCardType(Face face){
         Content background = Card.getType(face.getIdCard());
         assert background != null;
@@ -804,6 +1073,10 @@ public class Cli extends View implements Runnable {
         };
     }
 
+    /**
+     * Prints an {@code ObjectiveCard}.
+     * @param card the {@code ObjectiveCard} to be printed
+     */
     public void printObjectiveCards(ObjectiveCard card){
         System.out.println("card id: "+ card.getIdCard());
         AnsiColor ansiBackground = null;
@@ -980,6 +1253,10 @@ public class Cli extends View implements Runnable {
         }
     }
 
+    /**
+     * Prints the point given by a {@code ObjectiveCard}
+     * @param card the {@code ObjectiveCard} whose points have to be printed
+     */
     public void printObjectivesPoints(ObjectiveCard card){
         switch (card.getPoints()){
             case 2 -> System.out.print(AnsiColor.POINT_TWO.getFormattedCharacter());
@@ -987,14 +1264,21 @@ public class Cli extends View implements Runnable {
         }
     }
 
+    /**
+     * Prints the scores
+     */
     public void printScores(){
         System.out.println("The game scores are: ");
         for (Map.Entry<String, Integer> e : client.getVirtualView().getScores().entrySet())
             System.out.println(e.getKey() + ": " + e.getValue());
     }
 
+    /**
+     * Prints a {@code Map} of {@code Coordinate} and {@code Face}.
+     * @param grid the grid to be printed
+     * @param printCoordinate {@code true} to print coordinate, {@code false} otherwise
+     */
     public void printGrid(Map<Coordinate, Face> grid, boolean printCoordinate){
-        //todo: stampare il centro delle starter
         int xmin = getMinX(grid.keySet());
         int ymin = getMinY(grid.keySet());
         int xmax = getMaxX(grid.keySet());
@@ -1030,7 +1314,7 @@ public class Cli extends View implements Runnable {
                         printCenter(coord, grid);
                     }else
                         System.out.print(tab4+tab4+tab4);
-                } else if ( i%2 == 0 && j%2 != 0){
+                } else if (i % 2 == 0){
                     //se i è pari e j è dispari, significa che è sopra/sotto il centro --> stampo il sopra/sotto (punti/ objectNeeded/...)
 
                     returnArray = searchCenterVerticalAndCardTypeAtPosition(new Coordinate(i,j), grid);
@@ -1040,7 +1324,7 @@ public class Cli extends View implements Runnable {
                         printCenterVertical(cardType, (boolean)returnArray[1], grid, new Coordinate(i,j));
                     else
                         System.out.print(tab4+tab4+tab4);
-                } else if( i%2 != 0 && j%2 == 0){
+                } else {
                     //se i è dispari e j è pari, significa che è a destra/sinistra del centro --> stampo lati
                     returnArray = searchCenterHorizontalAndCardTypeAtPosition(new Coordinate(i,j), grid);
                     cardType = (AnsiColor) returnArray[0];
@@ -1075,6 +1359,10 @@ public class Cli extends View implements Runnable {
 
     }
 
+    /**
+     * Prints a face
+     * @param face the face to be printed.
+     */
     public void printFace(Face face){
         HashMap<Coordinate, Face> grid = new HashMap<>();
         grid.put(new Coordinate(0,0), face);
@@ -1082,10 +1370,17 @@ public class Cli extends View implements Runnable {
         printGrid(grid,false);
     }
 
+    /**
+     * Prints a {@code ArrayList} of {@code PlayableCard}.
+     * @param cards the {@code ArrayList} of {@code PlayableCard}
+     * @param printId {@code true} for printing the ID of the cards, {@code false} otherwise
+     * @param printCost {@code true} for printing the cost of the cards, {@code false} otherwise
+     * @param printFront {@code true} for printing the front face of the cards, {@code false} otherwise
+     * @param printBack {@code true} for printing the back face of the cards, {@code false} otherwise
+     */
     public void printListOfCards(ArrayList<PlayableCard> cards, boolean printId, boolean printCost, boolean printFront, boolean printBack){
 
         HashMap<Coordinate, Face> grid = new HashMap<>();
-        String tab4 = "    ";
 
         //print the id's
         if(printId) {
@@ -1135,6 +1430,9 @@ public class Cli extends View implements Runnable {
         printGrid(grid,false);
     }
 
+    /**
+     * Prints the player's hand, or "you have no cards" if the player's hand is empty.
+     */
     public void printPlayerHand() {
         ArrayList<PlayableCard> cards = client.getVirtualView().getHandCards();
         if (cards.isEmpty()){
@@ -1145,6 +1443,13 @@ public class Cli extends View implements Runnable {
         printListOfCards(cards,true,true,true,true);
     }
 
+    /**
+     * Based on the scaled {@code Coordinate} passed as a parameter (see how to scale it in {@code printGrid}),
+     * this method returns the highest corner content in that coordinate and the {@code AnsiColor} card type of the face to which that corner belongs.
+     * @param coord the scaled coordinate of the corner whose highest content and card type is returned
+     * @param grid the grid where to search
+     * @return an Array of {@code Object} : [0] = Content, [1] = AnsiColor
+     */
     public Object[] searchCornerAndCardTypeAtPosition(Coordinate coord, Map<Coordinate,Face> grid){
         Coordinate check;
         Content content = null;
@@ -1193,6 +1498,14 @@ public class Cli extends View implements Runnable {
         return returnArray;
     }
 
+    /**
+     * Based on the scaled {@code Coordinate} passed as a parameter (see how to scale it in {@code printGrid}),
+     * this method returns if the face part is above or underneath the center and the
+     * {@code AnsiColor} card type of the face to which that part belongs.
+     * @param coord the scaled coordinate of the center whose face part and card type is returned
+     * @param grid the grid where to search
+     * @return an Array of {@code Object} :[0] = Boolean ({@code true} if the face part is underneath, {@code false} if it is above), [1] = AnsiColor
+     */
     public Object[] searchCenterVerticalAndCardTypeAtPosition(Coordinate coord, Map<Coordinate,Face> grid){
         Coordinate check;
 
@@ -1221,6 +1534,15 @@ public class Cli extends View implements Runnable {
         return returnArray;
     }
 
+    /**
+     * Based on the scaled {@code Coordinate} passed as a parameter (see how to scale it in {@code printGrid}),
+     * this method returns if the face part is to the right or left of the center and the
+     * {@code AnsiColor} card type of the face to which that part belongs.
+     * @param coord the scaled coordinate of the center whose face part and card type is returned
+     * @param grid the grid where to search
+     * @return an Array of {@code Object} :[0] = Boolean ({@code true} if the face part is on the left of the center, {@code false} if it is on the right)
+     * , [1] = AnsiColor
+     */
     public Object[] searchCenterHorizontalAndCardTypeAtPosition(Coordinate coord, Map<Coordinate,Face> grid){
         Coordinate check;
         AnsiColor cardType = null;
@@ -1248,12 +1570,22 @@ public class Cli extends View implements Runnable {
         return returnArray;
     }
 
+    /**
+     * Prints a corner of a face
+     * @param content the {@code Content} of the corner
+     * @param cardType the {@code AnsiColor} of the face
+     */
     public void printCorner(Content content, AnsiColor cardType){
 
         String cornerText = cardType.getFormattedCharacter(content,cardType);
         System.out.print(cornerText);
     }
 
+    /**
+     * Prints the center part of a face
+     * @param coord the scaled coordinate (see how to scale in {@code printGrid}) of the center
+     * @param grid the grid where the face is
+     */
     public void printCenter(Coordinate coord, Map<Coordinate, Face> grid){
         AnsiColor cardType = getCardType(grid.get(coord));
         Face face = grid.get(coord);
@@ -1274,6 +1606,13 @@ public class Cli extends View implements Runnable {
         System.out.print(centerText);
     }
 
+    /**
+     * Prints the right part or the left part of a center of a card
+     * @param cardType the {@code AnsiColor} of the face
+     * @param isRight {@code true} if the face part is on the left of the center, {@code false} if it is on the right
+     * @param grid the grid where the face is
+     * @param coord the scaled coordinate (see how to scale in {@code printGrid}) of the center
+     */
     public void printCenterHorizontal(AnsiColor cardType, boolean isRight, Map<Coordinate, Face> grid, Coordinate coord){
         String centerText = "";
         int i = coord.getX();
@@ -1300,6 +1639,13 @@ public class Cli extends View implements Runnable {
 
     }
 
+    /**
+     * Prints the above part or underneath part of a center of a card
+     * @param cardType the {@code AnsiColor} of the face
+     * @param isAbove {{@code true} if the face part is underneath, {@code false} if it is above
+     * @param grid the grid where the face is
+     * @param coord the scaled coordinate (see how to scale in {@code printGrid}) of the center
+     */
     public void printCenterVertical(AnsiColor cardType, boolean isAbove, Map<Coordinate, Face> grid, Coordinate coord){
         String centerText = "";
         int i = coord.getX();
@@ -1359,6 +1705,11 @@ public class Cli extends View implements Runnable {
 
     }
 
+    /**
+     * Prints a string with the color of the player that has that nickname, or, if the color has not been chosen yet, the print is standard.
+     * @param stringToPrompt the string to prompt with the player's color
+     * @param nickname the nickname of the player
+     */
     public void printWithNicksColor(String stringToPrompt, String nickname){
         String colorString = getColor(nickname);
         String white = getWhite();
@@ -1366,14 +1717,30 @@ public class Cli extends View implements Runnable {
         System.out.print(colorString + stringToPrompt + white);
     }
 
+    /**
+     * Prints a string with the color of the player that has that nickname, or, if the color has not been chosen yet, the print is standard,
+     * then it starts a new line.
+     * @param stringToPrompt the string to prompt with the player's color
+     * @param nickname the nickname of the player
+     */
     public void printWithNicksColorNewLine(String stringToPrompt, String nickname){
         printWithNicksColor(stringToPrompt + "\n", nickname);
     }
 
+    /**
+     * Returns a colored string of the nickname based on color chosen by the player with that nickname
+     * @param nickname the nickname of the player
+     * @return a colored string of the nickname based on color chosen by the player with that nickname
+     */
     public String getColoredNick(String nickname){
         return getColor(nickname)+ nickname + getWhite();
     }
 
+    /**
+     * Returns the color string based on the player's color with the nickname passed as a parameter
+     * @param nickname the nickname of the player
+     * @return the color string based on the player's color with the nickname passed as a parameter
+     */
     public String getColor(String nickname){
         String blue = "\u001B[34m";
         String red = "\u001B[31m";
@@ -1398,6 +1765,10 @@ public class Cli extends View implements Runnable {
         return colorString;
     }
 
+    /**
+     * Returns the white color string
+     * @return the white color string
+     */
     public String getWhite(){
         return "\u001B[0m";
     }
