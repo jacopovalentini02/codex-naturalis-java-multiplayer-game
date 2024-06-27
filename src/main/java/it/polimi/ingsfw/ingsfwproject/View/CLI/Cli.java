@@ -275,7 +275,22 @@ public class Cli extends View implements Runnable {
     private String askForStringInput(String stringToPrompt){
         System.out.println(stringToPrompt);
         return scanner.nextLine();
-    };
+    }
+
+    /**
+     * Prompts the user to input a string and requires the user to insert a string with a minimum length.
+     * @param stringToPrompt the prompt message displayed to the user
+     * @param minLen the minimum length of the string
+     * @return the {@code String} input from the user
+     */
+    private String askForStringInputWithMinLen(String stringToPrompt, int minLen){
+        String input = askForStringInput(stringToPrompt);
+        while(input.length() < minLen){
+            System.out.println("The input is too short! the minimum length is " + minLen);
+            input = askForStringInput(stringToPrompt);
+        }
+        return input;
+    }
 
     /**
      * Prompts the user to choose a connection method and sets up the connection.
@@ -666,7 +681,7 @@ public class Cli extends View implements Runnable {
                         break;
                     }
                     int numOfPlayers = askForIntInput("insert the number of players between 2 and 4", 2, 4);
-                    name = askForStringInput("insert your nickname");
+                    name = askForStringInputWithMinLen("insert your nickname", 2);
                     messageToSend = new CreateGameMessage(client.getClientID(), numOfPlayers, name);
                     client.sendMessage(messageToSend);
                     break;
@@ -676,7 +691,7 @@ public class Cli extends View implements Runnable {
                         break;
                     }
                     int gameID = askForIntInput("insert the game ID", 0, 1000);
-                    name = askForStringInput("insert your nickname");
+                    name = askForStringInputWithMinLen("insert your nickname", 2);
                     messageToSend = new JoinGameMessage(client.getClientID(), name, gameID);
                     client.sendMessage(messageToSend);
                     break;
