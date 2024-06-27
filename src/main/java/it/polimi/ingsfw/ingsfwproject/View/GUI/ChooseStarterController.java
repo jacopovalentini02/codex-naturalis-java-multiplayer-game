@@ -269,7 +269,7 @@ public class ChooseStarterController extends GUIController implements Initializa
         } else {
             chatPane.setVisible(true);
             showChat.setText("Hide chat");
-            showChat.setVisible(false);
+            newMessage.setVisible(false);
         }
     }
 

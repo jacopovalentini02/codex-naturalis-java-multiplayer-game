@@ -8,6 +8,7 @@
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.effect.Blend?>
+<?import javafx.scene.effect.Glow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -16,7 +17,6 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<?import javafx.scene.effect.Glow?>
 <AnchorPane prefHeight="855.0" prefWidth="1444.0" style="-fx-background-color: #e6ddbc;" stylesheets="@Style.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsfw.ingsfwproject.View.GUI.WaitingController">
    <effect>
       <Blend />
@@ -38,7 +38,7 @@
       <font>
          <Font name="Bodoni 72 Smallcaps Book" size="37.0" />
       </font></Label>
-   <Button fx:id="showChat" layoutX="1169.0" layoutY="37.0" mnemonicParsing="false" onAction="#toggleChatMenu" prefHeight="47.0" prefWidth="153.0" style="-fx-background-color: #5F3075;" text="Show Chat" textFill="WHITE">
+   <Button fx:id="showChat" layoutX="1192.0" layoutY="63.0" mnemonicParsing="false" onAction="#toggleChatMenu" prefHeight="47.0" prefWidth="153.0" style="-fx-background-color: #5F3075;" text="Show Chat" textFill="WHITE">
       <font>
          <Font name="Bodoni 72 Smallcaps Book" size="22.0" />
       </font>
@@ -83,14 +83,14 @@
                <ListView fx:id="currentChat" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: cfc6a9; -fx-border-color: #5F3075;" BorderPane.alignment="CENTER" />
             </center>
          </BorderPane>
-         <Text fx:id="newMessage" layoutX="1210.0" layoutY="33.0" strokeType="OUTSIDE" strokeWidth="0.0" text="New message!" visible="false" wrappingWidth="84.74578857421858">
-            <font>
-               <Font name="Bodoni 72 Bold" size="15.0" />
-            </font>
-            <effect>
-               <Glow />
-            </effect>
-         </Text>
       </children>
    </AnchorPane>
+   <Text fx:id="newMessage" layoutX="1226.0" layoutY="47.0" strokeType="OUTSIDE" strokeWidth="0.0" text="New message!" visible="false" wrappingWidth="84.74578857421858">
+      <font>
+         <Font name="Bodoni 72 Bold" size="15.0" />
+      </font>
+      <effect>
+         <Glow />
+      </effect>
+   </Text>
 </AnchorPane>

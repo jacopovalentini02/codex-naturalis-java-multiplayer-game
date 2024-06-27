@@ -208,6 +208,7 @@ public class WaitingController extends GUIController{
         } else {
             chatPane.setVisible(true);
             showChat.setText("Hide chat");
+            newMessage.setVisible(false);
         }
     }
 
