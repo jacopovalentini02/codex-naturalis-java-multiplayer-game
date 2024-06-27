@@ -1,10 +1,14 @@
 package it.polimi.ingsfw.ingsfwproject.Model;
 
+import java.io.Serial;
+
 /**
  * The {@code GoldCard} class represents a gold card of the game.
  * It is a subclass of {@code NormalCard} and it adds a {@code GoldFront} attribute.
  */
 public class GoldCard extends NormalCard{
+    @Serial
+    private static final long serialVersionUID = -7670039832266071604L;
     private GoldFront front;
 
     /**

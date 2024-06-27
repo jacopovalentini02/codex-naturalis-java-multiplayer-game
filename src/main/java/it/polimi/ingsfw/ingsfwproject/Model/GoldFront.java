@@ -1,5 +1,6 @@
 package it.polimi.ingsfw.ingsfwproject.Model;
 
+import java.io.Serial;
 import java.util.*;
 
 /**
@@ -21,6 +22,8 @@ import java.util.*;
  *</p>
 */
 public class GoldFront extends NormalFace {
+    @Serial
+    private static final long serialVersionUID = -6831857852149718598L;
     private ArrayList<Content> cost;
     private boolean overlapped;
     private Content objectNeeded;

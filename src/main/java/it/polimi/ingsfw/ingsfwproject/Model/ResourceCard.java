@@ -1,10 +1,14 @@
 package it.polimi.ingsfw.ingsfwproject.Model;
 
+import java.io.Serial;
+
 /**
  * The {@code ResourceCard} class represents a resource card of the game.
  * It extends {@code NormalCard} and it adds a specific {@code NormalFace} front face.
  */
 public class ResourceCard extends NormalCard{
+    @Serial
+    private static final long serialVersionUID = 6051959552075268556L;
     private NormalFace front;
 
     /**

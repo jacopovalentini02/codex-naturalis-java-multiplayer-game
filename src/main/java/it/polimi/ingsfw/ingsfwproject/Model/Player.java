@@ -7,6 +7,7 @@ import it.polimi.ingsfw.ingsfwproject.Exceptions.PositionNotAvailableException;
 import it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient.*;
 import it.polimi.ingsfw.ingsfwproject.Network.Server.GameServerInstance;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.*;
 
@@ -16,6 +17,8 @@ import java.util.*;
  * Description: This class represents a player in the game. It manages the player's state, including their hand of cards, objectives, ground, and other properties.
  */
 public class Player implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 8578669925170943251L;
     private int clientID;
     private String username;
     private PlayerColor token;

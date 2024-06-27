@@ -1,10 +1,14 @@
 package it.polimi.ingsfw.ingsfwproject.Model;
 
+import java.io.Serial;
+
 /**
  * The {@code NormalCard} class is an abstract class representing a playable card with a {@code NormalBack} back face.
  * It extends the {@code PlayableCard} class and includes additional properties and methods specific to cards with a {@code NormalBack} back face.
  */
 abstract public class NormalCard extends PlayableCard{
+    @Serial
+    private static final long serialVersionUID = -909038063445427748L;
     private NormalBack backface;
 
     /**

@@ -17,7 +17,7 @@ public class ContentCounter implements Serializable {
     countersArray[5] =  INKWELL
     countersArray[6] =  MANUSCRIPT
     */
-
+    private static final long serialVersionUID=1122334455667788990L;
     private int[] countersArray;
 
     /**
