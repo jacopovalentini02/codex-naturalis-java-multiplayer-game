@@ -189,5 +189,8 @@ public class GameServerInstance {
                 return p.getClientID();
         return -1;
     }
+    public void setInGame(boolean inGame){
+        this.inGame = inGame;
+    }
 
 }
