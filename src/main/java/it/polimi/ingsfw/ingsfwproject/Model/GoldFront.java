@@ -19,7 +19,6 @@ import java.util.*;
  *   </li>
  *   <li>{@code objectNeeded} - In the case when {@code overlapped} is {@code false}, this represents the visible objects in the play area that grant points.</li>
  * </ul>
- *</p>
 */
 public class GoldFront extends NormalFace {
     @Serial

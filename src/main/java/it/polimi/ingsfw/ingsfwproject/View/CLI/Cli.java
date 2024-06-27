@@ -62,7 +62,7 @@ public class Cli extends View implements Runnable {
      * <li>Prompts the user to choose a connection by calling {@code chooseConnection()}.</li>
      * <li>Starts a new thread to handle user input by invoking the {@code readInputUser()} method.</li>
      * </ol>
-     * </p>
+     *
      */
     public void run(){
         init();
@@ -141,7 +141,7 @@ public class Cli extends View implements Runnable {
      */
     private boolean askForFaceToPlay(){
         int iFace = askForIntInput("Which side?\n1)Front\n2)Back", 1, 2);
-        return (iFace == 1)? true : false;
+        return iFace == 1;
     }
 
     /**
@@ -233,22 +233,21 @@ public class Cli extends View implements Runnable {
      * error message and prompts the user to try again.
      * </p>
      *
-     * @param stringToPrompt the prompt message displayed to the user
      * @param cards the {@code ArrayList} of {@code ObjectiveCard} the user can choose from
      * @return the valid card ID input from the user within the {@code ArrayList} passed as a parameter
      */
-    private int askForIdObjectiveInput(String stringToPrompt, ArrayList<ObjectiveCard> cards){
+    private int askForIdObjectiveInput(ArrayList<ObjectiveCard> cards){
         int choice = -1;
         Set<Integer> idCards = new HashSet<>();
         for(Card c : cards){
             idCards.add(c.getIdCard());
         }
-        System.out.println(stringToPrompt);
+        System.out.println("Which objective do you prefer?");
         String errorString = "Error: you have to insert a card id among the displayed cards!\n";
         do{
             try{
-                for(Card c : cards){
-                   printObjectiveCards((ObjectiveCard) c);
+                for(ObjectiveCard c : cards){
+                   printObjectiveCards(c);
                 }
                 System.out.println("Insert the id of the card chosen: ");
                 while (!scanner.hasNextInt()) {
@@ -279,15 +278,15 @@ public class Cli extends View implements Runnable {
 
     /**
      * Prompts the user to input a string and requires the user to insert a string with a minimum length.
-     * @param stringToPrompt the prompt message displayed to the user
+     *
      * @param minLen the minimum length of the string
      * @return the {@code String} input from the user
      */
-    private String askForStringInputWithMinLen(String stringToPrompt, int minLen){
-        String input = askForStringInput(stringToPrompt);
+    private String askForStringInputWithMinLen(int minLen){
+        String input = askForStringInput("insert your nickname");
         while(input.length() < minLen){
             System.out.println("The input is too short! the minimum length is " + minLen);
-            input = askForStringInput(stringToPrompt);
+            input = askForStringInput("insert your nickname");
         }
         return input;
     }
@@ -310,7 +309,6 @@ public class Cli extends View implements Runnable {
      *   <li>Initializes the appropriate client based on the user's choice.</li>
      *   <li>Starts the client connection.</li>
      * </ol>
-     * </p>
      *
      * @throws RuntimeException if there is an exception while setting up the connection
      */
@@ -324,7 +322,7 @@ public class Cli extends View implements Runnable {
         }
         try {
             int port = choice == 1? 1337 : 1099;
-            super.client = choice == 1 ? new SocketClient(ip, port, this) : new RMIClient(ip, port, this);
+            client = choice == 1 ? new SocketClient(ip, port, this) : new RMIClient(ip, port, this);
             client.startConnection();
         } catch (java.lang.Exception e) {
             throw new RuntimeException(e);
@@ -681,7 +679,7 @@ public class Cli extends View implements Runnable {
                         break;
                     }
                     int numOfPlayers = askForIntInput("insert the number of players between 2 and 4", 2, 4);
-                    name = askForStringInputWithMinLen("insert your nickname", 2);
+                    name = askForStringInputWithMinLen(2);
                     messageToSend = new CreateGameMessage(client.getClientID(), numOfPlayers, name);
                     client.sendMessage(messageToSend);
                     break;
@@ -691,7 +689,7 @@ public class Cli extends View implements Runnable {
                         break;
                     }
                     int gameID = askForIntInput("insert the game ID", 0, 1000);
-                    name = askForStringInputWithMinLen("insert your nickname", 2);
+                    name = askForStringInputWithMinLen(2);
                     messageToSend = new JoinGameMessage(client.getClientID(), name, gameID);
                     client.sendMessage(messageToSend);
                     break;
@@ -735,7 +733,7 @@ public class Cli extends View implements Runnable {
                         break;
                     }
 
-                    int objWanted = askForIdObjectiveInput("Which objective do you prefer?", (client.getVirtualView().getHandObjectives()));
+                    int objWanted = askForIdObjectiveInput((client.getVirtualView().getHandObjectives()));
                     messageToSend = new ObjectiveCardChosenMessage(client.getClientID(), client.getNickname(), objWanted);
                     client.sendMessage(messageToSend);
                     break;
@@ -1096,7 +1094,7 @@ public class Cli extends View implements Runnable {
         System.out.println("card id: "+ card.getIdCard());
         AnsiColor ansiBackground = null;
         String background;
-        switch(card.getType(card.getIdCard())){
+        switch(Card.getType(card.getIdCard())){
            case FUNGI_KINGDOM -> ansiBackground = AnsiColor.FUNGI_BACKGROUND;
            case PLANT_KINGDOM -> ansiBackground = AnsiColor.PLANT_BACKGROUND;
            case INSECT_KINGDOM -> ansiBackground = AnsiColor.INSECT_BACKGROUND;
@@ -1116,7 +1114,7 @@ public class Cli extends View implements Runnable {
                     System.out.print(background);
                     printObjectivesPoints(card);
                     System.out.print(background);
-                    printCorner(((StructuredObjectiveCard) card).getResourceRequested().get(0), ansiBackground);
+                    printCorner(((StructuredObjectiveCard) card).getResourceRequested().getFirst(), ansiBackground);
                     System.out.println();
                     //second row
                     for(int i=0; i<3; i++){
@@ -1133,7 +1131,7 @@ public class Cli extends View implements Runnable {
                     break;
                 case DOUBLE_UP_LEFT :
                     //first row
-                    printCorner(((StructuredObjectiveCard) card).getResourceRequested().get(0), ansiBackground);
+                    printCorner(((StructuredObjectiveCard) card).getResourceRequested().getFirst(), ansiBackground);
                     System.out.print(background);
                     printObjectivesPoints(card);
                     System.out.print(background);
@@ -1157,7 +1155,7 @@ public class Cli extends View implements Runnable {
                     System.out.print(background);
                     printObjectivesPoints(card);
                     System.out.print(background);
-                    printCorner(((StructuredObjectiveCard) card).getResourceRequested().get(0), ansiBackground);
+                    printCorner(((StructuredObjectiveCard) card).getResourceRequested().getFirst(), ansiBackground);
                     System.out.println();
                     //second row
                     for(int i=0; i<3; i++){
@@ -1175,7 +1173,7 @@ public class Cli extends View implements Runnable {
                 case DOUBLE_DOWN_LEFT :
                     //first row
                     System.out.print(background);
-                    printCorner(((StructuredObjectiveCard) card).getResourceRequested().get(0), ansiBackground);
+                    printCorner(((StructuredObjectiveCard) card).getResourceRequested().getFirst(), ansiBackground);
                     printObjectivesPoints(card);
                     System.out.print(background);
                     System.out.println(background);
@@ -1198,7 +1196,7 @@ public class Cli extends View implements Runnable {
                         System.out.print(background);
                     }
                     printObjectivesPoints(card);
-                    printCorner(((StructuredObjectiveCard) card).getResourceRequested().get(0), ansiBackground);
+                    printCorner(((StructuredObjectiveCard) card).getResourceRequested().getFirst(), ansiBackground);
                     System.out.println(background);
                     //third row
                     for(int i=0; i<3; i++){
@@ -1216,7 +1214,7 @@ public class Cli extends View implements Runnable {
                     break;
                 case RIGHT_DIAGONAL :
                     //first row
-                    printCorner(((StructuredObjectiveCard) card).getResourceRequested().get(0), ansiBackground);
+                    printCorner(((StructuredObjectiveCard) card).getResourceRequested().getFirst(), ansiBackground);
                     System.out.print(background);
                     printObjectivesPoints(card);
                     System.out.print(background);
@@ -1629,7 +1627,6 @@ public class Cli extends View implements Runnable {
      * @param coord the scaled coordinate (see how to scale in {@code printGrid}) of the center
      */
     private void printCenterHorizontal(AnsiColor cardType, boolean isRight, Map<Coordinate, Face> grid, Coordinate coord){
-        String centerText = "";
         int i = coord.getX();
         int j = coord.getY();
 
