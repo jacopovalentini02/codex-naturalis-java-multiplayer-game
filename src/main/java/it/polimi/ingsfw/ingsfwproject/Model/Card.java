@@ -1,5 +1,6 @@
 package it.polimi.ingsfw.ingsfwproject.Model;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 /**
@@ -10,6 +11,8 @@ import java.io.Serializable;
 
 abstract public class Card implements Serializable {
     private int idCard;
+    @Serial
+    private static final long serialVersionUID=19088521543661542L;
 
     /**
      * Constructs a new {@code Card} with the specified value.

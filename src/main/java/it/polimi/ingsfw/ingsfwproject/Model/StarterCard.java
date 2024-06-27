@@ -1,5 +1,6 @@
 package it.polimi.ingsfw.ingsfwproject.Model;
 
+import java.io.Serial;
 import java.util.Arrays;
 
 /**
@@ -7,6 +8,8 @@ import java.util.Arrays;
  * It extends {@code PlayableCard} and it adds a specific {@code NormalFace} back face and a {@code StarterFront } front face.
  */
 public class StarterCard extends PlayableCard{
+    @Serial
+    private static final long serialVersionUID = -782999640366018206L;
     private NormalFace back;
     private StarterFront front;
 

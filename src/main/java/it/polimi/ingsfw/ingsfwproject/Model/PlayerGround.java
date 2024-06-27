@@ -3,6 +3,7 @@ package it.polimi.ingsfw.ingsfwproject.Model;
 import it.polimi.ingsfw.ingsfwproject.Exceptions.NotEnoughResourcesException;
 import it.polimi.ingsfw.ingsfwproject.Exceptions.PositionNotAvailableException;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.*;
 
@@ -14,6 +15,8 @@ import java.util.*;
 
 public class PlayerGround implements Serializable {
 
+    @Serial
+    private static final long serialVersionUID = -5738294509649963404L;
     private ContentCounter contentCounter;
     private Map<Coordinate, Face> grid;
     private ArrayList<Coordinate> availablePositions;

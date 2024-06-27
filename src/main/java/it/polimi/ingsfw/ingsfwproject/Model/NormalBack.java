@@ -1,10 +1,14 @@
 package it.polimi.ingsfw.ingsfwproject.Model;
 
+import java.io.Serial;
+
 /**
  * The {@code NormalBack} class represents the back face of a {@code ResourceCard} or {@code GoldCard}.
  * This class is a subclass of {@code Face} and it adds a center {@code Content}.
  */
 public class NormalBack extends Face{
+    @Serial
+    private static final long serialVersionUID = 1573831788109124200L;
     private Content center;
 
     /**

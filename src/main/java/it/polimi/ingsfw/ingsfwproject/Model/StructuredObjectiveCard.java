@@ -1,8 +1,11 @@
 package it.polimi.ingsfw.ingsfwproject.Model;
 
+import java.io.Serial;
 import java.util.*;
 
 public class  StructuredObjectiveCard extends ObjectiveCard{
+    @Serial
+    private static final long serialVersionUID = -4340548073863437007L;
     private Structure structureType;
     private ArrayList<Content> resourceRequested;
 

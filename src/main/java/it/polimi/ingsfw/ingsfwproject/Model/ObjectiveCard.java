@@ -1,6 +1,10 @@
 package it.polimi.ingsfw.ingsfwproject.Model;
 
+import java.io.Serial;
+
 abstract public class ObjectiveCard extends Card {
+    @Serial
+    private static final long serialVersionUID = 19088521543661542L;
     private int points;
 
 

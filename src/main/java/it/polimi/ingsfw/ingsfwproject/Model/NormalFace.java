@@ -1,11 +1,15 @@
 package it.polimi.ingsfw.ingsfwproject.Model;
 
+import java.io.Serial;
+
 /**
  * The {@code NormalFace} class represents the front face of a {@code ResourceCard} or
  * the back face of a {@code StarterCard}.
  * This class is a subclass of {@code Face} and it adds points attribute.
  */
 public class NormalFace extends Face{
+    @Serial
+    private static final long serialVersionUID = -3155966952230005436L;
     private int points;
 
     /**
