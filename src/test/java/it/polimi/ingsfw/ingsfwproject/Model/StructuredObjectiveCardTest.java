@@ -2,6 +2,7 @@ package it.polimi.ingsfw.ingsfwproject.Model;
 
 import it.polimi.ingsfw.ingsfwproject.Exceptions.DeckEmptyException;
 import it.polimi.ingsfw.ingsfwproject.Network.Server.GameServerInstance;
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 
 import java.rmi.RemoteException;
@@ -38,12 +39,12 @@ class StructuredObjectiveCardTest {
 
         assertEquals(16, objectiveCards.size());
         ObjectiveCard redRightDiagonalObjectiveCard = null;
-        
+
         for (Card card : objectiveCards) {
             if (card.getIdCard() == 87)
                 redRightDiagonalObjectiveCard = (ObjectiveCard) card;
         }
-        
+
         assertNotEquals(null, redRightDiagonalObjectiveCard);
 
         ResourceCard card2 = (ResourceCard) resourceDeck.draw();
@@ -179,7 +180,7 @@ class StructuredObjectiveCardTest {
 
     }
 
-    @Test
+    @RepeatedTest(100)
     void verifyDoubleStructureObjective() throws RemoteException, DeckEmptyException{
         GameServerInstance gameServerInstance=new GameServerInstance();
         Player player1 = new Player("player1", gameServerInstance, 0);
@@ -208,7 +209,7 @@ class StructuredObjectiveCardTest {
         assertEquals(4, doubleStructureObjectives.size());
 
         Collections.shuffle(doubleStructureObjectives);
-        StructuredObjectiveCard cardToTest = doubleStructureObjectives.getFirst();
+        StructuredObjectiveCard cardToTest = doubleStructureObjectives.removeFirst();
 
         ArrayList<PlayableCard> greenCards = new ArrayList<>();
         ArrayList<PlayableCard> redCards = new ArrayList<>();
@@ -217,14 +218,14 @@ class StructuredObjectiveCardTest {
 
 
         for (Card c: resourceDeck.getCardList()){
-           if (Card.getType(c.getIdCard()) == Content.FUNGI_KINGDOM)
-               redCards.add((PlayableCard) c);
-           if (Card.getType(c.getIdCard()) == Content.INSECT_KINGDOM)
+            if (Card.getType(c.getIdCard()) == Content.FUNGI_KINGDOM)
+                redCards.add((PlayableCard) c);
+            if (Card.getType(c.getIdCard()) == Content.INSECT_KINGDOM)
                 purpleCards.add((PlayableCard) c);
-           if (Card.getType(c.getIdCard()) == Content.ANIMAL_KINGDOM)
-               blueCards.add((PlayableCard) c);
-           if (Card.getType(c.getIdCard()) == Content.PLANT_KINGDOM)
-               greenCards.add((PlayableCard) c);
+            if (Card.getType(c.getIdCard()) == Content.ANIMAL_KINGDOM)
+                blueCards.add((PlayableCard) c);
+            if (Card.getType(c.getIdCard()) == Content.PLANT_KINGDOM)
+                greenCards.add((PlayableCard) c);
         }
 
         for (Card c: goldDeck.getCardList()){
@@ -302,20 +303,28 @@ class StructuredObjectiveCardTest {
             assert card3 != null;
             assert card4 != null;
 
-            grid.put(coordinate1, card2.getFront());
-            grid.put(coordinate2, card3.getFront());
-            grid.put(coordinate3, card4.getBack());
-            structuresCreated++;
+            if (!(grid.containsKey(coordinate1) || grid.containsKey(coordinate2) || grid.containsKey(coordinate3))) {
+                grid.put(coordinate1, card2.getFront());
+                grid.put(coordinate2, card3.getFront());
+                grid.put(coordinate3, card4.getBack());
+                structuresCreated++;
+            }
         }
 
         int pointsGiven = cardToTest.verifyObjective(ground);
 
         assertEquals(structuresCreated*cardToTest.getPoints(),pointsGiven);
 
+        for (Card c: objectiveCards){
+            if (c.getIdCard() >= 91 && c.getIdCard() <= 94){
+                StructuredObjectiveCard obj = (StructuredObjectiveCard) c;
+                assertEquals(c.toString(), "StructuredObjectiveCard{" +
+                        "structureType=" + obj.getStructureType()+
+                        ", resourceRequested=" + obj.getResourceRequested() +
+                        '}');
+            }
+        }
 
-    }
 
 
-
-
-}
+    }}

@@ -1,3 +1,4 @@
+
 package it.polimi.ingsfw.ingsfwproject.Model;
 
 import it.polimi.ingsfw.ingsfwproject.Network.Server.GameServerInstance;
@@ -120,6 +121,16 @@ class NotStructuredObjectiveCardTest {
             int points5 = tripleSetCard.verifyObjective(ground);
 
             assertEquals(min * 3, points5);
+
+            for (Card card: objectiveCards){
+                if (card.getIdCard() >= 95 && card.getIdCard() <= 98){
+                    NotStructuredObjectiveCard c = (NotStructuredObjectiveCard) card;
+                    assertEquals(c.toString(), "NotStructuredObjectiveCard{" +
+                            "objectRequested=" + c.getObjectRequested() +
+                            '}');
+                }
+            }
+
 
         }
 
