@@ -4,6 +4,7 @@ module it.polimi.ingsfw.ingsfwproject {
     requires org.json;
     requires java.desktop;
     requires java.rmi;
+    requires java.management;
 
 
     exports it.polimi.ingsfw.ingsfwproject.Controller;
