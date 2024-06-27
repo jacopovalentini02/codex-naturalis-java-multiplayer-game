@@ -423,7 +423,7 @@ public class GUIView extends View {
             alert.setHeaderText(null);
             StringBuilder message = new StringBuilder();
 
-            if (nickname.equals("tie")){
+            if (nickname.equals("t")){
                 message.append("It's a tie! \n");
             } else {
                 message.append(nickname).append(" has won! \n");

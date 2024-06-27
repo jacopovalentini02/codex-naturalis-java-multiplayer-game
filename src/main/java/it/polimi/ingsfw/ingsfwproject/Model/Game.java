@@ -448,7 +448,7 @@ public class Game {
 
         winner = determineWinner(playerStats);
         if (winner == null) {
-            gameServerInstance.sendUpdateToAll(new WinnerMessage(-10, "tie"));
+            gameServerInstance.sendUpdateToAll(new WinnerMessage(-10, "t"));
         } else {
             gameServerInstance.sendUpdateToAll(new WinnerMessage(-10, winner.getUsername()));
         }

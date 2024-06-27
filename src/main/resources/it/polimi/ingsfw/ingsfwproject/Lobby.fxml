@@ -12,7 +12,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="855.0" prefWidth="1444.0" style="-fx-background-color: #e6ddbc;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsfw.ingsfwproject.View.GUI.LobbyGUIController">
+<AnchorPane prefHeight="855.0" prefWidth="1444.0" style="-fx-background-color: #e6ddbc;" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsfw.ingsfwproject.View.GUI.LobbyGUIController">
    <effect>
       <Blend />
    </effect>
@@ -26,15 +26,15 @@
          <Font name="Bodoni 72 Bold" size="24.0" />
       </font>
    </Button>
-   <Button fx:id="refreshButton" layoutX="1066.0" layoutY="685.0" mnemonicParsing="false" onAction="#refreshGames" prefHeight="60.0" prefWidth="153.0" style="-fx-background-color: #5F3075;" text="Refresh List" textFill="WHITE">
+   <Button fx:id="refreshButton" layoutX="1044.0" layoutY="685.0" mnemonicParsing="false" onAction="#refreshGames" prefHeight="60.0" prefWidth="226.0" style="-fx-background-color: #5F3075;" text="Refresh List" textFill="WHITE">
       <font>
          <Font name="Bodoni 72 Bold" size="24.0" />
       </font>
    </Button>
    <TableView fx:id="tableView" layoutX="999.0" layoutY="329.0" prefHeight="318.0" prefWidth="315.0">
       <columns>
-         <TableColumn fx:id="gameIdColumn" editable="false" maxWidth="1.7976931348623157E308" minWidth="3.0" prefWidth="94.0" text="ID" />
-         <TableColumn fx:id="playerCountColumn" prefWidth="168.0" text="Number of Players" />
+         <TableColumn fx:id="gameIdColumn" editable="false" maxWidth="1.7976931348623157E308" minWidth="3.0" prefWidth="128.0" text="ID" />
+         <TableColumn fx:id="playerCountColumn" prefWidth="186.0" text="Number of Players" />
       </columns>
    </TableView>
    <ImageView fitHeight="649.0" fitWidth="841.0" layoutX="-12.0" layoutY="-10.0" pickOnBounds="true" preserveRatio="true">
