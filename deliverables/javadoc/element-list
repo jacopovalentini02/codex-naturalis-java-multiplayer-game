@@ -1,0 +1,11 @@
+it.polimi.ingsfw.ingsfwproject.Controller
+it.polimi.ingsfw.ingsfwproject.Exceptions
+it.polimi.ingsfw.ingsfwproject.Model
+it.polimi.ingsfw.ingsfwproject.Network.Client
+it.polimi.ingsfw.ingsfwproject.Network.Messages
+it.polimi.ingsfw.ingsfwproject.Network.Messages.ClientToServer
+it.polimi.ingsfw.ingsfwproject.Network.Messages.ServerToClient
+it.polimi.ingsfw.ingsfwproject.Network.Server
+it.polimi.ingsfw.ingsfwproject.View
+it.polimi.ingsfw.ingsfwproject.View.CLI
+it.polimi.ingsfw.ingsfwproject.View.GUI
