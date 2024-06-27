@@ -468,7 +468,7 @@ public class Cli extends View implements Runnable {
                     }
 
                     String colorChoosen = null;
-                    colorChoosen = askForStringInput("What color do you want to choose?").toUpperCase();
+                    colorChoosen = askForStringInput("Which color do you want to choose?").toUpperCase();
                     if(!colorChoosen.equals("BLUE") && !colorChoosen.equals("YELLOW") && !colorChoosen.equals("RED") && !colorChoosen.equals("GREEN")){
                         System.out.println("Color invalid! Use the command \"getColorAvailable\" to know which color you can choose" );
                         printAvailableCommands();
@@ -484,7 +484,7 @@ public class Cli extends View implements Runnable {
                         break;
                     }
 
-                    int objWanted = askForIdObjectiveInput("What objective do you prefer?", (client.getVirtualView().getHandObjectives()));
+                    int objWanted = askForIdObjectiveInput("Which objective do you prefer?", (client.getVirtualView().getHandObjectives()));
                     messageToSend = new ObjectiveCardChosenMessage(client.getClientID(), client.getNickname(), objWanted);
                     client.sendMessage(messageToSend);
                     break;
@@ -652,7 +652,7 @@ public class Cli extends View implements Runnable {
                         System.out.println(errorString);
                         break;
                     }
-                    String playerNick = askForStringInput("Which chat you want to show? Type the nick of the other player: " + printOtherPlayers());
+                    String playerNick = askForStringInput("Which chat you want to show?" + printOtherPlayers());
                     if (client.getVirtualView().getPrivateChat(playerNick) != null){
                         for (ChatMessage m: client.getVirtualView().getPrivateChat(playerNick))
                             System.out.println(getColoredNick(m.getSender()) + GRAY + ": " + m.getMessage() + RESET);
@@ -665,7 +665,7 @@ public class Cli extends View implements Runnable {
                         System.out.println(errorString);
                         break;
                     }
-                    String recipient = askForStringInput("Who do you want to send the message to? Type the nick of the other player, global for globalchat: " + printOtherPlayers());
+                    String recipient = askForStringInput("Who do you want to send the message to? \nglobal" + printOtherPlayers());
                     String chatMessage = askForStringInput("Type your message: ");
                     client.getVirtualView().sendPrivateMessage(new ChatMessage(client.getNickname(), recipient, chatMessage));
                     client.sendMessage(new sendChatMessage(client.getClientID(), client.getNickname(), recipient, chatMessage));
@@ -683,7 +683,7 @@ public class Cli extends View implements Runnable {
         String toReturn = "";
         for (String s : client.getVirtualView().getListOfPlayers()){
             if (!(s.equals(client.getNickname())))
-               toReturn = toReturn.concat(getColoredNick(s) + " ");
+               toReturn = toReturn.concat("\n" + getColoredNick(s));
         }
         return toReturn;
     }
@@ -1003,7 +1003,7 @@ public class Cli extends View implements Runnable {
         Object[] returnArray;
 
         if(printCoordinate)
-            System.out.print(tab4);
+            System.out.print(tab4 + "   ");
 
         for(int j = (ymax*2)+1; j >= (ymin*2)-1; j--){
             for(int i = (xmin*2)-1; i <= (xmax*2)+1; i++){
@@ -1051,14 +1051,20 @@ public class Cli extends View implements Runnable {
             System.out.println();
             if(printCoordinate) {
                 if (j % 2 != 0 && (j - 1) / 2 != ymin - 1) {
+
+                    if((j-1)/2>=0 && (j-1)/2 < 10)
+                        System.out.print("  ");
+                    if(((j-1)/2 <= -1 && (j-1)/2 > -10) || ((j-1)/2 >=10))
+                        System.out.print(" ");
                     System.out.print((j - 1) / 2 + tab4);
                 } else
-                    System.out.print(tab4);
+                    System.out.print("   " + tab4);
             }
         }
         if(printCoordinate){
+            System.out.print("       ");
             for(int i = xmin; i <= xmax; i++){
-                System.out.print(tab4+tab4+i+ tab4 + tab4);
+                System.out.print("\t" +i+ "\t");
             }
         }
         System.out.println();
@@ -1080,7 +1086,7 @@ public class Cli extends View implements Runnable {
         //print the id's
         if(printId) {
             for (PlayableCard c : cards) {
-                System.out.print("id card: " + c.getIdCard() + tab4 + tab4 + tab4);
+                System.out.print("id card: " + c.getIdCard() + "\t\t\t");
             }
             System.out.println();
         }
@@ -1089,15 +1095,15 @@ public class Cli extends View implements Runnable {
         if(printCost) {
             for (PlayableCard c : cards) {
                 if (c.getFront() instanceof GoldFront) {
-                    System.out.print("cost:"+ tab4);
+                    System.out.print("cost:\t");
                     int count = 6;
                     for (Content content : ((GoldFront) c.getFront()).getCost()) {
                         AnsiColor ansicolor = AnsiColor.EMPTY_TEXT;
                         System.out.print(ansicolor.getFormattedCharacter(content, ansicolor));
                         count--;
                     }
-                    for(int j = 0; j<count; j++){
-                        System.out.print(tab4);
+                    for(int j = 0; j<count; j+=2){
+                        System.out.print("\t");
                     }
 
                 } else {

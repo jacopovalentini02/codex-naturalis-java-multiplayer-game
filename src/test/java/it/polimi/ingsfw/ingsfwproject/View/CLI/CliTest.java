@@ -9,6 +9,7 @@ import it.polimi.ingsfw.ingsfwproject.Model.Player;
 import it.polimi.ingsfw.ingsfwproject.Network.Server.GameServerInstance;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -98,6 +99,7 @@ class CliTest {
 
     @Test
     void testPrintGrid(){
+        //------------------------------
         GameManager gameManager = new GameManager();
         GameServerInstance gameserver = new GameServerInstance();
         Player player = new Player("peppo", gameserver, 0);
@@ -111,13 +113,33 @@ class CliTest {
         client.setVirtualView(virtualView);
 
         Map<Coordinate, Face> grid = new HashMap<>();
-        for(int i = 0; i<15; i++) {
+        for(int i = -15; i<0; i++) {
             Card card = game.getGoldDeck().getCardList().removeFirst();
-            grid.put(new Coordinate(2*i, 0), ((GoldCard) card).getFront());
+            grid.put(new Coordinate(i, i), ((GoldCard) card).getFront());
             System.out.println(card.getIdCard());
         }
 
         cli.printGrid(grid,true);
+        //------------------------------
+
+        grid = new HashMap<>();
+        for(int i = 0; i<15; i++) {
+            Card card = game.getGoldDeck().getCardList().removeFirst();
+            grid.put(new Coordinate(i, 2*i), ((GoldCard) card).getFront());
+            System.out.println(card.getIdCard());
+        }
+
+        cli.printGrid(grid,true);
+
+        //------------------------------
+        ArrayList<PlayableCard> cards = new ArrayList<>();
+        for(int i = 0; i<5; i++) {
+            PlayableCard card = (PlayableCard) game.getGoldDeck().getCardList().removeFirst();
+            cards.add(card);
+            System.out.println(card.getIdCard());
+        }
+        cli.printListOfCards(cards,true,true,true,true);
+        //____________________________
     }
 
     @Test

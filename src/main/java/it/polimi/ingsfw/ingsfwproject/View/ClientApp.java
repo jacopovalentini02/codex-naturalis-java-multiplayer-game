@@ -1,9 +1,16 @@
 package it.polimi.ingsfw.ingsfwproject.View;
 
+import it.polimi.ingsfw.ingsfwproject.Model.*;
+import it.polimi.ingsfw.ingsfwproject.Network.Client.Client;
+import it.polimi.ingsfw.ingsfwproject.Network.Client.SocketClient;
+import it.polimi.ingsfw.ingsfwproject.Network.Server.GameServerInstance;
 import it.polimi.ingsfw.ingsfwproject.View.CLI.AnsiColor;
 import it.polimi.ingsfw.ingsfwproject.View.CLI.Cli;
 import it.polimi.ingsfw.ingsfwproject.View.GUI.GUIView;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 import static javafx.application.Application.launch;
@@ -15,8 +22,7 @@ public class ClientApp {
         View view = null;
 
         do {
-            System.out.println(AnsiColor.POINT_ONE.getFormattedCharacter());
-            System.out.println(AnsiColor.POINT_TWO.getFormattedCharacter());
+
             System.out.println("Con che interfaccia vuoi giocare? \n1) CLI \n2) GUI");
             if (scanner.hasNextInt()) {
                 choice = scanner.nextInt();
@@ -35,9 +41,6 @@ public class ClientApp {
             thread.start();
         }else{
             view = new GUIView();
-//            Thread thread = new Thread(view);
-//            thread.start();
-            //Application.launch(ChooseConnectionApp.class);
         }
 
 
