@@ -403,17 +403,36 @@ public class Game {
      * Checks the final scores and determines the winner.
      */
     public void finalScoreCheck() {
-        for (Player p : this.listOfPlayers) {
+        Map<Player, Map<String, Integer>> playerStats = new HashMap<>();
+        //check for additional objective points, from both common and secret objective cards
+        for (Player p: this.listOfPlayers){
             int pointsToAdd = 0;
-            for (ObjectiveCard card : this.getDisplayedObjectiveCard()) {
-                pointsToAdd += card.verifyObjective(p.getGround());
+            int objectivesCompleted = 0;
+            for (ObjectiveCard card: this.getDisplayedObjectiveCard()){ //common objective cards
+                int pointsGained = card.verifyObjective(p.getGround());
+                if (pointsGained > 0)
+                    objectivesCompleted++;
+                pointsToAdd += pointsGained;
             }
-            pointsToAdd += p.getHandObjective().getFirst().verifyObjective(p.getGround());
-            updatePoints(pointsToAdd, p);
+
+            int pointsGained = p.getHandObjective().getFirst().verifyObjective(p.getGround()); //secret objective card
+            if (pointsGained > 0)
+                objectivesCompleted++;
+            pointsToAdd += pointsGained;
+            updatePoints(pointsToAdd, p); //points update
+            Map<String, Integer> stats = new HashMap<>();
+            stats.put("points", scores.get(p));
+            stats.put("objectives", objectivesCompleted);
+            playerStats.put(p, stats);
         }
-        //TODO : mettere qua dentro l'uso della funzione determineWinner
-        winner = Collections.max(scores.entrySet(), Map.Entry.comparingByValue()).getKey();
-        gameServerInstance.sendUpdateToAll(new WinnerMessage(-10, winner.getUsername()));
+
+        winner = determineWinner(playerStats);
+        if (winner == null) {
+            gameServerInstance.sendUpdateToAll(new WinnerMessage(-10, "tie"));
+        } else {
+            gameServerInstance.sendUpdateToAll(new WinnerMessage(-10, winner.getUsername()));
+        }
+        gameServerInstance.setInGame(false);
         setState(GameState.ENDED);
     }
 
