@@ -37,7 +37,7 @@ and can be consulted [here](deliverables/javadoc).
 ### Starting the Server
 To start the server, type the following command in a terminal:
 ```sh
-java -jar Server.jar 
+java -jar IngSfwProject-1.0-SNAPSHOT-jar-with-dependencies.jar 
 ```
 The server will start with the default values:
 - 1337 for socket;
@@ -46,7 +46,7 @@ The server will start with the default values:
 ### Starting the Client
 To start the client, type the following command in a terminal:
 ```sh
-java -jar Client.jar 
+java -jar IngSfwProject-1.0-SNAPSHOT-jar-with-dependencies.jar 
 ```
 
 ## System Requirements
