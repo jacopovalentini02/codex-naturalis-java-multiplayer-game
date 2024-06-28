@@ -4,7 +4,6 @@
 - [Features](#Features)
 - [Documentation](#Documentation)
 - [System Requirements](#System-Requirements)
-- [Compiling Source Files](#Compiling-Source-Files)
 - [Execution](#Execution)
 
 ## Codex Naturalis
@@ -31,7 +30,6 @@ Additionally, we chose to implement the following two extra features:
 The following documentation includes a description for most of the classes and methods used, it follows Java documentation techniques 
 and can be consulted [here](deliverables/javadoc).
 
-## Compiling Source Files
 
 ## Execution
 ### Starting the Server
