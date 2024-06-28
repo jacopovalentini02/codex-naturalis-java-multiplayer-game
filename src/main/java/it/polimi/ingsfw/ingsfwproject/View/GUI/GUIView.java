@@ -467,7 +467,6 @@ public class GUIView extends View {
             });
         }else if(client.getVirtualView().getState()==GameState.STARTED || client.getVirtualView().getState()==GameState.ENDING){
             Platform.runLater(() -> {
-                System.out.println(cards.getFirst().getIdCard() + cards.get(1).getIdCard() + cards.getLast().getIdCard());
                 gameBoardController.updateHand();
             });
         }
