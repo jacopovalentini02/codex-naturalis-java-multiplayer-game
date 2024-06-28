@@ -16,7 +16,7 @@ import java.util.Scanner;
 import static javafx.application.Application.launch;
 
 public class ClientApp {
-    public static void main(String[] args) {
+    public void start() {
         Scanner scanner = new Scanner(System.in);
         int choice;
         View view = null;
