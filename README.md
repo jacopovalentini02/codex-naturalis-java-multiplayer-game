@@ -1,28 +1,77 @@
 ![alt text](src/main/resources/it/polimi/ingsfw/ingsfwproject/Images/logoTagliato.png)
-# Indice
-- [Codex Naturalis](#CodexNaturalis)
-- [Funzionalità](#Funzionalità)
-- [Client](#Client)
-- [Server](#Server)
-# Implementazione
+## Index
+- [Codex Naturalis](#Codex-Naturalis)
+- [Features](#Features)
+- [Documentation](#Documentation)
+- [System Requirements](#System-Requirements)
+- [Compiling Source Files](#Compiling-Source-Files)
+- [Execution](#Execution)
+
 ## Codex Naturalis
-Il progetto consiste nell'implementazione software del gioco da tavolo [Codex Naturalis](https://www.craniocreations.it/prodotto/codex-naturalis). Il gioco prevede dalle 2 alle 4 persone, per questi motivi abbiamo sviluppato secondo il pattern MVC un'applicazione distribuita con un server che permette a più client contemporaneamente di giocare la stessa partita. Inoltre, abbiamo deciso di offrire all'utente due modi diversi di interagire con l'applicazione sia dal punto di vista della rete sia dal punto di vista visivo.
-## Funzionalità
-Attenendoci ai requisiti di progetto abbiamo sviluppato le seguenti funzionalità:
-- **Regole Complete**
-- **TUI**
-- **GUI**
-- **RMI**
+The project involves the software implementation of the board game [Codex Naturalis](https://www.craniocreations.it/prodotto/codex-naturalis). The game is designed for 2 to 4 players, so we developed a distributed application following the MVC pattern, with a server that allows multiple clients to play the same game simultaneously. Additionally, we decided to offer users two different ways to interact with the application, both in terms of network and visual interface.
+
+## Features
+In accordance with the project requirements, we developed the following features:
+- **Complete Rules**
+- **TUI** (Text User Interface)
+- **GUI** (Graphical User Interface)
+- **RMI** (Remote Method Invocation)
 - **Socket**
-  
-Inoltre, abbiamo scelto di implementare le seguenti 2 FA:
-- **Partite multiple**: realizzare il server in modo che possa gestire più partite contemporaneamente. In questo modo, si consente nsentire ai giocatori in fase di ingresso di scegliere a quale partita aperta e non ancora iniziata collegarsi o per creare una nuova partita
-- **Chat**: Client e server offrono la possibilità ai giocatori coinvolti in una partita di chattare tra di loro, inviando messaggi (testuali) indirizzati a tutti i giocatori della partita o a un singolo giocatore.
 
-# Come giocare
+Additionally, we chose to implement the following two extra features:
+- **Multiple Games**: The server is designed to handle multiple games simultaneously. This allows players to choose which open and not-yet-started game to join or to create a new game upon entry.
+- **Chat**: The client and server offer players the ability to chat with each other during a game, sending text messages to all players in the game or to a single player.
 
-## Client
-prova
+## Documentation
+### UML
+- High level UML [deliverables/UML/](UML_Project.pdf)
+- Detailed UML [deliverables/UML/detailed]()
 
-## Server
-prova
+### JavaDOC 
+The following documentation includes a description for most of the classes and methods used, it follows Java documentation techniques 
+and can be consulted at the following address  [deliverables/javadoc]()
+
+## Compiling Source Files
+
+## Execution
+### Starting the Server
+To start the server, type the following command in a terminal:
+```sh
+java -jar Server.jar 
+```
+The server will start with the default values:
+- 1337 for socket;
+- 1099 for RMI.
+
+### Starting the Client
+To start the client, type the following command in a terminal:
+```sh
+java -jar Client.jar 
+```
+
+## System Requirements
+
+This program requires Java 21 or higher to run correctly.
+
+### For the CLI Interface:
+#### For Emoji visualization in Windows Powershell:
+- Press `Win+R`
+- Type `intl.cpl` (which opens the regional settings)
+- Activate the "Administrative" tab
+- Click on "Change system locale..."
+- Check "Beta: Use Unicode UTF-8 for worldwide language support" 
+- (https://stackoverflow.com/questions/57131654/using-utf-8-encoding-chcp-65001-in-command-prompt-windows-powershell-window)
+
+#### Displaying the grid
+If the grid is too large, for a correct rendering:
+- for macOS, command + - until the rendering is ok
+- for Windows, ctrl + - and then re-print the grid. If the grid is still not correctly displayed repeat the process.
+### For the GUI Interface:
+- A screen with a resolution higher than 1440x900 px.
+
+
+### Authors
+- Spandri Michelangelo
+- Spazzadeschi Beatrice
+- Valentini Jacopo
+- Zanoni Alessandro
