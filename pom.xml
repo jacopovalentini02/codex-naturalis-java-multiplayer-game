@@ -159,7 +159,7 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>it.polimi.ingsfw.ingsfwproject.View.ClientApp</mainClass> <!-- Nome completo della classe principale -->
+                            <mainClass>it.polimi.ingsfw.ingsfwproject.MainApp</mainClass> <!-- Nome completo della classe principale -->
                         </manifest>
                     </archive>
                 </configuration>
@@ -187,7 +187,7 @@
                     <archive>
                         <index>true</index>
                         <manifest>
-                            <mainClass>it.polimi.ingsfw.ingsfwproject.View.ClientApp</mainClass>
+                            <mainClass>it.polimi.ingsfw.ingsfwproject.MainApp</mainClass>
                             <addClasspath>true</addClasspath>
                         </manifest>
                     </archive>
