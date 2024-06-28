@@ -24,12 +24,12 @@ Additionally, we chose to implement the following two extra features:
 
 ## Documentation
 ### UML
-- High level UML [deliverables/UML/](UML_Project.pdf)
-- Detailed UML [deliverables/UML/detailed]()
+- [High level UML](deliverables/UML/UML_Project.pdf)
+- [Detailed UML](deliverables/UML/detailed)
 
 ### JavaDOC 
 The following documentation includes a description for most of the classes and methods used, it follows Java documentation techniques 
-and can be consulted at the following address  [deliverables/javadoc]()
+and can be consulted [here](deliverables/javadoc).
 
 ## Compiling Source Files
 
@@ -60,7 +60,7 @@ This program requires Java 21 or higher to run correctly.
 - Activate the "Administrative" tab
 - Click on "Change system locale..."
 - Check "Beta: Use Unicode UTF-8 for worldwide language support" 
-- (https://stackoverflow.com/questions/57131654/using-utf-8-encoding-chcp-65001-in-command-prompt-windows-powershell-window)
+- [Clicke here for more information](https://stackoverflow.com/questions/57131654/using-utf-8-encoding-chcp-65001-in-command-prompt-windows-powershell-window)
 
 #### Displaying the grid
 If the grid is too large, for a correct rendering:

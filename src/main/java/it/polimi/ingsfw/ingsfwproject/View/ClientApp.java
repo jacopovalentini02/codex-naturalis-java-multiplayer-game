@@ -22,7 +22,7 @@ public class ClientApp {
         View view = null;
         do {
 
-            System.out.println("Con che interfaccia vuoi giocare? \n1) CLI \n2) GUI");
+            System.out.println("Which interface do you wanna choose? \n1) CLI \n2) GUI");
             if (scanner.hasNextInt()) {
                 choice = scanner.nextInt();
                 if (choice == 1 || choice == 2) {
@@ -31,7 +31,7 @@ public class ClientApp {
             } else {
                 scanner.next();
             }
-            System.out.println("Input non valido. Riprova.");
+            System.out.println("Input not valid. Retry.");
         }while(true);
 
         if(choice == 1) {

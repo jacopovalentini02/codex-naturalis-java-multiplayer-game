@@ -125,8 +125,6 @@ public class LobbyGUIController extends GUIController implements Initializable {
                         // Ottieni l'ID del gioco associato a questa riga
                         Map.Entry<Integer, Integer> entry = cell.getTableView().getItems().get(cell.getIndex());
                         Integer gameId = entry.getKey();
-                        // Stampa l'ID del gioco
-                        System.out.println("Game ID: " + gameId);
                         try {
                             sendJoinRequest(gameId);
                         } catch (IOException e) {
