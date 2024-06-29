@@ -1,26 +1,20 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
 
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
     <groupId>it.polimi.ing-sfw</groupId>
     <artifactId>IngSfwProject</artifactId>
     <version>1.0-SNAPSHOT</version>
     <name>IngSfwProject</name>
-
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <junit.version>5.9.2</junit.version>
     </properties>
-
     <dependencies>
         <dependency>
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
             <version>20240303</version>
         </dependency>
-
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
@@ -33,91 +27,24 @@
             <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
-
-        <!-- JavaFX - Windows -->
-        <dependency>
-            <groupId>org.openjfx</groupId>
-            <artifactId>javafx-graphics</artifactId>
-            <version>11</version>
-            <classifier>win</classifier>
-        </dependency>
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
-            <version>11</version>
-            <classifier>win</classifier>
+            <version>22-ea+16</version>
         </dependency>
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-fxml</artifactId>
-            <version>11</version>
-            <classifier>win</classifier>
-        </dependency>
-        <!-- JavaFX - Linux -->
-        <dependency>
-            <groupId>org.openjfx</groupId>
-            <artifactId>javafx-graphics</artifactId>
-            <version>11</version>
-            <classifier>linux</classifier>
+            <version>22-ea+16</version>
         </dependency>
         <dependency>
-            <groupId>org.openjfx</groupId>
-            <artifactId>javafx-controls</artifactId>
-            <version>11</version>
-            <classifier>linux</classifier>
+            <groupId>org.controlsfx</groupId>
+            <artifactId>controlsfx</artifactId>
+            <version>11.1.2</version>
         </dependency>
-        <dependency>
-            <groupId>org.openjfx</groupId>
-            <artifactId>javafx-fxml</artifactId>
-            <version>11</version>
-            <classifier>linux</classifier>
-        </dependency>
-        <!-- JavaFX - Mac -->
-        <dependency>
-            <groupId>org.openjfx</groupId>
-            <artifactId>javafx-graphics</artifactId>
-            <version>11</version>
-            <classifier>mac</classifier>
-        </dependency>
-        <dependency>
-            <groupId>org.openjfx</groupId>
-            <artifactId>javafx-controls</artifactId>
-            <version>11</version>
-            <classifier>mac</classifier>
-        </dependency>
-        <dependency>
-            <groupId>org.openjfx</groupId>
-            <artifactId>javafx-fxml</artifactId>
-            <version>11</version>
-            <classifier>mac</classifier>
-        </dependency>
-        <!-- JavaFX - Mac arm -->
-        <dependency>
-            <groupId>org.openjfx</groupId>
-            <artifactId>javafx-graphics</artifactId>
-            <version>21.0.2</version>
-            <classifier>mac-aarch64</classifier>
-        </dependency>
-        <dependency>
-            <groupId>org.openjfx</groupId>
-            <artifactId>javafx-controls</artifactId>
-            <version>21.0.2</version>
-            <classifier>mac-aarch64</classifier>
-        </dependency>
-        <dependency>
-            <groupId>org.openjfx</groupId>
-            <artifactId>javafx-fxml</artifactId>
-            <version>21.0.2</version>
-            <classifier>mac-aarch64</classifier>
-        </dependency>
-
-
-
     </dependencies>
-
     <build>
         <plugins>
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -133,11 +60,10 @@
                 <version>0.0.8</version>
                 <executions>
                     <execution>
-                        <!-- Default configuration for running with: mvn clean javafx:run -->
+                        <!--  Default configuration for running with: mvn clean javafx:run  -->
                         <id>default-cli</id>
                         <configuration>
-                            <mainClass>it.polimi.ingsfw.ingsfwproject/it.polimi.ingsfw.ingsfwproject.Model.HelloApplication
-                            </mainClass>
+                            <mainClass>it.polimi.ingsfw.ingsfwproject/it.polimi.ingsfw.ingsfwproject.Model.HelloApplication </mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>
                             <jlinkImageName>app</jlinkImageName>
@@ -148,7 +74,7 @@
                     </execution>
                 </executions>
             </plugin>
-            <!-- Plugin per creare il JAR eseguibile -->
+            <!--  Plugin per creare il JAR eseguibile  -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
@@ -159,7 +85,8 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>it.polimi.ingsfw.ingsfwproject.MainApp</mainClass> <!-- Nome completo della classe principale -->
+                            <mainClass>it.polimi.ingsfw.ingsfwproject.MainApp</mainClass>
+                            <!--  Nome completo della classe principale  -->
                         </manifest>
                     </archive>
                 </configuration>
@@ -173,27 +100,6 @@
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <archive>
-                        <index>true</index>
-                        <manifest>
-                            <mainClass>it.polimi.ingsfw.ingsfwproject.MainApp</mainClass>
-                            <addClasspath>true</addClasspath>
-                        </manifest>
-                    </archive>
-                </configuration>
-            </plugin>
-
         </plugins>
     </build>
 </project>
