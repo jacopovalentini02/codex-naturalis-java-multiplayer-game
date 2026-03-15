@@ -1,75 +1,212 @@
-![alt text](src/main/resources/it/polimi/ingsfw/ingsfwproject/Images/logoTagliato.png)
-## Index
-- [Codex Naturalis](#Codex-Naturalis)
-- [Features](#Features)
-- [Documentation](#Documentation)
-- [System Requirements](#System-Requirements)
-- [Execution](#Execution)
+![Codex Naturalis Logo](src/main/resources/it/polimi/ingsfw/ingsfwproject/Images/logoTagliato.png)
 
-## Codex Naturalis
-The project involves the software implementation of the board game [Codex Naturalis](https://www.craniocreations.it/prodotto/codex-naturalis). The game is designed for 2 to 4 players, so we developed a distributed application following the MVC pattern, with a server that allows multiple clients to play the same game simultaneously. Additionally, we decided to offer users two different ways to interact with the application, both in terms of network and visual interface.
+# Codex Naturalis Java Multiplayer
+
+Java multiplayer implementation of the board game **Codex Naturalis**, developed as a distributed client-server application using the **MVC architectural pattern**.
+
+The system allows **2–4 players** to participate in online matches simultaneously and supports both **CLI and GUI clients**, as well as multiple networking technologies (**RMI and TCP sockets**).
+
+This project was developed as part of the **Software Engineering course** at Politecnico di Milano.
+
+---
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Features](#features)
+- [Architecture](#architecture)
+- [Technologies](#technologies)
+- [Documentation](#documentation)
+- [Execution](#execution)
+- [System Requirements](#system-requirements)
+- [Authors](#authors)
+
+---
+
+## Overview
+
+The project is a software implementation of the board game **Codex Naturalis**.
+
+Players build their own manuscript by strategically placing cards and earning points based on specific patterns and objectives.
+
+To support multiplayer gameplay, the system was designed as a **distributed architecture**, where a central server coordinates multiple clients connected over the network.
+
+The server can manage **multiple matches concurrently**, allowing players to create new games or join existing ones.
+
+---
 
 ## Features
-In accordance with the project requirements, we developed the following features:
-- **Complete Rules**
-- **TUI** (Text User Interface)
-- **GUI** (Graphical User Interface)
-- **RMI** (Remote Method Invocation)
-- **Socket**
 
-Additionally, we chose to implement the following two extra features:
-- **Multiple Games**: The server is designed to handle multiple games simultaneously. This allows players to choose which open and not-yet-started game to join or to create a new game upon entry.
-- **Chat**: The client and server offer players the ability to chat with each other during a game, sending text messages to all players in the game or to a single player.
+The implementation includes all core features required by the project specifications:
+
+- Complete implementation of the **game rules**
+- **TUI (Text User Interface)**
+- **GUI (Graphical User Interface)**
+- **RMI communication**
+- **TCP Socket communication**
+
+Additional features implemented:
+
+### Multiple Games
+The server can manage multiple games simultaneously.  
+Players can choose an available game lobby or create a new match.
+
+### Chat System
+Players can communicate during the match through a built-in chat system supporting:
+
+- global chat
+- private messages
+
+---
+
+## Architecture
+
+The system follows a **distributed client-server architecture** structured according to the **MVC (Model-View-Controller) pattern**.
+
+### Model
+Handles:
+- game state
+- game rules
+- score computation
+- card placement logic
+
+### View
+Two different user interfaces are supported:
+
+- **TUI** (command line interface)
+- **GUI** (graphical interface)
+
+### Controller
+Manages:
+
+- player input
+- client-server communication
+- synchronization between view and model
+
+---
+
+## Networking
+
+Communication between client and server can occur through two different technologies:
+
+- **Java RMI**
+- **TCP Sockets**
+
+This dual implementation allows the system to support different networking paradigms while maintaining the same game logic.
+
+---
+
+## Technologies
+
+Main technologies used in the project:
+
+- **Java 21**
+- **Client-Server Architecture**
+- **MVC Pattern**
+- **Java RMI**
+- **TCP Sockets**
+- **Concurrent Server Handling Multiple Matches**
+
+---
 
 ## Documentation
+
 ### UML
-- [High level UML](deliverables/UML/UML_Project.pdf)
+
+- [High Level UML](deliverables/UML/UML_Project.pdf)
 - [Detailed UML](deliverables/UML/detailed)
 
-### JavaDOC 
-The following documentation includes a description for most of the classes and methods used, it follows Java documentation techniques 
-and can be consulted [here](deliverables/javadoc).
+### JavaDoc
 
+The JavaDoc documentation includes descriptions of the main classes and methods of the system.
+
+Available here:
+
+deliverables/javadoc
+
+---
 
 ## Execution
+
 ### Starting the Server
-To start the server, type the following command in a terminal:
-```sh
-java -jar IngSfwProject-1.0-SNAPSHOT-jar-with-dependencies.jar 
+
+Run the following command:
+
+```bash
+java -jar IngSfwProject-1.0-SNAPSHOT-jar-with-dependencies.jar
 ```
-The server will start with the default values:
-- 1337 for socket;
-- 1099 for RMI.
+
+Default configuration:
+
+- **Socket Port:** 1337
+- **RMI Port:** 1099
+
+---
 
 ### Starting the Client
-To start the client, type the following command in a terminal:
-```sh
-java -jar IngSfwProject-1.0-SNAPSHOT-jar-with-dependencies.jar 
+
+Run the same jar file:
+
+```bash
+java -jar IngSfwProject-1.0-SNAPSHOT-jar-with-dependencies.jar
 ```
+
+The user can then select the preferred interface:
+
+- CLI
+- GUI
+
+---
 
 ## System Requirements
 
-This program requires Java 21 or higher to run correctly.
+Java **21 or higher** is required.
 
-### For the CLI Interface:
-#### For Emoji visualization in Windows Powershell:
-- Press `Win+R`
-- Type `intl.cpl` (which opens the regional settings)
-- Activate the "Administrative" tab
-- Click on "Change system locale..."
-- Check "Beta: Use Unicode UTF-8 for worldwide language support" 
-- [Clicke here for more information](https://stackoverflow.com/questions/57131654/using-utf-8-encoding-chcp-65001-in-command-prompt-windows-powershell-window)
+---
 
-#### Displaying the grid
-If the grid is too large, for a correct rendering:
-- for macOS, command + - until the rendering is ok
-- for Windows, ctrl + - and then re-print the grid. If the grid is still not correctly displayed repeat the process.
-### For the GUI Interface:
-- A screen with a resolution higher than 1440x900 px.
+### CLI Interface
 
+#### Emoji visualization in Windows PowerShell
 
-### Authors
-- Spandri Michelangelo
-- Spazzadeschi Beatrice
-- Valentini Jacopo
-- Zanoni Alessandro
+1. Press `Win + R`
+2. Type `intl.cpl`
+3. Open the **Administrative** tab
+4. Click **Change system locale**
+5. Enable **Beta: Use Unicode UTF-8 for worldwide language support**
+
+More information:
+
+https://stackoverflow.com/questions/57131654/using-utf-8-encoding-chcp-65001-in-command-prompt-windows-powershell-window
+
+---
+
+#### Grid Rendering
+
+If the grid appears too large:
+
+**macOS**
+
+Command + -
+
+**Windows**
+
+Ctrl + -
+
+Repeat until the grid renders correctly.
+
+---
+
+### GUI Interface
+
+A display resolution higher than **1440x900** is recommended.
+
+---
+
+## Authors
+
+Project developed for the **Software Engineering course** at Politecnico di Milano.
+
+- Michelangelo Spandri
+- Beatrice Spazzadeschi
+- Jacopo Valentini
+- Alessandro Zanoni
